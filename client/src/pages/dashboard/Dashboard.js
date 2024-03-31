@@ -1,0 +1,54 @@
+import React, { useState } from 'react';
+import './Dashboard.css'; 
+import Navbar from './Navbar';
+
+const SideLeftMenu = () => {
+ 
+  const [activeButton, setActiveButton] = useState(null);
+
+  const handleButtonClick = (buttonId) => {
+    setActiveButton(buttonId);
+  };
+
+  
+  const menuItems = [
+    { text: 'Dashboard', icon: '/graph-1.svg' },
+    { text: 'Supervisors', icon: '/group.svg' },
+    { text: 'Doctoral Comittee', icon: '/iconoutlineshoppingcart.svg' },
+    { text: 'Presentation', icon: '/mdishoppingoutline.svg' },
+    { text: 'Publications', icon: '/interface--chart-line.svg' },
+    { text: 'Patents', icon: '/mdimessageprocessingoutline.svg' },
+    { text: 'Thesis', icon: '/mdicogoutline.svg' },
+    { text: 'Documents', icon: '/iconoutlineshoppingcart.svg' },
+    { text: 'Profile', icon: '/iconoutlineshoppingcart.svg' },
+    { text: 'Sign Out', icon: '/iconoutlineshoppingcart.svg' }
+  ];
+
+  return (  <div>
+    
+    <Navbar activeButton={activeButton}/>
+    
+    <div className="side-left-menu">
+      
+      <div className="tietlogo">
+      <img src="tiet-logoremovebgpreview-1@2x.png" alt="My Image" />
+      </div>
+      <div className="icons">
+        {menuItems.map((menuItem, index) => (
+          <button
+            key={index}
+            className={`menu-button ${activeButton === index ? 'active' : ''}`}
+            onClick={() => handleButtonClick(index)}
+          >
+            <img className="icon" alt="" src={menuItem.icon} />
+            <div className="text">{menuItem.text}</div>
+          </button>
+        ))}
+      </div>
+    </div>
+    </div>
+  );
+};
+
+export default SideLeftMenu;
+

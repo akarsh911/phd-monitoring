@@ -1,0 +1,70 @@
+.side-left-menu {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  top: 0;
+  left: 0;
+  background-color: #eaeaea;
+  width: 288px;
+  height: 100vh;
+}
+.tietlogo {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+.tietlogo img {
+ position: absolute;
+  width: 154px; 
+  height: 150px; 
+  border-radius: 5px; 
+  margin-top: 217px;
+}
+.icons{
+  margin-top: 218px;
+  
+
+  height: 600px;
+  width: 252px;
+}
+
+.menu-button {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 4px;
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  width: 92%;
+  padding: 12px; 
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Add transition effect */
+}
+
+.menu-button:hover {
+  background-color: #e0e0e0; /* Background color on hover */
+}
+
+.menu-button.active {
+  border-radius: 0.8rem;
+  background-color:rgb(179, 27, 27); /* Background color of active button */
+  color: white; /* Text color of active button */
+}
+
+.icon {
+  margin-right: 10px; /* Adjust margin as needed */
+}
+
+.text {
+  font-size: 16px; /* Adjust font size as needed */
+}
+
+

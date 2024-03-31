@@ -1,0 +1,65 @@
+#entry-page {
+    padding: 20px;
+  }
+  
+  form {
+ width: 300px; /* Adjust the width as needed */
+   
+  }
+  
+  
+  fieldset {
+    height: 363px;
+    width: 379px;
+    border: 1px solid #ccc;
+    padding: 43px;
+    padding-left: 72px;
+    margin-bottom: 21px;
+}
+  
+  legend {
+    font-size: 3.2em;
+    font-weight: bold;
+    
+  }
+  
+  ul {
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+  }
+  
+  li {
+    margin-bottom: 10px;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+  
+  input[type="text"],
+  input[type="password"],
+  input[type="email"] {
+    width: calc(100% - 12px); /* Adjust width according to field padding */
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  button {
+    padding: 8px 16px;
+    background-color:rgb(155, 5, 5);
+    color: #fff;
+    font-size: 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button[type="button"] {
+    background-color:rgb(174, 174, 152);
+    margin-right: 10px;
+  }
+  

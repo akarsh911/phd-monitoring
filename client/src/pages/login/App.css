@@ -1,0 +1,80 @@
+ body{
+  background: url('IMG-20240330-WA0053.jpg');
+  align-items: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+.centered-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.row {
+  display: flex;
+}
+
+.left-column, .right-column {
+  height: 600px;
+  width: 600px;
+  padding: 20px;
+  
+  box-sizing: border-box;
+}
+
+.left-column {
+
+  border-top-left-radius: 2em;
+  border-bottom-left-radius: 2em;
+  background-color: #f0f0f0;
+  border: 1px solid white;
+ 
+}
+
+.right-column {
+  border-top-right-radius: 2em;
+  border-bottom-right-radius: 2em;
+  color: white;
+  display: inline-block;
+  background-color: rgb(155, 5, 5);
+  border: 1px solid rgb(155, 5, 5);
+  margin: auto;
+  padding: 1em;
+  box-shadow:rgba(0,0,0) 0em 0em 1em;
+
+}
+section{
+  h1{
+    display: inline-block;
+    margin: 0em 8em;
+    margin-top: 1em;
+    padding: 0em 1em;
+    font-size: 1.5em;
+    font-weight:500;
+  }
+  h2{
+   display: inline-block;
+   margin: 0.3em 5em;
+    padding: 0.3em 3em;
+    font-size: 1.5em;
+    justify-content: center;
+  }
+  span{
+    display: inline-block;
+    margin: 0.3em 3.3em;
+    font-size: 2.5em;
+    font-weight: 700;
+    text-align: center;
+  }
+  p{
+    margin:2em 1em;
+    padding: 0em 1em;
+    font-size: 1.15em;
+  }
+} 
+
+
+

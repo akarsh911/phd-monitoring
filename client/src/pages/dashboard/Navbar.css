@@ -1,0 +1,19 @@
+.navbar {
+    position: relative;
+    height: 89px;
+    z-index: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color:  #eaeaea; /* Background color for the navbar */
+  
+    padding: 10px 20px; /* Padding around navbar content */
+  }
+
+  .navbar h2{
+    color: black;
+    margin-left: 348px;
+    font-size: 2rem;
+  }
+
+  
