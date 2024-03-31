@@ -16,13 +16,16 @@ return new class extends Migration
             $table->primary('id');
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('phone');
+            $table->string('phone')->unique();
             $table->string('email')->unique();
             $table->enum('gender',['Male','Female','Others'])->default('Others');
            
             $table->integer('role_id')->unsigned()->index();
-            $table->foreign('role_id')->references('id')->on('table_permissions')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             
+            $table->enum('first_activation',['true','false'])->default('false');
+            $table->enum('status',['active','inactive'])->default('active');
+
             $table->string('profile_picture')->nullable();
             $table->string('address')->nullable();
             $table->string('password');

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Supervisor extends Model
 {
     use HasFactory;
-
+    protected $table = 'supervisors';
     /**
      * The attributes that are mass assignable.
      *
@@ -29,17 +29,13 @@ class Supervisor extends Model
         'updated_at',
     ];
 
-    /**
-     * Get the faculty associated with the supervisor.
-     */
+  
     public function faculty()
     {
         return $this->belongsTo(Faculty::class);
     }
 
-    /**
-     * Get the student associated with the supervisor.
-     */
+    
     public function student()
     {
         return $this->belongsTo(Student::class);

@@ -8,14 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;
-
+    protected $table='roles';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name',
+        'role',
         'can_read_all_students',
         'can_read_all_faculties',
         'can_read_supervised_students',
@@ -54,4 +54,43 @@ class Role extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function setAllTrue()
+    {
+        $attributes = $this->getFillable();
+        
+        // Exclude the 'role' attribute
+        $attributes = array_diff($attributes, ['role']);
+
+        // Set all other attributes to true
+        foreach ($attributes as $attribute) {
+            $this->{$attribute} = true;
+        }
+    }
+        /**
+     * Override the save method to lowercase the role attribute.
+     *
+     * @param  array  $options
+     * @return bool
+     */
+    public function save(array $options = [])
+    {
+        $this->role = strtolower($this->role);
+        return parent::save($options);
+    }
+
+    /**
+     * Override the update method to lowercase the role attribute.
+     *
+     * @param  array  $attributes
+     * @param  array  $options
+     * @return bool
+     */
+    public function update(array $attributes = [], array $options = [])
+    {
+        if (isset($attributes['role'])) {
+            $attributes['role'] = strtolower($attributes['role']);
+        }
+        return parent::update($attributes, $options);
+    }
 }

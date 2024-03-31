@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Faculty extends Model
 {
     use HasFactory;
-
+    protected $table = 'faculty';
     /**
      * The attributes that are mass assignable.
      *
@@ -55,5 +55,16 @@ class Faculty extends Model
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+
+    public function supervisedStudents()
+    {
+        return $this->belongsToMany(Student::class, 'supervisors', 'faculty_id', 'student_id');
+    }
+
+    public function doctoredStudents()
+    {
+        return $this->belongsToMany(Student::class, 'doctoral_committee', 'faculty_id', 'student_id');
+
     }
 }
