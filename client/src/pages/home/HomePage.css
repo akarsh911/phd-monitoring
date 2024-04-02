@@ -1,0 +1,39 @@
+.home-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0; /* Set background color */
+    background-image: url('');
+    background-size: cover;
+    background-position: center;
+    backdrop-filter: blur(10px); /* Add background blur effect */
+}
+    
+  
+  
+  .content {    
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.8); /* White background with opacity */
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add shadow effect */
+    border: 2px solid #f0f0f0; /* Add border */
+  }
+  
+  .login-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #8b0000; /* Maroon color */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 18px;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .login-link:hover {
+    background-color: #5a0000; /* Darker shade of maroon on hover */
+  }
+  

@@ -45,6 +45,32 @@ Route::post('/login',function (Request $request){
 });
 
 
+Route::post('/login/google/callback',function(Request $request){
+    $request->validate([
+        'email' => 'required|email',
+        'first_name' => 'required|string',
+        'last_name' => 'required|string',
+        'phone' => 'required|string']);
+        
+    $user = User::where('email',$request->email)->first();
+    if (!$user){
+        $user = new User();
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->phone = $request->phone;
+        $user->email = $request->email;
+        $user->password = bcrypt('password');
+        $user->role_id = 1;
+        $user->save();
+    }
+    $user->role = Role::find($user->role_id);
+    $token = $user->createToken('auth_token
+    ', ['server:access'],now()->addDays(1))->plainTextToken;
+    return response()->json([
+        "user" => $user,
+        "token" => $token
+    ],200);
+});
 Route::post('register',function (Request $request){
     $request->validate([
         'first_name' => 'required|string',

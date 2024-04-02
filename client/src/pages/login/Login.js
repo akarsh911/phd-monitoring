@@ -27,7 +27,12 @@ const EntryPage = () => {
         password: password,
       }),
     })
-      .then(response => {response.json()})
+      .then(response => {
+        if(response.status==200)
+          return  response.json()
+        else 
+          throw response;      
+      })
       .then(data => {
         // Handle response data as needed
         // if(response.status==422)
@@ -36,24 +41,31 @@ const EntryPage = () => {
         // }
         // else if(response.status==200)
         // {
-        //   alert("Login Token: "+data.token)
+          alert("Login Token: "+data.token)
+          localStorage.setItem('token', data.token);
+          window.location.href = '/dashboard';
         // }
         // console.log(data);
       })
       .catch(error => {
-        console.log("Error has occured")
-        if(error.response.status == 422) {
-          alert(error.response.data.message);
+        console.log("Error has occurred:", error);
+        if (error instanceof Response) {
+          error.json().then(data => {
+            if (error.status === 422) {
+              alert(data.message);
+            } else if (error.status === 401) {
+              alert("Invalid email or password");
+            } else if (error.status === 500) {
+              alert("Server error. Please try again later.");
+            }
+          }).catch(jsonError => {
+            console.error('Error parsing JSON:', jsonError);
+          });
+        } else {
+          console.error('Unexpected error:', error);
         }
-        if(error.response.status == 401) {
-          alert("Invalid email or password");
-        }
-        else if(error.response.status == 500) {
-          alert("Server error. Please try again later.");
-        }
-        // Handle errors
-        console.error('Error:', error);
       });
+      
   };
 
   const currentViewContent = () => {

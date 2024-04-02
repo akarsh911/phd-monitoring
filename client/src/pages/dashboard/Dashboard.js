@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './Dashboard.css'; 
 import Navbar from './Navbar';
 
 const SideLeftMenu = () => {
  
   const [activeButton, setActiveButton] = useState(null);
+  const [init]=useState(0);
+
+  useEffect(() => {setActiveButton(0);}, [init]);
 
   const handleButtonClick = (buttonId) => {
     setActiveButton(buttonId);

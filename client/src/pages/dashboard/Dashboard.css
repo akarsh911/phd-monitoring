@@ -6,8 +6,9 @@
   top: 0;
   left: 0;
   background-color: #eaeaea;
-  width: 288px;
-  height: 100vh;
+  width: 290px;
+  min-height: 100vh;
+  height: fit-content;
 }
 .tietlogo {
   position: relative;
@@ -17,23 +18,21 @@
 }
 
 
-
 .tietlogo img {
  position: absolute;
   width: 154px; 
-  height: 150px; 
   border-radius: 5px; 
-  margin-top: 217px;
+  margin-top: 50%;
 }
-.icons{
-  margin-top: 218px;
-  
 
-  height: 600px;
+.icons{
+  margin-top: 50%;
+  min-height: fit-content;
   width: 252px;
 }
 
 .menu-button {
+  border-radius: 0.8rem;
   justify-content: center;
   align-items: center;
   text-align: center;
@@ -46,15 +45,17 @@
   border: none;
   background-color: transparent;
   cursor: pointer;
+  color: gray;
   transition: background-color 0.3s ease, color 0.3s ease; /* Add transition effect */
 }
 
 .menu-button:hover {
-  background-color: #e0e0e0; /* Background color on hover */
+  background-color: #deacac; /* Background color on hover */
+  color: rgb(179, 27, 27);
 }
 
 .menu-button.active {
-  border-radius: 0.8rem;
+
   background-color:rgb(179, 27, 27); /* Background color of active button */
   color: white; /* Text color of active button */
 }

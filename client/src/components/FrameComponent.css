@@ -1,0 +1,126 @@
+.frame-item {
+  width: 36.5rem;
+  height: 43.438rem;
+  position: relative;
+  border-radius: 0 48px 48px 0;
+  background-color: #932f2f;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  display: none;
+  max-width: 100%;
+}
+.welcome-to {
+  margin: 0;
+  width: 14.313rem;
+  position: relative;
+  font-size: inherit;
+  line-height: 4.375rem;
+  font-weight: 400;
+  font-family: inherit;
+  display: inline-block;
+  z-index: 2;
+}
+.welcome-to-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 0 4.563rem;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.thapar,
+.university {
+  margin: 0;
+}
+.thapar-university {
+  margin: 0;
+  align-self: stretch;
+  position: relative;
+  font-size: 3.75rem;
+  line-height: 4.375rem;
+  font-weight: 700;
+  font-family: "Open Sans";
+  z-index: 2;
+  margin-top: -0.437rem;
+}
+.frame-parent2,
+.frame-wrapper1 {
+  display: flex;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+.frame-parent2 {
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.frame-wrapper1 {
+  width: 28.25rem;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 0 2.063rem;
+  box-sizing: border-box;
+}
+.lorem-ipsum-dolor {
+  margin: 0;
+  align-self: stretch;
+  height: 21.938rem;
+  position: relative;
+  font-size: 1.25rem;
+  line-height: 1.313rem;
+  font-weight: 400;
+  font-family: "Open Sans";
+  text-align: left;
+  display: inline-block;
+  flex-shrink: 0;
+  z-index: 2;
+}
+.rectangle-group {
+  flex: 1;
+  border-radius: 0 48px 48px 0;
+  background-color: #932f2f;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 3.875rem 1.063rem 2.063rem 4.25rem;
+  box-sizing: border-box;
+  gap: 2.875rem;
+  min-width: 23.75rem;
+  max-width: 100%;
+  z-index: 1;
+  text-align: center;
+  font-size: 2.5rem;
+  color: #fff;
+  font-family: Orienta;
+}
+@media screen and (max-width: 900px) {
+  .welcome-to {
+    font-size: 2rem;
+    line-height: 3.5rem;
+  }
+  .thapar-university {
+    font-size: 3rem;
+    line-height: 3.5rem;
+  }
+}
+@media screen and (max-width: 700px) {
+  .rectangle-group {
+    min-width: 100%;
+  }
+}
+@media screen and (max-width: 450px) {
+  .thapar-university,
+  .welcome-to {
+    font-size: 1.5rem;
+    line-height: 2.625rem;
+  }
+  .thapar-university {
+    font-size: 2.25rem;
+  }
+  .lorem-ipsum-dolor {
+    font-size: 1rem;
+    line-height: 1.063rem;
+  }
+}
