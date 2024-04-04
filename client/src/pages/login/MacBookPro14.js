@@ -67,9 +67,7 @@ const MacBookPro14 = () => {
   const [checkChecked, setCheckChecked] = useState(true);
   return (
     <div className="macbook-pro-14-1">
-      <div className="wrapper-image-1">
-        <img className="image-1-icon" alt="" src="/image-1@2x.png" />
-      </div>
+       <img className="image-1-icon" alt="" src="/image-1@2x.png" />
       <main className="rectangle-parent">
         <div className="frame-child" />
         <div className="frame-wrapper">
