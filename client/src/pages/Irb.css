@@ -1,0 +1,45 @@
+.body-div{
+    position: absolute;
+    height: 944px;
+    width: 1736px;
+    margin-top: -19px;
+    margin-left: 290px;
+    background-color: white;
+}
+.form-div{
+    height:900px;
+    /* width:1710px; */
+    color:black;
+  background-color: #eaeaea;
+  display: flex;
+  flex-direction: column;
+    margin: 20px;
+align-items: center;
+justify-items: center;
+    
+}
+.input label{
+    font-size: 30px;
+}
+
+.input input{
+    border: none;
+ border-bottom: 1px solid black;
+background: transparent;
+outline: none;
+
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    margin: 60px;
+    font-size: 30px;
+    align-items: left;
+    width: 90%;
+    height: 100%;
+}
+
+
+
+
