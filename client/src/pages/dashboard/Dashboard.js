@@ -1,6 +1,9 @@
 import React, { useState,useEffect } from 'react';
 import './Dashboard.css'; 
 import Navbar from './Navbar';
+import StudentSideIrb from '../forms/StudentSideIrb';
+import IrbSubmission from '../forms/IrbSubmission';
+import IrbSubmissionSup from '../forms/IrbSubmissionSup';
 
 const SideLeftMenu = () => {
  
@@ -24,7 +27,8 @@ const SideLeftMenu = () => {
     { text: 'Thesis', icon: '/mdicogoutline.svg' },
     { text: 'Documents', icon: '/iconoutlineshoppingcart.svg' },
     { text: 'Profile', icon: '/iconoutlineshoppingcart.svg' },
-    { text: 'Sign Out', icon: '/iconoutlineshoppingcart.svg' }
+    { text: 'Sign Out', icon: '/iconoutlineshoppingcart.svg' },
+    { text: 'Forms', icon: '/iconoutlineshoppingcart.svg' }
   ];
 
   return (  <div>
@@ -49,6 +53,11 @@ const SideLeftMenu = () => {
         ))}
       </div>
     </div>
+    {/* Render body component here */}
+    {/* <StudentSideIrb/> */}
+    {/* <IrbSubmission/> */}
+    <IrbSubmissionSup/>
+    
     </div>
   );
 };

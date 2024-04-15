@@ -11,7 +11,8 @@ const Navbar = ({ activeButton }) => {
         'Thesis',
         'Documents',
         'Profile',
-        'Sign Out'
+        'Sign Out',
+        'Forms'
       ];
     
     
