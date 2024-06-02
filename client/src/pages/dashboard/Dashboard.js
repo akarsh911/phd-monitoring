@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import './Dashboard.css'; 
 import Navbar from './Navbar';
-import StudentSideIrb from '../forms/StudentSideIrb';
+import StudentSideIrb from '../forms/ConstituteOfIrb/ConstituteOfIrb.js';
 import IrbSubmission from '../forms/IrbSubmission';
 import IrbSubmissionSup from '../forms/IrbSubmissionSup';
 
@@ -54,9 +54,10 @@ const SideLeftMenu = () => {
       </div>
     </div>
     {/* Render body component here */}
-    {/* <StudentSideIrb/> */}
+    <StudentSideIrb/>
+    {/* <SupSideIrb/> */}
     {/* <IrbSubmission/> */}
-    <IrbSubmissionSup/>
+    {/* <IrbSubmissionSup/> */}
     
     </div>
   );

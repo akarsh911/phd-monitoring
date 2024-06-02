@@ -28,12 +28,12 @@ const Irb = () => {
 
 
   return (
-    <div className='body-div'>
-  <div className='form-div'>
+    <div className='irbSubbody-div'>
+  <div className='irbSubform-div'>
     <div className='heading'>
     <h1>IRB SUBMISSION FORM</h1>
     </div>
-    <form onSubmit={handleSubmit} className='form'>
+    <form onSubmit={handleSubmit} className='irbSubform'>
     <div className='data-input'>
           <label htmlFor="nameInput">Name of Candidate</label>
           <input

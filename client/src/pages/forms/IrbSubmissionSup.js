@@ -58,15 +58,15 @@ const Irb = () => {
   };
 
   return (
-    <div className='body-div'>
-      <div className='form-div'>
+    <div className='irbSubSupbody-div'>
+      <div className='irbSubSupform-div'>
         <div className='heading'>
           <h1>IRB SUBMISSION FORM</h1>
         </div>
         <div className='small-heading'>
           <h2>To be filled by supervisors from TIET</h2>
         </div>
-        <form onSubmit={handleSubmit} id="form1" className='form'>
+        <form onSubmit={handleSubmit} id="form1" className='irbSubSupform'>
           <div className='first'>
             <div className='data-input'>
               <label htmlFor="nameInput">Name</label>

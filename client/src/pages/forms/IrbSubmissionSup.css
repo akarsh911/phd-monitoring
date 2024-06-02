@@ -1,4 +1,4 @@
-.body-div{
+.irbSubSupbody-div{
     position: absolute;
     height: 944px;
     width: 1736px;
@@ -6,7 +6,7 @@
     margin-left: 290px;
     background-color: white;
 }
-.form-div{
+.irbSubSupform-div{
     height:900px;
     /* width:1710px; */
     color:black;
@@ -18,7 +18,7 @@ align-items: center;
 justify-items: center;
     
 }
-.data-input label,
+/* .data-input label,
 .upload-input label{
     font-size: 30px;
     font-weight: bold;
@@ -33,13 +33,13 @@ justify-items: center;
 background: transparent;
 outline: none;
 
-}
+} */
 #addressInput{
     width: 54%;
 
 }
 
-.form{
+.irbSubSupform{
     display: flex;
     flex-direction: column;
     margin: 0px;

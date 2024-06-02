@@ -1,13 +1,18 @@
-.body-div{
+.studentSidebody-div{
     position: absolute;
-    height: 944px;
+    height: 3000px;
     width: 1736px;
     margin-top: -19px;
     margin-left: 290px;
     background-color: white;
 }
-.form-div{
-    height:900px;
+.two-button{
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+}
+.studentSideform-div{
+    height:2000px;
     /* width:1710px; */
     color:black;
   background-color: #eaeaea;
@@ -20,7 +25,7 @@ justify-items: center;
 }
 .data-input label,
 .date-input label{
-    font-size: 30px;
+    font-size: 26px;
     font-weight: bold;
 }
 
@@ -37,14 +42,14 @@ outline: none;
     display: flex;
     flex-direction: column;
     margin: 60px;
-    font-size: 30px;
+    font-size: 15px;
     align-items: left;
     width: 90%;
     height: 100%;
 }
 
 .send{
-    width: 150px; /* Adjust width as needed */
+    width: 200px; /* Adjust width as needed */
     height: 48px; /* Adjust height as needed */
     border-radius: 18px; /* Adjust border radius for rounded edges */
     background-color:rgb(179, 27, 27); /* Red color for the button */
@@ -62,9 +67,15 @@ outline: none;
   
 }
 
-.hod-button-div{
+.supervisor-button-div{
     display: flex;
-    justify-content: flex-end;
+    /* justify-content: flex-end; */
+}
+
+#appr{
+    display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .data-input input,
@@ -74,7 +85,12 @@ outline: none;
   margin-left: 21px;
   
 }
-
+.data-input .small-label {
+    font-size: 20px; 
+    font-weight: 500;
+    margin-right: 20px;/* Adjust the font size as needed */
+  }
+  
 .heading{
     font-size: 20px;
 }
@@ -83,10 +99,6 @@ outline: none;
     flex-direction: row;
 }
 
-.gender-label{
-    font-weight: 350;
-    font-size: 27px;
-}
 .bold-label{
     font-weight: bold;
 }
