@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import StudentSideIrb from '../forms/ConstituteOfIrb/ConstituteOfIrb.js';
 import IrbSubmission from '../forms/IrbSubmission';
 import IrbSubmissionSup from '../forms/IrbSubmissionSup';
+import StudentList from '../teachers_view/StudentList.js';
 
 const SideLeftMenu = () => {
  
@@ -54,7 +55,8 @@ const SideLeftMenu = () => {
       </div>
     </div>
     {/* Render body component here */}
-    <StudentSideIrb/>
+    {/* <StudentSideIrb/> */}
+    <StudentList/>
     {/* <SupSideIrb/> */}
     {/* <IrbSubmission/> */}
     {/* <IrbSubmissionSup/> */}

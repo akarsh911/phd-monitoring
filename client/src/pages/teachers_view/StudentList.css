@@ -1,0 +1,52 @@
+
+  .StudentList{
+    position: absolute;
+    height: 3000px;
+    width: 1736px;
+    margin-top: -19px;
+    margin-left: 290px;
+    background-color: white;
+}
+  .search-bar input {
+    padding: 10px;
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .controls button {
+    margin: 0 5px 20px 5px;
+    padding: 10px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  thead th {
+    border-bottom: 2px solid #ddd;
+    padding: 10px;
+    text-align: left;
+  }
+  
+
+  tbody td {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+    
+  }
+  
+  .approved {
+    color: green;
+  }
+  
+  .tobeapproved {
+    color: orange;
+  }
+  
+  .notapproved {
+    color: red;
+  }
+  
+  
