@@ -1,10 +1,12 @@
 import React, { useState,useEffect } from 'react';
 import './Dashboard.css'; 
 import Navbar from './Navbar';
-import StudentSideIrb from '../forms/ConstituteOfIrb/ConstituteOfIrb.js';
+import ConstituteOfIrb from '../forms/ConstituteOfIrb/ConstituteOfIrb.js';
 import IrbSubmission from '../forms/IrbSubmission';
 import IrbSubmissionSup from '../forms/IrbSubmissionSup';
 import StudentList from '../teachers_view/StudentList.js';
+import ResearchProposalExtensionForm from '../forms/FormForExtension/Extension.js';
+
 
 const SideLeftMenu = () => {
  
@@ -55,8 +57,9 @@ const SideLeftMenu = () => {
       </div>
     </div>
     {/* Render body component here */}
-    {/* <StudentSideIrb/> */}
-    <StudentList/>
+    {/* <StudentList/> */}
+    <ResearchProposalExtensionForm/>
+    {/* <ConstituteOfIrb/> */}
     {/* <SupSideIrb/> */}
     {/* <IrbSubmission/> */}
     {/* <IrbSubmissionSup/> */}

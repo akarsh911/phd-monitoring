@@ -141,7 +141,7 @@ const Irb = () => {
 
           {/* STUDENT SIDE ENDS */}
           
-          <div className='spervisor-form'>
+          <div className='supervisor-form'>
             <SupSideIrb
               formData={formData}
               options={options}
