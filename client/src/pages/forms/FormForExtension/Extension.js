@@ -102,22 +102,9 @@ const ResearchProposalExtensionForm = () => {
             </div>
       {/* Student side ends */}
 
-      <label>
-            Recommendation of supervisors:
-            {formData.supervisorRecommendations.map((recommendation, index) => (
-              <SupervisorSideExtension
-                key={index}
-                supervisorIndex={index}
-                recommendation={recommendation}
-                onChange={handleSupervisorChange}
-                allRecommendations={formData.supervisorRecommendations}
-                supervisorProfile={supervisorProfile}
-              />
-            ))}
-          </label>
-          <div className='supervisor-button-div'>
-       <button className='send' type="submit">SEND TO HOD</button>
-     </div>
+    
+
+      <SupervisorSideExtension loggedInSupervisor="Supervisor 1" />
 
      {/* Supervisor Side Ends */}
          
