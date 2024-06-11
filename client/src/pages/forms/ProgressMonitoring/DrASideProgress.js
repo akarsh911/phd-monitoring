@@ -4,7 +4,7 @@ import './ProgressMonitoring.css';
 
 const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
   return (
-    <div className='hodSide-form'>
+    <div className='DrASide-form'>
       <div className='data-input' id='appr'>
         <label htmlFor="hodRecommendation">Recommendation of DR(A)</label>
         <div>

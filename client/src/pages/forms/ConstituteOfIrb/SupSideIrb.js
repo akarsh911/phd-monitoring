@@ -4,7 +4,7 @@ import './ConstituteOfIrb.css';
 
 const SupSideIrb = ({ formData, options, handleNomineeChange, handleRecommendationChange }) => {
   return (
-    <div className='supervisor-form'>
+    <div className='supervisorSide-form'>
       <div className='data-input' id='appr'>
         <label htmlFor="supervisorRecommendation">Recommendation of Supervisor</label>
         <div>

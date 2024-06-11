@@ -33,7 +33,7 @@ const HodSideIrb = ({
   }, []);
 
   return (
-    <div className='hod-form'>
+    <div className='hodSide-form'>
       <div className='data-input'>
         <label>List of 3 outside experts Proposed by the HOD</label>
         <table>

@@ -51,7 +51,7 @@ const StudentSideIrb = ({ formData }) => {
           />
         </div>
         <div className='data-input'>
-          <label htmlFor="regnoInput">Registration Number</label>
+          <label htmlFor="regnoInput">Roll Number</label>
           <input
             type="number"
             id="regnoInput"

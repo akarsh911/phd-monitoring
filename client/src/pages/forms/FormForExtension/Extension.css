@@ -23,7 +23,7 @@ justify-items: center;
     
 }
 
-.student-form,.hodSide-form,.DrASide-form,.DocComSide-form{
+.student-form,.hodSide-form,.DrASide-form,.DocComSide-form, .supervisorSide-form, .DoRDCSide-form{
     margin-left: 20px;
 }
 

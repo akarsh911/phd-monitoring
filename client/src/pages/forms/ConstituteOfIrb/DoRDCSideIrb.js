@@ -4,7 +4,7 @@ import './SupSideIrb.css';
 
 const DoRDCSideIrb = ({ formData, options, handleDoRDCChange }) => {
     return (
-        <div className='dordc-form'>
+        <div className='DoRDCSide-form'>
           <div className='data-input'>
             <label htmlFor="expertfromIrbInput">One expert from the IRB panel of outside experts of concerned department</label>
             <select

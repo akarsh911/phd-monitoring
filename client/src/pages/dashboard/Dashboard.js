@@ -64,9 +64,9 @@ const SideLeftMenu = () => {
     {/* <ConstituteOfIrb/> */}
   
     {/* <IrbSubmission/> */}
-    {/* <IrbSubmissionSup/> */}
+    <IrbSubmissionSup/>
     
-    <ProgressMonitoring/>
+    {/* <ProgressMonitoring/> */}
     
     
     </div>

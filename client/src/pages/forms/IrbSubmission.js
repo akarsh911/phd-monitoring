@@ -35,7 +35,7 @@ const Irb = () => {
     </div>
     <form onSubmit={handleSubmit} className='irbSubform'>
     <div className='data-input'>
-          <label htmlFor="nameInput">Name of Candidate</label>
+          <label htmlFor="nameInput">Name</label>
           <input
             type="text"
             id="nameInput"
@@ -59,20 +59,18 @@ const Irb = () => {
             required
           />
         </div>
-        <div class='data-input'>
-  <label htmlFor="departmentInput">Department:</label>
-  <select
-    id="departmentInput"
-    name="department"
-    value={formData.department}
-    onChange={handleChange}
-    required
-  >
-    <option value="">Select Department</option>
-  
-  </select>
-</div>
-</div>
+        <div className='data-input'>
+          <label htmlFor="departmentInput">Department</label>
+          <input
+            type="text"
+            id="departmentInput"
+            name="department"
+            value={formData.department}
+            readOnly
+            required
+          />
+        </div>
+        </div>
          <div className='first'>
         <div className='data-input'>
           <label htmlFor="cgpaInput">CGPA</label>
