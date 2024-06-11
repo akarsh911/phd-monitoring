@@ -6,6 +6,8 @@ import IrbSubmission from '../forms/IrbSubmission';
 import IrbSubmissionSup from '../forms/IrbSubmissionSup';
 import StudentList from '../teachers_view/StudentList.js';
 import ResearchProposalExtensionForm from '../forms/FormForExtension/Extension.js';
+import ProgressMonitoring from '../forms/ProgressMonitoring/ProgressMonitoring.js';
+import SupSideIrb from '../forms/ConstituteOfIrb/SupSideIrb.js';
 
 
 const SideLeftMenu = () => {
@@ -55,14 +57,17 @@ const SideLeftMenu = () => {
           </button>
         ))}
       </div>
-    </div>
+    </div >
     {/* Render body component here */}
     {/* <StudentList/> */}
-    <ResearchProposalExtensionForm/>
+    {/* <ResearchProposalExtensionForm/> */}
     {/* <ConstituteOfIrb/> */}
-    {/* <SupSideIrb/> */}
+  
     {/* <IrbSubmission/> */}
     {/* <IrbSubmissionSup/> */}
+    
+    <ProgressMonitoring/>
+    
     
     </div>
   );

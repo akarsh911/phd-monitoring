@@ -1,5 +1,5 @@
 .side-left-menu {
-  position: absolute;
+  position: fixed;
   z-index: 2;
   display: flex;
   flex-direction: column;

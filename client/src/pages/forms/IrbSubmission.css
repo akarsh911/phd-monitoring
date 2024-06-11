@@ -1,11 +1,13 @@
 .irbSubbody-div{
-    position: absolute;
-    height: 944px;
-    width: 1736px;
-    margin-top: -19px;
+    position: relative; /* Changed from absolute to relative */
+    min-height: 3000px; /* Ensure the content area is tall enough */
+    width: calc(100% - 290px); /* Adjust width to account for the sidebar */
+    margin-top: 109px; /* Ensure the content starts below the navbar */
     margin-left: 290px;
     background-color: white;
+    overflow-y: auto; /* Enable vertical scrolling */
 }
+
 .irbSubform-div{
     height:900px;
     /* width:1710px; */

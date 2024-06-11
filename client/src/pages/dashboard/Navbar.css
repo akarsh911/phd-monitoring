@@ -1,19 +1,19 @@
 .navbar {
-    position: relative;
-    height: 89px;
-    z-index: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color:  #eaeaea; /* Background color for the navbar */
-  
-    padding: 10px 20px; /* Padding around navbar content */
-  }
+  position: fixed; /* Changed from relative to fixed */
+  top: 0; /* Aligns the navbar to the top of the viewport */
+  left: 290px; /* Aligns the navbar to start after the sidebar */
+  height: 89px;
+  width: calc(100% - 290px); /* Adjusts the width to account for the sidebar */
+  z-index: 1; /* Ensures the navbar is above other content but below the sidebar */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #eaeaea; /* Background color for the navbar */
+  padding: 10px 20px; /* Padding around navbar content */
+}
 
-  .navbar h2{
-    color: black;
-    margin-left: 348px;
-    font-size: 2rem;
-  }
-
-  
+.navbar h2 {
+  color: black;
+  margin-left: 77px;
+  font-size: 2rem;
+}
