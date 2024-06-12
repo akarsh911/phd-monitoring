@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('student_status_changes', function (Blueprint $table) {
             $table->id();
             $table->integer('student_id')->unsigned()->index();
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
             $table->enum('previous_status',['part-time','full-time']);
             $table->enum('new_status',['part-time','full-time']);
             $table->text('reason');

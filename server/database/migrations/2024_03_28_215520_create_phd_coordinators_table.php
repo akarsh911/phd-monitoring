@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('department_id')->unsigned()->index();
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
             $table->integer('faculty_id')->unsigned()->index();
-            $table->foreign('faculty_id')->references('id')->on('faculty')->onDelete('cascade');
+            $table->foreign('faculty_id')->references('faculty_code')->on('faculty')->onDelete('cascade');
             $table->timestamps();
         });
     }

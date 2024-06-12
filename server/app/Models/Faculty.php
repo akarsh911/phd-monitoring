@@ -59,7 +59,7 @@ class Faculty extends Model
 
     public function supervisedStudents()
     {
-        return $this->belongsToMany(Student::class, 'supervisors', 'faculty_id', 'student_id');
+        return $this->belongsToMany(Student::class, 'supervisors',  'faculty_id', 'student_id',  'faculty_code','roll_no');
     }
 
     public function doctoredStudents()
@@ -67,4 +67,23 @@ class Faculty extends Model
         return $this->belongsToMany(Student::class, 'doctoral_committee', 'faculty_id', 'student_id');
 
     }
+    public function supervisedForms()
+    {
+        return $this->hasMany(IrbForm::class, 'supervisor_id');
+    }
+
+    public function irbNomineeCognates()
+    {
+        return $this->hasMany(IrbNomineeCognate::class, 'nominee_id', 'faculty_code');
+    }
+
+    public function irbExpertDepartments()
+    {
+        return $this->hasMany(IrbExpertDepartment::class, 'expert_id', 'faculty_code');
+    }
+    public static function findByUserId($userId)
+    {
+        return self::where('user_id', $userId)->first();
+    }
+    
 }

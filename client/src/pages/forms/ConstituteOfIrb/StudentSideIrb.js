@@ -1,6 +1,69 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './ConstituteOfIrb.css';
+import { toast } from 'react-toastify';
+import { SERVER_URL } from '../../../config';
+
 const StudentSideIrb = ({ formData }) => {
+  const [formValues, setFormValues] = useState(formData);
+  const isEditable = !formValues.student_lock;
+  const submitStudent=async ()=>
+  {
+  
+
+        try {
+          const response = await fetch(`${SERVER_URL}/forms/irb/constitutuion/submit`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+          });
+          // const response=await
+  
+          if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+           if(data)
+            toast.success("Success Submitting form")
+          } else {
+            var msg=await response.json()
+            
+            toast.error(msg.message);
+            throw response;
+          }
+  
+         
+        } catch (error) {
+          console.log("Error has occurred:", error);
+          if (error instanceof Response) {
+            error.json().then(data => {
+              if (error.status === 422) {
+                alert(data.message);
+              } else if (error.status === 401) {
+                alert("Invalid email or password");
+              } else if (error.status === 500) {
+                alert("Server error. Please try again later.");
+              }
+            }).catch(jsonError => {
+              console.error('Error parsing JSON:', jsonError);
+            });
+          } else {
+            console.error('Unexpected error:', error);
+          }
+        }
+      };
+  
+
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues({
+      ...formValues,
+      [name]: value,
+    });
+  };
+
   return (
     <div className='student-form'>
       <div className='date-input'>
@@ -9,8 +72,9 @@ const StudentSideIrb = ({ formData }) => {
           type="date"
           id="dateInput"
           name="date"
-          value={formData.date}
-          readOnly
+          value={formValues.date}
+          onChange={handleChange}
+          readOnly={!isEditable}
           required
         />
       </div>
@@ -21,8 +85,9 @@ const StudentSideIrb = ({ formData }) => {
             type="text"
             id="nameInput"
             name="name"
-            value={formData.name}
-            readOnly
+            value={formValues.name}
+            onChange={handleChange}
+            readOnly={!isEditable}
             required
           />
         </div>
@@ -32,8 +97,9 @@ const StudentSideIrb = ({ formData }) => {
             type="text"
             id="genderInput"
             name="gender"
-            value={formData.gender}
-            readOnly
+            value={formValues.gender}
+            onChange={handleChange}
+            readOnly={!isEditable}
             required
           />
         </div>
@@ -45,8 +111,9 @@ const StudentSideIrb = ({ formData }) => {
             type="date"
             id="admissionDateInput"
             name="admissionDate"
-            value={formData.admissionDate}
-            readOnly
+            value={formValues.admissionDate}
+            onChange={handleChange}
+            readOnly={!isEditable}
             required
           />
         </div>
@@ -56,8 +123,9 @@ const StudentSideIrb = ({ formData }) => {
             type="number"
             id="regnoInput"
             name="regno"
-            value={formData.regno}
-            readOnly
+            value={formValues.regno}
+            onChange={handleChange}
+            readOnly={!isEditable}
             required
           />
         </div>
@@ -69,8 +137,9 @@ const StudentSideIrb = ({ formData }) => {
             type="text"
             id="semesterInput"
             name="semester"
-            value={formData.semester}
-            readOnly
+            value={formValues.semester}
+            onChange={handleChange}
+            readOnly={!isEditable}
             required
           />
         </div>
@@ -80,8 +149,9 @@ const StudentSideIrb = ({ formData }) => {
             type="text"
             id="sessionInput"
             name="session"
-            value={formData.session}
-            readOnly
+            value={formValues.session}
+            onChange={handleChange}
+            readOnly={!isEditable}
             required
           />
         </div>
@@ -91,8 +161,9 @@ const StudentSideIrb = ({ formData }) => {
             type="text"
             id="departmentInput"
             name="department"
-            value={formData.department}
-            readOnly
+            value={formValues.department}
+            onChange={handleChange}
+            readOnly={!isEditable}
             required
           />
         </div>
@@ -101,11 +172,11 @@ const StudentSideIrb = ({ formData }) => {
         <label htmlFor="cgpaInput">CGPA</label>
         <input
           type="number"
-          step="0.01"
           id="cgpaInput"
           name="cgpa"
-          value={formData.cgpa}
-          readOnly
+          value={formValues.cgpa}
+          onChange={handleChange}
+          readOnly={!isEditable}
           required
         />
       </div>
@@ -115,8 +186,9 @@ const StudentSideIrb = ({ formData }) => {
           type="text"
           id="chairmanInput"
           name="chairman"
-          value={formData.chairman}
-          readOnly
+          value={formValues.chairman}
+          onChange={handleChange}
+          readOnly={!isEditable}
           required
         />
       </div>
@@ -126,14 +198,17 @@ const StudentSideIrb = ({ formData }) => {
           type="text"
           id="supervisorInput"
           name="supervisor"
-          value={formData.supervisor}
-          readOnly
+          value={formValues.supervisor}
+          onChange={handleChange}
+          readOnly={!isEditable}
           required
         />
       </div>
+    {formData.role=='student' &&(
       <div className='supervisor-button-div'>
-        <button className='send' type="submit">SEND TO SUPERVISOR</button>
+        <button className='send' type="submit" onClick={submitStudent}>SEND TO SUPERVISOR</button>
       </div>
+    )}
     </div>
   );
 };

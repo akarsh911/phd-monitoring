@@ -2,7 +2,7 @@ import React from 'react';
 import TableRow from './TableRow';
 import './StudentList.css';
 
-const Table = ({ data }) => {
+const Table = ({ data,callBack }) => {
   return (
     <table>
       <thead>
@@ -16,7 +16,7 @@ const Table = ({ data }) => {
       </thead>
       <tbody>
         {data.map((row, index) => (
-          <TableRow key={row.id} index={index} row={row} />
+          <TableRow key={row.id} index={index} row={row} callBack={callBack}/>
         ))}
       </tbody>
     </table>

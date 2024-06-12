@@ -31,6 +31,7 @@ class StudentController extends Controller {
                 'address' => 'required|string',
                 'current_status' => 'required|string',
                 'overall_progress' => 'required|decimal:0,3',
+                'cgpa' => 'required|decimal:0,3'
             ]
         );
         $password = Str::password(8, true, true, true, false);
@@ -61,6 +62,7 @@ class StudentController extends Controller {
         $student->fathers_name = $request->fathers_name;
         $student->current_status = $request->current_status;
         $student->address = $request->address;
+        $student->cgpa = $request->cgpa;
         if($request->has('overall_progress'))
              $student->overall_progress = $request->overall_progress;
         else

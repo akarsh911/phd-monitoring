@@ -11,13 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('doctoral_commitee', function (Blueprint $table) {
+        Schema::create('irb_sub_forms', function (Blueprint $table) {
             $table->increments('id');
             $table->primary('id');
-            $table->integer('faculty_id')->unsigned()->index();
-            $table->foreign('faculty_id')->references('faculty_code')->on('faculty')->onDelete('cascade');
             $table->integer('student_id')->unsigned()->index();
             $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
+            $table->enum('status',['awaited','approved','rejected']);
+            $table->enum('stage',['student','supervisor','phd_coordinator','hod']);
+            $table->text('student_comments');
+            $table->text('supervisor_comments');
+            $table->text('phd_coordinator_comments');
+            $table->text('hod_comments');
             $table->timestamps();
         });
     }
@@ -27,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('doctoral_commitee');
+        Schema::dropIfExists('irb_sub_forms');
     }
 };

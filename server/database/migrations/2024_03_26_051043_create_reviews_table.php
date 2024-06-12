@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('presentation_id')->unsigned()->index();
             $table->foreign('presentation_id')->references('id')->on('presentations')->onDelete('cascade');
             $table->integer('faculty_id')->unsigned()->index();
-            $table->foreign('faculty_id')->references('id')->on('faculty')->onDelete('cascade');
+            $table->foreign('faculty_id')->references('faculty_code')->on('faculty')->onDelete('cascade');
             $table->enum('progress',['satifactory','not satisfactory']);
             $table->text('comments');
             $table->enum('review_status',['pending','completed']);

@@ -15,9 +15,10 @@ return new class extends Migration
             $table->increments('id');
             $table->primary('id');
             $table->integer('faculty_id')->unsigned()->index();
-            $table->foreign('faculty_id')->references('id')->on('faculty')->onDelete('cascade');
+            $table->foreign('faculty_id')->references('faculty_code')->on('faculty')->onDelete('cascade');
             $table->integer('student_id')->unsigned()->index();
-            $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
+            $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
+            $table->unique(['faculty_id', 'student_id']);
             $table->timestamps();
         });
     }

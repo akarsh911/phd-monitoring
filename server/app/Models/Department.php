@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class Department extends Model
 {
     use HasFactory;
@@ -35,8 +36,9 @@ class Department extends Model
      */
     public function hod()
     {
-        return $this->belongsTo(User::class, 'hod_id');
+        return $this->belongsTo(Faculty::class, 'hod_id', 'faculty_code');
     }
+    
 
     /**
      * Get the students associated with the department.
@@ -44,5 +46,10 @@ class Department extends Model
     public function students()
     {
         return $this->hasMany(Student::class);
+    }
+
+    public function phdCoordinators()
+    {
+        return $this->hasMany(PhdCoordinator::class, 'department_id');
     }
 }

@@ -39,6 +39,10 @@ const handleLoginSubmit = (event) => {
       // {
         alert("Login Token: "+data.token)
         localStorage.setItem('token', data.token);
+        console.log(data.user.role)
+          if(data.user.role.role!='student')
+            window.location.href='/dashboard/students'
+          else
         window.location.href = '/dashboard';
       // }
       // console.log(data);

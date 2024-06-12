@@ -15,7 +15,8 @@ Route::get('', function (Request $request) {
         $students= \App\Models\Student::all();
     }
     else if($permissions->can_read_department_students == 'true'){
-        $students= \App\Models\Student::where('department_id',$user->department_id)->get();
+        // echo $user->faculty->department_id;
+        $students= \App\Models\Student::where('department_id',$user->faculty->department_id)->get();
     }
     else if($permissions->can_read_supervised_students == 'true'){
         $students= \App\Models\Faculty::where('user_id',$user->id)->first()->supervisedStudents()->get();
@@ -26,7 +27,11 @@ Route::get('', function (Request $request) {
     else{
         $students= [];
     }
-    return $request->user();
+    foreach($students as $student){
+        $student->name= $student->user->name();
+        $student->department= $student->department->name;
+    }
+    return $students;
 })->middleware('auth:sanctum');
 
 Route::post('/add', [StudentController::class, 'add'])->middleware('auth:sanctum');
