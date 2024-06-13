@@ -44,6 +44,9 @@ const EntryPage = () => {
           alert("Login Token: "+data.token)
           localStorage.setItem('token', data.token);
           window.location.href = '/dashboard';
+      
+          if(data.user.role.role!='student')
+            window.location.href='/students'
         // }
         // console.log(data);
       })

@@ -120,7 +120,9 @@ Route::prefix('students')->group(function () {
 Route::prefix('supervisors')->group(function () {
     require base_path('routes/base/supervisors.php');
 });
-
+Route::prefix('forms')->group(function () {
+    require base_path('routes/base/forms.php');
+});
 Route::get('/init',function (){
     
     User::factory()->count(10)->create();

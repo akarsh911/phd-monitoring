@@ -1,9 +1,13 @@
 import React from 'react';
 import './StudentList.css';
 
-const TableRow = ({ index, row }) => {
+const TableRow = ({ index, row, callBack }) => {
+  const handleClick = () => {
+    callBack(row.rollNumber);
+  };
+
   return (
-    <tr>
+    <tr onClick={handleClick}>
       <td>{index + 1}</td>
       <td>{row.name}</td>
       <td>{row.rollNumber}</td>

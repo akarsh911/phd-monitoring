@@ -4,6 +4,8 @@ import StudentSideIrb from './StudentSideIrb';
 import SupSideIrb from './SupSideIrb';
 import HodSideIrb from './HodSideIrb';
 import DoRDCSideIrb from './DoRDCSideIrb';
+import { SERVER_URL } from '../../../config';
+import { useParams } from 'react-router-dom';
 
 const Irb = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +26,12 @@ const Irb = () => {
     hodRecommendation: '',
     supervisorRecommendation: '',
     expertfromIRB: '',
-    nomineeDoRDC: ''
+    nomineeDoRDC: '',
+    student_lock: true,
+    supervisor_lock: true,
+    role: '',
+    suggestions:[],
+    status:'awaited'
   });
 
   const [options, setOptions] = useState({
@@ -33,20 +40,95 @@ const Irb = () => {
     chairmanExpertsOptions: [] 
   });
 
+  const [lastUpdate, setLastUpdate] = useState({});
+
   useEffect(() => {
+    
     const fetchData = async () => {
       try {
-        const response = await fetch(''); // API endpoint
-        const data = await response.json();
-        setFormData((prevData) => ({ ...prevData, ...data }));
-
-        setOptions({
-          experts: data.expertsOptions || [],
-          nominees: data.nomineesOptions || [],
-          chairmanExpertsOptions: data.chairmanExpertsOptions || [] 
+        
+        const response = await fetch(`${SERVER_URL}/forms/irb/constitutuion/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({ 
+            student_id: params.id
+          }) // Replace with actual id
         });
+        // const response=await
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          if(data.nominee_cognates.length<3){
+            for(let i=data.nominee_cognates.length;i<3;i++){
+              data.nominee_cognates.push({})
+            }
+          }
+          setFormData({
+            date: new Date(data.date_of_registration).toISOString().split('T')[0],
+            name: data.name,
+            gender: data.gender,
+            admissionDate: new Date(data.date_of_registration).toISOString().split('T')[0],
+            regno: data.roll_no,
+            department: data.department,
+            semester: '', // Map accordingly if available
+            session: '', // Map accordingly if available
+            cgpa: data.cgpa,
+            chairman: data.chairman.name,
+            supervisor: data.supervisors.map(s => s.name).join(', '),
+            experts: ['', '', ''], // Map accordingly if available
+            nominees: data.nominee_cognates|| [{},{},{}], // Map accordingly if available
+            chairmanExperts: [''], // Map accordingly if available// Map accordingly if available
+            expertfromIRB: '', // Map accordingly if available
+            nomineeDoRDC: '', // Map accordingly if available
+            student_lock: data.student_lock , // Adjust this based on your logic
+            supervisor_lock: data.supervisor_lock , // Adjust this based on your logic
+            role: data.role,
+            supervisor_comments: data.SuperVisorComments,
+            hod_comments: data.HODComments,
+            dordc_comments: data.dordc_comments,
+            suggestions:data.suggestions,
+            status:data.status
+          });
+          const update=  data.form_histories[data.form_histories.length - 1].change;
+          const time = new Date(data.form_histories[data.form_histories.length - 1].created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          const date = new Date(data.form_histories[data.form_histories.length - 1].created_at).toLocaleDateString();
+          const formattedDateTime = `${date} at ${time}`;
+          setLastUpdate({
+            change:update,
+            time:formattedDateTime 
+          })
+          setOptions({
+            experts: data.experts || [], // Map accordingly if available in data
+            nominees: data.nominees || [], // Map accordingly if available in data
+            chairmanExpertsOptions: data.chairmanExpertsOptions || [] // Map accordingly if available in data
+          });
+        } else {
+          throw response;
+        }
+
+       
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.log("Error has occurred:", error);
+        if (error instanceof Response) {
+          error.json().then(data => {
+            if (error.status === 422) {
+              alert(data.message);
+            } else if (error.status === 401) {
+              alert("Invalid email or password");
+            } else if (error.status === 500) {
+              alert("Server error. Please try again later.");
+            }
+          }).catch(jsonError => {
+            console.error('Error parsing JSON:', jsonError);
+          });
+        } else {
+          console.error('Unexpected error:', error);
+        }
       }
     };
 
@@ -92,12 +174,12 @@ const Irb = () => {
   };
 
   const handleRecommendationChange = (e) => {
-    const { name, value } = e.target;
+    const { value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      supervisorRecommendation : value
+      supervisorRecommendation: value
     }));
-  }
+  };
 
   const handleDoRDCChange = (name, value) => {
     setFormData((prevData) => ({
@@ -106,73 +188,80 @@ const Irb = () => {
     }));
   };
 
-  useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
-    setFormData((prevData) => ({ ...prevData, date: today }));
-
-    const fetchData = async () => {
-      try {
-        const response = await fetch(''); // API 
-        const data = await response.json();
-        setFormData((prevData) => ({ ...prevData, ...data }));
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+    // Handle form submission logic
   };
-
+  const params= useParams();
   return (
+    
     <div className='studentSidebody-div'>
       <div className='studentSideform-div'>
         <div className='heading'>
           <h1>CONSTITUTE OF INSTITUTE RESEARCH BOARD</h1>
+        
         </div>
+        <h2 className='last-update'>Last update - {lastUpdate.change} on {lastUpdate.time}</h2>
         <form onSubmit={handleSubmit} className='studentSideform'>
-          
-        <StudentSideIrb formData={formData} />
-
-
-          {/* STUDENT SIDE ENDS */}
-          
-          <div className='supervisor-form'>
-            <SupSideIrb
+          {formData.role === 'student' && <StudentSideIrb formData={formData} />}
+          {formData.role === 'faculty' && (
+            
+            <div className='supervisor-form'>
+              <StudentSideIrb formData={formData} />
+              <SupSideIrb
+                formData={formData}
+                options={options}
+                handleExpertChange={handleExpertChange}
+                handleNomineeChange={handleNomineeChange}
+                handleRecommendationChange={handleRecommendationChange}
+              />
+            </div>
+          )}
+          {formData.role === 'hod' && (
+            <div>
+               <StudentSideIrb formData={formData} />
+              <SupSideIrb
+                formData={formData}
+                options={options}
+                handleExpertChange={handleExpertChange}
+                handleNomineeChange={handleNomineeChange}
+                handleRecommendationChange={handleRecommendationChange}
+              />
+            <HodSideIrb
               formData={formData}
               options={options}
               handleExpertChange={handleExpertChange}
-              handleNomineeChange={handleNomineeChange}
-              handleRecommendationChange={handleRecommendationChange}
+              handleChairmanExpertChange={handleChairmanExpertChange}
+              addChairmanExpert={addChairmanExpert}
+              handleHodRecommendationChange={handleHodRecommendationChange}
             />
-          </div>
-
-
-          {/* SUPERVISOR SIDE ENDS */}
-
-      <HodSideIrb
-            formData={formData}
-            options={options}
-            handleExpertChange={handleExpertChange}
-            handleChairmanExpertChange={handleChairmanExpertChange}
-            addChairmanExpert={addChairmanExpert}
-            handleHodRecommendationChange={handleHodRecommendationChange}
-          />
-{/* HOD SIDE ENDS */}
-
-<DoRDCSideIrb
+            </div>
+          )}
+          {formData.role === 'dordc' && (
+            <div>
+                <StudentSideIrb formData={formData} />
+              <SupSideIrb
+                formData={formData}
+                options={options}
+                handleExpertChange={handleExpertChange}
+                handleNomineeChange={handleNomineeChange}
+                handleRecommendationChange={handleRecommendationChange}
+              />
+            <HodSideIrb
+              formData={formData}
+              options={options}
+              handleExpertChange={handleExpertChange}
+              handleChairmanExpertChange={handleChairmanExpertChange}
+              addChairmanExpert={addChairmanExpert}
+              handleHodRecommendationChange={handleHodRecommendationChange}
+            />
+            <DoRDCSideIrb
               formData={formData}
               options={options}
               handleDoRDCChange={handleDoRDCChange}
             />
-
-{/* DoRDC side ends */}
-
-
+            </div>
+          )}
         </form>
       </div>
     </div>

@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('presentation_panel', function (Blueprint $table) {
+        Schema::create('outside_experts', function (Blueprint $table) {
             $table->increments('id');
             $table->primary('id');
-            $table->integer('presentation_id')->unsigned()->index();
-            $table->foreign('presentation_id')->references('id')->on('presentations')->onDelete('cascade');
-            $table->integer('faculty_id')->unsigned()->index();
-            $table->foreign('faculty_id')->references('id')->on('faculty')->onDelete('cascade');
             $table->timestamps();
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('designation');
+            $table->string('institution');
+            $table->string('email');
+            $table->string('phone')->nullable();
         });
     }
 
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('presentation_panel');
+        Schema::dropIfExists('outside_experts');
     }
 };

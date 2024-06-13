@@ -1,22 +1,61 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Table from './Table';
 import './StudentList.css';
+import { SERVER_URL } from '../../config';
+import { toast } from 'react-toastify';
 
 const StudentList = () => {
   const [data, setData] = useState([
-    { id: 1, name: 'Abhinav Jain', rollNumber: '102203689', numberOfForms: 5, status: 'APPROVED' },
-    { id: 2, name: 'Nandini Jain', rollNumber: '123456789', numberOfForms: 5, status: 'TO BE APPROVED' },
-    { id: 3, name: 'Akarsh Srivastav', rollNumber: '123455432', numberOfForms: 5, status: 'NOT APPROVED' },
-    { id: 4, name: 'xyz', rollNumber: '123455432', numberOfForms: 5, status: 'NOT APPROVED' }// Add other rows as needed
+  
+   
   ]);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`${SERVER_URL}/students`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      // const response=await
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        let count=1;
+       if(data)
+        setData(
+      data.map((item) => ({
+        id: count++,
+        name: item.name,
+        rollNumber: item.roll_no,
+        numberOfForms: 1,
+        status: 'NOT APPROVED'
+      }))
+      )
+      } else {
+        var msg=await response.json()
+        
+        toast.error(msg.message);
+        throw response;
+      }
+
+    }
+    fetchData();
+  },[])
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
-  };
-
+  }; 
+  const callBack = (id) => {
+    window.location.href = `/dashboard/students/forms/irbconstitution/${id}`;
+    console.log(id);
+  }
   const handleSort = (event) => {
     setSortField(event.target.value);
   };
@@ -60,7 +99,7 @@ const StudentList = () => {
           <option value="NOT APPROVED">Not Approved</option>
         </select>
       </div>
-      <Table data={sortedData} />
+      <Table data={sortedData} callBack={callBack}/>
     </div>
   );
 };

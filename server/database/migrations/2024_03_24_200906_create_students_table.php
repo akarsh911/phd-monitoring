@@ -12,12 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('students', function (Blueprint $table) {
-            $table->increments('id');
-            $table->primary('id');
+            $table->integer('roll_no')->unique()->unsigned();
+            $table->primary('roll_no');
             $table->integer('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->unique('user_id');
-            $table->integer('roll_no')->unique();
             $table->integer('department_id')->unsigned()->nullable();
             $table->date('date_of_registration');
             $table->date('date_of_irb');
@@ -26,6 +25,7 @@ return new class extends Migration
             $table->text('address');
             $table->enum('current_status',['part-time','full-time']);
             $table->float('overall_progress');
+            $table->float('cgpa');
             $table->timestamps();
         });
      
