@@ -68,42 +68,39 @@ const Irb = () => {
         </div>
         <form onSubmit={handleSubmit} id="form1" className='irbSubSupform'>
           <div className='first'>
-            <div className='data-input'>
-              <label htmlFor="nameInput">Name</label>
-              <select
-                id="nameInput"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Name</option>
-              </select>
-            </div>
-            <div className='data-input'>
-              <label htmlFor="departmentInput">Department:</label>
-              <select
-                id="departmentInput"
-                name="department"
-                value={formData.department}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Department</option>
-              </select>
-            </div>
-            <div className='data-input'>
-              <label htmlFor="designationInput">Designation</label>
-              <select
-                id="designationInput"
-                name="designation"
-                value={formData.designation}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Designation</option>
-              </select>
-            </div>
+          <div className='data-input'>
+          <label htmlFor="firstNameInput"> Name</label>
+          <input
+            type="text"
+            id="firstNameInput"
+            name="firstName"
+            value={formData.firstName}
+            readOnly
+            required
+          />
+        </div>
+        <div className='data-input'>
+          <label htmlFor="firstNameInput"> Department</label>
+          <input
+            type="text"
+            id="firstNameInput"
+            name="firstName"
+            value={formData.firstName}
+            readOnly
+            required
+          />
+        </div>
+        <div className='data-input'>
+          <label htmlFor="firstNameInput"> Designation</label>
+          <input
+            type="text"
+            id="firstNameInput"
+            name="firstName"
+            value={formData.firstName}
+            readOnly
+            required
+          />
+        </div>
           </div>
 
           <div className='second'>
@@ -143,44 +140,41 @@ const Irb = () => {
         <div className='small-heading'>
           <h2>To be filled if supervisor is from outside TIET</h2>
         </div>
-        <form onSubmit={handleSubmit} id="form2" className='form'>
+        <form onSubmit={handleSubmit} id="form2" className='irbSubSupform'>
           <div className='first'>
-            <div className='data-input'>
-              <label htmlFor="nameInput">Name</label>
-              <select
-                id="nameInput"
-                name="name"
-                value={formData2.name}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Name</option>
-              </select>
-            </div>
-            <div className='data-input'>
-              <label htmlFor="designationInput">Designation</label>
-              <select
-                id="designationInput"
-                name="designation"
-                value={formData2.designation}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Designation</option>
-              </select>
-            </div>
-            <div className='data-input'>
-              <label htmlFor="departmentInput">Name of Institute</label>
-              <select
-                id="instituteInput"
-                name="institute"
-                value={formData2.institute}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select Institute</option>
-              </select>
-            </div>
+          <div className='data-input'>
+          <label htmlFor="firstNameInput"> Name</label>
+          <input
+            type="text"
+            id="firstNameInput"
+            name="firstName"
+            value={formData.firstName}
+            readOnly
+            required
+          />
+        </div>
+        <div className='data-input'>
+          <label htmlFor="firstNameInput"> Designation</label>
+          <input
+            type="text"
+            id="firstNameInput"
+            name="firstName"
+            value={formData.firstName}
+            readOnly
+            required
+          />
+        </div>
+        <div className='data-input'>
+          <label htmlFor="firstNameInput"> Name of Institute</label>
+          <input
+            type="text"
+            id="firstNameInput"
+            name="firstName"
+            value={formData.firstName}
+            readOnly
+            required
+          />
+        </div>
           </div>
           <div className='data-input'>
             <label htmlFor="addressInput">Address for correspondence</label>

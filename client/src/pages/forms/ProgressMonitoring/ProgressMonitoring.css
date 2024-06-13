@@ -22,8 +22,10 @@
     margin: 20px;
 align-items: center;
 justify-items: center;
+overflow-x: hidden;
+overflow-y: hidden;
     
-}
+}   
 .data-input label,
 .date-input label{
     font-size: 26px;
