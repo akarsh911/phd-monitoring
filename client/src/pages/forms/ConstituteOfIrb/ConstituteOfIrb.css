@@ -1,202 +1,249 @@
-.studentSidebody-div{
-    position: relative; /* Changed from absolute to relative */
-    min-height: 3000px; /* Ensure the content area is tall enough */
-    width: calc(100% - 290px); /* Adjust width to account for the sidebar */
-    margin-top: 109px; /* Ensure the content starts below the navbar */
-    margin-left: 290px;
-    background-color: white;
-    overflow-y: auto; /* Enable vertical scrolling */
+
+.studentSideform-div{
+  position: relative; /* Changed from absolute to relative */
+  min-height: 3000px; /* Ensure the content area is tall enough */
+  width: calc(100% - 46px); /* Adjust width to account for the sidebar */
+  margin-top: 109px; /* Ensure the content starts below the navbar */
+  margin-left: 290px;
+  background-color: white;
+  overflow-y: auto; /* Enable vertical scrolling */
 }
-.hodSide-form {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-  }
-  
-  .data-input {
-    z-index: 10;
-    margin-bottom: 20px;
-  }
-  
-  .data-input label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-  }
   
 
-  
-  .suggestions-list {
-    position: relative;
-    display: inline-block;
-    background-color: white;
-    border: 1px solid #ccc;
-    border-top: none;
-    font-size: 14px;
-    width: 200 px; /* Adjust width to align with input */
-  }
-  
-  .suggestion-item {
-    position: absolute;
-  border: 1px solid #d4d4d4;
-  background-color: #ffffff;
-  border-bottom: none;
-  border-top: none;
-  z-index: 99;
-  /*position the autocomplete items to be the same width as the container:*/
-  top: 100%;
-  left: 0;
-  right: 0;
-    padding: 10px;
-    cursor: pointer;
-  }
-  
-  .suggestion-item:hover {
-    background-color: #f0f0f0;
-  }
-  
-  .chairman-expert-input {
-    display: flex;
-    align-items: center;
-  }
-  
-  .add-button {
-    margin-left: 10px;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .add-button:hover {
-    background-color: #0056b3;
-  }
-  
-  #appr {
-    display: flex;
-    align-items: center;
-  }
-  
-  #appr div {
-    margin-right: 20px;
-  }
-  
-  .small-label {
-    margin-left: 5px;
-  }
-  
-  .supervisor-button-div {
-    text-align: center;
-  }
-  
-  .send {
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .send:hover {
-    background-color: #218838;
-  }
-  
-.two-button{
-    display: flex;
-    flex-direction: row;
-    align-items: end;
+.data-input label{
+  font-size: 26px;
+  font-weight: bold;
 }
-.studentSideform-div{
-    height:2000px;
-    /* width:1710px; */
-    color:black;
-  background-color: #eaeaea;
+
+#appr{
+  display: flex;
+flex-direction: row;
+align-items: center;
+}
+
+.studentSideform{
   display: flex;
   flex-direction: column;
-    margin: 20px;
-align-items: center;
-justify-items: center;
-    
-}
-.data-input label,
-.date-input label{
-    font-size: 26px;
-    font-weight: bold;
+  margin: 60px;
+  font-size: 30px;
+  align-items: left;
+  width: 100%;
+  height: 100%;
 }
 
+
 .data-input input{
-    margin-left: 8px;
-    border: none;
- border-bottom: 1px solid black;
+  margin-left: 8px;
+  border: none;
+border-bottom: 1px solid black;
 background: transparent;
 outline: none;
 
 }
 
 .form{
-    display: flex;
-    flex-direction: column;
-    margin: 60px;
-    font-size: 15px;
-    align-items: left;
-    width: 90%;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 60px;
+  font-size: 30px;
+  align-items: left;
+  width: 90%;
+  height: 100%;
 }
 
 .send{
-    width: 200px; /* Adjust width as needed */
-    height: 48px; /* Adjust height as needed */
-    border-radius: 18px; /* Adjust border radius for rounded edges */
-    background-color:rgb(179, 27, 27); /* Red color for the button */
-    color: white; /* Text color */
-    border: none; /* Remove default button border */
-    cursor: pointer; /* Show pointer cursor on hover */
-    transition: background-color 0.3s ease; 
-    margin-right: 193px;
+  width: 200px; /* Adjust width as needed */
+  height: 48px; /* Adjust height as needed */
+  border-radius: 18px; /* Adjust border radius for rounded edges */
+  background-color:rgb(179, 27, 27); /* Red color for the button */
+  color: white; /* Text color */
+  border: none; /* Remove default button border */
+  cursor: pointer; /* Show pointer cursor on hover */
+  transition: background-color 0.3s ease; 
+  margin-right: 193px;
 }
 
-.data-input,
-.date-input,
-.gender-input{
-    padding: 20px;
-  
+.data-input{
+  padding: 20px;
+
 }
 
 .supervisor-button-div{
-    display: flex;
-    /* justify-content: flex-end; */
+  display: flex;
+  /* justify-content: flex-end; */
+  margin: 20px;
+  margin-bottom: 30px;
+  margin-top: 25px;
 }
 
-#appr{
-    display: flex;
-  flex-direction: row;
-  align-items: center;
+.data-input input{
+margin-left: 21px;
+
 }
 
-.data-input input,
-.date-input input,
-.gender-input input,
-#departmentInput{
-  margin-left: 21px;
-  
-}
-.data-input .small-label {
-    font-size: 20px; 
-    font-weight: 500;
-    margin-right: 20px;/* Adjust the font size as needed */
-  }
-  
-.heading{
-    font-size: 20px;
-}
+
 .first{
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 
 .bold-label{
-    font-weight: bold;
+  font-weight: bold;
 }
+
+
+
+
+.suggestions-list {
+  position: relative;
+  display: inline-block;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  font-size: 14px;
+  width: 200 px; /* Adjust width to align with input */
+}
+
+.suggestion-item {
+  position: absolute;
+border: 1px solid #d4d4d4;
+background-color: #ffffff;
+border-bottom: none;
+border-top: none;
+z-index: 99;
+top: 100%;
+left: 0;
+right: 0;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
+.chairman-expert-input {
+  display: flex;
+  align-items: center;
+}
+
+.add-button {
+  margin-left: 10px;
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background-color: #0056b3;
+}
+
+
+
+.supervisor-button-div {
+  text-align: center;
+}
+
+.send {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.send:hover {
+  background-color: #218838;
+}
+
+/* 
+
+.data-input input {
+  margin-left: 8px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  background: transparent;
+  outline: none;
+  transition: border-color 0.3s ease;
+  font-size: 18px;
+  padding: 5px;
+  width: calc(100% - 20px);
+}
+
+.data-input input:focus {
+  border-bottom-color: #007bff;
+}
+
+
+.select-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.select-wrapper select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  appearance: none;
+  background-color: white;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.select-wrapper select:focus {
+  border-color: #007bff;
+}
+
+.select-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  border: 6px solid transparent;
+  border-top-color: #333;
+  pointer-events: none;
+}
+
+.supervisor-button-div button:hover {
+  background-color: #d40f0f; 
+}
+
+.search-bar {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+  display: none;
+  position: absolute;
+  top: 35px;
+  left: 0;
+  z-index: 1;
+  background: white;
+}
+
+.select-wrapper select:focus + .search-bar,
+.search-bar:focus {
+  display: block;
+}
+
+
+.no-names {
+  padding: 10px;
+  color: #999;
+  text-align: center;
+  font-style: italic;
+} 
+
+*/
