@@ -4,11 +4,15 @@ import StudentSideProgress from './StudentSideProgress';
 import DRASideProgress from './DrASideProgress';
 import HodSideProgress from './HodSideProgress';
 import DoRDCSideProgress from './DoRDCSideProgress';
+import SupervisorSideProgress from './SupervisorSideProgress';
+import DocComSideProgress from './DocComSideProgress';
+
 
 const ProgressMonitoring = () => {
   const [formData, setFormData] = useState({
     date: '',
     name: '',
+    regno: '',
     gender: '',
     admissionDate: '',
     regno: '',
@@ -24,7 +28,10 @@ const ProgressMonitoring = () => {
     hodRecommendation: '',
     supervisorRecommendation: '',
     expertfromIRB: '',
-    nomineeDoRDC: ''
+    nomineeDoRDC: '',
+    previousQuantumProgress: '',
+    increaseInQuantumProgress: '',
+    totalQuantumProgress: '',
   });
 
   const [options, setOptions] = useState({
@@ -91,21 +98,37 @@ const ProgressMonitoring = () => {
     }));
   };
 
-  const handleRecommendationChange = (e) => {
+  const handleSupRecommendationChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      supervisorRecommendation : value
-    }));
-  }
-
-  const handleDoRDCChange = (name, value) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value
+      supervisorRecommendation: value,
     }));
   };
 
+  const handleDocComRecommendationChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleDoRDCRecommendationChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleDRARecommendationChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0];
     setFormData((prevData) => ({ ...prevData, date: today }));
@@ -140,228 +163,15 @@ const ProgressMonitoring = () => {
 
 
           {/* STUDENT SIDE ENDS */}
-          <div className='DocComSide-form'>
-          <div className='data-input' id='appr'>
-        <label htmlFor="hodRecommendation">Member 1</label>
-        <div>
-          <input
-            type="radio"
-            id="approved"
-            name="hodRecommendation"
-            value="approved"
-            checked={formData.hodRecommendation === 'approved'}
-            onChange={handleHodRecommendationChange}
-            required
-          />
-          <label htmlFor="approved" className="small-label">Satisfactory</label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            id="notApproved"
-            name="hodRecommendation"
-            value="notApproved"
-            checked={formData.hodRecommendation === 'notApproved'}
-            onChange={handleHodRecommendationChange}
-            required
-          />
-           <label htmlFor="notApproved" className="small-label">Not Satisfactory</label>
-        </div>
-        <div className='data-input'>
-        <label htmlFor="HodRemarks" className='small-label'>Remarks (if any)</label>
-        <input
-          type="text"
-          id="hodRemarks"
-          name="hodRemarks"
-          value={formData.hodRemarks}
-        />
-      </div>
 
-      </div>
-      
-      <div className='data-input' id='appr'>
-        <label htmlFor="hodRecommendation">Member 2</label>
-        <div>
-          <input
-            type="radio"
-            id="approved"
-            name="hodRecommendation"
-            value="approved"
-            checked={formData.hodRecommendation === 'approved'}
-            onChange={handleHodRecommendationChange}
-            required
-          />
-          <label htmlFor="approved" className="small-label">Satisfactory</label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            id="notApproved"
-            name="hodRecommendation"
-            value="notApproved"
-            checked={formData.hodRecommendation === 'notApproved'}
-            onChange={handleHodRecommendationChange}
-            required
-          />
-           <label htmlFor="notApproved" className="small-label">Not Satisfactory</label>
-        </div>
-        <div className='data-input'>
-        <label htmlFor="HodRemarks" className='small-label'>Remarks (if any)</label>
-        <input
-          type="text"
-          id="hodRemarks"
-          name="hodRemarks"
-          value={formData.hodRemarks}
-        />
-      </div>
-      </div>
+          <SupervisorSideProgress formData={formData} handleSupRecommendationChange={handleSupRecommendationChange} />
+         
+     {/* SUPERVISOR SIDE ENDS */}
      
+     <DocComSideProgress formData={formData} handleDocComRecommendationChange={handleDocComRecommendationChange} />
 
-      <div className='data-input' id='appr'>
-        <label htmlFor="hodRecommendation">Member 3</label>
-        <div>
-          <input
-            type="radio"
-            id="approved"
-            name="hodRecommendation"
-            value="approved"
-            checked={formData.hodRecommendation === 'approved'}
-            onChange={handleHodRecommendationChange}
-            required
-          />
-          <label htmlFor="approved" className="small-label">Satisfactory</label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            id="notApproved"
-            name="hodRecommendation"
-            value="notApproved"
-            checked={formData.hodRecommendation === 'notApproved'}
-            onChange={handleHodRecommendationChange}
-            required
-          />
-           <label htmlFor="notApproved" className="small-label">Not Satisfactory</label>
-        </div>
-        <div className='data-input'>
-        <label htmlFor="HodRemarks" className='small-label'>Remarks (if any)</label>
-        <input
-          type="text"
-          id="hodRemarks"
-          name="hodRemarks"
-          value={formData.hodRemarks}
-        />
-      </div>
+{/* Doctoral Comittee Side Ends */}
 
-      </div>
-     
-
-      <div className='data-input' id='appr'>
-        <label htmlFor="hodRecommendation">Member 4</label>
-        <div>
-          <input
-            type="radio"
-            id="approved"
-            name="hodRecommendation"
-            value="approved"
-            checked={formData.hodRecommendation === 'approved'}
-            onChange={handleHodRecommendationChange}
-            required
-          />
-          <label htmlFor="approved" className="small-label">Satisfactory</label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            id="notApproved"
-            name="hodRecommendation"
-            value="notApproved"
-            checked={formData.hodRecommendation === 'notApproved'}
-            onChange={handleHodRecommendationChange}
-            required
-          />
-           <label htmlFor="notApproved" className="small-label">Not Satisfactory</label>
-        </div>
-        <div className='data-input'>
-        <label htmlFor="HodRemarks" className='small-label'>Remarks (if any)</label>
-        <input
-          type="text"
-          id="hodRemarks"
-          name="hodRemarks"
-          value={formData.hodRemarks}
-        />
-      </div>
-      </div>
-      
-
-      <div className='data-input' id='appr'>
-        <label htmlFor="hodRecommendation">Member 5</label>
-        <div>
-          <input
-            type="radio"
-            id="approved"
-            name="hodRecommendation"
-            value="approved"
-            checked={formData.hodRecommendation === 'approved'}
-            onChange={handleHodRecommendationChange}
-            required
-          />
-          <label htmlFor="approved" className="small-label">Satisfactory</label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            id="notApproved"
-            name="hodRecommendation"
-            value="notApproved"
-            checked={formData.hodRecommendation === 'notApproved'}
-            onChange={handleHodRecommendationChange}
-            required
-          />
-           <label htmlFor="notApproved" className="small-label">Not Satisfactory</label>
-        </div>
-        <div className='data-input'>
-        <label htmlFor="HodRemarks" className='small-label'>Remarks (if any)</label>
-        <input
-          type="text"
-          id="hodRemarks"
-          name="hodRemarks"
-          value={formData.hodRemarks}
-        />
-      </div>
-      </div>
-      <div className='data-input'>
-          <label htmlFor="nameInput">Previous Quantum Progress</label>
-          <input
-            type="text"
-            id="nameInput"
-            name="name"
-            value={formData.name}
-            readOnly
-            required
-          />
-        </div>
-        <div className='data-input'>
-          <label htmlFor="nameInput">Increase in Quantum Progress Percentage</label>
-          <input
-            type="text"
-            id="nameInput"
-            name="name"
-            value={formData.name}
-            readOnly
-            required
-          />
-        </div>
-        <div className='supervisor-button-div'>
-        <button className='send' type="submit">SEND TO HOD</button>
-      </div>
-      </div>
-      
-
-      
-
-
-          {/* SUPERVISOR SIDE ENDS */}
 
           <HodSideProgress
             formData={formData}
@@ -371,13 +181,13 @@ const ProgressMonitoring = () => {
 
 <DoRDCSideProgress
             formData={formData}
-            handleHodRecommendationChange={handleHodRecommendationChange}
+            handleDoRDCRecommendationChange={handleDoRDCRecommendationChange}
           />
 
 {/* DoRDC side ends */}
 <DRASideProgress
             formData={formData}
-            handleHodRecommendationChange={handleHodRecommendationChange}
+            handleDRARecommendationChange={handleDRARecommendationChange}
           />
 
         </form>

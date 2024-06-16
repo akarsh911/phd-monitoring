@@ -35,7 +35,7 @@ const HodSideIrb = ({
   return (
     <div className='hodSide-form'>
       <div className='data-input'>
-        <label>List of 3 outside experts Proposed by the HOD</label>
+        <label>List of 3 outside experts Proposed by the HOD from the duly approved panel by the Senate</label>
         <table>
           <tbody>
             {formData.experts.map((expert, index) => (
@@ -61,7 +61,7 @@ const HodSideIrb = ({
       </div>
 
       <div className='data-input'>
-        <label htmlFor="chairmanExpertInput">Expert(s) recommended by chairman board of the studies of concerned department in cognate area of department</label>
+        <label htmlFor="chairmanExpertInput">Expert(s) recommended by Chairman Board of Studies of concerned department in cognate area from the Department/School</label>
         {formData.chairmanExperts.map((expert, index) => (
           <div key={index} className='chairman-expert-input'>
             <select
@@ -111,7 +111,10 @@ const HodSideIrb = ({
           <label htmlFor="notApproved" className="small-label">Not Approved</label>
         </div>
       </div>
-      <div className='data-input'>
+
+
+      {/* Display after DoRDC select it */}
+      {/* <div className='data-input'>
         <label htmlFor="expertInput">One expert from the IRB panel of outside experts of concerned department</label>
         <input
           type="text"
@@ -123,7 +126,7 @@ const HodSideIrb = ({
         />
       </div>
       <div className='data-input'>
-        <label htmlFor="nomineeInput">Nominee of the DoRDC in cognate area from the institute</label>
+        <label htmlFor="nomineeInput">One nominee of the DoRDC in the cognate area from the Institute</label>
         <input
           type="text"
           id="nomineeInput"
@@ -132,7 +135,7 @@ const HodSideIrb = ({
           readOnly
           required
         />
-      </div>
+      </div> */}
       <div className='supervisor-button-div'>
         <button className='send' type="submit">SEND TO DoRDC</button>
       </div>

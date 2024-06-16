@@ -4,21 +4,32 @@ import './Extension.css';
 
 const StudentSideExtension = ({ formData, handleChange }) => {
   return (
-    <>
-      <div className='first'>
-        <div className='data-input'>
-          <label htmlFor="firstNameInput"> Name</label>
+    <div className='student-form'>
+       
+       <div className='first'>
+      <div className='data-input'>
+          <label htmlFor="regnoInput">Roll Number</label>
           <input
-            type="text"
-            id="firstNameInput"
-            name="firstName"
-            value={formData.firstName}
+            type="number"
+            id="regnoInput"
+            name="regno"
+            value={formData.regno}
             readOnly
             required
           />
         </div>
-        
-      </div>
+        <div className='data-input'>
+          <label htmlFor="nameInput">Name</label>
+          <input
+            type="text"
+            id="nameInput"
+            name="name"
+            value={formData.name}
+            readOnly
+            required
+          />
+        </div>
+        </div>
       <div className='first'>
         <div className='data-input'>
           <label htmlFor="dateOfAdmissionInput">Date of Admission</label>
@@ -111,7 +122,7 @@ const StudentSideExtension = ({ formData, handleChange }) => {
       </div>
       <div className='data-input'>
         <label>
-          Period of extension (IN MONTHS)
+          Period of extension required (IN MONTHS)
           <input type="date" name="extensionPeriodStart" value={formData.extensionPeriodStart} onChange={handleChange} /> to
           <input type="date" name="extensionPeriodEnd" value={formData.extensionPeriodEnd} onChange={handleChange} />
         </label>
@@ -125,7 +136,7 @@ const StudentSideExtension = ({ formData, handleChange }) => {
       <div className='supervisor-button-div'>
         <button className='send' type="submit">SEND TO SUPERVISOR</button>
       </div>
-    </>
+    </div>
   );
 };
 
