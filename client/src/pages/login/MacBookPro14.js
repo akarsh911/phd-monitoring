@@ -117,7 +117,7 @@ const MacBookPro14 = () => {
                         <input
                           className="input"
                           placeholder="*****************"
-                          type="text"
+                          type="password"
                           name="password"
                           required
                         />
