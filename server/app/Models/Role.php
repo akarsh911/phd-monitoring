@@ -42,6 +42,8 @@ class Role extends Model
         'can_manage_roles',
         'can_edit_department',
         'can_add_department',
+        'can_read_external',
+        'can_edit_external',
     ];
 
 

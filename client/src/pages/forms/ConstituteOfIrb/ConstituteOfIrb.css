@@ -7,7 +7,103 @@
     background-color: white;
     overflow-y: auto; /* Enable vertical scrolling */
 }
+.hodSide-form {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+  }
+  
+  .data-input {
+    z-index: 10;
+    margin-bottom: 20px;
+  }
+  
+  .data-input label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+  
 
+  
+  .suggestions-list {
+    position: relative;
+    display: inline-block;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-top: none;
+    font-size: 14px;
+    width: 200 px; /* Adjust width to align with input */
+  }
+  
+  .suggestion-item {
+    position: absolute;
+  border: 1px solid #d4d4d4;
+  background-color: #ffffff;
+  border-bottom: none;
+  border-top: none;
+  z-index: 99;
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+    padding: 10px;
+    cursor: pointer;
+  }
+  
+  .suggestion-item:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .chairman-expert-input {
+    display: flex;
+    align-items: center;
+  }
+  
+  .add-button {
+    margin-left: 10px;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .add-button:hover {
+    background-color: #0056b3;
+  }
+  
+  #appr {
+    display: flex;
+    align-items: center;
+  }
+  
+  #appr div {
+    margin-right: 20px;
+  }
+  
+  .small-label {
+    margin-left: 5px;
+  }
+  
+  .supervisor-button-div {
+    text-align: center;
+  }
+  
+  .send {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .send:hover {
+    background-color: #218838;
+  }
+  
 .two-button{
     display: flex;
     flex-direction: row;

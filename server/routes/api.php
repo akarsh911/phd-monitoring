@@ -120,6 +120,11 @@ Route::prefix('students')->group(function () {
 Route::prefix('supervisors')->group(function () {
     require base_path('routes/base/supervisors.php');
 });
+
+Route::prefix('external')->group(function () {
+    require base_path('routes/base/external.php');
+});
+
 Route::prefix('forms')->group(function () {
     require base_path('routes/base/forms.php');
 });

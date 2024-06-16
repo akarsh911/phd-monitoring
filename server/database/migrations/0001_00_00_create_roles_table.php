@@ -32,6 +32,8 @@ return new class extends Migration
             $table->enum('can_add_students',['true','false'])->default('false');
             $table->enum('can_read_supervisors',['true','false'])->default('false');
             $table->enum('can_read_doctoral_committee',['true','false'])->default('false');
+            $table->enum('can_read_external',['true','false'])->default('false');
+            $table->enum('can_edit_external',['true','false'])->default('false');
             $table->enum('can_edit_supervisors',['true','false'])->default('false');
             $table->enum('can_edit_doctoral_committee',['true','false'])->default('false');
             $table->enum('can_delete_department_students',['true','false'])->default('false');

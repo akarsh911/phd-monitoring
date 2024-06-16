@@ -19,8 +19,10 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('designation');
             $table->string('institution');
-            $table->string('email');
-            $table->string('phone')->nullable();
+            $table->string('department');
+            $table->string('email')->unique();
+            $table->string('phone')->nullable()->unique();
+            
         });
     }
 

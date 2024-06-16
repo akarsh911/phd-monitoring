@@ -3,10 +3,21 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
 class FacultyController extends Controller
 {
     public function add(Request $request)
     {
+
+        $user = Auth::user();
+
+        if(!$user->role->can_add_faulty)
+        {
+            return response()->json([
+                'message' => 'You do not have permission to add faculty'
+            ], 403);
+        }
+      
         $request->validate(
             [
                 'first_name' => 'required|string',
@@ -44,5 +55,28 @@ class FacultyController extends Controller
             'message' => 'Faculty added successfully',
             'password' => $password
         ], 200);
+    }
+
+    public function list(Request $request)
+    {
+        $user = Auth::user();
+         if($user->role->can_read_all_faculties==true)
+         {
+            $faculties = \App\Models\Faculty::all();
+            return response()->json($faculties, 200);
+         }
+         else if($user->role->can_read_department_faculties==true)
+         {
+            $faculties = \App\Models\Faculty::where('department_id', $user->faculty->department_id)->get();
+            return response()->json($faculties, 200);         
+         }
+            else
+            {
+                return response()->json([
+                    'message' => 'You do not have permission to view faculties'
+                ], 403);
+            }
+        $faculties = \App\Models\Faculty::all();
+        return response()->json($faculties, 200);
     }
 }

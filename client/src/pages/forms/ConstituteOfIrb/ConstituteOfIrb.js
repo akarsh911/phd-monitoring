@@ -82,7 +82,7 @@ const Irb = () => {
             supervisor: data.supervisors.map(s => s.name).join(', '),
             experts: ['', '', ''], // Map accordingly if available
             nominees: data.nominee_cognates|| [{},{},{}], // Map accordingly if available
-            chairmanExperts: [''], // Map accordingly if available// Map accordingly if available
+            chairmanExperts: data.chairman_experts, // Map accordingly if available// Map accordingly if available
             expertfromIRB: '', // Map accordingly if available
             nomineeDoRDC: '', // Map accordingly if available
             student_lock: data.student_lock , // Adjust this based on your logic

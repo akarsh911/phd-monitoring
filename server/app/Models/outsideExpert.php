@@ -15,6 +15,7 @@ class OutsideExpert extends Model
         'first_name',
         'last_name',
         'designation',
+        'department',
         'institution',
         'email',
         'phone',

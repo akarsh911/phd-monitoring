@@ -12,7 +12,6 @@ use App\Models\OutsideExpert;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redis;
 
 class IrbFormController extends Controller
 {
@@ -405,6 +404,7 @@ class IrbFormController extends Controller
                     'form_id' => 'required|integer',
                     'comments' => 'required|string',
                     'outsideExperts' => 'required|array',
+                    'cognateExperts' => 'required|array',
                     'recommendation' => 'required|string',
                 ]);
                 $irbForm = IrbForm::find($request->form_id);
@@ -442,6 +442,21 @@ class IrbFormController extends Controller
                                     'stage' => 'hod',
                                     'change' => "HOD added outside expert",
                                 ]);
+                            }
+                            foreach ($request->cognateExperts as $cognateExpert) {
+                                if (Faculty::where('faculty_code', $cognateExpert['faculty_code'])->exists()) {
+                                    IrbNomineeCognate::create([
+                                        'irb_form_id' => $irbForm->id,
+                                        'nominee_id' => $cognateExpert['faculty_code'],
+                                    ]);
+                                    IrbFormHistory::create([
+                                        'irb_form_id' => $irbForm->id,
+                                        'user_id' => $user->id,
+                                        'status' => 'approved',
+                                        'stage' => 'hod',
+                                        'change' => "HOD added cognate expert",
+                                    ]);
+                                }
                             }
                             $irbForm->update([
                                 'stage' => 'dordc',

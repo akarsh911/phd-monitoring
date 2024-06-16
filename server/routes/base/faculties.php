@@ -4,9 +4,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\FacultyController;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('',function (Request $request){
-    $faculties = \App\Models\Faculty::all();
-    return response()->json($faculties,200);
-});
+Route::get('',[FacultyController::class, 'list'])->middleware('auth:sanctum');
 
 Route::post('/add', [FacultyController::class, 'add'])->middleware('auth:sanctum');

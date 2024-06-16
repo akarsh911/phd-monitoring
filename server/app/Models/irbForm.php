@@ -66,6 +66,13 @@ class IrbForm extends Model
             }),
             'outside_experts' => $this->outsideExperts,
             'expert_departments' => $this->expertDepartments,
+            'chairman_experts' => $this->chairmanExperts->map(function($expert){
+                return [
+                    'name' => $expert->expert->user->name(),
+                    'designation' => $expert->expert->designation,
+                    'department' => $expert->expert->department->name
+                ];
+            }),
             'form_histories' => $this->formHistories,
             'student_lock' => $this->student_lock,
             'hod_lock' => $this->hod_lock,
@@ -115,5 +122,9 @@ class IrbForm extends Model
         return $this->hasMany(IrbSupervisorApproval::class,'irb_form_id','id');
     }
 
+    public function chairmanExperts()
+    {
+        return $this->hasMany(IrbExpertChairman::class,'irb_form_id','id');
+    }
     
 }
