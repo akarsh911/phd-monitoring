@@ -23,7 +23,7 @@ const DoRDCSideIrb = ({ formData, options, handleDoRDCChange }) => {
             </select>
           </div>
           <div className='data-input'>
-            <label htmlFor="nomineeInput">Nominee of the DoRDC in cognate area from the institute</label>
+            <label htmlFor="nomineeInput"> One nominee of the DoRDC in the cognate area from the Institute</label>
             <select
               id="nomineeInput"
               name="nomineeDoRDC"

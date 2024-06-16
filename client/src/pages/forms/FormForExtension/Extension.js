@@ -6,8 +6,8 @@ import HodSideExtension from './HodSideExtension';
 import DrASideExtension from './DrASideExtension';
 const ResearchProposalExtensionForm = () => {
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+   name:'',
+   regno:'',
     dateOfAdmission: '',
     department: '',
     researchTitle: '',
@@ -97,9 +97,9 @@ const ResearchProposalExtensionForm = () => {
           <h1>Extension for submission of research proposal</h1>
         </div>
         <form onSubmit={handleSubmit} className='extensionSideform'>
-        <div className='student-form'>
+        
         <StudentSideExtension formData={formData} handleChange={handleChange} />
-            </div>
+          
       {/* Student side ends */}
 
     

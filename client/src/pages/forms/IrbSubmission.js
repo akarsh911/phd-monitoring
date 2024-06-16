@@ -5,6 +5,7 @@ import './IrbSubmission.css';
 const Irb = () => {
   const [formData, setFormData] = useState({
     name: '',
+    regno:'',
     admissionDate: '',
     department: '',
     cgpa: '',
@@ -34,31 +35,31 @@ const Irb = () => {
     <h1>IRB SUBMISSION FORM</h1>
     </div>
     <form onSubmit={handleSubmit} className='irbSubform'>
-    <div className='data-input'>
+     <div className='first'>
+      <div className='data-input'>
+          <label htmlFor="regnoInput">Roll Number</label>
+          <input
+            type="number"
+            id="regnoInput"
+            name="regno"
+            value={formData.regno}
+            readOnly
+            required
+          />
+        </div>
+        <div className='data-input'>
           <label htmlFor="nameInput">Name</label>
           <input
             type="text"
             id="nameInput"
             name="name"
             value={formData.name}
-            onChange={handleChange}
-        
-            required
-          />
-    </div>
-        <div className='first'>
-        <div className='date-input'>
-          <label htmlFor="dateInput">Date of Admission</label>
-          <input
-            type="date"
-            id="dateInput"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            
+            readOnly
             required
           />
         </div>
+        </div>
+        <div className='first'>
         <div className='data-input'>
           <label htmlFor="departmentInput">Department</label>
           <input
@@ -70,8 +71,6 @@ const Irb = () => {
             required
           />
         </div>
-        </div>
-         <div className='first'>
         <div className='data-input'>
           <label htmlFor="cgpaInput">CGPA</label>
           <input
@@ -84,6 +83,21 @@ const Irb = () => {
             required
           />
         </div>
+        </div>
+        <div className='date-input'>
+          <label htmlFor="dateInput">Date of Admission</label>
+          <input
+            type="date"
+            id="dateInput"
+            name="date"
+            value={formData.date}
+            onChange={handleChange}
+            
+            required
+          />
+        </div>
+       
+        <div className='first'>
         <div className='data-input'>
           <label htmlFor="titleInput">Title of PHD Thesis</label>
           <input
@@ -110,7 +124,7 @@ const Irb = () => {
         </div>
         <div className='first'>
         <div className='data-input'>
-          <label htmlFor="telephonenumberInput">Telephone</label>
+          <label htmlFor="telephonenumberInput">Email</label>
           <input
             type="tel"
             id="telephonenumberInput"

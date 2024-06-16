@@ -79,6 +79,18 @@ const StudentSideIrb = ({ formData }) => {
         />
       </div>
       <div className='first'>
+      <div className='data-input'>
+          <label htmlFor="regnoInput">Roll Number</label>
+          <input
+            type="number"
+            id="regnoInput"
+            name="regno"
+            value={formValues.regno}
+            onChange={handleChange}
+            readOnly={!isEditable}
+            required
+          />
+        </div>
         <div className='data-input'>
           <label htmlFor="nameInput">Name</label>
           <input
@@ -91,6 +103,10 @@ const StudentSideIrb = ({ formData }) => {
             required
           />
         </div>
+        
+      </div>
+      <div className='first'>
+        
         <div className='data-input'>
           <label className='bold-label'>Gender</label>
           <input
@@ -103,10 +119,24 @@ const StudentSideIrb = ({ formData }) => {
             required
           />
         </div>
+        <div className='data-input'>
+          <label htmlFor="departmentInput">Department</label>
+          <input
+            type="text"
+            id="departmentInput"
+            name="department"
+            value={formValues.department}
+            onChange={handleChange}
+            readOnly={!isEditable}
+            required
+          />
+        </div>
+         
+       
+       
       </div>
-      <div className='first'>
-        <div className='date-input'>
-          <label htmlFor="admissionDateInput">Date of Admission</label>
+      <div className='date-input'>
+        <label htmlFor="admissionDateInput">Date of Admission</label>
           <input
             type="date"
             id="admissionDateInput"
@@ -117,19 +147,6 @@ const StudentSideIrb = ({ formData }) => {
             required
           />
         </div>
-        <div className='data-input'>
-          <label htmlFor="regnoInput">Roll Number</label>
-          <input
-            type="number"
-            id="regnoInput"
-            name="regno"
-            value={formValues.regno}
-            onChange={handleChange}
-            readOnly={!isEditable}
-            required
-          />
-        </div>
-      </div>
       <div className='first'>
         <div className='data-input'>
           <label htmlFor="semesterInput">Semester</label>
@@ -156,19 +173,6 @@ const StudentSideIrb = ({ formData }) => {
           />
         </div>
         <div className='data-input'>
-          <label htmlFor="departmentInput">Department</label>
-          <input
-            type="text"
-            id="departmentInput"
-            name="department"
-            value={formValues.department}
-            onChange={handleChange}
-            readOnly={!isEditable}
-            required
-          />
-        </div>
-      </div>
-      <div className='data-input'>
         <label htmlFor="cgpaInput">CGPA</label>
         <input
           type="number"
@@ -180,6 +184,8 @@ const StudentSideIrb = ({ formData }) => {
           required
         />
       </div>
+      </div>
+      
       <div className='data-input'>
         <label htmlFor="chairmanInput">Chairman, Board of Studies of the concerned department</label>
         <input

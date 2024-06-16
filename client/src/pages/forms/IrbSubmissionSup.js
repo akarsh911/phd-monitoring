@@ -63,9 +63,6 @@ const Irb = () => {
         <div className='heading'>
           <h1>IRB SUBMISSION FORM</h1>
         </div>
-        <div className='small-heading'>
-          <h2>To be filled by supervisors from TIET</h2>
-        </div>
         <form onSubmit={handleSubmit} id="form1" className='irbSubSupform'>
           <div className='first'>
           <div className='data-input'>
@@ -130,104 +127,103 @@ const Irb = () => {
             </div>
           </div>
 
-          <div className='addmore-button'>
-            <button className='addmore' onClick={handleAddMoreForm1}>Add more +</button>
-          </div>
+        
         </form>
-
-        {/* second part */}
-
-        <div className='small-heading'>
-          <h2>To be filled if supervisor is from outside TIET</h2>
         </div>
-        <form onSubmit={handleSubmit} id="form2" className='irbSubSupform'>
-          <div className='first'>
-          <div className='data-input'>
-          <label htmlFor="firstNameInput"> Name</label>
-          <input
-            type="text"
-            id="firstNameInput"
-            name="firstName"
-            value={formData.firstName}
-            readOnly
-            required
-          />
-        </div>
-        <div className='data-input'>
-          <label htmlFor="firstNameInput"> Designation</label>
-          <input
-            type="text"
-            id="firstNameInput"
-            name="firstName"
-            value={formData.firstName}
-            readOnly
-            required
-          />
-        </div>
-        <div className='data-input'>
-          <label htmlFor="firstNameInput"> Name of Institute</label>
-          <input
-            type="text"
-            id="firstNameInput"
-            name="firstName"
-            value={formData.firstName}
-            readOnly
-            required
-          />
-        </div>
-          </div>
-          <div className='data-input'>
-            <label htmlFor="addressInput">Address for correspondence</label>
-            <input
-              type="text"
-              id="addressInput"
-              name="address"
-              value={formData2.address}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className='first'>
-            <div className='data-input'>
-              <label htmlFor="numberInput">Contact Number</label>
-              <input
-                type="tel"
-                id="numberInput"
-                name="number"
-                value={formData2.number}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className='data-input'>
-              <label htmlFor="emailInput">Email</label>
-              <input
-                type="text"
-                id="emailInput"
-                name="email"
-                value={formData2.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className='upload-input'>
-              <label>
-                Upload NOC
-                <input
-                  type="file"
-                  id='upload-noc'
-                  onChange={handleFileChange}
-                />
-              </label>
-            </div>
-          </div>
-
-          <div className='addmore-button'>
-            <button className='addmore' onClick={handleAddMoreForm2}>Add more +</button>
-          </div>
-        </form>
-      </div>
     </div>
+
+        // {/* second part */}
+
+      //   {/* <div className='small-heading'>
+      //     <h2>To be filled if supervisor is from outside TIET</h2>
+      //   </div>
+      //   <form onSubmit={handleSubmit} id="form2" className='irbSubSupform'>
+      //     <div className='first'>
+      //     <div className='data-input'>
+      //     <label htmlFor="firstNameInput"> Name</label>
+      //     <input
+      //       type="text"
+      //       id="firstNameInput"
+      //       name="firstName"
+      //       value={formData.firstName}
+      //       readOnly
+      //       required
+      //     />
+      //   </div>
+      //   <div className='data-input'>
+      //     <label htmlFor="firstNameInput"> Designation</label>
+      //     <input
+      //       type="text"
+      //       id="firstNameInput"
+      //       name="firstName"
+      //       value={formData.firstName}
+      //       readOnly
+      //       required
+      //     />
+      //   </div>
+      //   <div className='data-input'>
+      //     <label htmlFor="firstNameInput"> Name of Institute</label>
+      //     <input
+      //       type="text"
+      //       id="firstNameInput"
+      //       name="firstName"
+      //       value={formData.firstName}
+      //       readOnly
+      //       required
+      //     />
+      //   </div>
+      //     </div>
+      //     <div className='data-input'>
+      //       <label htmlFor="addressInput">Address for correspondence</label>
+      //       <input
+      //         type="text"
+      //         id="addressInput"
+      //         name="address"
+      //         value={formData2.address}
+      //         onChange={handleChange}
+      //         required
+      //       />
+      //     </div>
+      //     <div className='first'>
+      //       <div className='data-input'>
+      //         <label htmlFor="numberInput">Contact Number</label>
+      //         <input
+      //           type="tel"
+      //           id="numberInput"
+      //           name="number"
+      //           value={formData2.number}
+      //           onChange={handleChange}
+      //           required
+      //         />
+      //       </div>
+      //       <div className='data-input'>
+      //         <label htmlFor="emailInput">Email</label>
+      //         <input
+      //           type="text"
+      //           id="emailInput"
+      //           name="email"
+      //           value={formData2.email}
+      //           onChange={handleChange}
+      //           required
+      //         />
+      //       </div>
+      //       <div className='upload-input'>
+      //         <label>
+      //           Upload NOC
+      //           <input
+      //             type="file"
+      //             id='upload-noc'
+      //             onChange={handleFileChange}
+      //           />
+      //         </label>
+      //       </div>
+      //     </div>
+
+      //     <div className='addmore-button'>
+      //       <button className='addmore' onClick={handleAddMoreForm2}>Add more +</button>
+      //     </div>
+      //   </form> */
+      //  }
   );
 };
 
