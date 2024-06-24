@@ -367,7 +367,7 @@ const HodSideIrb = ({
           <label htmlFor="notApproved" className="small-label">Not Approved</label>
         </div>
       </div>
-      <div className='data-input'>
+      {/* <div className='data-input'>
         <label htmlFor="expertInput">One expert from the IRB panel of outside experts of concerned department</label>
         <input
           type="text"
@@ -388,7 +388,7 @@ const HodSideIrb = ({
           readOnly
           required
         />
-      </div>
+      </div> */}
       <div className='supervisor-button-div'>
         <button className='send' type="submit">SEND TO DoRDC</button>
       </div>
