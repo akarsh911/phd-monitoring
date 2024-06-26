@@ -40,7 +40,7 @@ const StudentSideThesis = ({ formData, handleChange }) => {
         />
       </div>
      
-      <div className='data-input'>
+      <div className='date-input'>
         <label htmlFor="dateOfAdmissionInput">Date of Admission</label>
         <input
           type="date"
@@ -125,8 +125,8 @@ const StudentSideThesis = ({ formData, handleChange }) => {
         />
       </div>
       
-      <div className='data-input'>
-        <label htmlFor="dateOfStatusChangeInput">Date of change of Status</label>
+      <div className='date-input'>
+        <label htmlFor="dateOfStatusChangeInput">Date of Change of Status</label>
         <input
           type="date"
           id="dateOfStatusChangeInput"
@@ -145,7 +145,7 @@ const StudentSideThesis = ({ formData, handleChange }) => {
         </label>
       </div>
       
-      <div className='data-input'>
+      <div className='date-input'>
         <label htmlFor="dateOfSynopsisPresentationInput">Date of Synopsis Presentation</label>
         <input
           type="date"
@@ -160,7 +160,6 @@ const StudentSideThesis = ({ formData, handleChange }) => {
       <div className='first'>
         <div className='data-input'>
           <label htmlFor="thesisExamFeeInput">Thesis Examination Fee:</label>
-          {/* Add appropriate input fields for thesis examination fee */}
         </div>
        
         <div className='data-input'>
@@ -170,19 +169,19 @@ const StudentSideThesis = ({ formData, handleChange }) => {
             id="receiptNumberInput"
             name="receiptNumber"
             value={formData.receiptNumber}
-            readOnly
+         
             required
           />
         
         
-        <div className='data-input'>
+        <div className='date-input'>
           <label htmlFor="receiptDateInput">Date</label>
           <input
             type="date"
             id="receiptDateInput"
             name="receiptDate"
             value={formData.receiptDate}
-            readOnly
+        
             required
           />
           </div>
