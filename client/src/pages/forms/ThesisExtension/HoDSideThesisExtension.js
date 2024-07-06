@@ -1,8 +1,8 @@
-import './ThesisSub.css';
+import './ThesisExtension.css';
 import React from 'react';
 
 
-const HodSideThesis = ({ formData, handleHodRecommendationChange }) => {
+const HodSideThesisExtension = ({ formData, handleHodRecommendationChange }) => {
   return (
     <div className='supervisorSide-form'>
       <div className='data-input' id='appr'>
@@ -48,4 +48,4 @@ const HodSideThesis = ({ formData, handleHodRecommendationChange }) => {
   );
 };
 
-export default HodSideThesis;
+export default HodSideThesisExtension;

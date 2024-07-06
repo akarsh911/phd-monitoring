@@ -1,11 +1,11 @@
 import { useState,React }  from 'react';
-import './StatusChange.css';
+import './ThesisExtension.css';
 
-const StudentSideStatusChange = ({ formData, handleChange }) => {
-  const [statusChange, setstatusChange] = useState(null);
+const StudentSideThesisExtension = ({ formData, handleChange }) => {
+  const [ThesisExtension, setThesisExtension] = useState(null);
 
-  const handlestatusChange = (event) => {
-    setstatusChange(event.target.value);
+  const handleThesisExtension = (event) => {
+    setThesisExtension(event.target.value);
   };
   return (
     <div className='student-form'>
@@ -61,7 +61,7 @@ const StudentSideStatusChange = ({ formData, handleChange }) => {
         <div className='data-input'>
           <label htmlFor="emailInput">Email</label>
           <input
-            type="email"  // Changed to type="email" assuming it's for email input
+            type="email"  
             id="emailInput"
             name="email"
             value={formData.email}
@@ -103,40 +103,35 @@ const StudentSideStatusChange = ({ formData, handleChange }) => {
           required
         />
       </div>
-      <div className='data-input' id='appr'>
-        <label className='bold-label'>Change of Status availed if any earlier</label>
-        <div>
-          <input
-            type="radio"
-            id="StatusChangeYes"
-            name="statusChange"
-            value="Yes"
-            onChange={handlestatusChange}
-            required
-          />
-          <label htmlFor="StatusChangeYes" className="small-label">Yes</label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            id="StatusChangeNo"
-            name="statusChange"
-            value="No"
-            onChange={handlestatusChange}
-            required
-          />
-          <label htmlFor="StatusChangeNo" className="small-label">No</label>
-        </div>
+      {/* <div className='data-input' id='gender'>
+      <label className='bold-label'>Gender</label>
+      <div>
+        <input
+          type="radio"
+          id="genderMale"
+          name="gender"
+          value="Male"
+          checked={gender === 'Male'}
+          readOnly
+        />
+        <label htmlFor="genderMale" className="small-label">Male</label>
       </div>
-      {statusChange === "Yes" && (
-         <div className='supervisor-button-div'>
-         <button  type="submit">Attach copy of proof</button>
-       </div>
-    
-      )}
+      <div>
+        <input
+          type="radio"
+          id="genderFemale"
+          name="gender"
+          value="Female"
+          checked={gender === 'Female'}
+          readOnly
+        />
+        <label htmlFor="genderFemale" className="small-label">Female</label>
+      </div>
+    </div>
+       */}
 
 <div className='date-input'>
-        <label htmlFor="irbMeetingDateInput">Date and year of previous extension</label>
+        <label htmlFor="irbMeetingDateInput">Date of pre Synopsis meeting</label>
         <input
           type="date"
           id="previousExtensionDateInput"
@@ -162,24 +157,24 @@ const StudentSideStatusChange = ({ formData, handleChange }) => {
   <div>
     <input
       type="radio"
-      id="RequiredStatusChangeRegularToPartTime"
-      name="RequiredStatusChange"
+      id="RequiredThesisExtensionRegularToPartTime"
+      name="RequiredThesisExtension"
       value="Regular to Part-Time"
-      onChange={handlestatusChange}
+      onChange={handleThesisExtension}
       required
     />
-    <label htmlFor="RequiredStatusChangeRegularToPartTime" className="small-label">Regular to Part-Time</label>
+    <label htmlFor="RequiredThesisExtensionRegularToPartTime" className="small-label">Regular to Part-Time</label>
   </div>
   <div>
     <input
       type="radio"
-      id="RequiredStatusChangePartTimeToRegular"
-      name="RequiredStatusChange"
+      id="RequiredThesisExtensionPartTimeToRegular"
+      name="RequiredThesisExtension"
       value="Part-Time to Regular"
-      onChange={handlestatusChange}
+      onChange={handleThesisExtension}
       required
     />
-    <label htmlFor="RequiredStatusChangePartTimeToRegular" className="small-label">Part-Time to Regular</label>
+    <label htmlFor="RequiredThesisExtensionPartTimeToRegular" className="small-label">Part-Time to Regular</label>
   </div>
 </div>
 
@@ -200,4 +195,4 @@ const StudentSideStatusChange = ({ formData, handleChange }) => {
   );
 };
 
-export default StudentSideStatusChange;
+export default StudentSideThesisExtension;

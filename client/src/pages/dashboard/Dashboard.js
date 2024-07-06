@@ -10,6 +10,7 @@ import ProgressMonitoring from '../forms/ProgressMonitoring/ProgressMonitoring.j
 import SupSideIrb from '../forms/ConstituteOfIrb/SupSideIrb.js';
 import ThesisSubForm from '../forms/ThesisSubmission/ThesisSub.js';
 import StatusChange from '../forms/ChangeOfStatus/StatusChange.js';
+import ThesisExtensionForm from '../forms/ThesisExtension/ThesisExtension.js';
 
 
 const SideLeftMenu = () => {
@@ -64,10 +65,11 @@ const SideLeftMenu = () => {
     {/* <StudentList/> */}
     {/* <ResearchProposalExtensionForm/> */}
     {/* <ConstituteOfIrb/> */}
-    <ThesisSubForm/>
+    {/* <ThesisSubForm/> */}
     {/* <StatusChange/> */}
+    {/* <ThesisExtensionForm/> */}
   
-    {/* <IrbSubmission/> */}
+    <IrbSubmission/>
     {/* <IrbSubmissionSup/> */}
     
     {/* <ProgressMonitoring/> */}

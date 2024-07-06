@@ -68,7 +68,7 @@ const StudentSideThesis = ({ formData, handleChange }) => {
         <div className='data-input'>
           <label htmlFor="emailInput">Email</label>
           <input
-            type="email"  // Changed to type="email" assuming it's for email input
+            type="email"  
             id="emailInput"
             name="email"
             value={formData.email}
@@ -140,7 +140,7 @@ const StudentSideThesis = ({ formData, handleChange }) => {
       <div className='data-input'>
         <label htmlFor="publicationDetailsInput">
           <a href={formData.publicationLink} target="_blank" rel="noopener noreferrer">
-            Details of Publication
+            Details of Publications
           </a>
         </label>
       </div>
@@ -175,7 +175,7 @@ const StudentSideThesis = ({ formData, handleChange }) => {
         
         
         <div className='date-input'>
-          <label htmlFor="receiptDateInput">Date</label>
+          <label htmlFor="receiptDateInput">Date of Fee Submission</label>
           <input
             type="date"
             id="receiptDateInput"
