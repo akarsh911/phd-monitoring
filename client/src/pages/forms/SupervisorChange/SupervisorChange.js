@@ -24,7 +24,7 @@ const SupervisorChange = () => {
     supervisorChange: '',
     reasonForChange: '',
     preference: '',
-    selectedSupervisors: ['Sup 1', 'Sup 2', 'Sup 3'], // Holds the selected supervisors
+    selectedSupervisors: [], // Holds the selected supervisors
   newSupervisors: [] ,// Holds the names of the new supervisors
     
     supervisors: ['Sup 1', 'Sup 2', 'Sup 3'],
@@ -33,18 +33,37 @@ const SupervisorChange = () => {
    
     
   });
+const handleSelectedSupervisorChange = (event) => {
+    const supervisorName = event.target.value;
+  
+    // Check if supervisorName is already in selectedSupervisors
+    const isSelected = formData.selectedSupervisors.includes(supervisorName);
+  
+    if (event.target.checked && !isSelected) {
+      // Add supervisorName to selectedSupervisors if checked
+      const updatedSelectedSupervisors = [...formData.selectedSupervisors, supervisorName];
+      setFormData({
+        ...formData,
+        selectedSupervisors: updatedSelectedSupervisors,
+      });
+    } else if (!event.target.checked && isSelected) {
+      // Remove supervisorName from selectedSupervisors if unchecked
+      const updatedSelectedSupervisors = formData.selectedSupervisors.filter(
+        (name) => name !== supervisorName
+      );
+      setFormData({
+        ...formData,
+        selectedSupervisors: updatedSelectedSupervisors,
+      });
+    }
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const [options, setOptions] = useState({
-    experts: [],
-    nominees: [],
-    chairmanExpertsOptions: [] 
-  });
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -52,11 +71,7 @@ const SupervisorChange = () => {
         const data = await response.json();
         setFormData((prevData) => ({ ...prevData, ...data }));
 
-        setOptions({
-          experts: data.expertsOptions || [],
-          nominees: data.nomineesOptions || [],
-          chairmanExpertsOptions: data.chairmanExpertsOptions || [] 
-        });
+       
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -65,7 +80,12 @@ const SupervisorChange = () => {
     fetchData();
   }, []);
 
+
   
+  
+
+
+
   const handleHoDRecommendationChange = (e) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -128,7 +148,8 @@ const SupervisorChange = () => {
         </div>
         <form onSubmit={handleSubmit} className='studentSideform'>
           
-        <StudentSideSupervisorChange formData={formData} handleChange={handleChange} />
+        <StudentSideSupervisorChange formData={formData} handleChange={handleChange} 
+        handleSelectedSupervisorChange={handleSelectedSupervisorChange}/>
 
 
           {/* STUDENT SIDE ENDS */}

@@ -3,7 +3,7 @@ import {React , useState} from 'react';
 
 import './SupervisorChange.css';
 
-const StudentSideSupervisorChange = ({ formData, handleChange }) => {
+const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSupervisorChange}) => {
     const [supervisors, setSupervisors] = useState([{ name: '' }]);
 
   
@@ -179,8 +179,7 @@ const StudentSideSupervisorChange = ({ formData, handleChange }) => {
                 id={`supervisor-${index}`}
                 name="supervisor"
                 value={supervisor}
-                checked={formData.selectedSupervisor === supervisor}
-                onChange={handleChange}
+                onChange={handleSelectedSupervisorChange}
               />
               <label htmlFor={`supervisor-${index}`} className='small-label'>{supervisor}</label>
             </div>
