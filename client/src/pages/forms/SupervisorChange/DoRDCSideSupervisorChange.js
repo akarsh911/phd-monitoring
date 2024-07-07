@@ -1,12 +1,12 @@
 
 import React from 'react';
-import './ProgressMonitoring.css';
+import './SupervisorChange';
 
-const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
+const DoRDCSideSupervisorChange= ({ formData, handleHodRecommendationChange }) => {
   return (
-    <div className='DrASide-form'>
+    <div className='DoRDCSide-form'>
       <div className='data-input' id='appr'>
-        <label htmlFor="hodRecommendation">Recommendation of DR(A)</label>
+        <label htmlFor="hodRecommendation">Recommendation of DoRDC</label>
         <div>
           <input
             type="radio"
@@ -42,10 +42,10 @@ const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
         />
       </div>
       <div className='supervisor-button-div'>
-        <button className='send' type="submit">Submit</button>
+        <button className='send' type="submit">SEND TO DR(A)</button>
       </div>
     </div>
   );
 };
 
-export default DRASideProgress;
+export default DoRDCSideSupervisorChange;
