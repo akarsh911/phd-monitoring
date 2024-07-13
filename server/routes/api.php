@@ -128,16 +128,16 @@ Route::prefix('external')->group(function () {
 Route::prefix('forms')->group(function () {
     require base_path('routes/base/forms.php');
 });
-Route::get('/init',function (){
+// Route::get('/init',function (){
     
-    User::factory()->count(10)->create();
-    Department::factory()->count(3)->create();
-    Role::factory()->count(5)->create();
-    Student::factory()->count(15)->create();
-    Faculty::factory()->count(8)->create();
+//     User::factory()->count(10)->create();
+//     Department::factory()->count(3)->create();
+//     Role::factory()->count(5)->create();
+//     Student::factory()->count(15)->create();
+//     Faculty::factory()->count(8)->create();
 
 
-return response()->json([
-    'message' => 'Data initialized successfully'
-], 200);
-});
+// return response()->json([
+//     'message' => 'Data initialized successfully'
+// ], 200);
+// });

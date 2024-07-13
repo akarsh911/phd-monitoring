@@ -11,3 +11,7 @@ Route::prefix('irb/constitutuion')->group(function () {
 Route::prefix('irb/submission')->group(function () {
     require base_path('routes/base/irb/irbc_form.php');
 });
+
+Route::prefix('research/extension')->group(function () {
+    require base_path('routes/base/research_extention.php');
+});

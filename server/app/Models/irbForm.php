@@ -64,8 +64,19 @@ class IrbForm extends Model
                     'name' => $nominee->nominee->user->name(),
                 ];
             }),
-            'outside_experts' => $this->outsideExperts,
-            'expert_departments' => $this->expertDepartments,
+            'outside_experts' => $this->outsideExperts->map(function($expert){
+                $expert = $expert->expert;
+                return [
+                    'id' => $expert->id,
+                    'first_name' => $expert->first_name,
+                    'last_name' => $expert->last_name,
+                    'designation' => $expert->designation,
+                    'department' => $expert->department,
+                    'institution' => $expert->institution,
+                    'email' => $expert->email,
+                    'phone' => $expert->phone
+                ];
+            }),
             'chairman_experts' => $this->chairmanExperts->map(function($expert){
                 return [
                     'name' => $expert->expert->user->name(),
@@ -124,7 +135,7 @@ class IrbForm extends Model
 
     public function chairmanExperts()
     {
-        return $this->hasMany(IrbExpertChairman::class,'irb_form_id','id');
+        return $this->hasMany(IrbExpertChairman::class,'irb_form_id');
     }
     
 }

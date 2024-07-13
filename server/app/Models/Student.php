@@ -136,4 +136,14 @@ class Student extends Model
         ]);
         return $irbNewForm;
     }
+
+    public function researchExtentionsForm()
+    {
+        return $this->hasOne(ResearchExtentionsForm::class, 'student_id', 'roll_no');
+    }
+
+    public function researchExtentions()
+    {
+        return $this->hasMany(ResearchExtentions::class, 'student_id', 'roll_no');
+    }
 }

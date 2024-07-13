@@ -43,7 +43,7 @@ const SupSideIrb = ({
       setSelectedNominee(formData.nominees || [{},{},{}]);
     } else {
       var data = [{}, {}, {}] ;
-      console.log("formData.nominees : " + JSON.stringify(formData.nominees));
+      // console.log("formData.nominees : " + JSON.stringify(formData.nominees));
       if (formData.nominees) {
         if(formData.nominees[0])
           {
@@ -59,7 +59,7 @@ const SupSideIrb = ({
         // setSelectedNominee(data);
       
     }
-  }, [formData.supervisor_lock, formData.nominees, formData.nomineeCognates]);
+  }, []);
   
   
   const updatePrefs = async () => {
@@ -240,8 +240,8 @@ const SupSideIrb = ({
                       }
                       disabled={!isEditable}
                     />
-                    {console.log(index)}
-                    {console.log(selectedNominee[index])}
+                    {/* {console.log(index)} */}
+                    {/* {console.log(selectedNominee[index])} */}
                     <select
                       onChange={(e) =>
                         handleNomineeChangeWithCheck(
@@ -254,7 +254,7 @@ const SupSideIrb = ({
                       }
                       disabled={!isEditable}
                       required
-                      value={selectedNominee[index]?.faculty_code || ""}
+                      value={selectedNominee[index].faculty_code || ""}
                     >
                       <option value="">Select Nominee</option>
                       {filteredOptions(index).length > 0 ? (

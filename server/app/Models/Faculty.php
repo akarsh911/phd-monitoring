@@ -85,5 +85,8 @@ class Faculty extends Model
     {
         return self::where('user_id', $userId)->first();
     }
-    
+    public function researchExtentionsApprovals()
+    {
+        return $this->hasMany(ResearchExtentionsApprovals::class, 'supervisor_id', 'faculty_code');
+    }
 }
