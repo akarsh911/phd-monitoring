@@ -11,6 +11,7 @@ import SupSideIrb from '../forms/ConstituteOfIrb/SupSideIrb.js';
 import ThesisSubForm from '../forms/ThesisSubmission/ThesisSub.js';
 import StatusChange from '../forms/ChangeOfStatus/StatusChange.js';
 import SupervisorChange from '../forms/SupervisorChange/SupervisorChange.js';
+import SupAllocation from '../forms/SupAllocation/SupAllocation.js';
 
 
 const SideLeftMenu = () => {
@@ -69,9 +70,9 @@ const SideLeftMenu = () => {
   {/* <StatusChange/> */}
     {/* <IrbSubmission/> */}
     {/* <IrbSubmissionSup/> */}
-    <SupervisorChange/>
-    {/* <ProgressMonitoring/> */}
-    
+    {/* <SupervisorChange/> */}
+    <ProgressMonitoring/>
+    {/* <SupAllocation/> */}
     
     </div>
   );

@@ -33,7 +33,7 @@ const HodSideSupervisorChange= ({ formData, handleHodRecommendationChange, handl
         </div>
       </div>
       <div className='data-input'>
-      <label>Allot new Supervisor for</label>
+      <label>Allot new Supervisor</label>
     {formData.selectedSupervisors.map((selectedSupervisor, index) => (
       <div key={index}>
         <label htmlFor={`newSupervisor-${index}`}> {selectedSupervisor}:</label>

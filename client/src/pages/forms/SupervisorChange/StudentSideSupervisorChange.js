@@ -144,7 +144,7 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
       </div>
 
       <div className='data-input'>
-        <label htmlFor="preferenceInput">Broad Area of Research</label>
+        <label htmlFor="preferenceInput">Broad Areas of Research</label>
         <input
           type="text"
           id="preferenceInput"
