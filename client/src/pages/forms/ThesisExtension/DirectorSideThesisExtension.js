@@ -1,20 +1,20 @@
-
+import './ThesisExtension.css';
 import React from 'react';
-import './ProgressMonitoring.css';
 
-const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
+
+const DirectorSideThesisExtension = ({ formData, handleDirectorRecommendationChange }) => {
   return (
-    <div className='DrASide-form'>
+    <div className='supervisorSide-form'>
       <div className='data-input' id='appr'>
-        <label htmlFor="hodRecommendation">Recommendation of DR(A)</label>
+        <label htmlFor="DirectorRecommendation">Recommendation of Director</label>
         <div>
           <input
             type="radio"
             id="approved"
-            name="hodRecommendation"
+            name="DirectorRecommendation"
             value="approved"
-            checked={formData.hodRecommendation === 'approved'}
-            onChange={handleHodRecommendationChange}
+            checked={formData.DirectorRecommendation === 'approved'}
+            onChange={handleDirectorRecommendationChange}
             required
           />
           <label htmlFor="approved" className="small-label">Approved</label>
@@ -23,22 +23,22 @@ const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
           <input
             type="radio"
             id="notApproved"
-            name="hodRecommendation"
+            name="DirectorRecommendation"
             value="notApproved"
-            checked={formData.hodRecommendation === 'notApproved'}
-            onChange={handleHodRecommendationChange}
+            checked={formData.DirectorRecommendation === 'notApproved'}
+            onChange={handleDirectorRecommendationChange}
             required
           />
            <label htmlFor="notApproved" className="small-label">Not Approved</label>
         </div>
       </div>
       <div className='data-input'>
-        <label htmlFor="HodRemarks">Remarks (if any)</label>
+        <label htmlFor="DirectorRemarks">Remarks (if any)</label>
         <input
           type="text"
-          id="hodRemarks"
-          name="hodRemarks"
-          value={formData.hodRemarks}
+          id="DirectorRemarks"
+          name="DirectorRemarks"
+          value={formData.DirectorRemarks}
         />
       </div>
       <div className='supervisor-button-div'>
@@ -48,4 +48,4 @@ const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
   );
 };
 
-export default DRASideProgress;
+export default DirectorSideThesisExtension;

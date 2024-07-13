@@ -1,8 +1,8 @@
 
 import React from 'react';
-import './ProgressMonitoring.css';
+import './SupervisorChange';
 
-const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
+const DRASideSupervisorChange= ({ formData, handleHodRecommendationChange }) => {
   return (
     <div className='DrASide-form'>
       <div className='data-input' id='appr'>
@@ -48,4 +48,4 @@ const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
   );
 };
 
-export default DRASideProgress;
+export default DRASideSupervisorChange;

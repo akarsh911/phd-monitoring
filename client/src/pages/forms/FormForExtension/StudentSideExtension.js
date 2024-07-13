@@ -99,7 +99,7 @@ const StudentSideExtension = ({ formData, handleChange }) => {
         />
       </div>
       <div className='data-input'>
-        <label htmlFor="supervisorsInput">Name of Supervisors</label>
+        <label htmlFor="supervisorsInput">Supervisor(s)</label>
         <input
           type="text"
           id="supervisorsInput"

@@ -8,6 +8,9 @@ import StudentList from '../teachers_view/StudentList.js';
 import ResearchProposalExtensionForm from '../forms/FormForExtension/Extension.js';
 import ProgressMonitoring from '../forms/ProgressMonitoring/ProgressMonitoring.js';
 import SupSideIrb from '../forms/ConstituteOfIrb/SupSideIrb.js';
+import ThesisSubForm from '../forms/ThesisSubmission/ThesisSub.js';
+import StatusChange from '../forms/ChangeOfStatus/StatusChange.js';
+import SupervisorChange from '../forms/SupervisorChange/SupervisorChange.js';
 
 
 const SideLeftMenu = () => {
@@ -62,7 +65,8 @@ const SideLeftMenu = () => {
     {/* <StudentList/> */}
     <ResearchProposalExtensionForm/>
     {/* <ConstituteOfIrb/> */}
-  
+  {/* <ThesisSubForm/> */}
+  {/* <StatusChange/> */}
     {/* <IrbSubmission/> */}
     {/* <IrbSubmissionSup/> */}
     

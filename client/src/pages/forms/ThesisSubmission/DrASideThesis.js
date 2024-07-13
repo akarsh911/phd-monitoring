@@ -1,20 +1,20 @@
-
+import './ThesisSub.css';
 import React from 'react';
-import './ProgressMonitoring.css';
 
-const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
+
+const DrASideThesis = ({ formData, handleDrARecommendationChange }) => {
   return (
     <div className='DrASide-form'>
       <div className='data-input' id='appr'>
-        <label htmlFor="hodRecommendation">Recommendation of DR(A)</label>
+        <label htmlFor="DrARecommendation">Recommendation of Dr(A)</label>
         <div>
           <input
             type="radio"
             id="approved"
-            name="hodRecommendation"
+            name="DrARecommendation"
             value="approved"
-            checked={formData.hodRecommendation === 'approved'}
-            onChange={handleHodRecommendationChange}
+            checked={formData.DrARecommendation === 'approved'}
+            onChange={handleDrARecommendationChange}
             required
           />
           <label htmlFor="approved" className="small-label">Approved</label>
@@ -23,29 +23,29 @@ const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
           <input
             type="radio"
             id="notApproved"
-            name="hodRecommendation"
+            name="DrARecommendation"
             value="notApproved"
-            checked={formData.hodRecommendation === 'notApproved'}
-            onChange={handleHodRecommendationChange}
+            checked={formData.DrARecommendation === 'notApproved'}
+            onChange={handleDrARecommendationChange}
             required
           />
            <label htmlFor="notApproved" className="small-label">Not Approved</label>
         </div>
       </div>
       <div className='data-input'>
-        <label htmlFor="HodRemarks">Remarks (if any)</label>
+        <label htmlFor="DrARemarks">Remarks (if any)</label>
         <input
           type="text"
-          id="hodRemarks"
-          name="hodRemarks"
-          value={formData.hodRemarks}
+          id="DrARemarks"
+          name="DrARemarks"
+          value={formData.DrARemarks}
         />
       </div>
       <div className='supervisor-button-div'>
-        <button className='send' type="submit">Submit</button>
+        <button className='send' type="submit">SEND TO DoRDC</button>
       </div>
     </div>
   );
 };
 
-export default DRASideProgress;
+export default DrASideThesis;

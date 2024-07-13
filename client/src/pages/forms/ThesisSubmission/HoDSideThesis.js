@@ -1,12 +1,12 @@
-
+import './ThesisSub.css';
 import React from 'react';
-import './ProgressMonitoring.css';
 
-const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
+
+const HodSideThesis = ({ formData, handleHodRecommendationChange }) => {
   return (
-    <div className='DrASide-form'>
+    <div className='supervisorSide-form'>
       <div className='data-input' id='appr'>
-        <label htmlFor="hodRecommendation">Recommendation of DR(A)</label>
+        <label htmlFor="hodRecommendation">Recommendation of HoD</label>
         <div>
           <input
             type="radio"
@@ -42,10 +42,10 @@ const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
         />
       </div>
       <div className='supervisor-button-div'>
-        <button className='send' type="submit">Submit</button>
+        <button className='send' type="submit">SEND TO Dr(A)</button>
       </div>
     </div>
   );
 };
 
-export default DRASideProgress;
+export default HodSideThesis;

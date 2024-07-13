@@ -1,12 +1,12 @@
-
+// HodRecommendationSection.js
 import React from 'react';
-import './ProgressMonitoring.css';
+import './SupervisorChange';
 
-const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
+const HodSideSupervisorChange= ({ formData, handleHodRecommendationChange, handleChange }) => {
   return (
-    <div className='DrASide-form'>
+    <div className='hodSide-form'>
       <div className='data-input' id='appr'>
-        <label htmlFor="hodRecommendation">Recommendation of DR(A)</label>
+        <label htmlFor="hodRecommendation">Recommendation of HOD</label>
         <div>
           <input
             type="radio"
@@ -33,6 +33,21 @@ const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
         </div>
       </div>
       <div className='data-input'>
+      <label>Allot new Supervisor for</label>
+    {formData.selectedSupervisors.map((selectedSupervisor, index) => (
+      <div key={index}>
+        <label htmlFor={`newSupervisor-${index}`}> {selectedSupervisor}:</label>
+        <input
+          type="text"
+          id={`newSupervisor-${index}`}
+          name="newSupervisor"
+          value={formData.newSupervisors[index] || ''}
+          onChange={handleChange}
+        />
+      </div>
+    ))}
+  </div>
+      <div className='data-input'>
         <label htmlFor="HodRemarks">Remarks (if any)</label>
         <input
           type="text"
@@ -42,10 +57,10 @@ const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
         />
       </div>
       <div className='supervisor-button-div'>
-        <button className='send' type="submit">Submit</button>
+        <button className='send' type="submit">Send to DoRDC</button>
       </div>
     </div>
   );
 };
 
-export default DRASideProgress;
+export default HodSideSupervisorChange;
