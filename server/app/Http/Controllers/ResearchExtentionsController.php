@@ -56,7 +56,15 @@ class ResearchExtentionsController extends Controller
                     'DORDCComments' => null,
                     'DRAComments' => null,
                 ]);
-                return response()->json(['form' => $newForm->fullForm($user)], 200);
+                $supervisors = $student->supervisors;
+                foreach ($supervisors as $supervisor) {
+                    ResearchExtentionsApprovals::create([
+                        'research_extentions_id' => $newForm->id,
+                        'supervisor_id' => $supervisor->faculty_code,
+                        'status' => 'awaited'
+                    ]);
+                }
+                return response()->json($newForm->fullForm($user), 200);
             }
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 500);
@@ -95,6 +103,9 @@ class ResearchExtentionsController extends Controller
             }
             $researchExtentionsForm = $student->researchExtentionsForm;
             if($researchExtentionsForm){
+                if($researchExtentionsForm->stage!='hod'){
+                    return response()->json(['message'=>'Form not available'],403);
+                }
                 if ($student->department->id==$user->faculty->department_id)  {
                     return response()->json($student->researchExtentionsForm->fullForm($user));
                 } else {
@@ -174,6 +185,7 @@ class ResearchExtentionsController extends Controller
             if ($user->role->role == 'student') {
                 $student = Student::findByUserId($user->id);
                 $researchExtentionsForm = $student->researchExtentionsForm;
+                
                 if ($researchExtentionsForm->stage != 'student') {
                     return response()->json(['message' => 'Form already submitted'], 403);
                 }
@@ -270,14 +282,16 @@ class ResearchExtentionsController extends Controller
                            'stage' => 'dra',
                            'status' => 'awaited',
                            'hod_lock' => true,
-                           'dra_lock' => false
+                           'dra_lock' => false,
+                           'hod_approval' => $request->approval,
                        ]);
                    }
                    else{
                        $extentionForm->update([
                            'status' => 'rejected',
                            'hod_lock' => true,
-                           'dra_lock' => true
+                           'dra_lock' => true,
+                           'stage' => 'student',
                        ]);
                    }
                    return response()->json($student->researchExtentionsForm->fullForm($user));

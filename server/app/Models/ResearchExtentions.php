@@ -15,6 +15,8 @@ class ResearchExtentions extends Model
         'research_extentions_id',
         'student_id',
         'period_of_extension',
+        'start',
+        'end',
         'reason'
     ];
 

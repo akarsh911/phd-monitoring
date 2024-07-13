@@ -38,6 +38,7 @@ class ResearchExtentionsForm extends Model
             'name'=> $this->student->user->name(),
             'roll_no' => $this->student->roll_no,
             'department' => $this->student->department->name,
+            'phone' => $this->student->user->phone,
             'date_of_registration' => $this->student->date_of_registration,
             'phd_title' => $this->student->phd_title,
             'role'=>$user->role->role,
@@ -63,13 +64,23 @@ class ResearchExtentionsForm extends Model
             'supervisor_lock' => $this->supervisor_lock,
             'dordc_lock' => $this->dordc_lock,
             'dra_lock' => $this->dra_lock,
+            'researchExtentions' => $this->researchExtentions->map(function($extention){
+                return [
+                    'period_of_extension' => $extention->period_of_extension,
+                    'start' => $extention->start,
+                    'end' => $extention->end,
+                    'reason' => $extention->reason,
+                ];
+            }),
             'supervisorApprovals' => $this->researchExtentionsApprovals->map(function($approval){
                 return [
                     'supervisor_id' => $approval->supervisor_id,
-                    'status' => $approval->approval,
+                    'status' => $approval->status,
                     'comments' => $approval->comments,
+                    'name' => $approval->supervisor->user->name(),
                 ];
             }),
+            'user_name'=>$user->name(),
         ];
     }
 

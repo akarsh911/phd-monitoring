@@ -1,29 +1,128 @@
 import React, { useState, useEffect } from 'react';
 import './SupervisorSideExtension.css';
+import { SERVER_URL } from '../../../config';
+import { toast } from 'react-toastify';
 
-const SupervisorSideExtension = ({ loggedInSupervisor }) => {
-  const [supervisors, setSupervisors] = useState([
-    { name: '', recommended: null, remarks: '' },
-    { name: '', recommended: null, remarks: '' },
-    { name: '', recommended: null, remarks: '' },
-  ]);
+const SupervisorSideExtension = ({ loggedInSupervisor,formData }) => {
+  const [supervisors, setSupervisors] = useState([]);
+  const [supervisorLock, setSupervisorLock] = useState(false);
+
+  const [recommendation, setRecommendation] = useState('');
+
+
+
+  const sendToHod = async() => {
+    try {
+      const response = await fetch(`${SERVER_URL}/forms/research/extension/submit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          "student_id":formData.regno,
+        })
+      });
+      // const response=await
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+       if(data)
+        toast.success("Success Submitting form")
+      } else {
+        var msg=await response.json()
+        
+        toast.error(msg.message);
+        throw response;
+      }
+
+     
+    } catch (error) {
+      console.log("Error has occurred:", error);
+      if (error instanceof Response) {
+        error.json().then(data => {
+          if (error.status === 422) {
+            alert(data.message);
+          } else if (error.status === 401) {
+            alert("Invalid email or password");
+          } else if (error.status === 500) {
+            alert("Server error. Please try again later.");
+          }
+        }).catch(jsonError => {
+          console.error('Error parsing JSON:', jsonError);
+        });
+      } else {
+        console.error('Unexpected error:', error);
+      }
+    }
+  }
 
   useEffect(() => {
-    // Fetch supervisors from the API using fetch()
-    fetch('https://api.example.com/supervisors') // Replace with your API endpoint
-      .then(response => response.json())
-      .then(data => {
-        setSupervisors(data);
-      })
-      .catch(error => {
-        console.error('Error fetching supervisors:', error);
-      });
-  }, []);
+    if (formData.supervisorRecommendations) {
+      const newSupervisors = formData.supervisorRecommendations.map(supervisor => ({
+        recommended: supervisor.status,
+        name: supervisor.name,
+        remarks: supervisor.comments,
+      }));
+      console.log(newSupervisors);
+      setSupervisors(newSupervisors);
+      setSupervisorLock(formData.supervisor_lock);
+    }
+  }, [formData]);
 
-  const handleRecommendationChange = (index, recommendation) => {
+  const handleRecommendationChange = async(index, recommendation) => {
+    setRecommendation(recommendation);
     const newSupervisors = [...supervisors];
     newSupervisors[index].recommended = recommendation;
     setSupervisors(newSupervisors);
+    try {
+      const response = await fetch(`${SERVER_URL}/forms/research/extension/update`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          student_id: formData.regno,
+          approval:recommendation
+        })
+      });
+      // const response=await
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+       if(data)
+        toast.success("Success Updating")
+      } else {
+        var msg=await response.json()
+        
+        toast.error(msg.message);
+        throw response;
+      }
+
+     
+    } catch (error) {
+      console.log("Error has occurred:", error);
+      if (error instanceof Response) {
+        error.json().then(data => {
+          if (error.status === 422) {
+            alert(data.message);
+          } else if (error.status === 401) {
+            alert("Invalid email or password");
+          } else if (error.status === 500) {
+            alert("Server error. Please try again later.");
+          }
+        }).catch(jsonError => {
+          console.error('Error parsing JSON:', jsonError);
+        });
+      } else {
+        console.error('Unexpected error:', error);
+      }
+    }
     // Here, you would also want to send this change back to the server to persist it
   };
 
@@ -54,17 +153,19 @@ const SupervisorSideExtension = ({ loggedInSupervisor }) => {
                 <input
                   type="radio"
                   name={`recommendation-${index}`}
-                  checked={supervisor.recommended === 'recommended'}
-                  onChange={() => handleRecommendationChange(index, 'recommended')}
+                  
+                  checked={supervisor.recommended === 'approved'}
+                  onChange={() => handleRecommendationChange(index, 'approved')}
                   disabled={supervisor.name !== loggedInSupervisor}
+                  
                 />
               </td>
               <td>
                 <input
                   type="radio"
                   name={`recommendation-${index}`}
-                  checked={supervisor.recommended === 'not-recommended'}
-                  onChange={() => handleRecommendationChange(index, 'not-recommended')}
+                  checked={supervisor.recommended === 'rejected'}
+                  onChange={() => handleRecommendationChange(index, 'rejected')}
                   disabled={supervisor.name !== loggedInSupervisor}
                 />
               </td>
@@ -80,9 +181,9 @@ const SupervisorSideExtension = ({ loggedInSupervisor }) => {
           ))}
         </tbody>
       </table>
-      <div className='supervisor-button-div'>
-        <button className='send' type="submit">SEND TO HOD</button>
-      </div>
+      {!supervisorLock && (  <div className='supervisor-button-div'>
+        <button className='send' type="submit" onClick={sendToHod}>SEND TO HOD</button>
+      </div>)}
     </div>
   );
 };

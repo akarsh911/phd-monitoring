@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('end_date')->nullable();
             $table->text('reason')->nullable();
             $table->enum('hod_approval',['approved','rejected'])->nullable();
+            $table->enum('dra_approval',['approved','rejected'])->nullable();
             $table->boolean('student_lock')->default(false); 
             $table->boolean('supervisor_lock')->default(true);
             $table->boolean('hod_lock')->default(true);

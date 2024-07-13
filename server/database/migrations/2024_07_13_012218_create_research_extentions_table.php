@@ -18,6 +18,8 @@ return new class extends Migration
             $table->foreign('research_extentions_id')->references('id')->on('research_extentions_form')->onDelete('cascade');
             $table->integer('student_id')->unsigned()->index();
             $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
+            $table->text('start')->nullable();
+            $table->text('end')->nullable();
             $table->integer('period_of_extension')->unsigned();
             $table->String('reason');
            });
