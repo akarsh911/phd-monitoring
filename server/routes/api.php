@@ -128,6 +128,10 @@ Route::prefix('external')->group(function () {
 Route::prefix('forms')->group(function () {
     require base_path('routes/base/forms.php');
 });
+
+Route::prefix('suggestions')->group(function () {
+    require base_path('routes/base/suggestions.php');
+});
 // Route::get('/init',function (){
     
 //     User::factory()->count(10)->create();

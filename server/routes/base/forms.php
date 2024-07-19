@@ -15,3 +15,7 @@ Route::prefix('irb/submission')->group(function () {
 Route::prefix('research/extension')->group(function () {
     require base_path('routes/base/research_extention.php');
 });
+
+Route::prefix('supervisor/change')->group(function () {
+    require base_path('routes/base/supervisor_change.php');
+});
