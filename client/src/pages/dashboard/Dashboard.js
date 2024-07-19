@@ -12,6 +12,7 @@ import ThesisSubForm from '../forms/ThesisSubmission/ThesisSub.js';
 import StatusChange from '../forms/ChangeOfStatus/StatusChange.js';
 import ThesisExtensionForm from '../forms/ThesisExtension/ThesisExtension.js';
 import SupervisorChange from '../forms/SupervisorChange/SupervisorChange.js';
+import StatusChangeForm from '../forms/ChangeOfStatus/StatusChange.js';
 
 
 const SideLeftMenu = () => {
@@ -69,10 +70,10 @@ const SideLeftMenu = () => {
     {/* <ThesisSubForm/> */}
     {/* <StatusChange/> */}
     {/* <ThesisExtensionForm/> */}
-<SupervisorChange/>
+    {/* <SupervisorChange/> */}
     {/* <IrbSubmission/> */}
     {/* <IrbSubmissionSup/> */}
-    
+    <StatusChangeForm/>
     {/* <ProgressMonitoring/> */}
     
     

@@ -63,10 +63,10 @@ const SideLeftMenu = () => {
     </div >
     {/* Render body component here */}
     {/* <StudentList/> */}
-    <ResearchProposalExtensionForm/>
+    {/* <ResearchProposalExtensionForm/> */}
     {/* <ConstituteOfIrb/> */}
   {/* <ThesisSubForm/> */}
-  {/* <StatusChange/> */}
+  <StatusChange/>
     {/* <IrbSubmission/> */}
     {/* <IrbSubmissionSup/> */}
     
