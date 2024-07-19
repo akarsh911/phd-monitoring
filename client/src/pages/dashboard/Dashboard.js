@@ -13,6 +13,8 @@ import StatusChange from '../forms/ChangeOfStatus/StatusChange.js';
 import ThesisExtensionForm from '../forms/ThesisExtension/ThesisExtension.js';
 import SupervisorChange from '../forms/SupervisorChange/SupervisorChange.js';
 import SupAllocation from '../forms/SupAllocation/SupAllocation.js';
+import ListOfExaminer from '../forms/ListOfExaminer/ListOfExaminer.js';
+import Publications from '../forms/Publications/Publications.js';
 
 
 const SideLeftMenu = () => {
@@ -70,11 +72,13 @@ const SideLeftMenu = () => {
     {/* <ThesisSubForm/> */}
     {/* <StatusChange/> */}
     {/* <ThesisExtensionForm/> */}
+    <Publications/>
 {/* <SupervisorChange/> */}
     {/* <IrbSubmission/> */}
-    <IrbSubmissionSup/>
+    {/* <IrbSubmissionSup/> */}
     {/* <SupAllocation/> */}
     {/* <ProgressMonitoring/> */}
+    {/* <ListOfExaminer/> */}
     
     
     </div>

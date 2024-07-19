@@ -2,10 +2,16 @@ import { useState,React }  from 'react';
 import './ThesisExtension.css';
 
 const StudentSideThesisExtension = ({ formData, handleChange }) => {
-  const [ThesisExtension, setThesisExtension] = useState(null);
+  const [extensionAvailed, setExtensionAvailed] = useState('');
+  const [showExtensionPeriod, setShowExtensionPeriod] = useState(false);
 
-  const handleThesisExtension = (event) => {
-    setThesisExtension(event.target.value);
+  const handleThesisExtensionChange = (e) => {
+    setExtensionAvailed(e.target.value);
+    if (e.target.value === 'Yes') {
+      setShowExtensionPeriod(true);
+    } else {
+      setShowExtensionPeriod(false);
+    }
   };
   return (
     <div className='student-form'>
@@ -103,32 +109,17 @@ const StudentSideThesisExtension = ({ formData, handleChange }) => {
           required
         />
       </div>
-      {/* <div className='data-input' id='gender'>
-      <label className='bold-label'>Gender</label>
-      <div>
+      <div className='data-input'>
+        <label htmlFor="statusInput">Gender</label>
         <input
-          type="radio"
-          id="genderMale"
-          name="gender"
-          value="Male"
-          checked={gender === 'Male'}
+          type="text"
+          id="statusInput"
+          name="status"
+          value={formData.gender}
           readOnly
+          required
         />
-        <label htmlFor="genderMale" className="small-label">Male</label>
       </div>
-      <div>
-        <input
-          type="radio"
-          id="genderFemale"
-          name="gender"
-          value="Female"
-          checked={gender === 'Female'}
-          readOnly
-        />
-        <label htmlFor="genderFemale" className="small-label">Female</label>
-      </div>
-    </div>
-       */}
 
 <div className='date-input'>
         <label htmlFor="irbMeetingDateInput">Date of pre Synopsis meeting</label>
@@ -153,33 +144,161 @@ const StudentSideThesisExtension = ({ formData, handleChange }) => {
         />
       </div>
       <div className='data-input' id='appr'>
-  <label className='bold-label'>Required Change of Status</label>
+      <label className='bold-label'>Extension availed if any earlier</label>
+      <div>
+        <input
+          type="radio"
+          id="extensionYes"
+          name="extensionAvailed"
+          value="Yes"
+          onChange={handleThesisExtensionChange}
+          required
+        />
+        <label htmlFor="extensionYes" className="small-label">Yes</label>
+      </div>
+      <div>
+        <input
+          type="radio"
+          id="extensionNo"
+          name="extensionAvailed"
+          value="No"
+          onChange={handleThesisExtensionChange}
+          required
+        />
+        <label htmlFor="extensionNo" className="small-label">No</label>
+      </div>
+      </div>
+
+      {showExtensionPeriod && (
+        <div className='data-input' id='appr'>
+          <label className='bold-label'>Period of Extension</label>
+          <div>
+            <input
+              type="radio"
+              id="extension6"
+              name="extensionPeriod"
+              value="6"
+              required
+            />
+            <label htmlFor="extension6" className="small-label">6 years</label>
+          </div>
+          <div>
+            <input
+              type="radio"
+              id="extension7"
+              name="extensionPeriod"
+              value="7"
+              required
+            />
+            <label htmlFor="extension7" className="small-label">7 years</label>
+          </div>
+          {formData.gender === 'Female' && (
+            <>
+              <div>
+                <input
+                  type="radio"
+                  id="extension8"
+                  name="extensionPeriod"
+                  value="8"
+                  required
+                />
+                <label htmlFor="extension8" className="small-label">8 years</label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  id="extension9"
+                  name="extensionPeriod"
+                  value="9"
+                  required
+                />
+                <label htmlFor="extension9" className="small-label">9 years</label>
+              </div>
+              <div>
+                <input
+                  type="radio"
+                  id="extension10"
+                  name="extensionPeriod"
+                  value="10"
+                  required
+                />
+                <label htmlFor="extension10" className="small-label">10 years</label>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    
+    <div className='upload-input'>
+        <label htmlFor="proofOfExtension">Attach proof of previous Extension </label>
+        <label htmlFor="proofOfExtension" className='small-label'>(Letter issued by DR(A))</label>
+        <input
+          type="file"
+          id="proofOfExtension"
+          name="proofOfExtension"
+          accept=".pdf"
+          required
+        />
+      </div>
+      
+      <div className='data-input' id='appr'>
+  <label className='bold-label'> Required Period of Extension</label>
   <div>
     <input
       type="radio"
-      id="RequiredThesisExtensionRegularToPartTime"
-      name="RequiredThesisExtension"
-      value="Regular to Part-Time"
-      onChange={handleThesisExtension}
+      id="extension6"
+      name="requiredPeriodOfExtension"
+      value="6"
       required
     />
-    <label htmlFor="RequiredThesisExtensionRegularToPartTime" className="small-label">Regular to Part-Time</label>
+    <label htmlFor="extension6" className="small-label">6 years</label>
   </div>
   <div>
     <input
       type="radio"
-      id="RequiredThesisExtensionPartTimeToRegular"
-      name="RequiredThesisExtension"
-      value="Part-Time to Regular"
-      onChange={handleThesisExtension}
+      id="extension7"
+      name="requiredPeriodOfExtension"
+      value="7"
       required
     />
-    <label htmlFor="RequiredThesisExtensionPartTimeToRegular" className="small-label">Part-Time to Regular</label>
+    <label htmlFor="extension7" className="small-label">7 years</label>
   </div>
+  {formData.gender === 'Female' && (
+    <>
+      <div>
+        <input
+          type="radio"
+          id="extension8"
+          name="requiredPeriodOfExtension"
+          value="8"
+          required
+        />
+        <label htmlFor="extension8" className="small-label">8 years</label>
+      </div>
+      <div>
+        <input
+          type="radio"
+          id="extension9"
+          name="requiredPeriodOfExtension"
+          value="9"
+          required
+        />
+        <label htmlFor="extension9" className="small-label">9 years</label>
+      </div>
+      <div>
+        <input
+          type="radio"
+          id="extension10"
+          name="requiredPeriodOfExtension"
+          value="10"
+          required
+        />
+        <label htmlFor="extension10" className="small-label">10 years</label>
+      </div>
+    </>
+  )}
 </div>
 
-      
-     
       
      
       

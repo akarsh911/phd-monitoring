@@ -81,7 +81,7 @@ const SupervisorSideExtension = ({ loggedInSupervisor }) => {
         </tbody>
       </table>
       <div className='supervisor-button-div'>
-        <button className='send' type="submit">SEND TO HOD</button>
+        <button className='send' type="submit">SEND TO HoD</button>
       </div>
     </div>
   );

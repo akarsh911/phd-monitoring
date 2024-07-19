@@ -1,5 +1,6 @@
 .supervisor-table {
     margin: 20px;
+ 
     /* margin-left: 40px; */
   }
   
@@ -10,15 +11,18 @@
   }
   .headingg{
     margin-left: 20px;
+    font-size: 26px;
   }
   
   .supervisor-table th, .supervisor-table td {
-    border: 1px solid #ddd;
-    /* padding: 8px; */
+    border: 3px solid #ddd;
+    padding: 8px;
+    font-size: 20px;
   }
   
   .supervisor-table th {
     background-color: #f2f2f2;
     text-align: left;
+    font-size: 24px;
   }
   
