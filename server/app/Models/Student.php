@@ -66,6 +66,24 @@ class Student extends Model
         return $this->belongsToMany(Faculty::class, 'supervisors', 'student_id', 'faculty_id', 'roll_no', 'faculty_code');
     }
 
+    public function checkIrbCompletionStatus()
+    {
+        $irbForm = $this->irbForm()->first();
+        $irbSubForm = $this->irbSubForms()->first();
+
+        if ($irbForm && $irbSubForm && $irbForm->status == 'approved' && $irbSubForm->status == 'dra') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+
+    public function supervisor_update_date()
+    {
+        return $this->supervisors()->first()->pivot->updated_at;
+    }
+
     public function doctoralCommittee()
     {
         return $this->belongsToMany(Faculty::class, 'doctoral_committee', 'student_id', 'faculty_id', 'roll_no', 'faculty_code');
@@ -135,5 +153,25 @@ class Student extends Model
             'change' => "Form created by student",
         ]);
         return $irbNewForm;
+    }
+
+    public function researchExtentionsForm()
+    {
+        return $this->hasOne(ResearchExtentionsForm::class, 'student_id', 'roll_no');
+    }
+
+    public function researchExtentions()
+    {
+        return $this->hasMany(ResearchExtentions::class, 'student_id', 'roll_no');
+    }
+
+    public function supervisorChangeForm()
+    {
+        return $this->hasOne(SupervisorChangeForm::class, 'student_id', 'roll_no');
+    }
+
+    public function broad_area_specialization()
+    {
+        return $this->hasMany(StudentBroadAreaSpecialization::class, 'student_id', 'roll_no');
     }
 }

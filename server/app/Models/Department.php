@@ -52,4 +52,9 @@ class Department extends Model
     {
         return $this->hasMany(PhdCoordinator::class, 'department_id');
     }
+
+    public function broadAreaSpecializations()
+    {
+        return $this->hasMany(BroadAreaSpecialization::class);
+    }
 }

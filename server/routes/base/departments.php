@@ -9,3 +9,4 @@ Route::get('',function (Request $request){
     return response()->json($departments,200);
 });
 Route::post('/add', [DepartmentController::class, 'add'])->middleware('auth:sanctum');
+Route::post('/specialization/add', [DepartmentController::class, 'addBroadAreaSpecialization'])->middleware('auth:sanctum');

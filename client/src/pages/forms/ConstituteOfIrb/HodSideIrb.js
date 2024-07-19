@@ -7,27 +7,38 @@ import { toast } from 'react-toastify';
 const HodSideIrb = ({
   formData,
   addChairmanExpert,
-  handleHodRecommendationChange
 }) => {
+  if(formData.experts){
+    console.log(formData.experts)
+    formData.experts=[{},{},{}]
+  }
   const [experts, setExperts] = useState(formData.experts.map(expert => ({
+
     firstName: expert.first_name || '',
     lastName: expert.last_name || '',
     email: expert.email || '',
     designation: expert.designation || '',
     department: expert.department || '',
-    institute: expert.institute || '',
+    institution: expert.institution || '',
     phone: expert.phone || '',
     suggestions: [],
-    instituteSuggestions: [] // Add institute suggestions to state
+    instituteSuggestions: [] // Add institution suggestions to state
   })));
-  const [expertChairman, setExpertChairman] = useState([]);
+  console.log(experts)
+  const [expertChairman, setExpertChairman] = useState( []);
+ 
+
 
   formData.suggestions = formData.suggestions.filter(option => {
     return option.department === formData.department;
   });
 
+  const handleHodRecommendationChange = (e) => {
+    formData.hodRecommendation = e.target.value;
+  }
+
   const fetchSuggestions = async (input, index) => {
-    if (input.length > 2) {
+    if (input.length > 0) {
       try {
         const response = await fetch(
           `${SERVER_URL}/external/autocomplete`,
@@ -101,6 +112,63 @@ const HodSideIrb = ({
     }
   };
 
+  const sendToDordc = async (e) => {
+    try{
+      experts.forEach(expert => {
+          if(!expert.firstName || !expert.lastName || !expert.email || !expert.designation || !expert.department || !expert.institution || !expert.phone){
+            toast.error("Please fill all the fields for expert "+(experts.indexOf(expert)+1));
+            return;
+          }
+          if(!expert.id)
+            {
+              toast.error("Please save the expert before submitting");
+              return;
+            }
+      });
+      if(expertChairman.length < 1){
+        toast.error("Please add the chairman expert before submitting");
+        return;
+      }
+
+      const response = await fetch(
+        `${SERVER_URL}/forms/irb/constitutuion/submit`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            student_id: formData.regno,
+            outside_experts: experts.map(expert=>{
+              return {
+                expert_id: expert.id,
+              }
+            }),
+            cognate_experts: expertChairman.map(expert=>{
+              return {
+                faculty_code: expert,
+              }            
+            }),
+            recommendation: formData.hodRecommendation
+          }),
+        }
+      );
+      if(response.ok){
+        const res = await response.json();
+        toast.success("form submitted to DoRDC");}
+      else{
+        const msg = await response.json();
+        toast.error(msg.message);
+        throw response;
+      }
+    }
+    catch(error){
+      console.error(error);
+    }
+  }
+
   const isDuplicateExpert = (newExpert) => {
     return experts.some(expert =>
       expert.firstName === newExpert.firstName &&
@@ -117,13 +185,8 @@ const HodSideIrb = ({
     try {
       const expert = experts[index];
 
-      if (!expert.firstName || !expert.lastName || !expert.email || !expert.designation || !expert.department || !expert.institute || !expert.phone) {
-        toast.error("Please fill all the fields");
-        return;
-      }
-
-      if (isDuplicateExpert(expert)) {
-        toast.error("Duplicate expert entry");
+      if (!expert.firstName || !expert.lastName || !expert.email || !expert.designation || !expert.department || !expert.institution || !expert.phone) {
+        toast.error("Please fill all the fields for Expert " + (index + 1));
         return;
       }
 
@@ -142,7 +205,7 @@ const HodSideIrb = ({
             email: expert.email,
             designation: expert.designation,
             department: expert.department,
-            institution: expert.institute,
+            institution: expert.institution,
             phone: expert.phone
           }),
         }
@@ -158,7 +221,7 @@ const HodSideIrb = ({
           email: data.email,
           designation: data.designation,
           department: data.department,
-          institute: data.institution,
+          institution: data.institution,
           phone: data.phone,
           suggestions: [],
           instituteSuggestions: [] // Clear suggestions
@@ -177,12 +240,7 @@ const HodSideIrb = ({
 
   const handleExpertChange = (index, field, value) => {
     const updatedExperts = [...experts];
- 
- 
     updatedExperts[index][field] = value;
-    console.log(updatedExperts);
-    console.log(experts);
- 
     setExperts(updatedExperts);
   };
 
@@ -195,34 +253,34 @@ const HodSideIrb = ({
       email: suggestion.email,
       designation: suggestion.designation,
       department: suggestion.department,
-      institute: suggestion.institution,
+      institution: suggestion.institution,
       phone: suggestion.phone,
       suggestions: [],
       instituteSuggestions: [] // Clear suggestions
     };
     if(isDuplicateExpert(updatedExperts[index])){
-      // updatedExperts[index]={};
       toast.error("Duplicate expert entry");
     }
     setExperts(updatedExperts);
   };
 
-  const handleInstituteSuggestionSelect = (index, institute) => {
+  const handleInstituteSuggestionSelect = (index, institution) => {
     const updatedExperts = [...experts];
-    updatedExperts[index].institute = institute;
+    updatedExperts[index].institution = institution;
     updatedExperts[index].instituteSuggestions = [];
     setExperts(updatedExperts);
   };
 
   const changeExpertChairman = (index, value) => {
+    console.log(value);
+    console.log(expertChairman);
     if (isDuplicateChairmanExpert(value)) {
       toast.error("Duplicate chairman expert entry");
       return;
     }
     const updatedExperts = [...expertChairman];
     updatedExperts[index] = value;
-    console.log(updatedExperts);
-
+    formData.chairmanExperts = updatedExperts;
     setExpertChairman(updatedExperts);
   };
 
@@ -245,6 +303,7 @@ const HodSideIrb = ({
                         handleExpertChange(index, 'firstName', e.target.value);
                         fetchSuggestions(e.target.value, index);
                       }}
+                      readOnly={formData.hod_lock}
                     />
                     <input
                       type="text"
@@ -252,6 +311,7 @@ const HodSideIrb = ({
                       value={expert.lastName}
                       autoComplete='allo'
                       onChange={(e) => handleExpertChange(index, 'lastName', e.target.value)}
+                      readOnly={formData.hod_lock}
                     />
                     {expert.suggestions.map((suggestion, i) => (
                       <div
@@ -268,29 +328,33 @@ const HodSideIrb = ({
                     value={expert.email}
                     onChange={(e) => handleExpertChange(index, 'email', e.target.value)}
                     placeholder='Email'
+                    readOnly={formData.hod_lock}
                   />
                   <input
                     type="text"
                     value={expert.designation}
                     onChange={(e) => handleExpertChange(index, 'designation', e.target.value)}
                     placeholder='Designation'
+                    readOnly={formData.hod_lock}
                   />
                   <input
                     type="text"
                     value={expert.department}
                     onChange={(e) => handleExpertChange(index, 'department', e.target.value)}
                     placeholder='Department'
+                    readOnly={formData.hod_lock}
                   />
                   <div className="suggestions-list">
                     <input
                       type="text"
-                      value={expert.institute}
+                      value={expert.institution}
                       autoComplete='allo'
                       onChange={(e) => {
-                        handleExpertChange(index, 'institute', e.target.value);
+                        handleExpertChange(index, 'institution', e.target.value);
                         fetchInstituteSuggestions(e.target.value, index);
                       }}
-                      placeholder='Institute'
+                      placeholder='institution'
+                      readOnly={formData.hod_lock}
                     />
                     {expert.instituteSuggestions.map((suggestion, i) => (
                       <div
@@ -307,8 +371,11 @@ const HodSideIrb = ({
                     value={expert.phone}
                     onChange={(e) => handleExpertChange(index, 'phone', e.target.value)}
                     placeholder='Phone Number'
+                    readOnly={formData.hod_lock}
                   />
-                  <button type="button" onClick={() => addExpert(index)}>{expert.id ? "Edit" : "Save"}</button>
+                  {!formData.hod_lock && (
+                    <button type="button" onClick={() => addExpert(index)}>{expert.id ? "Edit" : "Save"}</button>
+                  )}
                 </td>
               </tr>
             ))}
@@ -318,15 +385,24 @@ const HodSideIrb = ({
 
       <div className='data-input'>
         <label htmlFor="chairmanExpertInput">Expert(s) recommended by Chairman Board of Studies of concerned department in cognate area from the Department/School</label>
-        {formData.chairmanExperts.map((expert, index) => (
+        {formData.chairmanExperts.map((expert, index) => 
+        (
+          
           <div key={index} className='chairman-expert-input'>
+
+            {console.log(expert)}
+            {
+              changeExpertChairman(index, expert)
+            }
             <select
               id="chairmanExpertInput"
               name="chairmanExpert"
-              value={expertChairman[index] || ''}
+              // value={expert|| ''}
               onChange={(e) => changeExpertChairman(index, e.target.value)}
               required
+              // disabled={formData.hod_lock}
             >
+
               <option value="">Select Expert</option>
               {formData.suggestions.map((option, idx) => (
                 <option key={idx} value={option.faculty_code}>
@@ -336,10 +412,13 @@ const HodSideIrb = ({
             </select>
           </div>
         ))}
-        <button type="button" onClick={addChairmanExpert} className='add-button'>
-          +
-        </button>
+        {!formData.hod_lock && (
+          <button type="button" onClick={addChairmanExpert} className='add-button'>
+            +
+          </button>
+        )}
       </div>
+
       <div className='data-input' id='appr'>
         <label htmlFor="hodRecommendation">Recommendation of HOD</label>
         <div>
@@ -351,6 +430,7 @@ const HodSideIrb = ({
             checked={formData.hodRecommendation === 'approved'}
             onChange={handleHodRecommendationChange}
             required
+            disabled={formData.hod_lock}
           />
           <label htmlFor="approved" className="small-label">Approved</label>
         </div>
@@ -363,35 +443,16 @@ const HodSideIrb = ({
             checked={formData.hodRecommendation === 'notApproved'}
             onChange={handleHodRecommendationChange}
             required
+            disabled={formData.hod_lock}
           />
           <label htmlFor="notApproved" className="small-label">Not Approved</label>
         </div>
       </div>
-      {/* <div className='data-input'>
-        <label htmlFor="expertInput">One expert from the IRB panel of outside experts of concerned department</label>
-        <input
-          type="text"
-          id="expertfromIrbInput"
-          name="expertfromIrb"
-          value={prefilledData.expertfromIRB}
-          readOnly
-          required
-        />
-      </div>
-      <div className='data-input'>
-        <label htmlFor="nomineeInput">Nominee of the DoRDC in cognate area from the institute</label>
-        <input
-          type="text"
-          id="nomineeInput"
-          name="nomineeDoRDC"
-          value={prefilledData.nomineeDoRDC}
-          readOnly
-          required
-        />
-      </div> */}
-      <div className='supervisor-button-div'>
-        <button className='send' type="submit">SEND TO DoRDC</button>
-      </div>
+      {!formData.hod_lock && (
+        <div className='supervisor-button-div'>
+          <button className='send' type="submit" onClick={sendToDordc}>SEND TO DoRDC</button>
+        </div>
+      )}
     </div>
   );
 };

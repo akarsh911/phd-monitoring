@@ -354,7 +354,7 @@ class IrbFormController extends Controller
                         return response()->json(['message' => 'Nominee Cognates have not been updated'], 403);
                     }
 
-                    $student = $irbForm->student;
+              
 
                     if ($student->checkSupervises($user->faculty->faculty_code)) {
 
@@ -401,19 +401,22 @@ class IrbFormController extends Controller
             $user = Auth::user();
             if ($user->role->role == 'hod') {
                 $request->validate([
-                    'form_id' => 'required|integer',
-                    'comments' => 'required|string',
-                    'outsideExperts' => 'required|array',
-                    'cognateExperts' => 'required|array',
+                    'student_id' => 'required|integer',
+                    'outside_experts' => 'required|array',
+                    'cognate_experts' => 'required|array',
                     'recommendation' => 'required|string',
                 ]);
-                $irbForm = IrbForm::find($request->form_id);
+                $student= Student::where('roll_no',$request->student_id)->first();
 
-                if ($irbForm) {
-                    $student = $irbForm->student;
-                    if ($student->checkHOD($user->id)) {
+                if ($student) {
+                    $irbForm = $student->irbForm;
+                    // $student = $irbForm->student;
+                    if($irbForm->hod_lock){
+                        return response()->json(['message' => 'Form is unavailable'], 403);
+                    }
+                    if ($student->department->id==$user->faculty->department_id) {
                         if ($request->recommendation == 'approved') {
-                            foreach ($request->outsideExperts as $outsideExpert) {
+                            foreach ($request->outside_experts as $outsideExpert) {
                                 if ($outsideExpert['expert_id'] != null) {
                                     IrbOutsideExpert::create([
                                         'irb_form_id' => $irbForm->id,
@@ -443,7 +446,7 @@ class IrbFormController extends Controller
                                     'change' => "HOD added outside expert",
                                 ]);
                             }
-                            foreach ($request->cognateExperts as $cognateExpert) {
+                            foreach ($request->cognate_experts as $cognateExpert) {
                                 if (Faculty::where('faculty_code', $cognateExpert['faculty_code'])->exists()) {
                                     IrbNomineeCognate::create([
                                         'irb_form_id' => $irbForm->id,
@@ -458,10 +461,13 @@ class IrbFormController extends Controller
                                     ]);
                                 }
                             }
+
                             $irbForm->update([
                                 'stage' => 'dordc',
                                 'status' => 'awaited',
                                 'HODComments' => $request->comments,
+                                'hod_lock' => true,
+                                'dra_lock' => false
                             ]);
 
                             IrbFormHistory::create([
@@ -471,11 +477,15 @@ class IrbFormController extends Controller
                                 'stage' => 'dordc',
                                 'change' => "Form approved by HOD",
                             ]);
+
                         } else {
                             $this->handleRejectionHOD($irbForm, $request, $user);
                         }
+                        return response()->json($student->getIrbFormWithHistory());
+                    } else {
+                        return response()->json(['message' => 'You are not authorized to access this resource'], 403);
                     }
-                    return response()->json($student->getIrbFormWithHistory());
+                    
                 } else {
                     return response()->json(['message' => 'No form found'], 404);
                 }

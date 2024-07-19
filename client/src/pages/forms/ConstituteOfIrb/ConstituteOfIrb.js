@@ -29,6 +29,8 @@ const Irb = () => {
     nomineeDoRDC: '',
     student_lock: true,
     supervisor_lock: true,
+    hod_lock: true,
+    dordc_lock: true,
     role: '',
     suggestions:[],
     status:'awaited'
@@ -80,13 +82,15 @@ const Irb = () => {
             cgpa: data.cgpa,
             chairman: data.chairman.name,
             supervisor: data.supervisors.map(s => s.name).join(', '),
-            experts: ['', '', ''], // Map accordingly if available
+            experts: data.outside_experts?.name || ['', '', ''], // Map accordingly if available
             nominees: data.nominee_cognates|| [{},{},{}], // Map accordingly if available
-            chairmanExperts: data.chairman_experts, // Map accordingly if available// Map accordingly if available
+            chairmanExperts: data.chairman_experts || [{}], // Map accordingly if available// Map accordingly if available
             expertfromIRB: '', // Map accordingly if available
             nomineeDoRDC: '', // Map accordingly if available
             student_lock: data.student_lock , // Adjust this based on your logic
             supervisor_lock: data.supervisor_lock , // Adjust this based on your logic
+            hod_lock: data.hod_lock , // Adjust this based on your logic
+            dordc_lock: data.dordc_lock , // Adjust this based on your logic
             role: data.role,
             supervisor_comments: data.SuperVisorComments,
             hod_comments: data.HODComments,
