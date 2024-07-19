@@ -16,7 +16,7 @@ const ThesisExtensionForm = () => {
         researchTitle: '',
         mobile: '',
         status: '',
-        gender:'',
+        gender:'Female',
         supervisors: ['', '', ''],
         hodRecommendation: '',
         hodRemarks: '',

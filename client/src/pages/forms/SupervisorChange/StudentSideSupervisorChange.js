@@ -107,7 +107,21 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
 
       {formData.irbCompleted === 'yes' && (
         <div className='data-input'>
-          <label htmlFor="researchTitleInput">Title of PHD Thesis</label>
+          <label htmlFor="researchTitleInput">Title of PhD Thesis</label>
+          <input
+            type="text"
+            id="researchTitleInput"
+            name="researchTitle"
+            value={formData.researchTitle}
+            onChange={handleChange}
+            required
+          />
+        </div>
+      )}
+
+{formData.irbCompleted === 'no' && (
+        <div className='data-input'>
+          <label htmlFor="researchTitleInput">Tentative Title of PhD Thesis</label>
           <input
             type="text"
             id="researchTitleInput"
@@ -143,32 +157,7 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
         />
       </div>
 
-      <div className='data-input'>
-        <label htmlFor="preferenceInput">Broad Area of Research</label>
-        <input
-          type="text"
-          id="preferenceInput"
-          name="preference"
-          value={formData.preference}
-          onChange={handleChange}
-        /> <input
-        type="text"
-        id="preferenceInput"
-        name="preference"
-        value={formData.preference}
-        onChange={handleChange}
-      />
-       <input
-          type="text"
-          id="preferenceInput"
-          name="preference"
-          value={formData.preference}
-          onChange={handleChange}
-        />
-      </div>
-
-      
-
+    
       <div className='data-input' id='appr'>
         <label htmlFor="supervisorName" >Supervisor(s) to be changed</label>
         <div >
@@ -225,7 +214,7 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
       </div>
 
       <div className='supervisor-button-div'>
-        <button className='send' type="submit">SEND TO HoD and PHD Coordinator</button>
+        <button className='send' type="submit">SEND TO HoD and PhD Coordinator</button>
       </div>
     </div>
   );
