@@ -33,7 +33,9 @@ class SupervisorChangeForm extends Model
         return [
             'form_id' => $this->id,
             'name' => $this->student->user->name(),
+            'email' => $this->student->user->email,
             'roll_no' => $this->student->roll_no,
+            'title_of_phd' => $this->student->phd_title,    
             'department' => $this->student->department->name,
             'phone' => $this->student->user->phone,
             'date_of_registration' => $this->student->date_of_registration,
