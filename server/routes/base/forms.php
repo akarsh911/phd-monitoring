@@ -19,3 +19,7 @@ Route::prefix('research/extension')->group(function () {
 Route::prefix('supervisor/change')->group(function () {
     require base_path('routes/base/supervisor_change.php');
 });
+
+Route::prefix('status-change')->group(function () {
+    require base_path('routes/base/student_status_change.php');
+});
