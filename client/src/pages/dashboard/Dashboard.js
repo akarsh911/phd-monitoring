@@ -12,13 +12,10 @@ import ThesisSubForm from '../forms/ThesisSubmission/ThesisSub.js';
 import StatusChange from '../forms/ChangeOfStatus/StatusChange.js';
 import ThesisExtensionForm from '../forms/ThesisExtension/ThesisExtension.js';
 import SupervisorChange from '../forms/SupervisorChange/SupervisorChange.js';
-<<<<<<< HEAD
-import StatusChangeForm from '../forms/ChangeOfStatus/StatusChange.js';
-=======
 import SupAllocation from '../forms/SupAllocation/SupAllocation.js';
 import ListOfExaminer from '../forms/ListOfExaminer/ListOfExaminer.js';
 import Publications from '../forms/Publications/Publications.js';
->>>>>>> 94d99d59a7151cbe3ee6f1a1238c92abec4afe58
+import StatusChangeForm from '../forms/ChangeOfStatus/StatusChange.js';
 
 
 const SideLeftMenu = () => {

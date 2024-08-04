@@ -78,6 +78,10 @@ class Student extends Model
         }
     }
     
+    public function statusChanges()
+    {
+        return $this->hasMany(StudentStatusChange::class, 'student_id', 'roll_no');
+    }
 
     public function supervisor_update_date()
     {
@@ -104,6 +108,11 @@ class Student extends Model
         return $this->hasOne(IrbSubForm::class, 'student_id', 'roll_no');
     }
     
+    public function statusChangeForms()
+    {
+        return $this->hasOne(StudentStatusChangeForms::class, 'student_id', 'roll_no');
+    }
+
     public static function findByUserId($userId)
     {
         return self::where('user_id', $userId)->first();
