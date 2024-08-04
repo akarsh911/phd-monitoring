@@ -1,21 +1,22 @@
-import {React , useState} from 'react';
+import { React, useState } from "react";
 
+import "./SupervisorChange.css";
 
-import './SupervisorChange.css';
+const StudentSideSupervisorChange = ({
+  formData,
+  handleChange,
+  handleSelectedSupervisorChange,
+}) => {
+  const [supervisors, setSupervisors] = useState([{ name: "" }]);
 
-const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSupervisorChange}) => {
-    const [supervisors, setSupervisors] = useState([{ name: '' }]);
-
-  
-    const addSupervisor = () => {
-      setSupervisors([...supervisors, { name: '' }]);
-    };
-  
+  const addSupervisor = () => {
+    setSupervisors([...supervisors, { name: "" }]);
+  };
 
   return (
-    <div className='student-form'>
-      <div className='first'>
-        <div className='data-input'>
+    <div className="student-form">
+      <div clasasName="first">
+        <div className="data-input">
           <label htmlFor="regnoInput">Roll Number</label>
           <input
             type="number"
@@ -26,7 +27,7 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
             required
           />
         </div>
-        <div className='data-input'>
+        <div className="data-input">
           <label htmlFor="nameInput">Name</label>
           <input
             type="text"
@@ -39,20 +40,20 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
         </div>
       </div>
 
-      <div className='date-input'>
+      <div className="date-input">
         <label htmlFor="dateOfAdmissionInput">Date of Admission</label>
         <input
           type="date"
           id="dateOfAdmissionInput"
           name="dateOfAdmission"
-          value={formData.dateOfAdmission}
+          value={formData.admissionDate}
           readOnly
           required
         />
       </div>
 
-      <div className='first'>
-        <div className='data-input'>
+      <div className="first">
+        <div className="data-input">
           <label htmlFor="emailInput">Email</label>
           <input
             type="email"
@@ -64,7 +65,7 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
             readOnly
           />
         </div>
-        <div className='data-input'>
+        <div className="data-input">
           <label htmlFor="mobileInput">Mobile No.</label>
           <input
             type="tel"
@@ -78,35 +79,38 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
         </div>
       </div>
 
-      <div className='data-input' id='appr'>
+      <div className="data-input" id="appr">
         <label>IRB Completed</label>
-        <div >
+        <div>
           <input
             type="radio"
             id="irbYes"
             name="irbCompleted"
-            value="yes"
-            checked={formData.irbCompleted === 'yes'}
+            value={true}
+            checked={formData.irbCompleted === true}
             onChange={handleChange}
             required
           />
-          <label htmlFor="irbYes" className='small-label'>Yes</label>
+          <label htmlFor="irbYes" className="small-label">
+            Yes
+          </label>
           <input
-          
             type="radio"
             id="irbNo"
             name="irbCompleted"
-            value="no"
-            checked={formData.irbCompleted === 'no'}
+            value={false}
+            checked={formData.irbCompleted === false}
             onChange={handleChange}
             required
           />
-          <label htmlFor="irbNo" className='small-label'>No</label>
+          <label htmlFor="irbNo" className="small-label">
+            No
+          </label>
         </div>
       </div>
 
-      {formData.irbCompleted === 'yes' && (
-        <div className='data-input'>
+      {formData.irbCompleted === true && (
+        <div className="data-input">
           <label htmlFor="researchTitleInput">Title of PhD Thesis</label>
           <input
             type="text"
@@ -119,9 +123,11 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
         </div>
       )}
 
-{formData.irbCompleted === 'no' && (
-        <div className='data-input'>
-          <label htmlFor="researchTitleInput">Tentative Title of PhD Thesis</label>
+      {formData.irbCompleted === false && (
+        <div className="data-input">
+          <label htmlFor="researchTitleInput">
+            Tentative Title of PhD Thesis
+          </label>
           <input
             type="text"
             id="researchTitleInput"
@@ -133,20 +139,22 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
         </div>
       )}
 
-<div className='data-input'>
+      <div className="data-input">
         <label htmlFor="supervisorsInput">Supervisor(s) Allocated</label>
         <input
           type="text"
           id="supervisorsInput"
           name="supervisors"
-          value={formData.supervisors.join(', ')}  // Assuming supervisors is an array
+          value={formData.supervisors.join(", ")} // Assuming supervisors is an array
           readOnly
           required
         />
       </div>
 
-      <div className='date-input' >
-        <label htmlFor="dateAllocatedInput">Date of Allocation of Supervisors</label>
+      <div className="date-input">
+        <label htmlFor="dateAllocatedInput">
+          Date of Allocation of Supervisors
+        </label>
         <input
           type="date"
           id="dateAllocatedInput"
@@ -157,10 +165,9 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
         />
       </div>
 
-    
-      <div className='data-input' id='appr'>
-        <label htmlFor="supervisorName" >Supervisor(s) to be changed</label>
-        <div >
+      <div className="data-input" id="appr">
+        <label htmlFor="supervisorName">Supervisor(s) to be changed</label>
+        <div>
           {formData.supervisors.map((supervisor, index) => (
             <div key={index}>
               <input
@@ -170,14 +177,15 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
                 value={supervisor}
                 onChange={handleSelectedSupervisorChange}
               />
-              <label htmlFor={`supervisor-${index}`} className='small-label'>{supervisor}</label>
+              <label htmlFor={`supervisor-${index}`} className="small-label">
+                {supervisor}
+              </label>
             </div>
           ))}
         </div>
       </div>
 
-
-      <div className='data-input'>
+      <div className="data-input">
         <label htmlFor="reasonForChangeInput">Reason for Change</label>
         <input
           type="text"
@@ -189,7 +197,7 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
         />
       </div>
 
-      <div className='data-input'>
+      <div className="data-input">
         <label htmlFor="preferenceInput"> Preferences</label>
         <input
           type="text"
@@ -197,14 +205,15 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
           name="preference"
           value={formData.preference}
           onChange={handleChange}
-        /> <input
-        type="text"
-        id="preferenceInput"
-        name="preference"
-        value={formData.preference}
-        onChange={handleChange}
-      />
-       <input
+        />{" "}
+        <input
+          type="text"
+          id="preferenceInput"
+          name="preference"
+          value={formData.preference}
+          onChange={handleChange}
+        />
+        <input
           type="text"
           id="preferenceInput"
           name="preference"
@@ -213,8 +222,10 @@ const StudentSideSupervisorChange = ({ formData, handleChange ,handleSelectedSup
         />
       </div>
 
-      <div className='supervisor-button-div'>
-        <button className='send' type="submit">SEND TO HoD and PhD Coordinator</button>
+      <div className="supervisor-button-div">
+        <button className="send" type="submit">
+          SEND TO HoD and PhD Coordinator
+        </button>
       </div>
     </div>
   );

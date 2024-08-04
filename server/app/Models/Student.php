@@ -85,7 +85,8 @@ class Student extends Model
 
     public function supervisor_update_date()
     {
-        return $this->supervisors()->first()->pivot->updated_at;
+        $last_update= Supervisor::where('student_id', $this->roll_no)->orderBy('updated_at', 'desc')->first();
+        return $last_update->updated_at;
     }
 
     public function doctoralCommittee()
