@@ -67,7 +67,7 @@ const SideLeftMenu = () => {
     {/* <ResearchProposalExtensionForm/> */}
     {/* <ConstituteOfIrb/> */}
   {/* <ThesisSubForm/> */}
-  <StatusChange/>
+  {/* <StatusChange/> */}
     {/* <IrbSubmission/> */}
     {/* <IrbSubmissionSup/> */}
     {/* <SupervisorChange/> */}
