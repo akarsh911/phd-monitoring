@@ -78,9 +78,9 @@ const SideLeftMenu = () => {
       {/* <IrbSubmissionSup /> */}
       {/* <StatusChangeForm /> */}
       {/* <ProgressMonitoring /> */}
-      {/* <ListOfExaminer /> */}
+      <ListOfExaminer />
       {/* <SupAllocation /> */}
-      <Publications/>
+      {/* <Publications/> */}
     </div>
   );
 };

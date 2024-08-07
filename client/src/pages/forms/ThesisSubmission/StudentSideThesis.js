@@ -149,13 +149,101 @@ const StudentSideThesis = ({ formData, handleChange }) => {
         />
       </div>
       
-      <div className='data-input'>
+      {/* <div className='data-input'>
         <label htmlFor="publicationDetailsInput">
           <a href={formData.publicationLink} target="_blank" rel="noopener noreferrer">
             Details of Publications
           </a>
         </label>
-      </div>
+      </div> */}
+
+<div className='data-input'>
+          <label htmlFor="regnoInput">Publications:</label>
+           
+          
+        </div>
+        <div className='data-input'>
+      <label>Papers in SCI Journal</label>
+      <table>
+        <thead>
+          <tr>
+            <th>Author(s)</th>
+            <th>Year of Publication</th>
+            <th>Title of Paper</th>
+            <th>Name of the Journal, Volume/page numbers</th>
+            <th>Name of the Publisher</th>
+            <th>Impact Factor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Example Title</td>
+            <td>John Doe</td>
+            <td>Journal of Example</td>
+            <td>2023</td>
+            <td>12</td>
+            <td>34-56</td>
+          </tr>
+          {/* Add more rows as needed */}
+        </tbody>
+      </table>
+    </div>
+    
+    <div className='data-input'>
+      <label>Papers in Scopus Journal</label>
+      <table>
+        <thead>
+          <tr>
+            <th>Author(s)</th>
+            <th>Year of Publication</th>
+            <th>Title of Paper</th>
+            <th>Name of the Journal, Volume/page numbers</th>
+            <th>Name of the Publisher</th>
+            <th>Impact Factor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Example Title</td>
+            <td>John Doe</td>
+            <td>Journal of Example</td>
+            <td>2023</td>
+            <td>12</td>
+            <td>34-56</td>
+          </tr>
+          {/* Add more rows as needed */}
+        </tbody>
+      </table>
+    </div>
+ 
+
+    <div className='data-input'>
+      <label>Patents</label>
+      <table>
+        <thead>
+          <tr>
+            <th>Author(s)</th>
+            <th>Year of Award</th>
+            <th>Title of Patent</th>
+            <th>Patent Number</th>
+            <th>International/Indian</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Example Title</td>
+            <td>John Doe</td>
+            <td>Journal of Example</td>
+            <td>2023</td>
+            <td>12</td>
+            
+          </tr>
+          {/* Add more rows as needed */}
+        </tbody>
+      </table>
+    </div>
+
       
       <div className='date-input'>
         <label htmlFor="dateOfSynopsisPresentationInput">Date of Synopsis Presentation</label>

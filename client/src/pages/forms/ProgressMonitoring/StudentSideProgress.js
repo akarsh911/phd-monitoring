@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './ProgressMonitoring.css';
+import '../ThesisSubmission/ThesisSub.css';
 
 const StudentSideProgress = ({ formData }) => {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
@@ -129,6 +130,172 @@ const StudentSideProgress = ({ formData }) => {
           <label htmlFor="publicationNo" className="small-label">No</label>
         </div>
       </div>
+       
+      <div className='data-input'>
+          <label htmlFor="regnoInput">Publications:</label>
+           
+          
+        </div>
+        <div className='data-input'>
+      <label>Papers in SCI Journal</label>
+      <table>
+        <thead>
+          <tr>
+            <th>Author(s)</th>
+            <th>Year of Publication</th>
+            <th>Title of Paper</th>
+            <th>Name of the Journal, Volume/page numbers</th>
+            <th>Name of the Publisher</th>
+            <th>Impact Factor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Example Title</td>
+            <td>John Doe</td>
+            <td>Journal of Example</td>
+            <td>2023</td>
+            <td>12</td>
+            <td>34-56</td>
+          </tr>
+          {/* Add more rows as needed */}
+        </tbody>
+      </table>
+    </div>
+    
+    <div className='data-input'>
+      <label>Papers in Scopus Journal</label>
+      <table>
+        <thead>
+          <tr>
+            <th>Author(s)</th>
+            <th>Year of Publication</th>
+            <th>Title of Paper</th>
+            <th>Name of the Journal, Volume/page numbers</th>
+            <th>Name of the Publisher</th>
+            <th>Impact Factor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Example Title</td>
+            <td>John Doe</td>
+            <td>Journal of Example</td>
+            <td>2023</td>
+            <td>12</td>
+            <td>34-56</td>
+          </tr>
+          {/* Add more rows as needed */}
+        </tbody>
+      </table>
+    </div>
+
+
+    <div className='data-input'>
+      <label>Papers in International Conferences</label>
+      <table>
+        <thead>
+          <tr>
+            <th>Author(s)</th>
+            <th>Year of Publication</th>
+            <th>Title of Paper</th>
+            <th>Name and Place of Conference</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Example Title</td>
+            <td>John Doe</td>
+            <td>Journal of Example</td>
+            <td>2023</td>
+            
+          </tr>
+          {/* Add more rows as needed */}
+        </tbody>
+      </table>
+    </div>
+
+    <div className='data-input'>
+      <label>Papers in Indian Conferences</label>
+      <table>
+        <thead>
+          <tr>
+            <th>Author(s)</th>
+            <th>Year of Publication</th>
+            <th>Title of Paper</th>
+            <th>Name and Place of Conference</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Example Title</td>
+            <td>John Doe</td>
+            <td>Journal of Example</td>
+            <td>2023</td>
+            
+          </tr>
+          {/* Add more rows as needed */}
+        </tbody>
+      </table>
+    </div>
+       
+
+
+    <div className='data-input'>
+      <label>Books</label>
+      <table>
+        <thead>
+          <tr>
+            <th>Name of Book</th>
+            <th>Chapter Title</th>
+            <th>Year of Publication</th>
+            <th>Name of Publisher</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Example Title</td>
+            <td>John Doe</td>
+            <td>Journal of Example</td>
+            <td>2023</td>
+
+          </tr>
+          {/* Add more rows as needed */}
+        </tbody>
+      </table>
+    </div>
+
+    <div className='data-input'>
+      <label>Patents</label>
+      <table>
+        <thead>
+          <tr>
+            <th>Author(s)</th>
+            <th>Year of Award</th>
+            <th>Title of Patent</th>
+            <th>Patent Number</th>
+            <th>International/Indian</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Example Title</td>
+            <td>John Doe</td>
+            <td>Journal of Example</td>
+            <td>2023</td>
+            <td>12</td>
+            
+          </tr>
+          {/* Add more rows as needed */}
+        </tbody>
+      </table>
+    </div>
+
+
 
       <div className='data-input' id='appr'>
         <label className='bold-label'>Teaching work, if any done during the period under report</label>
