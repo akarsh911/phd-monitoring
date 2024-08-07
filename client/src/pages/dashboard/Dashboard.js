@@ -71,7 +71,7 @@ const SideLeftMenu = () => {
       {/* <ResearchProposalExtensionForm /> */}
       {/* <ConstituteOfIrb /> */}
       {/* <ThesisSubForm /> */}
-      <StatusChange/>
+      {/* <StatusChange/> */}
       {/* <ThesisExtensionForm /> */}
       {/* <SupervisorChange /> */}
       {/* <IrbSubmission /> */}
@@ -80,6 +80,7 @@ const SideLeftMenu = () => {
       {/* <ProgressMonitoring /> */}
       {/* <ListOfExaminer /> */}
       {/* <SupAllocation /> */}
+      <Publications/>
     </div>
   );
 };
