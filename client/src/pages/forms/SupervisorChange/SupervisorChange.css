@@ -1,31 +1,32 @@
 .studentSidebody-div{
-    position: relative; /* Changed from absolute to relative */
-    min-height: 3000px; /* Ensure the content area is tall enough */
-    width: calc(100% - 290px); /* Adjust width to account for the sidebar */
-    margin-top: 109px; /* Ensure the content starts below the navbar */
+    position: relative;
+    min-height: 3000px;
+    width: calc(100% - 290px);
+    margin-top: 109px;
     margin-left: 290px;
     background-color: white;
-    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-y: auto;
 }
+
 .two-button{
     display: flex;
     flex-direction: row;
     align-items: end;
 }
+
 .studentSideform-div{
     height:2500px;
-    /* width:1710px; */
     color:black;
-  background-color: #eaeaea;
-  display: flex;
-  flex-direction: column;
+    background-color: #eaeaea;
+    display: flex;
+    flex-direction: column;
     margin: 20px;
-align-items: center;
-justify-items: center;
-overflow-x: hidden;
-overflow-y: hidden;
-    
+    align-items: center;
+    justify-items: center;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }   
+
 .data-input label,
 .date-input label{
     font-size: 26px;
@@ -35,11 +36,9 @@ overflow-y: hidden;
 .data-input input{
     margin-left: 8px;
     border: none;
- border-bottom: 1px solid black;
-background: transparent;
-outline: none;
-/* width: 256px; */
-
+    border-bottom: 1px solid black;
+    background: transparent;
+    outline: none;
 }
 
 .form{
@@ -53,13 +52,13 @@ outline: none;
 }
 
 .send{
-    width: 200px; /* Adjust width as needed */
-    height: 48px; /* Adjust height as needed */
-    border-radius: 18px; /* Adjust border radius for rounded edges */
-    background-color:rgb(179, 27, 27); /* Red color for the button */
-    color: white; /* Text color */
-    border: none; /* Remove default button border */
-    cursor: pointer; /* Show pointer cursor on hover */
+    width: 200px;
+    height: 48px;
+    border-radius: 18px;
+    background-color:rgb(179, 27, 27);
+    color: white;
+    border: none;
+    cursor: pointer;
     transition: background-color 0.3s ease; 
     margin-right: 193px;
 }
@@ -68,41 +67,39 @@ outline: none;
 .date-input,
 .gender-input{
     padding: 20px;
-  
 }
 
 #appr.data-input{
     height: 55px;
-   
 }
+
 .supervisor-button-div{
     display: flex;
-    /* justify-content: flex-end; */
 }
 
 #appr{
     display: flex;
-  flex-direction: row;
-  align-items: center;
-  
+    flex-direction: row;
+    align-items: center;
 }
 
 .data-input input,
 .date-input input,
 .gender-input input,
 #departmentInput{
-  margin-left: 21px;
-  
+    margin-left: 21px;
 }
+
 .data-input .small-label {
     font-size: 20px; 
     font-weight: 500;
-    margin-right: 20px;/* Adjust the font size as needed */
-  }
-  
+    margin-right: 20px;
+}
+
 .heading{
     font-size: 20px;
 }
+
 .first{
     display: flex;
     flex-direction: row;
@@ -112,23 +109,69 @@ outline: none;
     font-weight: bold;
 }
 
-
-
-
-
-
 #appr div {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap; /* This allows the items to wrap if they don't fit in one line */
+    flex-wrap: wrap;
 }
 
 #appr div > div {
     display: flex;
     align-items: center;
-    margin-right: 16px; /* Adjust the spacing between radio buttons as needed */
+    margin-right: 16px;
 }
 
 #appr .small-label {
     margin-left: 8px;
+}
+
+/* New styles for preferences */
+.preferences-container {
+    margin-bottom: 20px;
+}
+
+.preferences-input-container {
+    display: flex;
+    gap: 10px;
+}
+
+.preference-input-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.preference-input {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: none;
+    border-bottom: 1px solid black;
+    background: transparent;
+    outline: none;
+}
+
+.filtered-supervisors {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: white;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.filtered-supervisors li {
+    padding: 8px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.filtered-supervisors li:hover {
+    background-color: #f0f0f0;
 }

@@ -19,6 +19,7 @@ const SupervisorChange = () => {
     mobile: "",
     irbCompleted: "",
     email: "",
+    role: "student",
     researchTitle: "",
     supervisorsAllocated: "",
     dateAllocated: "",
@@ -27,7 +28,10 @@ const SupervisorChange = () => {
     preference: "",
     selectedSupervisors: [], // Holds the selected supervisors
     newSupervisors: [], // Holds the names of the new supervisors
-
+    student_lock: true,
+    supervisor_lock: true,
+    hod_lock: true,
+    dordc_lock: true,
     supervisors: ["Sup 1", "Sup 2", "Sup 3"],
 
     HoDRecommendation: "",
@@ -111,6 +115,11 @@ const SupervisorChange = () => {
           supervisorChange: "",
           reasonForChange: "",
           preference: "",
+          role:data.role,
+          student_lock: data.student_lock, // Adjust this based on your logic
+          supervisor_lock: data.supervisor_lock, // Adjust this based on your logic
+          hod_lock: data.hod_lock, // Adjust this based on your logic
+          dordc_lock: data.dordc_lock, 
           selectedSupervisors: [], // Holds the selected supervisors
           newSupervisors: [], // Holds the names of the new supervisors
 
@@ -181,20 +190,30 @@ const SupervisorChange = () => {
         <div className="heading">
           <h1>Request for Change of Supervisor</h1>
         </div>
+        
         <form onSubmit={handleSubmit} className="studentSideform">
-          <StudentSideSupervisorChange
+        {formData.role == "student" && (
+            <StudentSideSupervisorChange
             formData={formData}
             handleChange={handleChange}
             handleSelectedSupervisorChange={handleSelectedSupervisorChange}
           />
+          )}
+          
 
           {/* STUDENT SIDE ENDS */}
 
           {/* <PHDCoordinatorSideSupervisorChange formData={formData} handlePHDCoordinatorRecommendationChange={handlePHDCoordinatorRecommendationChange} />
 
 PHD Coordinator Side Ends */}
-
-          <HoDSideSupervisorChange
+        {formData.role === "hod" && (
+            <div>
+              <StudentSideSupervisorChange
+            formData={formData}
+            handleChange={handleChange}
+            handleSelectedSupervisorChange={handleSelectedSupervisorChange}
+          />
+              <HoDSideSupervisorChange
             formData={formData}
             handleHoDRecommendationChange={handleHoDRecommendationChange}
             handleChange={handleChange}
@@ -211,6 +230,54 @@ PHD Coordinator Side Ends */}
             formData={formData}
             handleDRARecommendationChange={handleDRARecommendationChange}
           />
+            </div>
+          )}
+          {formData.role === "dordc" && (
+            <div>
+              <StudentSideSupervisorChange
+            formData={formData}
+            handleChange={handleChange}
+            handleSelectedSupervisorChange={handleSelectedSupervisorChange}
+          />
+              <HoDSideSupervisorChange
+            formData={formData}
+            handleHoDRecommendationChange={handleHoDRecommendationChange}
+            handleChange={handleChange}
+          />
+          {/* HoD SIDE ENDS */}
+
+          <DoRDCSideSupervisorChange
+            formData={formData}
+            handleDoRDCRecommendationChange={handleDoRDCRecommendationChange}
+          />
+            </div>
+          )}
+          {formData.role === "dra" && (
+            <div>
+              <StudentSideSupervisorChange
+            formData={formData}
+            handleChange={handleChange}
+            handleSelectedSupervisorChange={handleSelectedSupervisorChange}
+          />
+              <HoDSideSupervisorChange
+            formData={formData}
+            handleHoDRecommendationChange={handleHoDRecommendationChange}
+            handleChange={handleChange}
+          />
+          {/* HoD SIDE ENDS */}
+
+          <DoRDCSideSupervisorChange
+            formData={formData}
+            handleDoRDCRecommendationChange={handleDoRDCRecommendationChange}
+          />
+
+          {/* DoRDC side ends */}
+          <DrASideSupervisorChange
+            formData={formData}
+            handleDRARecommendationChange={handleDRARecommendationChange}
+          />
+            </div>
+          )}
         </form>
       </div>
     </div>
