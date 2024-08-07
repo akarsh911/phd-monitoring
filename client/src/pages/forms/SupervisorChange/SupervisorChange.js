@@ -116,7 +116,7 @@ const SupervisorChange = () => {
           reasonForChange: "",
           preference: "",
           role:data.role,
-          student_lock: data.student_lock, // Adjust this based on your logic
+         // Adjust this based on your logic
           supervisor_lock: data.supervisor_lock, // Adjust this based on your logic
           hod_lock: data.hod_lock, // Adjust this based on your logic
           dordc_lock: data.dordc_lock, 

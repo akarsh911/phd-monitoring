@@ -6,6 +6,7 @@ const StudentSideSupervisorChange = ({
   handleChange,
   handleSelectedSupervisorChange,
 }) => {
+  const isEditable = formData.student_lock;
   const [supervisors, setSupervisors] = useState([]);
   const [filteredSupervisors, setFilteredSupervisors] = useState([]);
   const [preferences, setPreferences] = useState(['', '', '']);
@@ -133,6 +134,7 @@ const StudentSideSupervisorChange = ({
             checked={formData.irbCompleted === true}
             onChange={handleChange}
             required
+            readOnly={!isEditable}
           />
           <label htmlFor="irbYes" className="small-label">
             Yes
@@ -145,6 +147,7 @@ const StudentSideSupervisorChange = ({
             checked={formData.irbCompleted === false}
             onChange={handleChange}
             required
+            readOnly={!isEditable}
           />
           <label htmlFor="irbNo" className="small-label">
             No
@@ -162,6 +165,7 @@ const StudentSideSupervisorChange = ({
             value={formData.researchTitle}
             onChange={handleChange}
             required
+            readOnly={!isEditable}
           />
         </div>
       )}
@@ -178,6 +182,7 @@ const StudentSideSupervisorChange = ({
             value={formData.researchTitle}
             onChange={handleChange}
             required
+            readOnly={!isEditable}
           />
         </div>
       )}
@@ -218,6 +223,7 @@ const StudentSideSupervisorChange = ({
                 id={`supervisor-${index}`}
                 name="supervisor"
                 value={supervisor}
+                readOnly={!isEditable}
                 onChange={handleSelectedSupervisorChange}
               />
               <label htmlFor={`supervisor-${index}`} className="small-label">
@@ -236,6 +242,7 @@ const StudentSideSupervisorChange = ({
           name="reasonForChange"
           value={formData.reasonForChange}
           onChange={handleChange}
+          readOnly={!isEditable}
           required
         />
       </div>
@@ -249,6 +256,7 @@ const StudentSideSupervisorChange = ({
                 type="text"
                 className="preference-input"
                 required
+                readOnly={!isEditable}
                 value={preference}
                 onChange={(e) => handlePreferenceChange(index, e.target.value)}
                 onFocus={() => setActiveInput(index)}
