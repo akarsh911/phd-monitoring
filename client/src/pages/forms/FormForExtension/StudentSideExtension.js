@@ -131,7 +131,7 @@ const StudentSideExtension = ({ formData, handleChange }) => {
         />
       </div>
       <div className='data-input'>
-        <label htmlFor="researchTitleInput">Title of research Proposal</label>
+        <label htmlFor="researchTitleInput">Title of Phd Thesis</label>
         <input
           type="text"
           id="researchTitleInput"

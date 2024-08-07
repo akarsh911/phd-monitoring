@@ -41,7 +41,7 @@ const SupervisorSideStatusChange = ({ formData, handleSupRecommendationChange })
         />
       </div>
       <div className='supervisor-button-div'>
-        <button className='send' type="submit">SEND TO HoD</button>
+        <button className='send' type="submit">Send to HoD and PhD Coordinator</button>
       </div>
     </div>
   );

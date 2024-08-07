@@ -124,6 +124,18 @@ const StudentSideThesis = ({ formData, handleChange }) => {
           required
         />
       </div>
+
+      <div className='data-input'>
+        <label htmlFor="statusInput">Current Status</label>
+        <input
+          type="text"
+          id="currentStatusInput"
+          name="currentStatus"
+          value={formData.currentStatus}
+          readOnly
+          required
+        />
+      </div>
       
       <div className='date-input'>
         <label htmlFor="dateOfStatusChangeInput">Date of Change of Status</label>
@@ -172,9 +184,10 @@ const StudentSideThesis = ({ formData, handleChange }) => {
          
             required
           />
+          <br/>
+          <br/>
         
-        
-        <div className='date-input'>
+        {/* <div className='date-input'> */}
           <label htmlFor="receiptDateInput">Date of Fee Submission</label>
           <input
             type="date"
@@ -184,7 +197,7 @@ const StudentSideThesis = ({ formData, handleChange }) => {
         
             required
           />
-          </div>
+          {/* </div> */}
         </div>
       </div>
      

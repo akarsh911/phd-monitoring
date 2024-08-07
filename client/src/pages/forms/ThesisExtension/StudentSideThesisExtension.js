@@ -88,7 +88,7 @@ const StudentSideThesisExtension = ({ formData, handleChange }) => {
         </div>
       </div>
       <div className='data-input'>
-        <label htmlFor="researchTitleInput">Title of research Proposal</label>
+        <label htmlFor="researchTitleInput">Title of PhD Thesis</label>
         <input
           type="text"
           id="researchTitleInput"
@@ -122,7 +122,7 @@ const StudentSideThesisExtension = ({ formData, handleChange }) => {
       </div>
 
 <div className='date-input'>
-        <label htmlFor="irbMeetingDateInput">Date of pre Synopsis meeting</label>
+        <label htmlFor="irbMeetingDateInput">Date of Synopsis meeting</label>
         <input
           type="date"
           id="previousExtensionDateInput"

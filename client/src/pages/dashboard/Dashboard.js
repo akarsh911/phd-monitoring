@@ -72,13 +72,13 @@ const SideLeftMenu = () => {
     {/* <ThesisSubForm/> */}
     {/* <StatusChange/> */}
     {/* <ThesisExtensionForm/> */}
-    <Publications/>
+    {/* <Publications/> */}
 {/* <SupervisorChange/> */}
     {/* <IrbSubmission/> */}
     {/* <IrbSubmissionSup/> */}
     {/* <SupAllocation/> */}
     {/* <ProgressMonitoring/> */}
-    {/* <ListOfExaminer/> */}
+    <ListOfExaminer/>
     
     
     </div>

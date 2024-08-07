@@ -71,7 +71,7 @@ const StudentSideProgress = ({ formData }) => {
         />
       </div>
       <div className='data-input'>
-        <label htmlFor="researchTitleInput">Title of Research Proposal</label>
+        <label htmlFor="researchTitleInput">Title of PhD Thesis</label>
         <input
           type="text"
           id="researchTitleInput"

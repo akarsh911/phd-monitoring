@@ -69,6 +69,8 @@ const Publications = () => {
             <label>Page No.</label>
             <input type="text" />
           </div>
+         
+
           <div className="form-group">
             <label>Name of Publisher</label>
             <input type="text" />
@@ -77,8 +79,10 @@ const Publications = () => {
             <label>Impact Factor</label>
             <input type="text" />
           </div>
+          
           <div className="form-group">
             <label>Status of Paper</label>
+           
             <div>
               <label>
                 <input type="radio" name="status-sci" value="accepted" /> Accepted
@@ -88,6 +92,10 @@ const Publications = () => {
               </label>
             </div>
           </div>
+          <div className="form-group">
+  <label>Upload first page of paper (PDF)</label>
+  <input type="file" accept="application/pdf" />
+</div>
           <div>
             <button className='two-button'>Add More</button>
             <button className='two-button'>Submit</button>
@@ -138,6 +146,10 @@ const Publications = () => {
               </label>
             </div>
           </div>
+          <div className="form-group">
+  <label>Upload first page of paper (PDF)</label>
+  <input type="file" accept="application/pdf" />
+</div>
           <div>
             <button className='two-button'>Add More</button>
             <button className='two-button'>Submit</button>
@@ -180,6 +192,10 @@ const Publications = () => {
               </label>
             </div>
           </div>
+          <div className="form-group">
+  <label>Upload first page of paper (PDF)</label>
+  <input type="file" accept="application/pdf" />
+</div>
           <div>
             <button className='two-button'>Add More</button>
             <button className='two-button'>Submit</button>
@@ -222,6 +238,10 @@ const Publications = () => {
               </label>
             </div>
           </div>
+          <div className="form-group">
+  <label>Upload first page of paper (PDF)</label>
+  <input type="file" accept="application/pdf" />
+</div>
           <div>
             <button className='two-button'>Add More</button>
             <button className='two-button'>Submit</button>
@@ -262,10 +282,6 @@ const Publications = () => {
             <input type="text" />
           </div>
           <div className="form-group">
-            <label>CO-author(s) (if any)</label>
-            <input type="text" />
-          </div>
-          <div className="form-group">
             <label>Name of Publisher</label>
             <input type="text" />
           </div>
@@ -280,6 +296,10 @@ const Publications = () => {
               </label>
             </div>
           </div>
+          <div className="form-group">
+  <label>Upload first page of paper (PDF)</label>
+  <input type="file" accept="application/pdf" />
+</div>
           <div>
             <button className='two-button'>Add More</button>
             <button className='two-button'>Submit</button>
@@ -329,6 +349,10 @@ const Publications = () => {
               </label>
             </div>
           </div>
+          <div className="form-group">
+  <label>Upload first page of paper (PDF)</label>
+  <input type="file" accept="application/pdf" />
+</div>
           <div>
             <button className='two-button'>Add More</button>
             <button className='two-button'>Submit</button>
