@@ -78,10 +78,15 @@ class Student extends Model
         }
     }
     
+    public function statusChanges()
+    {
+        return $this->hasMany(StudentStatusChange::class, 'student_id', 'roll_no');
+    }
 
     public function supervisor_update_date()
     {
-        return $this->supervisors()->first()->pivot->updated_at;
+        $last_update= Supervisor::where('student_id', $this->roll_no)->orderBy('updated_at', 'desc')->first();
+        return $last_update->updated_at;
     }
 
     public function doctoralCommittee()
@@ -104,6 +109,11 @@ class Student extends Model
         return $this->hasOne(IrbSubForm::class, 'student_id', 'roll_no');
     }
     
+    public function statusChangeForms()
+    {
+        return $this->hasOne(StudentStatusChangeForms::class, 'student_id', 'roll_no');
+    }
+
     public static function findByUserId($userId)
     {
         return self::where('user_id', $userId)->first();

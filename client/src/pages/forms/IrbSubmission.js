@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import './IrbSubmission.css';
+import React, { useState } from "react";
+import "./IrbSubmission.css";
 
 const Irb = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    regno:'',
-    admissionDate: '',
-    department: '',
-    cgpa: '',
-    title: '',
-    address:'',
-    telephoneNumber:'',
-    number:'',
-    objectives: [''],
-    revisedTitle: '',
-    revisedObjectives: '',
+    name: "",
+    regno: "",
+    admissionDate: "",
+    department: "",
+    cgpa: "",
+    title: "",
+    address: "",
+    telephoneNumber: "",
+    number: "",
+    objectives: [""],
+    revisedTitle: "",
+    revisedObjectives: "",
     revisedPdf: null,
   });
 
@@ -22,17 +22,20 @@ const Irb = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked, files } = e.target;
-    const newValue = type === 'checkbox' ? checked : type === 'file' ? files[0] : value;
+    const newValue =
+      type === "checkbox" ? checked : type === "file" ? files[0] : value;
     setFormData({ ...formData, [name]: newValue });
   };
 
   const handleObjectiveChange = (index, value) => {
-    const newObjectives = formData.objectives.map((obj, i) => (i === index ? value : obj));
+    const newObjectives = formData.objectives.map((obj, i) =>
+      i === index ? value : obj
+    );
     setFormData({ ...formData, objectives: newObjectives });
   };
 
   const addObjective = () => {
-    setFormData({ ...formData, objectives: [...formData.objectives, ''] });
+    setFormData({ ...formData, objectives: [...formData.objectives, ""] });
   };
 
   const handleSubmit = (e) => {
@@ -45,14 +48,14 @@ const Irb = () => {
   };
 
   return (
-    <div className='irbSubbody-div'>
-      <div className='irbSubform-div'>
-        <div className='heading'>
+    <div className="irbSubbody-div">
+      <div className="irbSubform-div">
+        <div className="heading">
           <h1>IRB SUBMISSION FORM</h1>
         </div>
-        <form onSubmit={handleSubmit} className='irbSubform'>
-          <div className='first'>
-            <div className='data-input'>
+        <form onSubmit={handleSubmit} className="irbSubform">
+          <div className="first">
+            <div className="data-input">
               <label htmlFor="regnoInput">Roll Number</label>
               <input
                 type="number"
@@ -63,7 +66,7 @@ const Irb = () => {
                 required
               />
             </div>
-            <div className='data-input'>
+            <div className="data-input">
               <label htmlFor="nameInput">Name</label>
               <input
                 type="text"
@@ -75,8 +78,8 @@ const Irb = () => {
               />
             </div>
           </div>
-          <div className='first'>
-            <div className='data-input'>
+          <div className="first">
+            <div className="data-input">
               <label htmlFor="departmentInput">Department</label>
               <input
                 type="text"
@@ -87,7 +90,7 @@ const Irb = () => {
                 required
               />
             </div>
-            <div className='data-input'>
+            <div className="data-input">
               <label htmlFor="cgpaInput">CGPA</label>
               <input
                 type="number"
@@ -100,7 +103,7 @@ const Irb = () => {
               />
             </div>
           </div>
-          <div className='date-input'>
+          <div className="date-input">
             <label htmlFor="dateInput">Date of Admission</label>
             <input
               type="date"
@@ -111,7 +114,7 @@ const Irb = () => {
               required
             />
           </div>
-          <div className='data-input'>
+          <div className="data-input">
             <label htmlFor="titleInput">Title of PHD Thesis</label>
             <input
               type="text"
@@ -122,9 +125,9 @@ const Irb = () => {
               required
             />
           </div>
-          <div className='data-input'>
+          <div className="data-input">
             <label htmlFor="objectivesInput">Objectives</label>
-            <ol className='objectives-list'>
+            <ol className="objectives-list">
               {formData.objectives.map((objective, index) => (
                 <li key={index}>
                   <input
@@ -132,15 +135,19 @@ const Irb = () => {
                     id={`objective${index + 1}Input`}
                     name={`objective${index + 1}`}
                     value={objective}
-                    onChange={(e) => handleObjectiveChange(index, e.target.value)}
+                    onChange={(e) =>
+                      handleObjectiveChange(index, e.target.value)
+                    }
                     required
                   />
                 </li>
               ))}
             </ol>
-            <button type="button" onClick={addObjective}>Add another Objective</button>
+            <button type="button" onClick={addObjective}>
+              Add another Objective
+            </button>
           </div>
-          <div className='data-input'>
+          <div className="data-input">
             <label htmlFor="addressInput">Address for correspondence</label>
             <input
               type="text"
@@ -151,8 +158,8 @@ const Irb = () => {
               required
             />
           </div>
-          <div className='first'>
-            <div className='data-input'>
+          <div className="first">
+            <div className="data-input">
               <label htmlFor="telephonenumberInput">Email</label>
               <input
                 type="tel"
@@ -163,7 +170,7 @@ const Irb = () => {
                 required
               />
             </div>
-            <div className='data-input'>
+            <div className="data-input">
               <label htmlFor="numberInput">Mobile</label>
               <input
                 type="tel"
@@ -175,61 +182,80 @@ const Irb = () => {
               />
             </div>
           </div>
-          <div className='button-div'>
-            <button className='upload-button' type="submit">UPLOAD IRB PDF</button>
-            <button className='send-button' type="submit">SEND TO SUPERVISOR</button>
+          <div className="button-div">
+            <button className="upload-button" type="submit">
+              UPLOAD IRB PDF
+            </button>
+            <button className="send-button" type="submit">
+              SEND TO SUPERVISOR
+            </button>
           </div>
-        
-        <button className='send-button' type="submit" onClick={handleRevisedClick}>REVISED IRB</button>
-        {showRevisedFields && (
-          <div className='revised-irb-fields'>
-            <div className='data-input'>
-              <label htmlFor="revisedTitleInput">Revised Title of PHD Thesis</label>
-              <input
-                type="text"
-                id="revisedTitleInput"
-                name="revisedTitle"
-                value={formData.revisedTitle}
-                onChange={handleChange}
-                required
-              />
+
+          <button
+            className="send-button"
+            type="submit"
+            onClick={handleRevisedClick}
+          >
+            REVISED IRB
+          </button>
+          {showRevisedFields && (
+            <div className="revised-irb-fields">
+              <div className="data-input">
+                <label htmlFor="revisedTitleInput">
+                  Revised Title of PHD Thesis
+                </label>
+                <input
+                  type="text"
+                  id="revisedTitleInput"
+                  name="revisedTitle"
+                  value={formData.revisedTitle}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="data-input">
+                <label htmlFor="objectivesInput"> Revised Objectives</label>
+                <ol className="objectives-list">
+                  {formData.objectives.map((objective, index) => (
+                    <li key={index}>
+                      <input
+                        type="text"
+                        id={`objective${index + 1}Input`}
+                        name={`objective${index + 1}`}
+                        value={objective}
+                        onChange={(e) =>
+                          handleObjectiveChange(index, e.target.value)
+                        }
+                        required
+                      />
+                    </li>
+                  ))}
+                </ol>
+                <button type="button" onClick={addObjective}>
+                  Add another Objective
+                </button>
+              </div>
+              <div className="date-input">
+                <label htmlFor="irbMeetingDateInput">Date of IRB meeting</label>
+                <input
+                  type="date"
+                  id="irbMeetingDateInput"
+                  name="irbMeetingDate"
+                  value={formData.irbMeetingDate}
+                  readOnly
+                  required
+                />
+              </div>
+              <div className="button-div">
+                <button className="upload-button" type="submit">
+                  UPLOAD REVISED IRB PDF
+                </button>
+                <button className="send-button" type="submit">
+                  SEND TO SUPERVISOR
+                </button>
+              </div>
             </div>
-            <div className='data-input'>
-            <label htmlFor="objectivesInput"> Revised Objectives</label>
-            <ol className='objectives-list'>
-              {formData.objectives.map((objective, index) => (
-                <li key={index}>
-                  <input
-                    type="text"
-                    id={`objective${index + 1}Input`}
-                    name={`objective${index + 1}`}
-                    value={objective}
-                    onChange={(e) => handleObjectiveChange(index, e.target.value)}
-                    required
-                  />
-                </li>
-              ))}
-            </ol>
-            <button type="button" onClick={addObjective}>Add another Objective</button>
-          </div>
-          <div className='date-input'>
-        <label htmlFor="irbMeetingDateInput">Date of IRB meeting</label>
-        <input
-          type="date"
-          id="irbMeetingDateInput"
-          name="irbMeetingDate"
-          value={formData.irbMeetingDate}
-          readOnly
-          required
-        />
-      </div>
-          <div className='button-div'>
-            <button className='upload-button' type="submit">UPLOAD REVISED IRB PDF</button>
-            <button className='send-button' type="submit">SEND TO SUPERVISOR</button>
-          </div>
-          </div>
-          
-        )}
+          )}
         </form>
       </div>
     </div>

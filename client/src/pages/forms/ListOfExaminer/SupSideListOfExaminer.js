@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import './ListOfExaminer.css';
-import '../FormForExtension/SupervisorSideExtension.css';
-import Modal from 'react-modal';
+import React, { useState } from "react";
+import "./ListOfExaminer.css";
+import "../FormForExtension/SupervisorSideExtension.css";
+import Modal from "react-modal";
 
-Modal.setAppElement('#root'); // Make sure to bind modal to your appElement
+Modal.setAppElement("#root"); // Make sure to bind modal to your appElement
 
 const SupSideListOfExaminer = ({ formData, handleChange }) => {
   const [supervisors, setSupervisors] = useState([
-    { serialno: '1', name: '', recommended: null, remarks: '' },
-    { serialno: '2', name: '', recommended: null, remarks: '' },
-    { serialno: '3', name: '', recommended: null, remarks: '' },
+    { serialno: "1", name: "", recommended: null, remarks: "" },
+    { serialno: "2", name: "", recommended: null, remarks: "" },
+    { serialno: "3", name: "", recommended: null, remarks: "" },
   ]);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -28,7 +28,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
     country: "",
     mobile: "",
     email: "",
-    referenceNo: ""
+    referenceNo: "",
   });
   const [modalHeading, setModalHeading] = useState(""); // New state for modal heading
 
@@ -77,7 +77,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
       country: "",
       mobile: "",
       email: "",
-      referenceNo: ""
+      referenceNo: "",
     });
     closeModal();
   };
@@ -94,7 +94,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
       country: "",
       mobile: "",
       email: "",
-      referenceNo: ""
+      referenceNo: "",
     });
     setModalHeading(nationality === "Indian" ? "National Examiner Details" : "International Examiner Details"); // Set the modal heading
     if (index !== null) {
@@ -117,15 +117,17 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
     if (nationality === "Indian") {
       setNationalExaminers(nationalExaminers.filter((_, i) => i !== index));
     } else {
-      setInternationalExaminers(internationalExaminers.filter((_, i) => i !== index));
+      setInternationalExaminers(
+        internationalExaminers.filter((_, i) => i !== index)
+      );
     }
   };
 
   return (
     <div>
-      <div className='student-form'>
-        <div className='first'>
-          <div className='data-input'>
+      <div className="student-form">
+        <div className="first">
+          <div className="data-input">
             <label htmlFor="regnoInput">Roll Number</label>
             <input
               type="number"
@@ -136,7 +138,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
               required
             />
           </div>
-          <div className='data-input'>
+          <div className="data-input">
             <label htmlFor="nameInput">Name</label>
             <input
               id="nameInput"
@@ -147,7 +149,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
             />
           </div>
         </div>
-        <div className='date-input'>
+        <div className="date-input">
           <label htmlFor="dateOfAdmissionInput">Date of Admission</label>
           <input
             type="date"
@@ -158,7 +160,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
             required
           />
         </div>
-        <div className='data-input'>
+        <div className="data-input">
           <label htmlFor="researchTitleInput">Title of PhD Thesis</label>
           <input
             id="researchTitleInput"
@@ -170,7 +172,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
         </div>
       </div>
       <div className="supervisor-table">
-        <h2 className='headingg'>Supervisors Details</h2>
+        <h2 className="headingg">Supervisors Details</h2>
         <table>
           <thead>
             <tr>
@@ -184,61 +186,145 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
             {supervisors.map((supervisor, index) => (
               <tr key={index}>
                 <td>{supervisor.serialno}</td>
-                <td>
-                  {/* Supervisor name input */}
-                </td>
-                <td>
-                  {/* Supervisor contact number input */}
-                </td>
-                <td>
-                  {/* Supervisor email input */}
-                </td>
+                <td>{/* Supervisor name input */}</td>
+                <td>{/* Supervisor contact number input */}</td>
+                <td>{/* Supervisor email input */}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <div className='student-form'>
+      <div className="student-form">
         <div className="submitted-data">
-          <div className='data-input'>
+          <div className="data-input">
             <label>List of Examiners</label>
           </div>
           <div className="columns">
             <div className="column">
-              <h5>National Examiners <br /> <button className='add-button' onClick={() => openModal("Indian")}>Add + </button></h5>
+              <h5>
+                National Examiners <br />{" "}
+                <button
+                  className="add-button"
+                  onClick={() => openModal("Indian")}
+                >
+                  Add +{" "}
+                </button>
+              </h5>
               {nationalExaminers.map((examiner, index) => (
                 <div key={index} className="examiner-details">
-                  <p><strong>Name of Examiner:</strong> <span className="value">{examiner.examinerName}</span></p>
-                  <p><strong>Designation:</strong> <span className="value">{examiner.designation}</span></p>
-                  <p><strong>Department:</strong> <span className="value">{examiner.department}</span></p>
-                  <p><strong>Name of University:</strong> <span className="value">{examiner.university}</span></p>
-                  <p><strong>Name of City:</strong> <span className="value">{examiner.city}</span></p>
-                  <p><strong>Pincode:</strong> <span className="value">{examiner.pincode}</span></p>
-                  <p><strong>Name of Country:</strong> <span className="value">{examiner.country}</span></p>
-                  <p><strong>Mobile No.:</strong> <span className="value">{examiner.mobile}</span></p>
-                  <p><strong>Institutional Email ID:</strong> <span className="value">{examiner.email}</span></p>
-                  <p><strong>Reference No. in Thesis:</strong> <span className="value">{examiner.referenceNo}</span></p>
-                  <button className='two-button' onClick={() => openModal("Indian", index)}>Edit</button>
-                  <button className='two-button' onClick={() => handleDelete("Indian", index)}>Delete</button>
+                  <p>
+                    <strong>Name of Examiner:</strong>{" "}
+                    <span className="value">{examiner.examinerName}</span>
+                  </p>
+                  <p>
+                    <strong>Designation:</strong>{" "}
+                    <span className="value">{examiner.designation}</span>
+                  </p>
+                  <p>
+                    <strong>Department:</strong>{" "}
+                    <span className="value">{examiner.department}</span>
+                  </p>
+                  <p>
+                    <strong>Name of University:</strong>{" "}
+                    <span className="value">{examiner.university}</span>
+                  </p>
+                  <p>
+                    <strong>Name of City:</strong>{" "}
+                    <span className="value">{examiner.city}</span>
+                  </p>
+                  <p>
+                    <strong>Pincode:</strong>{" "}
+                    <span className="value">{examiner.pincode}</span>
+                  </p>
+                  <p>
+                    <strong>Name of Country:</strong>{" "}
+                    <span className="value">{examiner.country}</span>
+                  </p>
+                  <p>
+                    <strong>Mobile No.:</strong>{" "}
+                    <span className="value">{examiner.mobile}</span>
+                  </p>
+                  <p>
+                    <strong>Institutional Email ID:</strong>{" "}
+                    <span className="value">{examiner.email}</span>
+                  </p>
+                  <p>
+                    <strong>Reference No. in Thesis:</strong>{" "}
+                    <span className="value">{examiner.referenceNo}</span>
+                  </p>
+                  <button
+                    className="two-button"
+                    onClick={() => openModal("Indian", index)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="two-button"
+                    onClick={() => handleDelete("Indian", index)}
+                  >
+                    Delete
+                  </button>
                 </div>
               ))}
             </div>
             <div className="column">
-              <h5>International Examiners <br /><button className='add-button' onClick={() => openModal("International")}>Add + </button></h5>
+              <h5>
+                International Examiners <br />
+                <button
+                  className="add-button"
+                  onClick={() => openModal("International")}
+                >
+                  Add +{" "}
+                </button>
+              </h5>
               {internationalExaminers.map((examiner, index) => (
                 <div key={index} className="examiner-details">
-                  <p><strong>Name of Examiner:</strong> <span className="value">{examiner.examinerName}</span></p>
-                  <p><strong>Designation:</strong> <span className="value">{examiner.designation}</span></p>
-                  <p><strong>Department:</strong> <span className="value">{examiner.department}</span></p>
-                  <p><strong>Name of University:</strong> <span className="value">{examiner.university}</span></p>
-                  <p><strong>Name of City:</strong> <span className="value">{examiner.city}</span></p>
-                  <p><strong>Pincode:</strong> <span className="value">{examiner.pincode}</span></p>
-                  <p><strong>Name of Country:</strong> <span className="value">{examiner.country}</span></p>
-                  <p><strong>Mobile No.:</strong> <span className="value">{examiner.mobile}</span></p>
-                  <p><strong>Institutional Email ID:</strong> <span className="value">{examiner.email}</span></p>
-                  <p><strong>Reference No. in Thesis:</strong> <span className="value">{examiner.referenceNo}</span></p>
-                  <button onClick={() => openModal("International", index)}>Edit</button>
-                  <button onClick={() => handleDelete("International", index)}>Delete</button>
+                  <p>
+                    <strong>Name of Examiner:</strong>{" "}
+                    <span className="value">{examiner.examinerName}</span>
+                  </p>
+                  <p>
+                    <strong>Designation:</strong>{" "}
+                    <span className="value">{examiner.designation}</span>
+                  </p>
+                  <p>
+                    <strong>Department:</strong>{" "}
+                    <span className="value">{examiner.department}</span>
+                  </p>
+                  <p>
+                    <strong>Name of University:</strong>{" "}
+                    <span className="value">{examiner.university}</span>
+                  </p>
+                  <p>
+                    <strong>Name of City:</strong>{" "}
+                    <span className="value">{examiner.city}</span>
+                  </p>
+                  <p>
+                    <strong>Pincode:</strong>{" "}
+                    <span className="value">{examiner.pincode}</span>
+                  </p>
+                  <p>
+                    <strong>Name of Country:</strong>{" "}
+                    <span className="value">{examiner.country}</span>
+                  </p>
+                  <p>
+                    <strong>Mobile No.:</strong>{" "}
+                    <span className="value">{examiner.mobile}</span>
+                  </p>
+                  <p>
+                    <strong>Institutional Email ID:</strong>{" "}
+                    <span className="value">{examiner.email}</span>
+                  </p>
+                  <p>
+                    <strong>Reference No. in Thesis:</strong>{" "}
+                    <span className="value">{examiner.referenceNo}</span>
+                  </p>
+                  <button onClick={() => openModal("International", index)}>
+                    Edit
+                  </button>
+                  <button onClick={() => handleDelete("International", index)}>
+                    Delete
+                  </button>
                 </div>
               ))}
             </div>
@@ -374,13 +460,17 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
                   />
                 </div>
               </div>
-              <button type="submit" className='two-button'>Save</button>
+              <button type="submit" className="two-button">
+                Save
+              </button>
             </form>
           </Modal>
         </div>
 
-        <div className='supervisor-button-div'>
-          <button className='send' type="submit">SEND TO DoRDC</button>
+        <div className="supervisor-button-div">
+          <button className="send" type="submit">
+            SEND TO DoRDC
+          </button>
         </div>
       </div>
     </div>
