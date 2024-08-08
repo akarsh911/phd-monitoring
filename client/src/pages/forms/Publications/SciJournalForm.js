@@ -127,11 +127,11 @@ const SciJournalForm = () => {
         </div>
         <div className="form-group">
           <label>Page No.</label>
-          <input type="text" value={pageNo} onChange={(e) => setPageNo(e.target.value)} required />
+          <input type="text"  value={volume} onChange={(e) => setVolume(e.target.value)} required />
         </div>
         <div className="form-group">
           <label>Name of Publisher</label>
-          <input type="text" value={publisher} onChange={(e) => setPublisher(e.target.value)} required />
+          <input type="text"  value={volume} onChange={(e) => setVolume(e.target.value)} required />
         </div>
         <div className="form-group">
           <label>Impact Factor</label>
