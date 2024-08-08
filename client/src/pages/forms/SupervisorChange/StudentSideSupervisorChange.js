@@ -6,7 +6,7 @@ const StudentSideSupervisorChange = ({
   handleChange,
   handleSelectedSupervisorChange,
 }) => {
-  const isEditable = formData.student_lock;
+  const isEditable = !formData.student_lock;
   const [supervisors, setSupervisors] = useState([]);
   const [filteredSupervisors, setFilteredSupervisors] = useState([]);
   const [preferences, setPreferences] = useState(['', '', '']);

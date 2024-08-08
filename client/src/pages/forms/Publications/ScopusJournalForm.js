@@ -36,7 +36,7 @@ const ScopusJournalForm = () => {
 
     const jsonBody = JSON.stringify({
       type:'journal',
-      journal_type:'scopus',
+      journal_type:'non-sci',
       title: title,
       year_of_publication: year,
       journal_name: journalName,
@@ -133,6 +133,10 @@ const ScopusJournalForm = () => {
         <label>Name of Publisher</label>
         <input type="text"  value={volume} onChange={(e) => setPublisher(e.target.value)} required />
       </div>
+      <div className="form-group">
+          <label>Impact Factor</label>
+          <input type="text" value={impactFactor} onChange={(e) => setImpactFactor(e.target.value)} required />
+        </div>
       <div className="form-group">
         <label>Status of Paper</label>
         <div>

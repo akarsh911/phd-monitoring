@@ -153,9 +153,7 @@ class PublicationController extends Controller
             $publication->page_no = $request->page_no;
             $publication->date_of_publication = $request->date_of_publication;
             $publication->year_of_publication = $request->year_of_publication;
-            if ($request->journal_type == 'sci') {
-                $publication->impact_factor = $request->impact_factor;
-            }
+            $publication->impact_factor = $request->impact_factor;
             $publication->journal_type = $request->journal_type;
             break;
         case 'conference':
