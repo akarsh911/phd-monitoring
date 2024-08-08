@@ -16,71 +16,54 @@ import StatusChangeForm from "../forms/ChangeOfStatus/StatusChange.js";
 import SupAllocation from "../forms/SupAllocation/SupAllocation.js";
 import ListOfExaminer from "../forms/ListOfExaminer/ListOfExaminer.js";
 import Publications from "../forms/Publications/Publications.js";
+import FormCard from './FormCard';
 
 const SideLeftMenu = () => {
-  const [activeButton, setActiveButton] = useState(null);
-  const [init] = useState(0);
+  const [activeForm, setActiveForm] = useState(null);
 
-  useEffect(() => {
-    setActiveButton(0);
-  }, [init]);
-
-  const handleButtonClick = (buttonId) => {
-    setActiveButton(buttonId);
+  const handleCardClick = (formComponent) => {
+    setActiveForm(formComponent);
   };
 
-  const menuItems = [
-    { text: "Dashboard", icon: "/graph-1.svg" },
-    { text: "Supervisors", icon: "/group.svg" },
-    { text: "Doctoral Comittee", icon: "/iconoutlineshoppingcart.svg" },
-    { text: "Presentation", icon: "/mdishoppingoutline.svg" },
-    { text: "Publications", icon: "/interface--chart-line.svg" },
-    { text: "Patents", icon: "/mdimessageprocessingoutline.svg" },
-    { text: "Thesis", icon: "/mdicogoutline.svg" },
-    { text: "Documents", icon: "/iconoutlineshoppingcart.svg" },
-    { text: "Profile", icon: "/iconoutlineshoppingcart.svg" },
-    { text: "Sign Out", icon: "/iconoutlineshoppingcart.svg" },
-    { text: "Forms", icon: "/iconoutlineshoppingcart.svg" },
+  const formCards = [
+    { component: <StudentList />, title: "Student List", icon: "/graph-1.svg" },
+    { component: <ResearchProposalExtensionForm />, title: "Research Proposal Extension", icon: "/group.svg" },
+    { component: <ConstituteOfIrb />, title: "Constitute of IRB", icon: "/iconoutlineshoppingcart.svg" },
+    { component: <Publications />, title: "Publications", icon: "/interface--chart-line.svg" },
+    { component: <StatusChange />, title: "Status Change", icon: "/mdimessageprocessingoutline.svg" },
+    { component: <SupervisorChange />, title: "Supervisor Change", icon: "/mdicogoutline.svg" },
+    { component: <ProgressMonitoring />, title: "Progress Monitoring", icon: "/iconoutlineshoppingcart.svg" },
+    { component: <SupAllocation />, title: "Supervisor Allocation", icon: "/iconoutlineshoppingcart.svg" },
+    { component: <StatusChangeForm />, title: "Status Change Form", icon: "/iconoutlineshoppingcart.svg" },
+    { component: <IrbSubmission />, title: "IRB Submission", icon: "/iconoutlineshoppingcart.svg" },
+    { component: <IrbSubmissionSup />, title: "IRB Submission Sup", icon: "/iconoutlineshoppingcart.svg" },
+    { component: <ListOfExaminer />, title: "List of Examiner", icon: "/iconoutlineshoppingcart.svg" },
+    { component: <ThesisSubForm />, title: "Thesis Submission", icon: "/iconoutlineshoppingcart.svg" },
+    { component: <ThesisExtensionForm />, title: "Thesis Extension", icon: "/iconoutlineshoppingcart.svg" },
   ];
 
   return (
     <div>
-      <Navbar activeButton={activeButton} />
+      <Navbar activeForm={activeForm} />
 
       <div className="side-left-menu">
         <div className="tietlogo">
           <img src="tiet-logoremovebgpreview-1@2x.png" alt="My Image" />
         </div>
         <div className="icons">
-          {menuItems.map((menuItem, index) => (
-            <button
+          {formCards.map((formCard, index) => (
+            <FormCard
               key={index}
-              className={`menu-button ${
-                activeButton === index ? "active" : ""
-              }`}
-              onClick={() => handleButtonClick(index)}
-            >
-              <img className="icon" alt="" src={menuItem.icon} />
-              <div className="text">{menuItem.text}</div>
-            </button>
+              title={formCard.title}
+              icon={formCard.icon}
+              onClick={() => handleCardClick(formCard.component)}
+            />
           ))}
         </div>
       </div>
-      {/* Render body component here */}
-      {/* <StudentList/> */}
-      {/* <ResearchProposalExtensionForm /> */}
-      {/* <ConstituteOfIrb /> */}
-      {/* <Publications/> */}
-       {/* <StatusChange/> */}
-       {/* <SupervisorChange /> */}
-      <ProgressMonitoring />
-      {/* <SupAllocation /> */}
-      {/* <StatusChangeForm /> */}
-       {/* <IrbSubmission /> */}
-      {/* <IrbSubmissionSup /> */}
-      {/* <ListOfExaminer /> */}
-      {/* <ThesisSubForm /> */}
-       {/* <ThesisExtensionForm /> */}
+      <div className="form-container">
+        {activeForm}
+      </div>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 // ScopusJournalForm.js
 import React, { useState } from 'react';
+import { SERVER_URL } from "../../../config";
 
 const ScopusJournalForm = () => {
   const [authors, setAuthors] = useState(['']);

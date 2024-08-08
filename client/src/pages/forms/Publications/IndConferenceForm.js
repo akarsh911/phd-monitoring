@@ -1,5 +1,6 @@
 // IndConferenceForm.js
 import React, { useState } from 'react';
+import { SERVER_URL } from "../../../config";
 
 const IndConferenceForm = () => {
   const [authors, setAuthors] = useState(['']);
@@ -37,7 +38,7 @@ const IndConferenceForm = () => {
       title: title,
       year_of_publication: year,
       conference_name: conferenceName,
-      conference_location: conferenceLocation,
+      conference_location: conferencePlace,
       publisher: publisher,
       impact_factor: impactFactor,
       status: status,

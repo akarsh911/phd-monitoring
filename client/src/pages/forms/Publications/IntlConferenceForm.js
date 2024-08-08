@@ -1,5 +1,6 @@
 // IntlConferenceForm.js
 import React, { useState } from 'react';
+import { SERVER_URL } from "../../../config";
 
 const IntlConferenceForm = () => {
   const [authors, setAuthors] = useState(['']);
