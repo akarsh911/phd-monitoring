@@ -191,3 +191,50 @@ overflow-y: hidden;
   background-color: white;
   overflow-y: auto; /* Enable vertical scrolling */
 }
+
+
+.button-group {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.button-group button {
+  padding: 20px 170px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #8b8d8d;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-group button:hover {
+  background-color: #0056b3;
+}
+
+
+
+/* .dropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.dropdown button {
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #333;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown button:hover {
+  background-color: #adb5bd;
+} */
