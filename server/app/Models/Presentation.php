@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Presentation extends Model
 {
     use HasFactory;
-
+    protected $table='presentations';
     /**
      * The attributes that are mass assignable.
      *
@@ -24,6 +24,15 @@ class Presentation extends Model
         'locked',
         'progress',
         'overall_progress',
+        'student_lock',
+        'supervisor_lock',
+        'hod_lock',
+        'dordc_lock',
+        'dra_lock',
+        'SuperVisorComments',
+        'HODComments',
+        'DORDCComments',
+        'DRAComments',
     ];
 
     /**
@@ -33,7 +42,12 @@ class Presentation extends Model
      */
     protected $casts = [
         'date' => 'date',
-        'progress' => 'float',
+        'progress' => 'integer',
+        'student_lock' => 'boolean',
+        'supervisor_lock' => 'boolean',
+        'hod_lock' => 'boolean',
+        'dordc_lock' => 'boolean',
+        'dra_lock' => 'boolean',
     ];
 
     /**
@@ -49,8 +63,24 @@ class Presentation extends Model
     /**
      * Get the student associated with the presentation.
      */
+    public function FullData()
+    {
+        return [
+            'presentation' => $this,
+            'student' => $this->student,
+            'roll_no' => $this->student->roll_no,
+            'name' => $this->student->name,
+            'period_of_report' => $this->period_of_report,
+            'date_of_irb' => $this->student->date_of_irb,
+            'title_of_thesis' => $this->student->title_of_thesis,
+            'extentions'=> $this->student->extentions,
+            'publications' => $this->student->publications,
+            'reviews' => $this->reviews
+        ];
+    }
+
     public function student()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class, 'student_id', 'roll_no');
     }
 }

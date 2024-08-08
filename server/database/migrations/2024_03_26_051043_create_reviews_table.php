@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('faculty_id')->unsigned()->index();
             $table->foreign('faculty_id')->references('faculty_code')->on('faculty')->onDelete('cascade');
             $table->enum('progress',['satifactory','not satisfactory']);
+            $table->enum('is_supervisor',['yes','no']);
             $table->text('comments');
             $table->enum('review_status',['pending','completed']);
             $table->timestamps();

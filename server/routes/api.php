@@ -109,6 +109,11 @@ Route::prefix('departments')->group(function () {
     require base_path('routes/base/departments.php');
 });
 
+
+Route::prefix('publications')->group(function () {
+    require base_path('routes/base/publications.php');
+});
+
 Route::prefix('faculties')->group(function () {
     require base_path('routes/base/faculties.php');
 });

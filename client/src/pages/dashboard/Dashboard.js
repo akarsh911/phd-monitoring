@@ -69,18 +69,18 @@ const SideLeftMenu = () => {
       {/* Render body component here */}
       {/* <StudentList/> */}
       {/* <ResearchProposalExtensionForm /> */}
-      <ConstituteOfIrb />
-      {/* <ThesisSubForm /> */}
-      {/* <StatusChange/> */}
-      {/* <ThesisExtensionForm /> */}
-      <SupervisorChange />
-      {/* <IrbSubmission /> */}
-      {/* <IrbSubmissionSup /> */}
-      {/* <StatusChangeForm /> */}
-      {/* <ProgressMonitoring /> */}
-      <ListOfExaminer />
-      {/* <SupAllocation /> */}
+      {/* <ConstituteOfIrb /> */}
       {/* <Publications/> */}
+       {/* <StatusChange/> */}
+       {/* <SupervisorChange /> */}
+      <ProgressMonitoring />
+      {/* <SupAllocation /> */}
+      {/* <StatusChangeForm /> */}
+       {/* <IrbSubmission /> */}
+      {/* <IrbSubmissionSup /> */}
+      {/* <ListOfExaminer /> */}
+      {/* <ThesisSubForm /> */}
+       {/* <ThesisExtensionForm /> */}
     </div>
   );
 };

@@ -40,11 +40,11 @@ return new class extends Migration
             $table->enum('journal_type', ['sci', 'non-sci',''])->default('')->nullable();
           
 
-            $table->date('date_filed');
-            $table->integer('year_filed');
-            $table->date('date_of_publication');
-            $table->integer('year_of_publication');
-            $table->float('impact_factor');
+            $table->date('date_filed')->nullable();
+            $table->integer('year_filed')->nullable();
+            $table->date('date_of_publication')->nullable();
+            $table->integer('year_of_publication')->nullable();
+            $table->float('impact_factor')->nullable();
         
             $table->timestamps();
         });

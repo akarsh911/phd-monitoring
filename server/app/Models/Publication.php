@@ -74,9 +74,10 @@ class Publication extends Model
 
     public function addAuthor($name, $userId = null)
     {
-        return $this->authors()->create([
+        return PublicationAuthors::create([
+            'publication_id' => $this->id,
             'name' => $name,
-            'user_id' => $userId
+            'user_id' => $userId,
         ]);
     }
 

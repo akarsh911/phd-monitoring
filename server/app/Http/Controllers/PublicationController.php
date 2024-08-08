@@ -30,12 +30,9 @@ class PublicationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
-            'author' => 'required|string|max:255',
-            'content' => 'required|string',
-            'published_at' => 'nullable|date'
         ]);
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->role->role;
         if($role!='student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
@@ -46,10 +43,8 @@ class PublicationController extends Controller
         $publication = new Publication();
         $publication->student_id = $user->student->roll_no;
         $publication->title = $request->title;
-        $authors = $request->author;
-        foreach ($authors as $author) {
-            $publication->addAuthor($author['name'], $author['user_id'] ?? null);
-        }
+        $authors = $request->authors;
+        
         $publication->title=$request->title;
         $publication->date_filed=$request->date_filed;
         $publication->year_filed=$request->year_filed;
@@ -83,7 +78,10 @@ class PublicationController extends Controller
                 break;
         }
         $publication->save();
-
+        foreach ($authors as $author) {
+            $publication->addAuthor($author['name'], $author['user_id'] ?? null);
+        }
+        $publication->save();
         return response()->json($publication, 201);
     }
 
@@ -110,7 +108,6 @@ class PublicationController extends Controller
     $validator = Validator::make($request->all(), [
         'title' => 'required|string|max:255',
         'author' => 'required|string|max:255',
-        'content' => 'required|string',
         'published_at' => 'nullable|date',
         'id' => 'required|integer'
     ]);

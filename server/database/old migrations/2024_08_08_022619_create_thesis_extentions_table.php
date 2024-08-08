@@ -11,19 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('presentations', function (Blueprint $table) {
+        Schema::create('thesis_extentions', function (Blueprint $table) {
             $table->increments('id');
             $table->primary('id');
             $table->integer('student_id')->unsigned()->index();
             $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
-            $table->date('date');
-            $table->string('time');
-            $table->string('period_of_report');
-            $table->enum('teaching_work',['UG','PG','Both','None'])->default('None');
-            $table->enum('status', ['scheduled','under review','evaluated']);
-            $table->enum('locked', ['yes','no'])->default('no');
-            $table->integer('progress');
-            $table->enum('overall_progress', ['satisfactory','not satisfactory']);
+            $table->enum('status',['awaited','approved','rejected']);
+            $table->enum('stage',['student','supervisor','hod','dordc','dra']);
+            $table->date('requires_period');
+            $table->text('reason')->nullable();
+            $table->enum('hod_approval',['approved','rejected'])->nullable();
+            $table->enum('dra_approval',['approved','rejected'])->nullable();
             $table->boolean('student_lock')->default(false); 
             $table->boolean('supervisor_lock')->default(true);
             $table->boolean('hod_lock')->default(true);
@@ -42,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('presentations');
+        Schema::dropIfExists('thesis_extentions');
     }
 };
