@@ -27,6 +27,8 @@ return new class extends Migration
             $table->text('conference_name')->nullable();
             $table->string('conference_location')->nullable();
             $table->text('publisher')->nullable();
+            $table->text('chapter_title')->nullable();
+            $table->text('ISSN')->nullable();
             $table->integer('volume')->nullable();
             $table->integer('page_no')->nullable();
     
@@ -43,6 +45,7 @@ return new class extends Migration
             $table->date('date_of_publication');
             $table->integer('year_of_publication');
             $table->float('impact_factor');
+        
             $table->timestamps();
         });
     }
