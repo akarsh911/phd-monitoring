@@ -30,6 +30,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
     email: "",
     referenceNo: "",
   });
+  const [modalHeading, setModalHeading] = useState(""); // New state for modal heading
 
   const HandleChange = (e) => {
     const { name, value } = e.target;
@@ -95,6 +96,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
       email: "",
       referenceNo: "",
     });
+    setModalHeading(nationality === "Indian" ? "National Examiner Details" : "International Examiner Details"); // Set the modal heading
     if (index !== null) {
       if (nationality === "Indian") {
         setFormData(nationalExaminers[index]);
@@ -174,7 +176,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
         <table>
           <thead>
             <tr>
-              <th>Serial No.</th>
+              <th>S No.</th>
               <th>Name</th>
               <th>Contact No.</th>
               <th>Email ID</th>
@@ -336,7 +338,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
             className="Modal"
             overlayClassName="Overlay"
           >
-            <h2>Allot Examiners</h2>
+            <h2>{modalHeading}</h2>
             <form onSubmit={handleSubmit}>
               <div className="student-form">
                 <div className="first">
@@ -447,9 +449,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
                   </div>
                 </div>
                 <div className="modal-input">
-                  <label htmlFor="referenceNoInput">
-                    Reference No. in Thesis
-                  </label>
+                  <label htmlFor="referenceNoInput">Reference No. in Thesis (semi colon (;) separated)</label>
                   <input
                     type="text"
                     id="referenceNoInput"
