@@ -16,13 +16,13 @@ return new class extends Migration
             $table->primary('id');
             $table->integer('student_id')->unsigned()->index();
             $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
-            $table->date('date');
-            $table->string('time');
-            $table->string('period_of_report');
+            $table->date('date')->nullable();
+            $table->string('time')->nullable();
+            $table->string('period_of_report')->nullable();
             $table->enum('teaching_work',['UG','PG','Both','None'])->default('None');
             $table->enum('status', ['scheduled','under review','evaluated']);
             $table->enum('locked', ['yes','no'])->default('no');
-            $table->integer('progress');
+            $table->integer('progress')->nullable();
             $table->enum('overall_progress', ['satisfactory','not satisfactory']);
             $table->boolean('student_lock')->default(false); 
             $table->boolean('supervisor_lock')->default(true);

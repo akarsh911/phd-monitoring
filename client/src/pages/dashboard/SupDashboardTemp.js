@@ -60,7 +60,7 @@ const SideLeftMenu = () => {
       </div>
     </div >
     {/* Render body component here */}
-    {/* <StudentList/> */}
+    <StudentList/>
     {/* <ResearchProposalExtensionForm/> */}
     {/* <ConstituteOfIrb/> */}
   
@@ -69,7 +69,7 @@ const SideLeftMenu = () => {
     
     {/* <ProgressMonitoring/> */}
     
-    <Publications/>
+    {/* <Publications/> */}
     </div>
   );
 };
