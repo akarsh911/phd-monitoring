@@ -1,17 +1,21 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import './ProgressMonitoring.css';
 import { toast } from 'react-toastify';
 import { SERVER_URL } from '../../../config';
 
 const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
+  const [approval, setApproval] = useState('');
+  const handleDRAReviewChange = (e) => {
+    console.log(e.target.value);
+    setApproval(e.target.value);
+  }
   const submitForm = async (e) => {
     e.preventDefault();
     const data={
       progress:approval,
       student_id:formData.regno,
     }
-  
     try {
       const response = await fetch(
         `${SERVER_URL}/presentation/submit`,
@@ -48,7 +52,7 @@ const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
             name="hodRecommendation"
             value="approved"
             checked={formData.hodRecommendation === 'approved'}
-            onChange={handleHodRecommendationChange}
+            onChange={handleDRAReviewChange}
             required
           />
           <label htmlFor="approved" className="small-label">Approved</label>
@@ -60,7 +64,7 @@ const DRASideProgress= ({ formData, handleHodRecommendationChange }) => {
             name="hodRecommendation"
             value="notApproved"
             checked={formData.hodRecommendation === 'notApproved'}
-            onChange={handleHodRecommendationChange}
+            onChange={handleDRAReviewChange}
             required
           />
            <label htmlFor="notApproved" className="small-label">Not Approved</label>

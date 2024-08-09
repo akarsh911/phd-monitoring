@@ -1,12 +1,15 @@
-
-import React from 'react';
+import React, { useState } from 'react';
 import './ProgressMonitoring.css';
 import { toast } from 'react-toastify';
 import { SERVER_URL } from '../../../config';
 
 const DoRDCSideProgress= ({ formData, handleHodRecommendationChange }) => {
 
-
+  const [approval, setApproval] = useState('');
+  const handleDoRDCReviewChange = (e) => {
+    console.log(e.target.value);
+    setApproval(e.target.value);
+  }
 const submitForm = async (e) => {
   e.preventDefault();
   const data={
@@ -50,7 +53,7 @@ const submitForm = async (e) => {
             name="hodRecommendation"
             value="approved"
             checked={formData.hodRecommendation === 'approved'}
-            onChange={handleHodRecommendationChange}
+            onChange={handleDoRDCReviewChange}
             required
           />
           <label htmlFor="approved" className="small-label">Approved</label>
@@ -62,7 +65,7 @@ const submitForm = async (e) => {
             name="hodRecommendation"
             value="notApproved"
             checked={formData.hodRecommendation === 'notApproved'}
-            onChange={handleHodRecommendationChange}
+            onChange={handleDoRDCReviewChange}
             required
           />
            <label htmlFor="notApproved" className="small-label">Not Approved</label>
