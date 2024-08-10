@@ -6,7 +6,9 @@ import HodSideProgress from './HodSideProgress';
 import DoRDCSideProgress from './DoRDCSideProgress';
 import SupervisorSideProgress from './SupervisorSideProgress';
 import DocComSideProgress from './DocComSideProgress';
-
+import { SERVER_URL } from "../../../config";
+import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
 
 const ProgressMonitoring = () => {
   const [formData, setFormData] = useState({
@@ -15,16 +17,12 @@ const ProgressMonitoring = () => {
     regno: '',
     gender: '',
     admissionDate: '',
-    regno: '',
     department: '',
     semester: '',
     session: '',
     cgpa: '',
     chairman: '',
     supervisor: '',
-    experts: ['', '', ''],
-    nominees: ['', '', ''],
-    chairmanExperts: [''],
     hodRecommendation: '',
     supervisorRecommendation: '',
     expertfromIRB: '',
@@ -32,26 +30,88 @@ const ProgressMonitoring = () => {
     previousQuantumProgress: '',
     increaseInQuantumProgress: '',
     totalQuantumProgress: '',
+    date_of_irb: '',
+    period_of_report: '',
+    phd_title: '',
+    prev_progress: 0,
+    publications: [],
+    supervisorReviews: [],
+    extentions: [],
+    status: '',
+    HODComments: '',
+    DORDCComments: '',
+    DRAComments: '',
+    student_lock: false,
+    hod_lock: false,
+    supervisor_lock: false,
+    dordc_lock: false,
+    dra_lock: false,
+    role: 'dra'
   });
 
   const [options, setOptions] = useState({
     experts: [],
     nominees: [],
-    chairmanExpertsOptions: [] 
+    chairmanExpertsOptions: []
   });
+  const params = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log("Fetching data");
       try {
-        const response = await fetch(''); // API endpoint
-        const data = await response.json();
-        setFormData((prevData) => ({ ...prevData, ...data }));
+        const response = await fetch(`${SERVER_URL}/presentation`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            student_id: params.id,
+          }), // Replace with actual id
+        });
+        if (response.ok) {
+          const data = await response.json();
+          console.log(data);
+          
+        setFormData((prevData) => ({
+          ...prevData,
+          date: new Date().toISOString().split('T')[0],
+          name: data.name,
+          regno: data.roll_no,
+          admissionDate: data.date_of_registration,
+          department: data.department,
+          period_of_report: data.period_of_report,
+          phd_title: data.phd_title,
+          date_of_irb: new Date(data.date_of_irb)
+          .toISOString()
+          .split("T")[0],
+          prev_progress: data.prev_progress,
+          publications: data.publications,
+          supervisorReviews: data.supervisorReviews,
+          status: data.status,
+          HODComments: data.HODComments,
+          DORDCComments: data.DORDCComments,
+          extentions:data.extention,
+          DRAComments: data.DRAComments,
+          student_lock: data.student_lock,
+          hod_lock: data.hod_lock,
+          supervisor_lock: data.supervisor_lock,
+          dordc_lock: data.dordc_lock,
+          dra_lock: data.dra_lock,
+          role: data.role,
+        }));
 
         setOptions({
           experts: data.expertsOptions || [],
           nominees: data.nomineesOptions || [],
-          chairmanExpertsOptions: data.chairmanExpertsOptions || [] 
+          chairmanExpertsOptions: data.chairmanExpertsOptions || []
         });
+      }
+      else{
+        toast.error("Error fetching data"); 
+      }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -60,36 +120,6 @@ const ProgressMonitoring = () => {
     fetchData();
   }, []);
 
-  const handleExpertChange = (index, value) => {
-    setFormData((prevData) => {
-      const newExperts = [...prevData.experts];
-      newExperts[index] = value;
-      return { ...prevData, experts: newExperts };
-    });
-  };
-
-  const handleNomineeChange = (index, value) => {
-    setFormData((prevData) => {
-      const newNominees = [...prevData.nominees];
-      newNominees[index] = value;
-      return { ...prevData, nominees: newNominees };
-    });
-  };
-
-  const handleChairmanExpertChange = (index, value) => {
-    setFormData((prevData) => {
-      const newChairmanExperts = [...prevData.chairmanExperts];
-      newChairmanExperts[index] = value;
-      return { ...prevData, chairmanExperts: newChairmanExperts };
-    });
-  };
-
-  const addChairmanExpert = () => {
-    setFormData((prevData) => ({
-      ...prevData,
-      chairmanExperts: [...prevData.chairmanExperts, '']
-    }));
-  };
 
   const handleHodRecommendationChange = (e) => {
     setFormData((prevData) => ({
@@ -99,10 +129,9 @@ const ProgressMonitoring = () => {
   };
 
   const handleSupRecommendationChange = (e) => {
-    const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      supervisorRecommendation: value,
+      supervisorRecommendation: e.target.value
     }));
   };
 
@@ -110,7 +139,7 @@ const ProgressMonitoring = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: value
     }));
   };
 
@@ -118,7 +147,7 @@ const ProgressMonitoring = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: value
     }));
   };
 
@@ -126,29 +155,13 @@ const ProgressMonitoring = () => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: value,
+      [name]: value
     }));
   };
-  useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
-    setFormData((prevData) => ({ ...prevData, date: today }));
-
-    const fetchData = async () => {
-      try {
-        const response = await fetch(''); // API 
-        const data = await response.json();
-        setFormData((prevData) => ({ ...prevData, ...data }));
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+    // Submit form logic
   };
 
   return (
@@ -158,38 +171,50 @@ const ProgressMonitoring = () => {
           <h1>Progress Monitoring</h1>
         </div>
         <form onSubmit={handleSubmit} className='studentSideform'>
-          
-        <StudentSideProgress formData={formData} />
-
-
-          {/* STUDENT SIDE ENDS */}
-
-          <SupervisorSideProgress formData={formData} handleSupRecommendationChange={handleSupRecommendationChange} />
-         
-     {/* SUPERVISOR SIDE ENDS */}
-     
-     <DocComSideProgress formData={formData} handleDocComRecommendationChange={handleDocComRecommendationChange} />
-
-{/* Doctoral Comittee Side Ends */}
-
-
-          <HodSideProgress
-            formData={formData}
-            handleHodRecommendationChange={handleHodRecommendationChange}
-          />
-{/* HOD SIDE ENDS */}
-
-<DoRDCSideProgress
-            formData={formData}
-            handleDoRDCRecommendationChange={handleDoRDCRecommendationChange}
-          />
-
-{/* DoRDC side ends */}
-<DRASideProgress
-            formData={formData}
-            handleDRARecommendationChange={handleDRARecommendationChange}
-          />
-
+        {formData.role === "student" && (
+            <StudentSideProgress formData={formData} />
+          )}
+          {formData.role === "supervisor" && (
+            <div>
+              <StudentSideProgress formData={formData} />
+              <SupervisorSideProgress formData={formData} handleSupRecommendationChange={handleSupRecommendationChange} />
+              </div>
+          )}
+          {formData.role === "doccom" && (
+            <div>
+              <StudentSideProgress formData={formData} />
+              <SupervisorSideProgress formData={formData} handleSupRecommendationChange={handleSupRecommendationChange} />
+              <DocComSideProgress formData={formData} handleDocComRecommendationChange={handleDocComRecommendationChange} />
+              </div>
+          )}
+          {formData.role === "hod" && (
+            <div>
+              <StudentSideProgress formData={formData} />
+              <SupervisorSideProgress formData={formData} handleSupRecommendationChange={handleSupRecommendationChange} />
+              <DocComSideProgress formData={formData} handleDocComRecommendationChange={handleDocComRecommendationChange} />
+              <HodSideProgress formData={formData} handleHodRecommendationChange={handleHodRecommendationChange} />
+              </div>
+            
+          )}
+          {formData.role === "dordc" && (
+            <div>
+              <StudentSideProgress formData={formData} />
+              <SupervisorSideProgress formData={formData} handleSupRecommendationChange={handleSupRecommendationChange} />
+              <DocComSideProgress formData={formData} handleDocComRecommendationChange={handleDocComRecommendationChange} />
+              <HodSideProgress formData={formData} handleHodRecommendationChange={handleHodRecommendationChange} />
+              <DoRDCSideProgress formData={formData} handleDoRDCRecommendationChange={handleDoRDCRecommendationChange} />
+              </div>
+          )}
+          {formData.role === "dra" && (
+            <div>
+              <StudentSideProgress formData={formData} />
+              <SupervisorSideProgress formData={formData} handleSupRecommendationChange={handleSupRecommendationChange} />
+              <DocComSideProgress formData={formData} handleDocComRecommendationChange={handleDocComRecommendationChange} />
+              <HodSideProgress formData={formData} handleHodRecommendationChange={handleHodRecommendationChange} />
+              <DoRDCSideProgress formData={formData} handleDoRDCRecommendationChange={handleDoRDCRecommendationChange} />
+              <DRASideProgress formData={formData} handleDRARecommendationChange={handleDRARecommendationChange} />
+              </div>
+          )}
         </form>
       </div>
     </div>

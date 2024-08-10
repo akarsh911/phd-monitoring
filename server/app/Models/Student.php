@@ -94,6 +94,11 @@ class Student extends Model
         return $this->belongsToMany(Faculty::class, 'doctoral_committee', 'student_id', 'faculty_id', 'roll_no', 'faculty_code');
     }
 
+    public function checkDoctoralCommittee($facultyId)
+    {
+        return $this->doctoralCommittee->contains('faculty_code', $facultyId);
+    }
+
     public function hod()
     {
         return $this->department()->first()->hod();
@@ -183,5 +188,10 @@ class Student extends Model
     public function broad_area_specialization()
     {
         return $this->hasMany(StudentBroadAreaSpecialization::class, 'student_id', 'roll_no');
+    }
+
+    public function publications()
+    {
+        return $this->hasMany(Publication::class, 'student_id', 'roll_no');
     }
 }

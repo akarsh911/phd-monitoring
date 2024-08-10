@@ -150,7 +150,7 @@ const ResearchProposalExtensionForm = () => {
         </div>
         {/* <form onSubmit={handleSubmit} className='extensionSideform'> */}
         
-        {/* {formData.role === 'student' && <StudentSideExtension formData={formData} handleChange={handleChange} />} */}
+        {formData.role === 'student' && <StudentSideExtension formData={formData} handleChange={handleChange} />}
        
       {formData.role === 'faculty' && (
           <div className='supervisor-form'>

@@ -61,8 +61,28 @@ class Publication extends Model
     /**
      * Get the student associated with the publication.
      */
+
+    public function authors()
+    {
+        return $this->hasMany(PublicationAuthors::class);
+    }
+
     public function student()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class, 'student_id', 'roll_no');
+    }
+
+    public function addAuthor($name, $userId = null)
+    {
+        return PublicationAuthors::create([
+            'publication_id' => $this->id,
+            'name' => $name,
+            'user_id' => $userId,
+        ]);
+    }
+
+    public function removeAllAuthors()
+    {
+        return $this->authors()->delete();
     }
 }

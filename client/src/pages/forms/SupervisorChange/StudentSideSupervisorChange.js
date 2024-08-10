@@ -1,5 +1,4 @@
-import { React, useState } from "react";
-
+import { React, useState, useEffect } from "react";
 import "./SupervisorChange.css";
 
 const StudentSideSupervisorChange = ({
@@ -7,15 +6,60 @@ const StudentSideSupervisorChange = ({
   handleChange,
   handleSelectedSupervisorChange,
 }) => {
-  const [supervisors, setSupervisors] = useState([{ name: "" }]);
+  const isEditable = !formData.student_lock;
+  const [supervisors, setSupervisors] = useState([]);
+  const [filteredSupervisors, setFilteredSupervisors] = useState([]);
+  const [preferences, setPreferences] = useState(['', '', '']);
+  const [activeInput, setActiveInput] = useState(null);
 
-  const addSupervisor = () => {
-    setSupervisors([...supervisors, { name: "" }]);
+  useEffect(() => {
+    // Replace this with actual API call
+    setSupervisors([
+      "Dr. John Doe",
+      "Dr. Jane Smith",
+      "Dr. Robert Johnson",
+      "Dr. Emily Brown",
+      "Dr. Michael Lee",
+    ]);
+  }, []);
+
+  const handlePreferenceChange = (index, value) => {
+    const newPreferences = [...preferences];
+    newPreferences[index] = value;
+    setPreferences(newPreferences);
+
+    const filtered = supervisors.filter(supervisor =>
+      supervisor.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredSupervisors(filtered);
+    setActiveInput(index);
+
+    handleChange({
+      target: {
+        name: 'preference',
+        value: newPreferences.join(', ')
+      }
+    });
+  };
+
+  const selectSupervisor = (index, supervisor) => {
+    const newPreferences = [...preferences];
+    newPreferences[index] = supervisor;
+    setPreferences(newPreferences);
+    setFilteredSupervisors([]);
+    setActiveInput(null);
+
+    handleChange({
+      target: {
+        name: 'preference',
+        value: newPreferences.join(', ')
+      }
+    });
   };
 
   return (
     <div className="student-form">
-      <div clasasName="first">
+      <div className="first">
         <div className="data-input">
           <label htmlFor="regnoInput">Roll Number</label>
           <input
@@ -90,6 +134,7 @@ const StudentSideSupervisorChange = ({
             checked={formData.irbCompleted === true}
             onChange={handleChange}
             required
+            readOnly={!isEditable}
           />
           <label htmlFor="irbYes" className="small-label">
             Yes
@@ -102,6 +147,7 @@ const StudentSideSupervisorChange = ({
             checked={formData.irbCompleted === false}
             onChange={handleChange}
             required
+            readOnly={!isEditable}
           />
           <label htmlFor="irbNo" className="small-label">
             No
@@ -119,6 +165,7 @@ const StudentSideSupervisorChange = ({
             value={formData.researchTitle}
             onChange={handleChange}
             required
+            readOnly={!isEditable}
           />
         </div>
       )}
@@ -135,6 +182,7 @@ const StudentSideSupervisorChange = ({
             value={formData.researchTitle}
             onChange={handleChange}
             required
+            readOnly={!isEditable}
           />
         </div>
       )}
@@ -145,7 +193,7 @@ const StudentSideSupervisorChange = ({
           type="text"
           id="supervisorsInput"
           name="supervisors"
-          value={formData.supervisors.join(", ")} // Assuming supervisors is an array
+          value={formData.supervisors.join(", ")}
           readOnly
           required
         />
@@ -175,6 +223,7 @@ const StudentSideSupervisorChange = ({
                 id={`supervisor-${index}`}
                 name="supervisor"
                 value={supervisor}
+                readOnly={!isEditable}
                 onChange={handleSelectedSupervisorChange}
               />
               <label htmlFor={`supervisor-${index}`} className="small-label">
@@ -193,33 +242,41 @@ const StudentSideSupervisorChange = ({
           name="reasonForChange"
           value={formData.reasonForChange}
           onChange={handleChange}
+          readOnly={!isEditable}
           required
         />
       </div>
 
-      <div className="data-input">
-        <label htmlFor="preferenceInput"> Preferences</label>
-        <input
-          type="text"
-          id="preferenceInput"
-          name="preference"
-          value={formData.preference}
-          onChange={handleChange}
-        />{" "}
-        <input
-          type="text"
-          id="preferenceInput"
-          name="preference"
-          value={formData.preference}
-          onChange={handleChange}
-        />
-        <input
-          type="text"
-          id="preferenceInput"
-          name="preference"
-          value={formData.preference}
-          onChange={handleChange}
-        />
+      <div className="data-input preferences-container">
+        <label htmlFor="preferenceInput">Preferences</label>
+        <div className="preferences-input-container">
+          {preferences.map((preference, index) => (
+            <div key={index} className="preference-input-wrapper">
+              <input
+                type="text"
+                className="preference-input"
+                required
+                readOnly={!isEditable}
+                value={preference}
+                onChange={(e) => handlePreferenceChange(index, e.target.value)}
+                onFocus={() => setActiveInput(index)}
+                placeholder={`Preference ${index + 1}`}
+              />
+              {activeInput === index && filteredSupervisors.length > 0 && (
+                <ul className="filtered-supervisors">
+                  {filteredSupervisors.map((supervisor, idx) => (
+                    <li 
+                      key={idx}
+                      onClick={() => selectSupervisor(index, supervisor)}
+                    >
+                      {supervisor}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="supervisor-button-div">

@@ -39,7 +39,7 @@ const Publications = () => {
     <div className='StudentSidebody-div'>
       <div className='StudentSideform-div'>
         <div className='heading'>
-          <h1>Publications</h1>
+          <h1>Add a Publication </h1>
         </div>
 
         {dropdownVisible ? (

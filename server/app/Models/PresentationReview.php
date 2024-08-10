@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PresentationReview extends Model
 {
     use HasFactory;
-
+    protected $table='presentation_reviews';
     /**
      * The attributes that are mass assignable.
      *
@@ -20,6 +20,7 @@ class PresentationReview extends Model
         'progress',
         'comments',
         'review_status',
+        'is_supervisor',
     ];
 
     /**
@@ -29,6 +30,8 @@ class PresentationReview extends Model
      */
     protected $casts = [
         'progress' => 'string',
+        'is_supervisor' => 'string',
+        'review_status' => 'string',
     ];
 
     /**
@@ -54,6 +57,6 @@ class PresentationReview extends Model
      */
     public function faculty()
     {
-        return $this->belongsTo(Faculty::class);
+        return $this->belongsTo(Faculty::class, 'faculty_id', 'faculty_code');
     }
 }
