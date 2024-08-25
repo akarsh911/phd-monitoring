@@ -76,12 +76,12 @@ const MacBookPro14 = () => {
         <div className="frame-child" />
         <div className="frame-wrapper">
           <div className="account-label-parent">
-            <div className="account-label">
+            {/* <div className="account-label">
               <h1 className="login-to-your">Login to your Account</h1>
-            </div>
+            </div> */}
             <div className="frame-parent">
               <div className="frame-container">
-                <button className="sign-in-google">
+                {/* <button className="sign-in-google">
                   <img
                     className="image-2-icon"
                     loading="lazy"
@@ -89,11 +89,11 @@ const MacBookPro14 = () => {
                     src="/image-2@2x.png"
                   />
                   <b className="continue-with-google">Continue with Thapar ID</b>
-                </button>
+                </button> */}
               </div>
               <div className="or-sign-in-container">
                 <span>-------------</span>
-                <span className="or-sign-in">{` or Sign in with Email `}</span>
+                <span className="or-sign-in">{` Sign in with Email `}</span>
                 <span>{`------------- `}</span>
               </div>
               <form className="frame-group" onSubmit={handleLoginSubmit}>

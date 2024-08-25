@@ -6,6 +6,7 @@ import HoDSideStatusChange from './HoDSideStatusChange';
 import DrASideStatusChange from './DrASideStatusChange';
 import DoRDCSideStatusChange from './DoRDCSideStatusChange';
 import DirectorSideStatusChange from './DirectorSideStatusChange';
+import StatusModal from '../Modal/Modal';
 const StatusChangeForm = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -96,6 +97,16 @@ const StatusChangeForm = () => {
     console.log(formData);
   };
 
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   
 
   return (
@@ -103,6 +114,10 @@ const StatusChangeForm = () => {
       <div className='extensionform-div'>
         <div className='heading'>
           <h1>Application for Change of Status</h1>
+          <div className='top-button'>
+          <button onClick={openModal}>View Status</button>
+          {isModalOpen && <StatusModal closeModal={closeModal} />}
+        </div>
         </div>
         <form onSubmit={handleSubmit} className='extensionSideform'>
         

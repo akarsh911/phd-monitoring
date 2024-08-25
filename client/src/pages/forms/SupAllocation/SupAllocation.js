@@ -148,8 +148,8 @@ const SupAllocation = () => {
   };
 
   return (
-    <div className='studentSidebody-div'>
-      <div className='studentSideform-div'>
+    <div className='extensionBody-div'>
+      <div className='extensionFody-div'>
         <div className='heading'>
           <h1>Supervisor Allocation</h1>
         </div>

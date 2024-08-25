@@ -6,15 +6,23 @@
   top: 0;
   left: 0;
   background-color: #eaeaea;
-  width: 290px;
+  width: 215px;
   min-height: 100vh;
   height: fit-content;
+ 
 }
+
+
+
+
 .tietlogo {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 40px;
+  margin-bottom: 60px;
+
 }
 
 
@@ -25,12 +33,26 @@
   margin-top: 50%;
 }
 
-.icons{
+.icons {
   margin-top: 50%;
   min-height: fit-content;
   width: 252px;
+  max-height: 600px; /* Set a max-height for the div */
+  overflow-y: scroll; /* Enable vertical scrolling */
+  overflow-x: hidden; /* Hide horizontal scrolling */
+
+  /* Hide scrollbar for WebKit browsers */
+  -webkit-overflow-scrolling: touch; /* Enables smooth scrolling on touch devices */
 }
 
+.icons::-webkit-scrollbar {
+  display: none; /* Hides the scrollbar for WebKit browsers */
+}
+
+/* Hide scrollbar for Firefox */
+.icons {
+  scrollbar-width: none; /* Hides scrollbar in Firefox */
+}
 .menu-button {
   border-radius: 0.8rem;
   justify-content: center;

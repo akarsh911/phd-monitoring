@@ -66,7 +66,7 @@ const StudentSideIrb = ({ formData }) => {
 
   return (
     <div className='student-form'>
-      <div className='date-input'>
+      {/* <div className='date-input'>
         <label htmlFor="dateInput">Date</label>
         <input
           type="date"
@@ -77,7 +77,7 @@ const StudentSideIrb = ({ formData }) => {
           readOnly={!isEditable}
           required
         />
-      </div>
+      </div> */}
       <div className='first'>
       <div className='data-input'>
           <label htmlFor="regnoInput">Roll Number</label>
@@ -160,7 +160,7 @@ const StudentSideIrb = ({ formData }) => {
             required
           />
         </div>
-        <div className='data-input'>
+        {/* <div className='data-input'>
           <label htmlFor="sessionInput">Session</label>
           <input
             type="text"
@@ -171,7 +171,7 @@ const StudentSideIrb = ({ formData }) => {
             readOnly={!isEditable}
             required
           />
-        </div>
+        </div> */}
         <div className='data-input'>
         <label htmlFor="cgpaInput">CGPA</label>
         <input
@@ -210,11 +210,14 @@ const StudentSideIrb = ({ formData }) => {
           required
         />
       </div>
-    {formData.role=='student' &&(
+    {/* {formData.role=='student' &&(
       <div className='supervisor-button-div'>
         <button className='send' type="submit" onClick={submitStudent}>SEND TO SUPERVISOR</button>
       </div>
-    )}
+    )} */}
+     <div className='supervisor-button-div'>
+        <button className='send' type="submit" onClick={submitStudent}>SEND TO SUPERVISOR</button>
+      </div>
     </div>
   );
 };

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import "./ConstituteOfIrb.css";
+import "../ChangeOfStatus/StatusChange.css";
 import StudentSideIrb from "./StudentSideIrb";
 import SupSideIrb from "./SupSideIrb";
 import HodSideIrb from "./HodSideIrb";
 import DoRDCSideIrb from "./DoRDCSideIrb";
 import { SERVER_URL } from "../../../config";
 import { useParams } from "react-router-dom";
+import StatusModal from "../Modal/Modal";
 
 const Irb = () => {
   const [formData, setFormData] = useState({
@@ -31,7 +32,7 @@ const Irb = () => {
     supervisor_lock: true,
     hod_lock: true,
     dordc_lock: true,
-    role: "",
+    role: "dordc",
     suggestions: [],
     status: "awaited",
   });
@@ -144,7 +145,7 @@ const Irb = () => {
       }
     };
 
-    fetchData();
+    // fetchData();
   }, []);
 
   const handleExpertChange = (index, value) => {
@@ -200,20 +201,36 @@ const Irb = () => {
     }));
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // Handle form submission logic
   };
   const params = useParams();
   return (
-    <div className="studentSidebody-div">
-      <div className="studentSideform-div">
+    <div className="extensionBody-div">
+      <div className="extensionform-div">
         <div className="heading">
-          <h1>CONSTITUTE OF INSTITUTE RESEARCH BOARD</h1>
+          <h1>Constitute of Institute Research Board</h1>
+          <div className='top-button'>
+          <button onClick={openModal}>View Status</button>
+          {isModalOpen && <StatusModal closeModal={closeModal} />}
         </div>
-        <h2 className="last-update">
+        </div>
+        {/* <h2 className="last-update">
           Last update - {lastUpdate.change} on {lastUpdate.time}
-        </h2>
+        </h2> */}
+        {/* <StudentSideIrb formData={formData} /> */}
         <form onSubmit={handleSubmit} className="studentSideform">
           {formData.role === "student" && (
             <StudentSideIrb formData={formData} />
