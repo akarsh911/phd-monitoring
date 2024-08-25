@@ -1,3 +1,4 @@
+/* Sidebar Container */
 .side-left-menu {
   position: fixed;
   z-index: 2;
@@ -9,85 +10,81 @@
   width: 215px;
   min-height: 100vh;
   height: fit-content;
- 
+  padding: 20px 0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
 }
 
-
-
-
+/* Logo Styling */
 .tietlogo {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 40px;
-  margin-bottom: 60px;
-
+  margin: 40px 0 60px 0;
 }
-
 
 .tietlogo img {
- position: absolute;
-  width: 154px; 
-  border-radius: 5px; 
+  position: absolute;
+  width: 154px;
+  border-radius: 8px;
   margin-top: 50%;
 }
 
+/* Icons Container */
 .icons {
   margin-top: 50%;
-  min-height: fit-content;
   width: 252px;
-  max-height: 600px; /* Set a max-height for the div */
-  overflow-y: scroll; /* Enable vertical scrolling */
-  overflow-x: hidden; /* Hide horizontal scrolling */
-
-  /* Hide scrollbar for WebKit browsers */
-  -webkit-overflow-scrolling: touch; /* Enables smooth scrolling on touch devices */
+  max-height: 600px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on touch devices */
 }
 
+/* Hide Scrollbar */
 .icons::-webkit-scrollbar {
-  display: none; /* Hides the scrollbar for WebKit browsers */
+  display: none; /* WebKit browsers */
 }
 
-/* Hide scrollbar for Firefox */
 .icons {
-  scrollbar-width: none; /* Hides scrollbar in Firefox */
+  scrollbar-width: none; /* Firefox */
 }
+
+/* Menu Button Styling */
 .menu-button {
-  border-radius: 0.8rem;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 4px;
-  margin: 20px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 12px;
+  margin: 20px;
   width: 92%;
-  padding: 12px; 
   border: none;
+  border-radius: 0.8rem;
   background-color: transparent;
-  cursor: pointer;
   color: gray;
-  transition: background-color 0.3s ease, color 0.3s ease; /* Add transition effect */
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  text-align: center;
 }
 
 .menu-button:hover {
-  background-color: #deacac; /* Background color on hover */
+  background-color: #deacac;
   color: rgb(179, 27, 27);
 }
 
 .menu-button.active {
-
-  background-color:rgb(179, 27, 27); /* Background color of active button */
-  color: white; /* Text color of active button */
+  background-color: rgb(179, 27, 27);
+  color: white;
 }
 
+/* Icon Styling */
 .icon {
-  margin-right: 10px; /* Adjust margin as needed */
+  margin-right: 10px;
+  font-size: 18px; /* Adjust font size for consistency */
 }
 
+/* Text Styling */
 .text {
-  font-size: 16px; /* Adjust font size as needed */
+  font-size: 16px;
+  font-weight: 500;
+  color: inherit; /* Inherit color from the menu button */
 }
-
-
