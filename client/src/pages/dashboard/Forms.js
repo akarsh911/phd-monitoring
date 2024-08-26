@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Dashboard.css'; 
+import '../forms/Publications/Publications.css';
 import ConstituteOfIrb from '../forms/ConstituteOfIrb/ConstituteOfIrb.js';
 import IrbSubmission from '../forms/IrbSubmission.js';
 import StatusChange from '../forms/ChangeOfStatus/StatusChange.js';

@@ -170,7 +170,7 @@ text-align: left;
   height:5000px;
   /* width:1710px; */
   color:black;
-background-color: #eaeaea;
+/* background-color: #eaeaea; */
 display: flex;
 flex-direction: column;
   margin: 20px;
@@ -183,11 +183,11 @@ overflow-y: hidden;
 
 
 .StudentSidebody-div{
-  position: relative; /* Changed from absolute to relative */
+  /* position: relative; Changed from absolute to relative */
   min-height: 5000px; /* Ensure the content area is tall enough */
-  width: calc(100% - 290px); /* Adjust width to account for the sidebar */
+  /* width: calc(100% - 290px); Adjust width to account for the sidebar */
   margin-top: 109px; /* Ensure the content starts below the navbar */
-  margin-left: 290px;
+  margin-left: 222px;
   background-color: white;
   overflow-y: auto; /* Enable vertical scrolling */
 }
@@ -200,19 +200,48 @@ overflow-y: hidden;
   gap: 12px;
 }
 
-.button-group button {
+/* .button-group button {
   padding: 20px 170px;
   font-size: 16px;
   color: #fff;
-  background-color: #8b8d8d;
+  background-color: rgb(155, 35, 35);
+  
   border: none;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+} */
+
+
+.button-group button {
+  padding: 18px 30px; /* Adjusted padding for better aesthetics */
+  font-size: 16px;
+  font-weight: 600; /* Makes the text bold */
+  color: #fff;
+  background-color: rgb(155, 35, 35); /* Gradient background */
+  border: none;
+  border-radius: 8px; /* Slightly rounded corners for a modern look */
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+  transition: all 0.3s ease; /* Smooth transition for all properties */
 }
 
 .button-group button:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #f43636, #b51717); /* Inverse gradient on hover */
+  transform: translateY(-2px); /* Slight lift effect on hover */
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Increased shadow on hover */
+}
+
+.button-group button:active {
+  transform: translateY(0); /* No lift when active */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Reduced shadow on click */
+  background: linear-gradient(135deg, #b51717, #e03d3d); /* Darker gradient when clicked */
+}
+
+
+.button-group button:hover {
+  background-color: #eaeaea;
+  color: black;
 }
 
 

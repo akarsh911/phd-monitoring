@@ -27,7 +27,7 @@ const SideLeftMenu = () => {
     // { component: <ThesisSubForm />, title: "Thesis Submission", icon: "/iconoutlineshoppingcart.svg" },
     // {  title: "Thesis Extension", icon: "/iconoutlineshoppingcart.svg" },
     {  title: "Profile", icon: "/iconoutlineshoppingcart.svg" },
-    {  title: "Dashboard", icon: "/iconoutlineshoppingcart.svg" },
+    {  title: "Dashboard", icon: "/group.svg" },
     {  title: "Publications", icon: "/iconoutlineshoppingcart.svg" },
     {  title: "Progress Monitoring", icon: "/iconoutlineshoppingcart.svg" },
     {  component:<Forms/>,title: "Forms", icon: "/iconoutlineshoppingcart.svg" }

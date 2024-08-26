@@ -67,8 +67,7 @@
   align-self: stretch;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  
 }
 .or-sign-in {
   color: #000;
@@ -102,7 +101,7 @@
   font-size: 20px;
   /* height: 1.188rem; */
   white-space: nowrap;
-  padding: 0.813rem 0.625rem;
+  padding: 0.600rem 0.625rem;
 }
 .email-parent,
 .mailabccom-wrapper {
@@ -147,7 +146,7 @@
   font-size: 20px;
   background-color: transparent;
   padding: 0;
-  padding: 0.813rem 0.625rem;
+  padding: 0.600rem 0.625rem;
 }
 .password-label,
 .password-parent {
@@ -251,7 +250,7 @@
   margin: 0;
   align-items: flex-start;
   justify-content: flex-start;
-  gap: 2rem;
+  gap: 1rem;
 }
 .account-label-parent,
 .frame-group,
@@ -263,7 +262,7 @@
 .frame-parent {
   align-items: center;
   justify-content: center;
-  gap: 2.25rem;
+  gap: 0.25rem;
   z-index: 1;
   font-size: 0.875rem;
   color: #000;
@@ -284,26 +283,30 @@
   flex-direction: column;
   align-items: flex-start;
   min-width: 26.25rem;
-  min-height: 36.438rem;
+  
+  min-height: 34.438rem;
+
 }
+
 .rectangle-parent {
+  height: 500px;
   position: absolute;
-  top: 6.625rem;
-  left: calc(50% - 390px);
-  border-radius: 48px;
-  background-color: #f3f3f3;
-  box-shadow: 5px 5px 20px 1px rgba(0, 0, 0, 0.29);
-  width: 50rem;
-  flex-direction: row;
-  align-items: flex-end;
-  padding: 0 0 0 5.188rem;
-  box-sizing: border-box;
-  gap: 9rem;
-  z-index: 1;
-  text-align: left;
-  font-size: 2.25rem;
-  color: #525252;
-  font-family: "Nunito Sans";
+    top: 6.625rem;
+    left: calc(50% - 300px);
+    border-radius: 15px;
+    background-color: #f3f3f3;
+    box-shadow: 5px 5px 20px 1px rgba(0, 0, 0, 0.29);
+    width: 37rem;
+    flex-direction: row;
+    align-items: flex-end;
+    padding: 0 0 0 5.188rem;
+    box-sizing: border-box;
+    gap: 9rem;
+    z-index: 1;
+    text-align: left;
+    font-size: 2.25rem;
+    color: #525252;
+    font-family: "Nunito Sans";
 }
 .macbook-pro-14-1 {
   width: 100%;
@@ -313,7 +316,7 @@
   overflow: hidden;
   letter-spacing: normal;
 }
-@media screen and (max-width: 900px) {
+/* @media screen and (max-width: 900px) {
   .login-to-your {
     font-size: 1.813rem;
   }
@@ -342,4 +345,20 @@
   .checkbox-parent {
     flex-wrap: wrap;
   }
+} */
+
+.tiet-logo {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 40px 0 31px 0;
+}
+
+.tiet-logo img {
+  /* position: absolute; */
+  width: 175px;
+  border-radius: 8px;
+  padding-top: 28px;
+  /* margin-top: 50%; */
 }

@@ -1,60 +1,122 @@
-
-  .StudentList{
-    position: relative; /* Changed from absolute to relative */
-    min-height: 3000px; /* Ensure the content area is tall enough */
-    width: calc(100% - 290px); /* Adjust width to account for the sidebar */
-    margin-top: 109px; /* Ensure the content starts below the navbar */
-    margin-left: 290px;
-    background-color: white;
-    overflow-y: auto; /* Enable vertical scrolling */
+.StudentList {
+  position: relative;
+  min-height: 3000px;
+  width: calc(100% - 388px);
+  margin-top: 95px;
+  margin-left: 252px;
+  background-color: #f9f9f9;
+  overflow-y: auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px;
 }
 
-  .search-bar input {
-    padding: 10px;
-    margin-bottom: 20px;
-    width: 100%;
-    box-sizing: border-box;
-  }
-  
-  .controls button {
-    margin: 0 5px 20px 5px;
-    padding: 10px;
-  }
+.search-bar {
+  flex-grow: 1;
+  margin-right: 10px;
+}
 
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  thead th {
-    border-bottom: 2px solid #ddd;
-    padding: 10px;
-    text-align: left;
-    font-size: 19px;
-  }
-  
+.search-bar input {
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: box-shadow 0.3s ease;
+}
 
-  tbody td {
-    border-bottom: 1px solid #ddd;
-    padding: 10px;
-    font-size: 19px;
-    
-  }
-  tr :hover {
-    background-color: #b9b8b8;
-    cursor: pointer;
-  }
-  
-  .approved {
-    color: green;
-  }
-  
-  .tobeapproved {
-    color: orange;
-  }
-  
-  .notapproved {
-    color: red;
-  }
-  
-  
+.search-bar input:focus {
+  box-shadow: 0 0 2px #771414;
+  outline: none;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.controls select {
+  margin: 0 5px 20px 5px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.controls select:focus {
+  border-color: #771414;
+  box-shadow: 0 0 5px #771414;
+  outline: none;
+}
+
+.controls select:hover {
+  border-color: #771414;
+}
+
+.controls button {
+  margin: 0 5px 20px 5px;
+  padding: 12px 20px;
+  background-color: #771414;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.controls button:hover {
+  background-color: #771414;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+thead th {
+  border-bottom: 2px solid #ddd;
+  padding: 12px 15px;
+  text-align: left;
+  font-size: 20px;
+  background-color: #f1f1f1;
+  font-weight: bold;
+}
+
+tbody td {
+  border-bottom: 1px solid #ddd;
+  padding: 12px 15px;
+  font-size: 18px;
+  color: #333;
+}
+
+tbody tr:hover {
+  background-color: #eaeaea;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.approved {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.tobeapproved {
+  color: #ffc107;
+  font-weight: bold;
+}
+
+.notapproved {
+  color: #dc3545;
+  font-weight: bold;
+}

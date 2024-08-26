@@ -90,6 +90,9 @@ const MacBookPro14 = () => {
                   />
                   <b className="continue-with-google">Continue with Thapar ID</b>
                 </button> */}
+                <div className="tiet-logo">
+          <img src="tiet-logoremovebgpreview-1@2x.png" alt="My Image" />
+        </div>
               </div>
               <div className="or-sign-in-container">
                 <span>-------------</span>
