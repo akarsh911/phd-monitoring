@@ -9,57 +9,109 @@ class IrbSubForm extends Model
 {
     use HasFactory;
 
+    // The table associated with the model
+    protected $table = 'irb_sub_forms';
+
+    // The primary key associated with the table
+    protected $primaryKey = 'id';
+
+    // Indicates if the IDs are auto-incrementing
+    public $incrementing = true;
+
+    // The attributes that are mass assignable
     protected $fillable = [
         'student_id',
+        'form_type',
+        'phd_title',
+        'revised_phd_title',
+        'irb_pdf',
+        'revised_irb_pdf',
         'status',
         'stage',
         'student_comments',
         'supervisor_comments',
         'phd_coordinator_comments',
         'hod_comments',
+        'student_lock',
+        'supervisor_lock',
+        'hod_lock',
+        'dordc_lock',
+        'dra_lock',
+        'SuperVisorComments',
+        'HODComments',
+        'DORDCComments',
+        'DRAComments'
+        
     ];
 
-    /**
-     * Get the student associated with the IRB sub form.
-     */
+    // The attributes that should be cast to native types
+    protected $casts = [
+        'form_type' => 'string',
+        'status' => 'string',
+        'stage' => 'string',
+    ];
+    public function fullForm($user)
+    {
+        return [
+            'form_id'=>$this->id,
+            'name'=> $this->student->user->name(),
+            'roll_no' => $this->student->roll_no,
+            'department' => $this->student->department->name,
+            'cgpa' => $this->student->user->phone,
+            'phd_title' => $this->student->phd_title,
+            'role'=>$user->role->role,
+            'objectives' => $this->objectives->map(function($objective){
+                return [
+                    'objective' => $objective->objective,
+                    'type' => $objective->type,
+                ];
+            }),
+            'revised_phd_title' => $this->revised_phd_title,
+            'irb_pdf' => $this->irb_pdf,
+            'revised_irb_pdf' => $this->revised_irb_pdf,
+            'supervisors' => $this->student->supervisors->map(function($supervisor){
+                return [
+                    'name' => $supervisor->user->name(),
+                    'designation' => $supervisor->designation,
+                    'department' => $supervisor->department->name
+                ];
+            }),
+            'status' => $this->status,
+            'stage' => $this->stage,
+            'SuperVisorComments' => $this->SuperVisorComments,
+            'hod_approval' => $this->hod_approval,
+            'HODComments' => $this->HODComments,
+            'DORDCComments' => $this->DORDCComments,
+            'DRAComments' => $this->DRAComments,
+            'student_lock' => $this->student_lock,
+            'hod_lock' => $this->hod_lock,
+            'supervisor_lock' => $this->supervisor_lock,
+            'dordc_lock' => $this->dordc_lock,
+            'dra_lock' => $this->dra_lock,
+            'supervisorApprovals' => $this->researchExtentionsApprovals->map(function($approval){
+                return [
+                    'supervisor_id' => $approval->supervisor_id,
+                    'status' => $approval->status,
+                    'comments' => $approval->comments,
+                    'name' => $approval->supervisor->user->name(),
+                ];
+            }),
+            'user_name'=>$user->name(),
+        ];
+    }
+    // Relationships
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id', 'roll_no');
     }
 
-    /**
-     * Scope a query to only include IRB sub forms for a specific student.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param int $studentId
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeForStudent($query, $studentId)
+    public function history()
     {
-        return $query->where('student_id', $studentId);
+        return $this->hasMany(IrbSubFormHistory::class, 'sub_form_id', 'id');
     }
 
-    /**
-     * Scope a query to only include IRB sub forms with a specific status.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $status
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeWithStatus($query, $status)
+    public function objectives()
     {
-        return $query->where('status', $status);
-    }
-
-    /**
-     * Scope a query to only include IRB sub forms with a specific stage.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param string $stage
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public function scopeWithStage($query, $stage)
-    {
-        return $query->where('stage', $stage);
+        return $this->hasMany(IrbFormObjective::class, 'irb_form_id', 'id');
     }
 }
