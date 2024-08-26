@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class IrbSubFormHistory extends Model
+class IrbFormObjective extends Model
 {
     use HasFactory;
 
     // The table associated with the model
-    protected $table = 'irb_sub_form_histories';
+    protected $table = 'irb_form_objectives';
 
     // The primary key associated with the table
     protected $primaryKey = 'id';
@@ -20,27 +20,19 @@ class IrbSubFormHistory extends Model
 
     // The attributes that are mass assignable
     protected $fillable = [
-        'sub_form_id',
-        'status',
-        'stage',
-        'comments',
-        'user_id',
+        'irb_form_id',
+        'objective',
+        'type',
     ];
 
     // The attributes that should be cast to native types
     protected $casts = [
-        'status' => 'string',
-        'stage' => 'string',
+        'type' => 'string',
     ];
 
     // Relationships
-    public function subForm()
+    public function irbForm()
     {
-        return $this->belongsTo(IrbSubForm::class, 'sub_form_id', 'id');
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(IrbSubForm::class, 'irb_form_id', 'id');
     }
 }

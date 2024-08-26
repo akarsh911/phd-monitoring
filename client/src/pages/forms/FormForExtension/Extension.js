@@ -54,7 +54,7 @@ const ResearchProposalExtensionForm = () => {
         if(response.ok)
           {
             let  data = await response.json();
-            data=data.form;
+            // data=data.form;
             console.log(data);
             const recommended=[];
             data?.supervisorApprovals?.forEach((supervisor) => {

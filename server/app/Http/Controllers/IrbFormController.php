@@ -60,7 +60,7 @@ class IrbFormController extends Controller
         }
     }
 
-    protected function handleStudentForm($user)
+    private function handleStudentForm($user)
     {
         try {
             $student = Student::findByUserId($user->id);
@@ -78,7 +78,7 @@ class IrbFormController extends Controller
         }
     }
 
-    protected function handleHodForm($user, $request)
+    private function handleHodForm($user, $request)
     {
         $request->validate(['student_id' => 'required|integer']);
 
@@ -104,7 +104,7 @@ class IrbFormController extends Controller
         }
     }
 
-    protected function handleAdminForm($request, $user)
+    private function handleAdminForm($request, $user)
     {
 
         $request->validate(['student_id' => 'required|integer']);
@@ -127,7 +127,7 @@ class IrbFormController extends Controller
         }
     }
 
-    protected function handleFacultyForm($user, $request)
+    private function handleFacultyForm($user, $request)
     {
         $request->validate(['student_id' => 'required|integer']);
      
@@ -306,7 +306,7 @@ class IrbFormController extends Controller
     }
 
 
-    protected function updateSupervisorPrefs($irbForm, $request, $user)
+    private function updateSupervisorPrefs($irbForm, $request, $user)
     {
         IrbNomineeCognate::where('irb_form_id', $irbForm->id)->delete();
 
@@ -498,7 +498,7 @@ class IrbFormController extends Controller
     }
 
 
-    protected function handleRejectionHOD($irbForm, $request, $user)
+    private function handleRejectionHOD($irbForm, $request, $user)
     {
         try {
             $irbForm->update([
