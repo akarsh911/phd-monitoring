@@ -103,38 +103,28 @@ const StudentSideStatusChange = ({ formData, handleChange }) => {
           required
         />
       </div>
-      <div className='data-input' id='appr'>
-        <label className='bold-label'>Change of Status availed if any earlier</label>
-        <div>
-          <input
-            type="radio"
-            id="StatusChangeYes"
-            name="statusChange"
-            value="Yes"
-            onChange={handlestatusChange}
-            required
-          />
-          <label htmlFor="StatusChangeYes" className="small-label">Yes</label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            id="StatusChangeNo"
-            name="statusChange"
-            value="No"
-            onChange={handlestatusChange}
-            required
-          />
-          <label htmlFor="StatusChangeNo" className="small-label">No</label>
-        </div>
-      </div>
+      <div className='data-input'>
+  <label htmlFor="statusChangeDropdown" className='bold-label'>Change of Status availed if any earlier</label>
+  <select
+    id="statusChangeDropdown"
+    name="statusChange"
+    value={statusChange}
+    onChange={handlestatusChange}
+    required
+  >
+    <option value="">Select an option</option>
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+</div>
+
       {statusChange === "Yes" && (
          <div className='supervisor-button-div'>
          <button  type="submit">Attach copy of proof</button>
        </div>
     
       )}
-
+<div className="first">
 <div className='date-input'>
         <label htmlFor="irbMeetingDateInput">Date and year of previous extension</label>
         <input
@@ -157,32 +147,21 @@ const StudentSideStatusChange = ({ formData, handleChange }) => {
           required
         />
       </div>
-      <div className='data-input' id='appr'>
-  <label className='bold-label'>Required Change of Status</label>
-  <div>
-    <input
-      type="radio"
-      id="RequiredStatusChangeRegularToPartTime"
-      name="RequiredStatusChange"
-      value="Regular to Part-Time"
-      onChange={handlestatusChange}
-      required
-    />
-    <label htmlFor="RequiredStatusChangeRegularToPartTime" className="small-label">Regular to Part-Time</label>
-  </div>
-  <div>
-    <input
-      type="radio"
-      id="RequiredStatusChangePartTimeToRegular"
-      name="RequiredStatusChange"
-      value="Part-Time to Regular"
-      onChange={handlestatusChange}
-      required
-    />
-    <label htmlFor="RequiredStatusChangePartTimeToRegular" className="small-label">Part-Time to Regular</label>
-  </div>
+      </div>
+      <div className='data-input'>
+  <label htmlFor="statusChangeDropdown" className='bold-label'>Required Change of Status</label>
+  <select
+    id="statusChangeDropdown"
+    name="statusChange"
+    value={statusChange}
+    onChange={handlestatusChange}
+    required
+  >
+    <option value="">Select an option</option>
+    <option value="Yes">Regular to Part Time</option>
+    <option value="No">Part Time to Regular</option>
+  </select>
 </div>
-
       
      
       

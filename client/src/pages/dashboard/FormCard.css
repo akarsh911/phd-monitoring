@@ -7,6 +7,8 @@
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
+    height: 14px;
+    width: 172px;
   }
   
   .form-card:hover {
@@ -20,7 +22,25 @@
   }
   
   .form-card-title {
-    font-size: 16px;
+    font-size: 12px;
     font-weight: bold;
+  }
+  
+
+  .back-button {
+    position: fixed;        /* Keeps the button fixed relative to the viewport */
+    bottom: 20px;           /* Positions the button 20px from the bottom */
+    right: 20px;            /* Positions the button 20px from the right */
+    display: flex;          /* Enables flexbox layout */
+    justify-content: center;/* Centers the content horizontally within the button */
+    align-items: center;    /* Centers the content vertically within the button */
+    /* Optional styling for better appearance */
+    padding: 10px 20px;
+    
+    color: white;               /* Example text color */
+    border: none;               /* Removes default border */
+    border-radius: 5px;         /* Adds slight rounding to the corners */
+    cursor: pointer;            /* Changes cursor to pointer on hover */
+  
   }
   
