@@ -126,7 +126,8 @@ const StudentSideProgress = ({ formData }) => {
           />
         </div>
         </div>
-      <div className='data-input' id='appr'>
+        <div className="first">
+      <div className='data-input' >
         <label className='bold-label'>Period of Report</label>
         <input
         type="text"
@@ -138,7 +139,8 @@ const StudentSideProgress = ({ formData }) => {
         required
       />
       </div>
-
+      </div>
+<div className="first">
       <div className='date-input'>
         <label htmlFor="irbMeetingDateInput">Date of IRB meeting</label>
         <input
@@ -149,6 +151,7 @@ const StudentSideProgress = ({ formData }) => {
           readOnly={!isEditable}
           required
         />
+      </div>
       </div>
       <div className='data-input'>
         <label htmlFor="researchTitleInput">Title of PhD Thesis</label>
@@ -187,224 +190,6 @@ const StudentSideProgress = ({ formData }) => {
           <label htmlFor="extensionNo" className="small-label">No</label>
         </div>
       </div>
-
-      <div className='data-input' id='appr'>
-        <label className='bold-label'>Publication during the period under report</label>
-        <div>
-          <input
-            type="radio"
-            id="publicationYes"
-            name="publication"
-            value="Yes"
-            checked={publicationSem == "Yes"}
-            required
-          />
-          <label htmlFor="publicationYes" className="small-label">Yes</label>
-        </div>
-        <div>
-          <input
-            type="radio"
-            id="publicationNo"
-            name="publication"
-            value="No"
-            checked={publicationSem == "No"}
-            required
-          />
-          <label htmlFor="publicationNo" className="small-label">No</label>
-        </div>
-      </div>
-       
-      <div className='data-input'>
-          <label htmlFor="regnoInput">Publications:</label>
-           
-          
-        </div>
-        <div className='data-input'>
-      <label>Papers in SCI Journal</label>
-      <table>
-      
-        <thead>
-          <tr>
-            <th>Author(s)</th>
-            <th>Year of Publication</th>
-            <th>Title of Paper</th>
-            <th>Name of the Journal, Volume/page numbers</th>
-            <th>Name of the Publisher</th>
-            <th>Impact Factor</th>
-          </tr>
-        </thead>
-
-        <tbody>
-        {sci.map((pub) => (
-          <tr>
-            <td>{pub.authors.join(", ")}</td>
-            <td>{pub.publication.year_of_publication}</td>
-            <td>{pub.publication.title}</td>
-            <td>{pub.publication.journal_name},{pub.publication.volume}</td>
-            <td>{pub.publication.publisher}</td>
-            <td>{pub.publication.impact_factor}</td>
-          </tr>))}
-          {
-            !sci.length && <tr><td colSpan="4">No Indian Conference Publications</td></tr>
-          }
-        </tbody>
-      </table>
-    </div>
-    
-    <div className='data-input'>
-      <label>Papers in Scopus Journal</label>
-      <table>
-        <thead>
-          <tr>
-            <th>Author(s)</th>
-            <th>Year of Publication</th>
-            <th>Title of Paper</th>
-            <th>Name of the Journal, Volume/page numbers</th>
-            <th>Name of the Publisher</th>
-            <th>Impact Factor</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            scopus.map((pub) => (
-              <tr>
-                <td>{pub.authors.join(", ")}</td>
-                <td>{pub.publication.year_of_publication}</td>
-                <td>{pub.publication.title}</td>
-                <td>{pub.publication.journal_name},{pub.publication.volume}</td>
-                <td>{pub.publication.publisher}</td>
-                <td>{pub.publication.impact_factor}</td>
-              </tr>
-            ))
-          }
-          {
-            !scopus.length && <tr><td colSpan="4">No Indian Conference Publications</td></tr>
-          }
-         
-          {/* Add more rows as needed */}
-        </tbody>
-      </table>
-    </div>
-
-
-    <div className='data-input'>
-      <label>Papers in International Conferences</label>
-      <table>
-        <thead>
-          <tr>
-            <th>Author(s)</th>
-            <th>Year of Publication</th>
-            <th>Title of Paper</th>
-            <th>Name and Place of Conference</th>
-            
-          </tr>
-        </thead>
-        <tbody>
-          {
-            international.map((pub) => (
-              <tr>
-                <td>{pub.authors.join(", ")}</td>
-                <td>{pub.publication.year_of_publication}</td>
-                <td>{pub.publication.title}</td>
-                <td>{pub.publication.conference_name},{pub.publication.conference_location}</td>
-              </tr>
-            ))
-          }
-          {
-            !international.length && <tr><td colSpan="4">No Indian Conference Publications</td></tr>
-          }
-          {/* Add more rows as needed */}
-        </tbody>
-      </table>
-    </div>
-
-    <div className='data-input'>
-      <label>Papers in Indian Conferences</label>
-      <table>
-        <thead>
-          <tr>
-            <th>Author(s)</th>
-            <th>Year of Publication</th>
-            <th>Title of Paper</th>
-            <th>Name and Place of Conference</th>
-            
-          </tr>
-        </thead>
-        <tbody>
-          {
-            indian.map((pub) => (
-              <tr>
-                <td>{pub.authors.join(", ")}</td>
-                <td>{pub.publication.year_of_publication}</td>
-                <td>{pub.publication.title}</td>
-                <td>{pub.publication.conference_name},{pub.publication.conference_location}</td>
-              </tr>
-            ))
-          }
-          {
-            !indian.length && <tr><td colSpan="4">No Indian Conference Publications</td></tr>
-          }
-          {/* Add more rows as needed */}
-        </tbody>
-      </table>
-    </div>
-       
-
-
-    <div className='data-input'>
-      <label>Books</label>
-      <table>
-        <thead>
-          <tr>
-            <th>Name of Book</th>
-            <th>Chapter Title</th>
-            <th>Year of Publication</th>
-            <th>Name of Publisher</th>
-            
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Example Title</td>
-            <td>John Doe</td>
-            <td>Journal of Example</td>
-            <td>2023</td>
-
-          </tr>
-          {/* Add more rows as needed */}
-        </tbody>
-      </table>
-    </div>
-
-    <div className='data-input'>
-      <label>Patents</label>
-      <table>
-        <thead>
-          <tr>
-            <th>Author(s)</th>
-            <th>Year of Award</th>
-            <th>Title of Patent</th>
-            <th>Patent Number</th>
-            <th>International/Indian</th>
-            
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Example Title</td>
-            <td>John Doe</td>
-            <td>Journal of Example</td>
-            <td>2023</td>
-            <td>12</td>
-            
-          </tr>
-          {/* Add more rows as needed */}
-        </tbody>
-      </table>
-    </div>
-
-
-
       <div className='data-input' id='appr'>
         <label className='bold-label'>Teaching work, if any done during the period under report</label>
         <div>
@@ -456,6 +241,224 @@ const StudentSideProgress = ({ formData }) => {
           </div>
         </div>
       )}
+      <div className='data-input' id='appr'>
+        <label className='bold-label'>Publication during the period under report</label>
+        <div>
+          <input
+            type="radio"
+            id="publicationYes"
+            name="publication"
+            value="Yes"
+            checked={publicationSem == "Yes"}
+            required
+          />
+          <label htmlFor="publicationYes" className="small-label">Yes</label>
+        </div>
+        <div>
+          <input
+            type="radio"
+            id="publicationNo"
+            name="publication"
+            value="No"
+            checked={publicationSem == "No"}
+            required
+          />
+          <label htmlFor="publicationNo" className="small-label">No</label>
+        </div>
+      </div>
+       
+      <div className='data-input'>
+          <label htmlFor="regnoInput">Publications:</label>
+           
+          
+        </div>
+        <div className='supervisor-table'>
+      <h2 className='headingg'>Papers in SCI Journal</h2>
+      <table>
+      
+        <thead>
+          <tr>
+            <th>Author(s)</th>
+            <th>Year of Publication</th>
+            <th>Title of Paper</th>
+            <th>Name of the Journal, Volume/page numbers</th>
+            <th>Name of the Publisher</th>
+            <th>Impact Factor</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        {sci.map((pub) => (
+          <tr>
+            <td>{pub.authors.join(", ")}</td>
+            <td>{pub.publication.year_of_publication}</td>
+            <td>{pub.publication.title}</td>
+            <td>{pub.publication.journal_name},{pub.publication.volume}</td>
+            <td>{pub.publication.publisher}</td>
+            <td>{pub.publication.impact_factor}</td>
+          </tr>))}
+          {
+            !sci.length && <tr><td colSpan="4">No Indian Conference Publications</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    
+    <div className='supervisor-table'>
+      <h2 className='headingg'>Papers in Scopus Journal</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Author(s)</th>
+            <th>Year of Publication</th>
+            <th>Title of Paper</th>
+            <th>Name of the Journal, Volume/page numbers</th>
+            <th>Name of the Publisher</th>
+            <th>Impact Factor</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            scopus.map((pub) => (
+              <tr>
+                <td>{pub.authors.join(", ")}</td>
+                <td>{pub.publication.year_of_publication}</td>
+                <td>{pub.publication.title}</td>
+                <td>{pub.publication.journal_name},{pub.publication.volume}</td>
+                <td>{pub.publication.publisher}</td>
+                <td>{pub.publication.impact_factor}</td>
+              </tr>
+            ))
+          }
+          {
+            !scopus.length && <tr><td colSpan="4">No Indian Conference Publications</td></tr>
+          }
+         
+          {/* Add more rows as needed */}
+        </tbody>
+      </table>
+    </div>
+
+
+    <div className='supervisor-table'>
+      <h2 className='headingg'>Papers in International Conferences</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Author(s)</th>
+            <th>Year of Publication</th>
+            <th>Title of Paper</th>
+            <th>Name and Place of Conference</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {
+            international.map((pub) => (
+              <tr>
+                <td>{pub.authors.join(", ")}</td>
+                <td>{pub.publication.year_of_publication}</td>
+                <td>{pub.publication.title}</td>
+                <td>{pub.publication.conference_name},{pub.publication.conference_location}</td>
+              </tr>
+            ))
+          }
+          {
+            !international.length && <tr><td colSpan="4">No Indian Conference Publications</td></tr>
+          }
+          {/* Add more rows as needed */}
+        </tbody>
+      </table>
+    </div>
+
+    <div className='supervisor-table'>
+      <h2 className='headingg'>Papers in Indian Conferences</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Author(s)</th>
+            <th>Year of Publication</th>
+            <th>Title of Paper</th>
+            <th>Name and Place of Conference</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          {
+            indian.map((pub) => (
+              <tr>
+                <td>{pub.authors.join(", ")}</td>
+                <td>{pub.publication.year_of_publication}</td>
+                <td>{pub.publication.title}</td>
+                <td>{pub.publication.conference_name},{pub.publication.conference_location}</td>
+              </tr>
+            ))
+          }
+          {
+            !indian.length && <tr><td colSpan="4">No Indian Conference Publications</td></tr>
+          }
+          {/* Add more rows as needed */}
+        </tbody>
+      </table>
+    </div>
+       
+
+
+    <div className='supervisor-table'>
+      <h2 className='headingg'>Books</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Name of Book</th>
+            <th>Chapter Title</th>
+            <th>Year of Publication</th>
+            <th>Name of Publisher</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Example Title</td>
+            <td>John Doe</td>
+            <td>Journal of Example</td>
+            <td>2023</td>
+
+          </tr>
+          {/* Add more rows as needed */}
+        </tbody>
+      </table>
+    </div>
+
+    <div className='supervisor-table'>
+      <h2 className='headingg'>Patents</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Author(s)</th>
+            <th>Year of Award</th>
+            <th>Title of Patent</th>
+            <th>Patent Number</th>
+            <th>International/Indian</th>
+            
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Example Title</td>
+            <td>John Doe</td>
+            <td>Journal of Example</td>
+            <td>2023</td>
+            <td>12</td>
+            
+          </tr>
+          {/* Add more rows as needed */}
+        </tbody>
+      </table>
+    </div>
+
+
+
+      
 {
   isEditable && ( <div className='supervisor-button-div'>
     <button className='send' type="submit" onClick={submitForm}>SEND TO SUPERVISOR</button>

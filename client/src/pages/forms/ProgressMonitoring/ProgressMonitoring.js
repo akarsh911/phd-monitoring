@@ -165,8 +165,8 @@ const ProgressMonitoring = () => {
   };
 
   return (
-    <div className='studentSidebody-div'>
-      <div className='studentSideform-div'>
+    <div className='extensionBody-div'>
+      <div className='extensionform-div'>
         <div className='heading'>
           <h1>Progress Monitoring</h1>
         </div>

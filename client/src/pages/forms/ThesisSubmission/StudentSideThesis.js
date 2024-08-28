@@ -28,7 +28,7 @@ const StudentSideThesis = ({ formData, handleChange }) => {
           />
         </div>
       </div>
-      
+      <div className="first">
       <div className='data-input'>
         <label htmlFor="fatherNameInput">Father's Name</label>
         <input
@@ -39,7 +39,8 @@ const StudentSideThesis = ({ formData, handleChange }) => {
           required
         />
       </div>
-     
+      </div>
+     <div className="first">
       <div className='date-input'>
         <label htmlFor="dateOfAdmissionInput">Date of Admission</label>
         <input
@@ -51,6 +52,8 @@ const StudentSideThesis = ({ formData, handleChange }) => {
           required
         />
       </div>
+      </div>
+      
      
       <div className='data-input'>
         <label htmlFor="addressInput">Address for correspondence</label>
@@ -124,7 +127,7 @@ const StudentSideThesis = ({ formData, handleChange }) => {
           required
         />
       </div>
-
+<div className="first">
       <div className='data-input'>
         <label htmlFor="statusInput">Current Status</label>
         <input
@@ -148,6 +151,7 @@ const StudentSideThesis = ({ formData, handleChange }) => {
           required
         />
       </div>
+      </div>
       
       {/* <div className='data-input'>
         <label htmlFor="publicationDetailsInput">
@@ -162,8 +166,8 @@ const StudentSideThesis = ({ formData, handleChange }) => {
            
           
         </div>
-        <div className='data-input'>
-      <label>Papers in SCI Journal</label>
+        <div className='supervisor-table'>
+      <h2 className='headingg'>Papers in SCI Journal</h2>
       <table>
         <thead>
           <tr>
@@ -189,8 +193,8 @@ const StudentSideThesis = ({ formData, handleChange }) => {
       </table>
     </div>
     
-    <div className='data-input'>
-      <label>Papers in Scopus Journal</label>
+    <div className='supervisor-table'>
+      <h2 className='headingg'>Papers in Scopus Journal</h2>
       <table>
         <thead>
           <tr>
@@ -217,8 +221,8 @@ const StudentSideThesis = ({ formData, handleChange }) => {
     </div>
  
 
-    <div className='data-input'>
-      <label>Patents</label>
+    <div className='supervisor-table'>
+      <h2 className='headingg'>Patents</h2>
       <table>
         <thead>
           <tr>
@@ -244,7 +248,7 @@ const StudentSideThesis = ({ formData, handleChange }) => {
       </table>
     </div>
 
-      
+      <div className="first">
       <div className='date-input'>
         <label htmlFor="dateOfSynopsisPresentationInput">Date of Synopsis Presentation</label>
         <input
@@ -256,12 +260,13 @@ const StudentSideThesis = ({ formData, handleChange }) => {
           required
         />
       </div>
+      </div>
       
-      <div className='first'>
         <div className='data-input'>
           <label htmlFor="thesisExamFeeInput">Thesis Examination Fee:</label>
         </div>
        
+      <div className='first'>
         <div className='data-input'>
           <label htmlFor="receiptNumberInput">Receipt Number</label>
           <input
@@ -272,10 +277,9 @@ const StudentSideThesis = ({ formData, handleChange }) => {
          
             required
           />
-          <br/>
-          <br/>
+           </div>
         
-        {/* <div className='date-input'> */}
+        <div className='date-input'>
           <label htmlFor="receiptDateInput">Date of Fee Submission</label>
           <input
             type="date"
@@ -285,8 +289,8 @@ const StudentSideThesis = ({ formData, handleChange }) => {
         
             required
           />
-          {/* </div> */}
-        </div>
+          </div>
+       
       </div>
      
       <div className='supervisor-button-div'>

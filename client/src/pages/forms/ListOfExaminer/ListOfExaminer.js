@@ -156,8 +156,8 @@ const ListOfExaminer = () => {
   };
 
   return (
-    <div className='studentSidebody-div'>
-      <div className='studentSideform-div'>
+    <div className='extensionBody-div'>
+      <div className='extensionform-div'>
         <div className='heading'>
           <h1>List of Panel of Examiners</h1>
         </div>

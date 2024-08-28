@@ -5,6 +5,7 @@ import Navbar from './Navbar';
 import StudentList from '../teachers_view/StudentList.js';
 import Forms from "./Forms";
 import FormCard from './FormCard';
+import ProgressMonitoring from '../forms/ProgressMonitoring/ProgressMonitoring.js';
 
 
 
@@ -34,7 +35,7 @@ const SideLeftMenu = () => {
     {  title: "Profile", icon: "/iconoutlineshoppingcart.svg" },
     {  title: "Dashboard", icon: "/group.svg" },
     {  title: "Publications", icon: "/iconoutlineshoppingcart.svg" },
-    {  title: "Progress Monitoring", icon: "/iconoutlineshoppingcart.svg" },
+    {  component:<ProgressMonitoring/>,title: "Progress Monitoring", icon: "/iconoutlineshoppingcart.svg" },
     {  component:<Forms/>,title: "Forms", icon: "/iconoutlineshoppingcart.svg" }
   ];
 
@@ -46,8 +47,8 @@ const SideLeftMenu = () => {
     <div className="side-left-menu">
       
        <div className="tietlogo">
-          <img src="tiet-logoremovebgpreview-1@2x.png" alt="My Image" />
-        </div>
+       <img src="../tiet-logoremovebgpreview-1@2x.png" alt="My Image" />
+       </div>
       <div className="icons">
           {formCards.map((formCard, index) => (
             <FormCard

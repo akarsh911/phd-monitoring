@@ -3,6 +3,7 @@ import "./Dashboard.css";
 import Navbar from "./Navbar";
 import Forms from "./Forms";
 import FormCard from './FormCard';
+import ProgressMonitoring from "../forms/ProgressMonitoring/ProgressMonitoring";
 
 const SideLeftMenu = () => {
   const [activeForm, setActiveForm] = useState(null);
@@ -29,7 +30,7 @@ const SideLeftMenu = () => {
     {  title: "Profile", icon: "/iconoutlineshoppingcart.svg" },
     {  title: "Dashboard", icon: "/group.svg" },
     {  title: "Publications", icon: "/iconoutlineshoppingcart.svg" },
-    {  title: "Progress Monitoring", icon: "/iconoutlineshoppingcart.svg" },
+    {  component:<ProgressMonitoring/>,title: "Progress Monitoring", icon: "/iconoutlineshoppingcart.svg" },
     {  component:<Forms/>,title: "Forms", icon: "/iconoutlineshoppingcart.svg" }
   ];
 

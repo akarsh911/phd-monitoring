@@ -185,10 +185,11 @@ const SupervisorChange = () => {
   };
   const params = useParams();
   return (
-    <div className="studentSidebody-div">
-      <div className="studentSideform-div">
+    <div className='extensionBody-div'>
+      <div className='extensionform-div'>
         <div className="heading">
-          <h1>Request for Change of Supervisor</h1>
+          <h1>Application for Supervisor Change
+          </h1>
         </div>
         
         <form onSubmit={handleSubmit} className="studentSideform">

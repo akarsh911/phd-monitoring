@@ -48,10 +48,10 @@ const Irb = () => {
   };
 
   return (
-    <div className="irbSubbody-div">
-      <div className="irbSubform-div">
+    <div className='extensionBody-div'>
+      <div className='extensionform-div'>
         <div className="heading">
-          <h1>IRB SUBMISSION FORM</h1>
+          <h1>IRB Submission Form</h1>
         </div>
         <form onSubmit={handleSubmit} className="irbSubform">
           <div className="first">
@@ -90,7 +90,21 @@ const Irb = () => {
                 required
               />
             </div>
-            <div className="data-input">
+            <div className="date-input">
+            <label htmlFor="dateInput">Date of Admission</label>
+            <input
+              type="date"
+              id="dateInput"
+              name="admissionDate"
+              value={formData.admissionDate}
+              onChange={handleChange}
+              required
+            />
+          </div>
+           
+          </div>
+         <div className="first">
+         <div className="data-input">
               <label htmlFor="cgpaInput">CGPA</label>
               <input
                 type="number"
@@ -102,18 +116,7 @@ const Irb = () => {
                 required
               />
             </div>
-          </div>
-          <div className="date-input">
-            <label htmlFor="dateInput">Date of Admission</label>
-            <input
-              type="date"
-              id="dateInput"
-              name="admissionDate"
-              value={formData.admissionDate}
-              onChange={handleChange}
-              required
-            />
-          </div>
+         </div>
           <div className="data-input">
             <label htmlFor="titleInput">Title of PHD Thesis</label>
             <input
@@ -158,46 +161,28 @@ const Irb = () => {
               required
             />
           </div>
-          <div className="first">
-            <div className="data-input">
-              <label htmlFor="telephonenumberInput">Email</label>
-              <input
-                type="tel"
-                id="telephonenumberInput"
-                name="telephoneNumber"
-                value={formData.telephoneNumber}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="data-input">
-              <label htmlFor="numberInput">Mobile</label>
-              <input
-                type="tel"
-                id="numberInput"
-                name="number"
-                value={formData.number}
-                onChange={handleChange}
-                required
-              />
-            </div>
-          </div>
-          <div className="button-div">
-            <button className="upload-button" type="submit">
+          <div className="data-input">
+          <button  type="submit">
               UPLOAD IRB PDF
             </button>
-            <button className="send-button" type="submit">
+          </div>
+          <div className="supervisor-button-div">
+            
+            <button className="send" type="submit">
               SEND TO SUPERVISOR
             </button>
           </div>
 
           <button
-            className="send-button"
+            className="send"
             type="submit"
             onClick={handleRevisedClick}
           >
             REVISED IRB
           </button>
+          <br />
+          <br />
+
           {showRevisedFields && (
             <div className="revised-irb-fields">
               <div className="data-input">
@@ -235,6 +220,7 @@ const Irb = () => {
                   Add another Objective
                 </button>
               </div>
+              <div className="first">
               <div className="date-input">
                 <label htmlFor="irbMeetingDateInput">Date of IRB meeting</label>
                 <input
@@ -246,11 +232,15 @@ const Irb = () => {
                   required
                 />
               </div>
-              <div className="button-div">
-                <button className="upload-button" type="submit">
+              </div>
+              <div className="data-input">
+              <button className="upload-button" type="submit">
                   UPLOAD REVISED IRB PDF
                 </button>
-                <button className="send-button" type="submit">
+              </div>
+              <div className="supervisor-button-div">
+                
+                <button className="send" type="submit">
                   SEND TO SUPERVISOR
                 </button>
               </div>
