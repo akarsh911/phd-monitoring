@@ -169,7 +169,7 @@ text-align: left;
 
 
 .StudentSideform-div{
-  height:5000px;
+  height:1000px;
   /* width:1710px; */
   color:black;
 /* background-color: #eaeaea; */
@@ -186,17 +186,17 @@ overflow-y: hidden;
 
 .StudentSidebody-div{
   /* position: relative; Changed from absolute to relative */
-  min-height: 5000px; /* Ensure the content area is tall enough */
+  min-height: 1000px; /* Ensure the content area is tall enough */
   /* width: calc(100% - 290px); Adjust width to account for the sidebar */
   margin-top: 109px; /* Ensure the content starts below the navbar */
   margin-left: 222px;
   background-color: white;
-  overflow-y: auto; /* Enable vertical scrolling */
+  overflow-y: hidden; /* Enable vertical scrolling */
 }
 
 
 .button-group {
-  margin-top: 40px;
+  margin-top: -8px;
   display: flex;
   flex-direction: column;
   gap: 12px;
