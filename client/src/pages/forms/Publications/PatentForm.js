@@ -27,7 +27,7 @@ const PatentForm = () => {
           />
         </div>
       ))}
-      <button onClick={handleAddAuthor}>Add more</button>
+      <button className="add-moree" onClick={handleAddAuthor}>Add more</button>
       <div className="form-group">
         <label>Year of Award</label>
         <select>
@@ -63,9 +63,9 @@ const PatentForm = () => {
           <label>
             <input type="radio" name="status-patent" value="published" /> Published
           </label>
-          <label>
+          {/* <label>
             <input type="radio" name="status-patent" value="submitted" /> Submitted
-          </label>
+          </label> */}
         </div>
       </div>
       <div className="form-group">
@@ -73,7 +73,7 @@ const PatentForm = () => {
         <input type="file" accept="application/pdf" />
       </div>
       <div>
-        <button className='two-button'>Submit</button>
+        <button className='send'>Submit</button>
       </div>
     </section>
   );

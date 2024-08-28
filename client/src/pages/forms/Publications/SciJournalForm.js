@@ -101,7 +101,7 @@ const SciJournalForm = () => {
             />
           </div>
         ))}
-        <button type="button" onClick={handleAddAuthor}>Add more</button>
+        <button type="button" className='add-moree' onClick={handleAddAuthor}>Add more</button>
         <div className="form-group">
           <label>Year of Publication / Acceptance</label>
           <select value={year} onChange={(e) => setYear(e.target.value)} required>
@@ -146,9 +146,9 @@ const SciJournalForm = () => {
             <label>
               <input type="radio" name="status" value="published" onChange={(e) => setStatus(e.target.value)} required /> Published
             </label>
-            <label>
+            {/* <label>
               <input type="radio" name="status" value="submitted" onChange={(e) => setStatus(e.target.value)} required /> Submitted
-            </label>
+            </label> */}
           </div>
         </div>
         <div className="form-group">
@@ -156,7 +156,7 @@ const SciJournalForm = () => {
           <input type="file" accept="application/pdf" onChange={(e) => setFile(e.target.files[0])} required />
         </div>
         <div>
-          <button type='submit' className='two-button'>Submit</button>
+          <button type='submit' className='send'>Submit</button>
         </div>
       </form>
     </section>

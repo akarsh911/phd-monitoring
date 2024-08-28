@@ -10,6 +10,7 @@ import ThesisExtensionForm from '../forms/ThesisExtension/ThesisExtension.js';
 import ListOfExaminer from '../forms/ListOfExaminer/ListOfExaminer.js'
 import ResearchProposalExtensionForm from '../forms/FormForExtension/Extension.js';
 import ThesisSubForm from '../forms/ThesisSubmission/ThesisSub.js';
+import Publications from '../forms/Publications/Publications.js';
 
 const Forms = () => {
   const [selectedForm, setSelectedForm] = useState(null);
@@ -32,6 +33,8 @@ const Forms = () => {
           return <ListOfExaminer />;
           case 'Thesis Submission':
           return <ThesisSubForm/>;
+          case 'Publications':
+            return <Publications/>;
       default:
         return (
           <div className='StudentSidebody-div'>
@@ -48,6 +51,7 @@ const Forms = () => {
                 <button onClick={() => setSelectedForm('Supervisor Change')}>Supervisor Change</button>
                 <button onClick={() => setSelectedForm('List of Examiner')}>List of Examiner</button>
                 <button onClick={() => setSelectedForm('Thesis Submission')}>Thesis Submission</button>
+                <button onClick={() => setSelectedForm('Publications')}>Publications</button>
               </div>
             </div>
           </div>

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./IrbSubmission.css";
+import StatusModal from "./Modal/Modal";
 
 const Irb = () => {
   const [formData, setFormData] = useState({
@@ -47,11 +48,26 @@ const Irb = () => {
     setShowRevisedFields(!showRevisedFields);
   };
 
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className='extensionBody-div'>
       <div className='extensionform-div'>
         <div className="heading">
           <h1>IRB Submission Form</h1>
+          <div className='top-button'>
+          <button onClick={openModal}>View Status</button>
+          {isModalOpen && <StatusModal closeModal={closeModal} />}
+        </div>
         </div>
         <form onSubmit={handleSubmit} className="irbSubform">
           <div className="first">

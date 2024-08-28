@@ -3,6 +3,7 @@ import './SupAllocation.css';
 import StudentSideSupAllocation from './StudentSideSupAllocation';
 // import PhDCoordSideSupAllocation from './PhDCoordSideSupAllocation';
 // import HoDSideSupAllocation from './HoDSideSupAllocation';
+import StatusModal from "../Modal/Modal";
 
 const SupAllocation = () => {
   const [formData, setFormData] = useState({
@@ -146,12 +147,25 @@ const SupAllocation = () => {
     e.preventDefault();
     
   };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className='extensionBody-div'>
       <div className='extensionFody-div'>
         <div className='heading'>
           <h1>Supervisor Allocation</h1>
+          <div className='top-button'>
+          <button onClick={openModal}>View Status</button>
+          {isModalOpen && <StatusModal closeModal={closeModal} />}
+        </div>
         </div>
         <form onSubmit={handleSubmit} className='studentSideform'>
           

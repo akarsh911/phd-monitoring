@@ -6,6 +6,7 @@ import HodSideExtension from './HodSideExtension';
 import DrASideExtension from './DrASideExtension';
 import { SERVER_URL } from '../../../config';
 import { useParams } from 'react-router-dom';
+import StatusModal from "../Modal/Modal";
 
 const ResearchProposalExtensionForm = () => {
   const [formData, setFormData] = useState({
@@ -140,6 +141,16 @@ const ResearchProposalExtensionForm = () => {
     console.log(formData);
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   
   const params= useParams();
   return (
@@ -147,6 +158,10 @@ const ResearchProposalExtensionForm = () => {
       <div className='extensionform-div'>
         <div className='heading'>
           <h1>Extension for submission of research proposal</h1>
+          <div className='top-button'>
+          <button onClick={openModal}>View Status</button>
+          {isModalOpen && <StatusModal closeModal={closeModal} />}
+        </div>
         </div>
         {/* <form onSubmit={handleSubmit} className='extensionSideform'> */}
         

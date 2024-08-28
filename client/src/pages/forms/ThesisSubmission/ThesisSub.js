@@ -5,6 +5,7 @@ import SupervisorSideThesis from './SupervisorSideThesis';
 import HoDSideThesis from './HoDSideThesis';
 import DrASideThesis from './DrASideThesis';
 import DoRDCSideThesis from './DoRDCSideThesis';
+import StatusModal from "../Modal/Modal";
 const ThesisSubForm = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -46,7 +47,15 @@ const ThesisSubForm = () => {
     };
   })
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
    
 
   const handleChange = (e) => {
@@ -93,6 +102,10 @@ const ThesisSubForm = () => {
       <div className='extensionform-div'>
         <div className='heading'>
           <h1>Thesis Submission Form</h1>
+          <div className='top-button'>
+          <button onClick={openModal}>View Status</button>
+          {isModalOpen && <StatusModal closeModal={closeModal} />}
+        </div>
         </div>
         <form onSubmit={handleSubmit} className='extensionSideform'>
         

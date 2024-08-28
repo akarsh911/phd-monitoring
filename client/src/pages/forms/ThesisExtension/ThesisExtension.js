@@ -7,6 +7,7 @@ import DrASideThesisExtension from './DrASideThesisExtension';
 import DoRDCSideThesisExtension from './DoRDCSideThesisExtension';
 import DirectorSideThesisExtension from './DirectorSideThesisExtension';
 import DocComSideThesisExtension from './DocComSideThesisExtension';
+import StatusModal from "../Modal/Modal";
 const ThesisExtensionForm = () => {
     const [formData, setFormData] = useState({
         name: '',
@@ -105,13 +106,25 @@ const ThesisExtensionForm = () => {
     console.log(formData);
   };
 
-  
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className='extensionBody-div'>
       <div className='extensionform-div'>
         <div className='heading'>
           <h1>Extension for Thesis Submission</h1>
+          <div className='top-button'>
+          <button onClick={openModal}>View Status</button>
+          {isModalOpen && <StatusModal closeModal={closeModal} />}
+        </div>
         </div>
         <form onSubmit={handleSubmit} className='extensionSideform'>
         

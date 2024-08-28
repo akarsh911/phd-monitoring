@@ -107,7 +107,7 @@
 } */
 
 .form-section{
-  background-color: rgb(212, 213, 216);
+  background-color: white;
   width:80%;
   display:flex;
   flex-direction: column;
@@ -117,6 +117,8 @@
   padding: 16px;
   padding-left: 70px;
   margin: 16px;
+  border: 0.2px solid #ccc;
+  box-shadow: #ccc;
 }
 
 .form-group {
@@ -136,7 +138,7 @@ text-align: left;
 .form-group label {
   display: block;
   margin-bottom: 5px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   text-align: left;
   align-items: left;
@@ -267,3 +269,9 @@ overflow-y: hidden;
 .dropdown button:hover {
   background-color: #adb5bd;
 } */
+
+
+.add-moree{
+  margin-left: 158px;
+  margin-bottom: 14px;
+}
