@@ -98,7 +98,7 @@ const IndConferenceForm = () => {
           />
         </div>
       ))}
-      <button onClick={handleAddAuthor}>Add more</button>
+      <button className="add-moree" onClick={handleAddAuthor}>Add more</button>
       <div className="form-group">
         <label>Year of Publication / Acceptance</label>
         <select value={year} onChange={(e) => setYear(e.target.value)} required>
@@ -131,9 +131,9 @@ const IndConferenceForm = () => {
           <label>
             <input type="radio" name="status-ind-conference" value="published" onChange={(e) => setStatus(e.target.value)} /> Published
           </label>
-          <label>
+          {/* <label>
             <input type="radio" name="status-ind-conference" value="submitted"onChange={(e) => setStatus(e.target.value)}  /> Submitted
-          </label>
+          </label> */}
         </div>
       </div>
       <div className="form-group">
@@ -141,7 +141,7 @@ const IndConferenceForm = () => {
         <input type="file" accept="application/pdf" onChange={(e) => setFile(e.target.files[0])} required/>
       </div>
       <div>
-        <button className='two-button'>Submit</button>
+        <button className='send'>Submit</button>
       </div>
       </form>
     </section>

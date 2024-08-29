@@ -1,0 +1,178 @@
+
+
+
+/* Add this to your CSS file */
+.Modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 499px;
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  }
+  
+  .Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    z-index: 1000;
+  }
+
+  .modal-input.radio-group {
+    display: flex;
+    align-items: center;
+  }
+  
+  
+  
+  .radio-group div {
+    display: flex;
+    align-items: center;
+    margin-right: 10px; /* Adjust spacing as needed */
+  }
+  
+  
+  
+  .modal-input {
+    margin-bottom: 15px;
+  }
+  
+  .modal-input label {
+    /* display: block; */
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+.modal-input label.bold-label {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .modal-input input[type="text"],
+  .modal-input input[type="number"],
+  .modal-input input[type="email"],
+  .modal-input input[type="radio"] {
+    width: 100%;
+    padding: 6px;
+    box-sizing: border-box;
+  }
+  
+  
+  
+  .first .modal-input {
+    flex: 1;
+    margin-right: 15px;
+  }
+  
+  .first .modal-input:last-child {
+    margin-right: 0;
+  }
+
+
+
+
+  .submitted-data {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+  }
+  
+  .columns {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .column {
+    width: 45%; /* Adjust the width as needed */
+  }
+  
+  .column h5 {
+    font-size: 16px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .column p {
+    margin: 2px 0;
+    font-size: 20px;
+  }
+  
+  .examiner-details {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+
+  .add-button{
+    background-color: transparent; /* Green */
+    border: 2px solid black;
+  color: rgb(20, 19, 19);
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 5px;
+  margin-top: 10px;
+  }
+
+  .add-button:hover {
+    background-color: transparent; 
+   
+  }
+
+  .two-button{
+    background-color: transparent; /* Green */
+    border: 2px solid black;
+  color: rgb(20, 19, 19);
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 6px;
+  margin-top: 10px;
+  margin-left: 10px;
+
+  }
+
+  
+  .supervisor-table table {
+    width: 96%;
+    border-collapse: collapse;
+    margin-left: 20px;
+  }
+  .headingg{
+    margin-left: 20px;
+    font-size: 16px;
+  }
+  
+  .supervisor-table th, .supervisor-table td {
+    /* border: 3px solid #ddd; */
+    padding: 8px;
+    font-size: 16px;
+  }
+  
+  .supervisor-table th {
+    background-color: #FFE2E2;
+    text-align: left;
+    font-size: 16px;
+  }
+  
+

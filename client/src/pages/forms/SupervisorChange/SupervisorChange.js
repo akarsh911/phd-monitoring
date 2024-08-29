@@ -5,6 +5,7 @@ import StudentSideSupervisorChange from "./StudentSideSupervisorChange";
 import HoDSideSupervisorChange from "./HoDSideSupervisorChange";
 import DoRDCSideSupervisorChange from "./DoRDCSideSupervisorChange";
 import DrASideSupervisorChange from "./DrASideSupervisorChange";
+import StatusModal from "../Modal/Modal";
 import { SERVER_URL } from "../../../config";
 import { useParams } from "react-router-dom";
 
@@ -183,12 +184,28 @@ const SupervisorChange = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   const params = useParams();
   return (
-    <div className="studentSidebody-div">
-      <div className="studentSideform-div">
+    <div className='extensionBody-div'>
+      <div className='extensionform-div'>
         <div className="heading">
-          <h1>Request for Change of Supervisor</h1>
+          <h1>Application for Supervisor Change
+          </h1>
+          <div className='top-button'>
+          <button onClick={openModal}>View Status</button>
+          {isModalOpen && <StatusModal closeModal={closeModal} />}
+        </div>
         </div>
         
         <form onSubmit={handleSubmit} className="studentSideform">

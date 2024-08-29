@@ -1,63 +1,64 @@
 import React, { useState,useEffect } from 'react';
 import './Dashboard.css'; 
 import Navbar from './Navbar';
-import ConstituteOfIrb from '../forms/ConstituteOfIrb/ConstituteOfIrb.js';
-import IrbSubmission from '../forms/IrbSubmission';
-import IrbSubmissionSup from '../forms/IrbSubmissionSup';
+
 import StudentList from '../teachers_view/StudentList.js';
-import ResearchProposalExtensionForm from '../forms/FormForExtension/Extension.js';
+import Forms from "./Forms";
+import FormCard from './FormCard';
 import ProgressMonitoring from '../forms/ProgressMonitoring/ProgressMonitoring.js';
-import SupSideIrb from '../forms/ConstituteOfIrb/SupSideIrb.js';
-import Publications from '../forms/Publications/Publications.js';
+
 
 
 const SideLeftMenu = () => {
  
-  const [activeButton, setActiveButton] = useState(null);
-  const [init]=useState(0);
+  const [activeForm, setActiveForm] = useState(null);
 
-  useEffect(() => {setActiveButton(0);}, [init]);
-
-  const handleButtonClick = (buttonId) => {
-    setActiveButton(buttonId);
+  const handleCardClick = (formComponent) => {
+    setActiveForm(formComponent);
   };
 
-  
-  const menuItems = [
-    { text: 'Dashboard', icon: '/graph-1.svg' },
-    { text: 'Supervisors', icon: '/group.svg' },
-    { text: 'Doctoral Comittee', icon: '/iconoutlineshoppingcart.svg' },
-    { text: 'Presentation', icon: '/mdishoppingoutline.svg' },
-    { text: 'Publications', icon: '/interface--chart-line.svg' },
-    { text: 'Patents', icon: '/mdimessageprocessingoutline.svg' },
-    { text: 'Thesis', icon: '/mdicogoutline.svg' },
-    { text: 'Documents', icon: '/iconoutlineshoppingcart.svg' },
-    { text: 'Profile', icon: '/iconoutlineshoppingcart.svg' },
-    { text: 'Sign Out', icon: '/iconoutlineshoppingcart.svg' },
-    { text: 'Forms', icon: '/iconoutlineshoppingcart.svg' }
+  const formCards = [
+    // { component: <StudentList />, title: "Student List", icon: "/graph-1.svg" },
+    // { component: <ResearchProposalExtensionForm />, title: "Research Proposal Extension", icon: "/group.svg" },
+    // { component: <ConstituteOfIrb />, title: "Constitute of IRB", icon: "/iconoutlineshoppingcart.svg" },
+    // { component: <Publications />, title: "Publications", icon: "/interface--chart-line.svg" },
+    // { component: <StatusChange />, title: "Status Change", icon: "/mdimessageprocessingoutline.svg" },
+    // { component: <SupervisorChange />, title: "Supervisor Change", icon: "/mdicogoutline.svg" },
+    // { component: <ProgressMonitoring />, title: "Progress Monitoring", icon: "/iconoutlineshoppingcart.svg" },
+    // { component: <SupAllocation />, title: "Supervisor Allocation", icon: "/iconoutlineshoppingcart.svg" },
+    // { component: <StatusChangeForm />, title: "Status Change Form", icon: "/iconoutlineshoppingcart.svg" },
+    // { component: <IrbSubmission />, title: "IRB Submission", icon: "/iconoutlineshoppingcart.svg" },
+    // { component: <IrbSubmissionSup />, title: "IRB Submission Sup", icon: "/iconoutlineshoppingcart.svg" },
+    // { component: <ListOfExaminer />, title: "List of Examiner", icon: "/iconoutlineshoppingcart.svg" },
+    // { component: <ThesisSubForm />, title: "Thesis Submission", icon: "/iconoutlineshoppingcart.svg" },
+    // {  title: "Thesis Extension", icon: "/iconoutlineshoppingcart.svg" },
+    {  title: "Profile", icon: "/iconoutlineshoppingcart.svg" },
+    {  title: "Dashboard", icon: "/group.svg" },
+    {  title: "Publications", icon: "/iconoutlineshoppingcart.svg" },
+    {  component:<ProgressMonitoring/>,title: "Progress Monitoring", icon: "/iconoutlineshoppingcart.svg" },
+    {  component:<Forms/>,title: "Forms", icon: "/iconoutlineshoppingcart.svg" }
   ];
+
 
   return (  <div>
     
-    <Navbar activeButton={activeButton}/>
+    <Navbar activeButton={activeForm}/>
     
     <div className="side-left-menu">
       
-      <div className="tietlogo">
-      <img src="tiet-logoremovebgpreview-1@2x.png" alt="My Image" />
-      </div>
+       <div className="tietlogo">
+       <img src="../tiet-logoremovebgpreview-1@2x.png" alt="My Image" />
+       </div>
       <div className="icons">
-        {menuItems.map((menuItem, index) => (
-          <button
-            key={index}
-            className={`menu-button ${activeButton === index ? 'active' : ''}`}
-            onClick={() => handleButtonClick(index)}
-          >
-            <img className="icon" alt="" src={menuItem.icon} />
-            <div className="text">{menuItem.text}</div>
-          </button>
-        ))}
-      </div>
+          {formCards.map((formCard, index) => (
+            <FormCard
+              key={index}
+              title={formCard.title}
+              icon={formCard.icon}
+              onClick={() => handleCardClick(formCard.component)}
+            />
+          ))}
+        </div>
     </div >
     {/* Render body component here */}
     <StudentList/>

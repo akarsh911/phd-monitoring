@@ -99,7 +99,7 @@ const BookChapterForm = () => {
           />
         </div>
       ))}
-      <button onClick={handleAddAuthor}>Add more</button>
+      <button className="add-moree" onClick={handleAddAuthor}>Add more</button>
       <div className="form-group">
         <label>Name of book</label>
         <input type="text" onChange={(e)=>setBookName(e.target.value)} required/>
@@ -144,9 +144,9 @@ const BookChapterForm = () => {
           <label>
             <input type="radio" name="status-book" value="published" onChange={(e) => setStatus(e.target.value)} /> Published
           </label>
-          <label>
+          {/* <label>
             <input type="radio" name="status-book" value="submitted" onChange={(e) => setStatus(e.target.value)} /> Submitted
-          </label>
+          </label> */}
         </div>
       </div>
       <div className="form-group">
@@ -154,7 +154,7 @@ const BookChapterForm = () => {
         <input type="file" accept="application/pdf" onChange={(e) => setFile(e.target.files[0])} required/>
       </div>
       <div>
-        <button className='two-button'>Submit</button>
+        <button className='send'>Submit</button>
       </div>
       </form>
     </section>

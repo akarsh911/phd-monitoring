@@ -83,7 +83,7 @@ const StudentSideSupervisorChange = ({
           />
         </div>
       </div>
-
+<div className="first">
       <div className="date-input">
         <label htmlFor="dateOfAdmissionInput">Date of Admission</label>
         <input
@@ -94,6 +94,7 @@ const StudentSideSupervisorChange = ({
           readOnly
           required
         />
+      </div>
       </div>
 
       <div className="first">
@@ -198,7 +199,7 @@ const StudentSideSupervisorChange = ({
           required
         />
       </div>
-
+<div className="first">
       <div className="date-input">
         <label htmlFor="dateAllocatedInput">
           Date of Allocation of Supervisors
@@ -211,6 +212,7 @@ const StudentSideSupervisorChange = ({
           readOnly
           required
         />
+      </div>
       </div>
 
       <div className="data-input" id="appr">
@@ -260,7 +262,7 @@ const StudentSideSupervisorChange = ({
                 value={preference}
                 onChange={(e) => handlePreferenceChange(index, e.target.value)}
                 onFocus={() => setActiveInput(index)}
-                placeholder={`Preference ${index + 1}`}
+                placeholder={`Select Supervisor ${index + 1}`}
               />
               {activeInput === index && filteredSupervisors.length > 0 && (
                 <ul className="filtered-supervisors">

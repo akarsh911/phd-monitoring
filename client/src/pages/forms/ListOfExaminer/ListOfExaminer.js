@@ -3,7 +3,7 @@ import './ListOfExaminer.css';
 import SupSideListOfExaminer from './SupSideListOfExaminer';
  import DirectorSideListOfExaminer from './DirectorSideListOfExaminer';
  import DoRDCSideListOfExaminer from './DoRDCSideListOfExaminer';
-
+ import StatusModal from "../Modal/Modal";
 
 
 const ListOfExaminer = () => {
@@ -155,11 +155,25 @@ const ListOfExaminer = () => {
     
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
-    <div className='studentSidebody-div'>
-      <div className='studentSideform-div'>
+    <div className='extensionBody-div'>
+      <div className='extensionform-div'>
         <div className='heading'>
           <h1>List of Panel of Examiners</h1>
+          <div className='top-button'>
+          <button onClick={openModal}>View Status</button>
+          {isModalOpen && <StatusModal closeModal={closeModal} />}
+        </div>
         </div>
         <form onSubmit={handleSubmit} className='studentSideform'>
 

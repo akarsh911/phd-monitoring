@@ -1,0 +1,25 @@
+.supervisor-table table {
+    width: 96%;
+    border-collapse: collapse;
+    margin-left: 20px;
+    margin-bottom: 20px;
+  }
+  .headingg{
+    margin-left: 20px;
+    font-size: 16px;
+  }
+  
+  .supervisor-table th, .supervisor-table td {
+    /* border: 3px solid #ddd; */
+    padding: 8px;
+    font-size: 14px;
+  }
+  
+  .supervisor-table th {
+    background-color: #FFE2E2;
+    text-align: left;
+    font-size: 14px;
+  }
+  
+  
+

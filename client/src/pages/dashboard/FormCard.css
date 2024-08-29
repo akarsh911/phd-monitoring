@@ -2,7 +2,9 @@
     display: flex;
     align-items: center;
     padding: 10px;
+    padding-bottom: 18px;
     margin: 10px;
+    margin-bottom: 18px;
     border: 1px solid #ddd;
     border-radius: 5px;
     cursor: pointer;
@@ -12,17 +14,21 @@
   }
   
   .form-card:hover {
-    background-color: #f0f0f0;
+    /* background-color: #f0f0f0; */
+    background-color:  rgb(179, 27, 27);
+  color: white;
   }
   
   .form-card-icon {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
+    width: 35x;
+    height: 35px;
+    margin-right: 20px;
+    margin-top: 10px;
   }
   
   .form-card-title {
-    font-size: 12px;
+    margin-top: 10px;
+    font-size: 14px;
     font-weight: bold;
   }
   

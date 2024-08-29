@@ -9,6 +9,7 @@ import DocComSideProgress from './DocComSideProgress';
 import { SERVER_URL } from "../../../config";
 import { toast } from 'react-toastify';
 import { useParams } from 'react-router-dom';
+import StatusModal from "../Modal/Modal";
 
 const ProgressMonitoring = () => {
   const [formData, setFormData] = useState({
@@ -164,11 +165,26 @@ const ProgressMonitoring = () => {
     // Submit form logic
   };
 
+
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
   return (
-    <div className='studentSidebody-div'>
-      <div className='studentSideform-div'>
+    <div className='extensionBody-div'>
+      <div className='extensionform-div'>
         <div className='heading'>
           <h1>Progress Monitoring</h1>
+          <div className='top-button'>
+          <button onClick={openModal}>View Status</button>
+          {isModalOpen && <StatusModal closeModal={closeModal} />}
+        </div>
         </div>
         <form onSubmit={handleSubmit} className='studentSideform'>
         {formData.role === "student" && (

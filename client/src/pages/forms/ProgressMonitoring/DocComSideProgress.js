@@ -29,6 +29,7 @@ const DocComSideProgress = ({ formData, handleDocComRecommendationChange }) => {
           />
           <label htmlFor='notApproved3' className='small-label'>Not Satisfactory</label>
         </div>
+        </div>
         <div className='data-input'>
           <label htmlFor='docComRemarks3' className='small-label'>Remarks (if any)</label>
           <input
@@ -39,7 +40,7 @@ const DocComSideProgress = ({ formData, handleDocComRecommendationChange }) => {
             onChange={(e) => handleDocComRecommendationChange(e, 3, true)}
           />
         </div>
-      </div>
+      
       <div className='data-input' id='appr'>
         <label htmlFor='docComRecommendation4'>Member 4</label>
         <div>
@@ -66,6 +67,7 @@ const DocComSideProgress = ({ formData, handleDocComRecommendationChange }) => {
           />
           <label htmlFor='notApproved4' className='small-label'>Not Satisfactory</label>
         </div>
+        </div>
         <div className='data-input'>
           <label htmlFor='docComRemarks4' className='small-label'>Remarks (if any)</label>
           <input
@@ -76,7 +78,7 @@ const DocComSideProgress = ({ formData, handleDocComRecommendationChange }) => {
             onChange={(e) => handleDocComRecommendationChange(e, 4, true)}
           />
         </div>
-      </div>
+      
       <div className='data-input' id='appr'>
         <label htmlFor='docComRecommendation5'>Member 5</label>
         <div>
@@ -103,6 +105,7 @@ const DocComSideProgress = ({ formData, handleDocComRecommendationChange }) => {
           />
           <label htmlFor='notApproved5' className='small-label'>Not Satisfactory</label>
         </div>
+        </div>
         <div className='data-input'>
           <label htmlFor='docComRemarks5' className='small-label'>Remarks (if any)</label>
           <input
@@ -113,7 +116,7 @@ const DocComSideProgress = ({ formData, handleDocComRecommendationChange }) => {
             onChange={(e) => handleDocComRecommendationChange(e, 5, true)}
           />
         </div>
-      </div>
+      
       <div className='supervisor-button-div'>
         <button className='send' type='submit'>SEND TO HOD</button>
       </div>

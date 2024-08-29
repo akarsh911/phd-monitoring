@@ -149,6 +149,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
             />
           </div>
         </div>
+        <div className="first">
         <div className="date-input">
           <label htmlFor="dateOfAdmissionInput">Date of Admission</label>
           <input
@@ -159,6 +160,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
             readOnly
             required
           />
+        </div>
         </div>
         <div className="data-input">
           <label htmlFor="researchTitleInput">Title of PhD Thesis</label>

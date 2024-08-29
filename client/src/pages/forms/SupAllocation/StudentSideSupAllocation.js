@@ -32,7 +32,7 @@ const StudentSideSupAllocation = ({ formData, handleChange }) => {
           />
         </div>
       </div>
-
+       <div className="first">
       <div className='date-input'>
         <label htmlFor="dateOfAdmissionInput">Date of Admission</label>
         <input
@@ -43,6 +43,7 @@ const StudentSideSupAllocation = ({ formData, handleChange }) => {
           readOnly
           required
         />
+      </div>
       </div>
 
       <div className='first'>
@@ -105,7 +106,7 @@ const StudentSideSupAllocation = ({ formData, handleChange }) => {
   </select>
 </div>
 <div className="data-input">
-<label>Select 5 tentative names of Supervisors in order</label><br /><br />
+<label>Select 5 tentative names of Supervisors in order</label>
             <select name="teacher1" value={formData.teacher1} onChange={handleChange}>
                 <option value="">Select Teacher 1</option>
                 {/* Add teacher options here */}
