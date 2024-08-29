@@ -38,12 +38,17 @@ class IrbFormController extends Controller
         $studentId = $user->roll_no;
         $form = IrbSubForm::where('student_id', $studentId)->first();
 
-        if ($form) {
-            $newForm = Irb
+        if (!$form) {
+            $newForm = new IrbForm();
+            $newForm->student_id = $studentId;
+            $newForm->form_type = 'draft';
+            $newForm->save();
+            return response()->json($newForm->fullForm($user), 200);
         } else {
-            return response()->json(['message' => 'Form not found'], 404);
+            return response()->json($form->fullForm($user), 200);
         }
     }
+    protected function handleHo
 
     
 

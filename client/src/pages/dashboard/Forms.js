@@ -23,7 +23,7 @@ const Forms = () => {
       case 'Extension for Submission of Research Proposal':
         return <ThesisExtensionForm />;
       case 'Supervisor Change':
-        return <SupervisorChange />;
+        return <SupervisorChange />;2
       default:
         return (
           <div className='StudentSidebody-div'>
@@ -38,6 +38,7 @@ const Forms = () => {
                 <button onClick={() => setSelectedForm('IRB Submission')}>IRB Submission</button>
                 <button onClick={() => setSelectedForm('Extension for Submission of Research Proposal')}>Extension for Submission of Research Proposal</button>
                 <button onClick={() => setSelectedForm('Supervisor Change')}>Supervisor Change</button>
+                
               </div>
             </div>
           </div>
