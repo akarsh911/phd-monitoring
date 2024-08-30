@@ -39,7 +39,7 @@ const DoRDCSideIrb = ({ formData, options, handleDoRDCChange }) => {
               ))}
             </select>
           </div>
-          <div className='two-button'>
+          {/* <div className='two-button'> */}
           <div className='supervisor-button-div'>
         <button className='send' type="submit">Disapprove</button>
       </div>
@@ -47,7 +47,7 @@ const DoRDCSideIrb = ({ formData, options, handleDoRDCChange }) => {
         <button className='send' type="submit">Approve send to DR(A)</button>
       </div>
       </div>
-        </div>
+        // </div>
       );
 };
 

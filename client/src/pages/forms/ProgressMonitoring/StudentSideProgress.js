@@ -139,8 +139,6 @@ const StudentSideProgress = ({ formData }) => {
         required
       />
       </div>
-      </div>
-<div className="first">
       <div className='date-input'>
         <label htmlFor="irbMeetingDateInput">Date of IRB meeting</label>
         <input
@@ -152,7 +150,10 @@ const StudentSideProgress = ({ formData }) => {
           required
         />
       </div>
+     
       </div>
+
+     
       <div className='data-input'>
         <label htmlFor="researchTitleInput">Title of PhD Thesis</label>
         <input

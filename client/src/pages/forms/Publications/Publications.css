@@ -179,27 +179,42 @@ flex-direction: column;
 align-items: center;
 justify-items: center;
 overflow-x: hidden;
-overflow-y: hidden;
-  
-} 
-
-
+overflow-y: auto;
+}
 .StudentSidebody-div{
   /* position: relative; Changed from absolute to relative */
-  min-height: 1000px; /* Ensure the content area is tall enough */
+  /* min-height: 1000px;  */
   /* width: calc(100% - 290px); Adjust width to account for the sidebar */
   margin-top: 109px; /* Ensure the content starts below the navbar */
   margin-left: 222px;
   background-color: white;
-  overflow-y: hidden; /* Enable vertical scrolling */
+  overflow-y: auto; /* Enable vertical scrolling */
+  
+  -webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  scrollbar-width: none; /* Firefox */
+  }
+  
+  /* Hide scrollbar for WebKit browsers */
+  .StudentSideBody-div::-webkit-scrollbar {
+  display: none;
+  }
+  
+.group{
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  
 }
 
-
 .button-group {
-  margin-top: -8px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 /* .button-group button {
@@ -216,7 +231,8 @@ overflow-y: hidden;
 
 
 .button-group button {
-  padding: 18px 30px; /* Adjusted padding for better aesthetics */
+  width: 400px;
+  padding: 18px 30px; 
   font-size: 16px;
   font-weight: 600; /* Makes the text bold */
   color: #fff;

@@ -159,7 +159,7 @@ const SupAllocation = () => {
 
   return (
     <div className='extensionBody-div'>
-      <div className='extensionFody-div'>
+      <div className='extensionform-div'>
         <div className='heading'>
           <h1>Supervisor Allocation</h1>
           <div className='top-button'>

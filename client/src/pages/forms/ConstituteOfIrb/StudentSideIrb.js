@@ -135,6 +135,7 @@ const StudentSideIrb = ({ formData }) => {
        
        
       </div>
+      <div className="first">
       <div className='date-input'>
         <label htmlFor="admissionDateInput">Date of Admission</label>
           <input
@@ -146,6 +147,7 @@ const StudentSideIrb = ({ formData }) => {
             readOnly={!isEditable}
             required
           />
+        </div>
         </div>
       <div className='first'>
         <div className='data-input'>

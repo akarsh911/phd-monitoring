@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import IrbSup from "./pages/forms/IrbSubmissionSup";
 
 
 
@@ -22,7 +23,7 @@ const App = () => {
           
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/students" element={<SupDashboard/>}/>
-          <Route path="/dashboard/students/forms/irbconstitution/:id" element={<ConstituteofIrb/>} />
+          <Route path="/dashboard/students/forms/irbconstitution/:id" element={<IrbSup/>} />
         </Routes>
       </Router>
     </div>

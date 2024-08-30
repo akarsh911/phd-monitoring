@@ -66,13 +66,14 @@ const IrbSup = () => {
   };
 
   return (
-    <div className='irbSubSupbody-div'>
-      <div className='irbSubSupform-div'>
+    <div className='studentsideBody-div'>
+      <div className='studentsideform-div'>
         <div className='heading'>
-          <h1>IRB SUBMISSION FORM</h1>
+          {/* <h1>IRB SUBMISSION FORM</h1> */}
         </div>
-        <form onSubmit={handleSubmit} id="form1" className='irbSubSupform'>
-          <div className='first'>
+        <form onSubmit={handleSubmit} >
+          {/* <div className="hodSide-form"> */}
+       <div className="first">
           <div className='data-input'>
           <label htmlFor="firstNameInput"> Name</label>
           <input
@@ -84,6 +85,8 @@ const IrbSup = () => {
             required
           />
         </div>
+        </div>
+        <div className='first'>
         <div className='data-input'>
           <label htmlFor="firstNameInput"> Department</label>
           <input
@@ -135,9 +138,10 @@ const IrbSup = () => {
 <div className='supervisor-button-div'>
         <button className='send' type='submit'>SEND TO HOD</button>
       </div>
+      {/* </div> */}
 
 
-      <div className='hodSide-form'>
+      {/* <div className='hodSide-form'> */}
       <div className='data-input' id='appr'>
         <label htmlFor="hodRecommendation">Recommendation of HOD</label>
         <div>
@@ -177,10 +181,10 @@ const IrbSup = () => {
       <div className='supervisor-button-div'>
         <button className='send' type="submit">SEND TO DR(A)</button>
       </div>
-    </div>
+    {/* </div> */}
 
 
-    <div className='DrASide-form'>
+    {/* <div className='DrASide-form'> */}
       <div className='data-input' id='appr'>
         <label htmlFor="hodRecommendation">Recommendation of DR(A)</label>
         <div>
@@ -220,8 +224,8 @@ const IrbSup = () => {
       <div className='supervisor-button-div'>
         <button className='send' type="submit">SEND TO DoRDC</button>
       </div>
-    </div>
-    <div className='DoRDCSide-form'>
+    {/* </div> */}
+    {/* <div className='DoRDCSide-form'> */}
       <div className='data-input' id='appr'>
         <label htmlFor="hodRecommendation">Recommendation of DoRDC</label>
         <div>
@@ -262,7 +266,7 @@ const IrbSup = () => {
         <button className='send' type='submit'>SUBMIT</button>
       </div>
     
-    </div>
+    {/* </div> */}
         
         </form>
         </div>

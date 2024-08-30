@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Dashboard.css'; 
 import '../forms/Publications/Publications.css';
+import './Forms.css';
 import ConstituteOfIrb from '../forms/ConstituteOfIrb/ConstituteOfIrb.js';
 import IrbSubmission from '../forms/IrbSubmission.js';
 import StatusChange from '../forms/ChangeOfStatus/StatusChange.js';
@@ -37,21 +38,25 @@ const Forms = () => {
             return <Publications/>;
       default:
         return (
-          <div className='StudentSidebody-div'>
-            <div className='StudentSideform-div'>
+          <div className='StudenttSidebody-div'>
+            <div className='StudenttSideform-div'>
               <div className='heading'>
                 <h1>Forms</h1>
               </div>
+              <div className="group">
               <div className='button-group'>
                 <button onClick={() => setSelectedForm('Constitute of IRB')}>Constitute of Institutional Research Board</button>
                 <button onClick={() => setSelectedForm('Change of Status')}>Form for Change of Status</button>
                 <button onClick={() => setSelectedForm('Supervisor Allocation')}>Supervisor Allocation</button>
                 <button onClick={() => setSelectedForm('IRB Submission')}>IRB Submission</button>
                 <button onClick={() => setSelectedForm('Extension for Thesis Submission')}>Extension for Thesis Submission</button>
+                </div>
+                <div className='button-group'>
                 <button onClick={() => setSelectedForm('Supervisor Change')}>Supervisor Change</button>
                 <button onClick={() => setSelectedForm('List of Examiner')}>List of Examiner</button>
                 <button onClick={() => setSelectedForm('Thesis Submission')}>Thesis Submission</button>
                 <button onClick={() => setSelectedForm('Publications')}>Publications</button>
+              </div>
               </div>
             </div>
           </div>

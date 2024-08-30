@@ -1,0 +1,26 @@
+
+.StudenttSideform-div{
+    height:600px;
+    /* width:1710px; */
+    color:black;
+  /* background-color: #eaeaea; */
+  display: flex;
+  flex-direction: column;
+    margin: 20px;
+  align-items: center;
+  justify-items: center;
+  overflow-x: hidden;
+  overflow-y: hidden;
+    
+  } 
+  
+  
+  .StudenttSidebody-div{
+    /* position: relative; Changed from absolute to relative */
+    min-height: 400px; /* Ensure the content area is tall enough */
+    /* width: calc(100% - 290px); Adjust width to account for the sidebar */
+    margin-top: 109px; /* Ensure the content starts below the navbar */
+    margin-left: 222px;
+    background-color: white;
+    overflow-y: hidden; /* Enable vertical scrolling */
+  }
