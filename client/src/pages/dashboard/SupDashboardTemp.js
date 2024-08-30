@@ -32,11 +32,11 @@ const SideLeftMenu = () => {
     // { component: <ListOfExaminer />, title: "List of Examiner", icon: "/iconoutlineshoppingcart.svg" },
     // { component: <ThesisSubForm />, title: "Thesis Submission", icon: "/iconoutlineshoppingcart.svg" },
     // {  title: "Thesis Extension", icon: "/iconoutlineshoppingcart.svg" },
-    {  title: "Profile", icon: "/iconoutlineshoppingcart.svg" },
-    {  title: "Dashboard", icon: "/group.svg" },
-    {  title: "Publications", icon: "/iconoutlineshoppingcart.svg" },
-    {  component:<ProgressMonitoring/>,title: "Progress Monitoring", icon: "/iconoutlineshoppingcart.svg" },
-    {  component:<Forms/>,title: "Forms", icon: "/iconoutlineshoppingcart.svg" }
+    {  title: "Profile", icon: <i class="fa-solid fa-user"></i> },
+    {  title: "Dashboard", icon: <i class="fa-solid fa-chart-simple"></i> },
+    {  title: "Publications", icon: <i class="fa-sharp fa-solid fa-newspaper"></i> },
+    {  component:<ProgressMonitoring/>,title: "Progress Monitoring", icon: <i class="fa-solid fa-bars-progress"></i>},
+    {  component:<Forms/>,title: "Forms", icon: <i class="fa-solid fa-file-lines"></i> }
   ];
 
 
