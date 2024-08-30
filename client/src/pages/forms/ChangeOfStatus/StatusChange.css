@@ -1,15 +1,26 @@
 .extensionBody-div {
     position: relative; /* Changed from absolute to relative */
-    min-height: 3000px; /* Ensure the content area is tall enough */
+   
     width: calc(100% - 730px); /* Adjust width to account for the sidebar */
     margin-top: 65px; /* Ensure the content starts below the navbar */
     margin-left: 230px;
     background-color: white;
     overflow-y: auto; /* Enable vertical scrolling */
+    -webkit-scrollbar {
+        display: none;
+    }
+    
+    /* Hide scrollbar for IE, Edge and Firefox */
+    scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for WebKit browsers */
+.extensionBody-div::-webkit-scrollbar {
+    display: none;
 }
 
 .extensionform-div {
-    height: 4000px;
+    height: 664px;
     color: black;
     background-color: white;
     display: flex;
