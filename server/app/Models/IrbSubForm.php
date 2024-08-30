@@ -60,6 +60,8 @@ class IrbSubForm extends Model
             'department' => $this->student->department->name,
             'cgpa' => $this->student->user->phone,
             'phd_title' => $this->student->phd_title,
+            'address' => $this->student->user->address,
+            'formtype' => $this->form_type,
             'role'=>$user->role->role,
             'objectives' => $this->objectives->map(function($objective){
                 return [
