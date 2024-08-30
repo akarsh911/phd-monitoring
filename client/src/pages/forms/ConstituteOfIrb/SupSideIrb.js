@@ -31,7 +31,11 @@ const SupSideIrb = ({
   //   }
   // }, [formData.supervisor_lock, formData.nominees, formData.nomineeCognates]);
   
+ 
+  const [showOptions, setShowOptions] = useState([false, false, false]);
 
+
+  
   const handleSearchChange = (index, value) => {
     const newSearchQuery = [...searchQuery];
     newSearchQuery[index] = value;
@@ -104,6 +108,13 @@ const SupSideIrb = ({
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleInputFocus = (index) => {
+    // Show options when the input field is focused
+    const updatedShowOptions = [...showOptions];
+    updatedShowOptions[index] = true;
+    setShowOptions(updatedShowOptions);
   };
 
   const filteredOptions = (index) => {
@@ -231,28 +242,25 @@ const SupSideIrb = ({
       </div>
 
       <div className="data-input">
-        <label>
-          List of 3 nominees of the DoRDC in cognate area from the institute
-        </label>
-        <table>
-          <tbody>
-            {selectedNominee.slice(0, 3).map((nominee, index) => (
-              // console.log("hi : "+JSON.stringify(nominee)),
-              <tr key={index}>
-                <td>
-                  <div className="select-wrapper">
-                    <input
-                      type="text"
-                      className="search-bar"
-                      placeholder="Search by name, department, email, or id"
-                      value={searchQuery[index]}
-                      onChange={(e) =>
-                        handleSearchChange(index, e.target.value)
-                      }
-                      disabled={!isEditable}
-                    />
-                    {/* {console.log(index)} */}
-                    {/* {console.log(selectedNominee[index])} */}
+      <label>
+        List of 3 nominees of the DoRDC in cognate area from the institute
+      </label>
+      <table>
+        <tbody>
+          {selectedNominee.slice(0, 3).map((nominee, index) => (
+            <tr key={index}>
+              <td>
+                <div className="select-wrapper">
+                  <input
+                    type="text"
+                    className="search-bar"
+                    placeholder="Search by Name or Department"
+                    value={searchQuery[index]}
+                    onChange={(e) => handleSearchChange(index, e.target.value)}
+                    onFocus={() => handleInputFocus(index)}
+                    disabled={!isEditable}
+                  />
+                  {showOptions[index] && (
                     <select
                       onChange={(e) =>
                         handleNomineeChangeWithCheck(
@@ -271,8 +279,7 @@ const SupSideIrb = ({
                       {filteredOptions(index).length > 0 ? (
                         filteredOptions(index).map((option, idx) => (
                           <option key={idx} value={option.faculty_code}>
-                            {option.name} ({option.department}, {option.email}
-                        )
+                            {`${option.name} (${option.department})`}
                           </option>
                         ))
                       ) : (
@@ -281,13 +288,22 @@ const SupSideIrb = ({
                         </option>
                       )}
                     </select>
+                  )}
+                </div>
+                {selectedNominee[index] && (
+                  <div className="nominee-details">
+                    <p>{`Name: ${selectedNominee[index].name}`}</p>
+                    <p>{`Department: ${selectedNominee[index].department}`}</p>
+                    <p>{`Email ID: ${selectedNominee[index].email}`}</p>
                   </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
      
       {formData.role === "faculty" && isEditable && (
         <div className="supervisor-button-div">
