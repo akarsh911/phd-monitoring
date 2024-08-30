@@ -1,6 +1,6 @@
 .extensionBody-div {
   position: relative; /* Changed from absolute to relative */
-  min-height: 3000px; /* Ensure the content area is tall enough */
+  /* min-height: 1000px;  */
   width: calc(100% - 730px); /* Adjust width to account for the sidebar */
   margin-top: 65px; /* Ensure the content starts below the navbar */
   margin-left: 230px;
@@ -9,7 +9,7 @@
 }
 
 .extensionform-div {
-  height: 4000px;
+  height: 664px;
   color: black;
   background-color: white;
   display: flex;

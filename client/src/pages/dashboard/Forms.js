@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Dashboard.css'; 
 import '../forms/Publications/Publications.css';
+import './Forms.css';
 import ConstituteOfIrb from '../forms/ConstituteOfIrb/ConstituteOfIrb.js';
 import IrbSubmission from '../forms/IrbSubmission.js';
 import StatusChange from '../forms/ChangeOfStatus/StatusChange.js';
@@ -37,8 +38,8 @@ const Forms = () => {
             return <Publications/>;
       default:
         return (
-          <div className='StudentSidebody-div'>
-            <div className='StudentSideform-div'>
+          <div className='StudenttSidebody-div'>
+            <div className='StudenttSideform-div'>
               <div className='heading'>
                 <h1>Forms</h1>
               </div>

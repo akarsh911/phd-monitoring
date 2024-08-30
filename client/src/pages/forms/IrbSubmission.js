@@ -264,8 +264,9 @@ const Irb = () => {
             </div>
           )}
         </form>
-      </div>
         <IrbSup/>
+      </div>
+        
     </div>
   
   );
