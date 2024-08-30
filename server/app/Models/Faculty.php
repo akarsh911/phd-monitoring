@@ -9,6 +9,8 @@ class Faculty extends Model
 {
     use HasFactory;
     protected $table = 'faculty';
+    protected $primaryKey = 'faculty_code'; 
+    public $incrementing = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -19,6 +21,8 @@ class Faculty extends Model
         'designation',
         'department_id',
         'faculty_code',
+        'supervised_campus',
+        'supervied_outside',
     ];
 
     /**

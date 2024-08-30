@@ -28,10 +28,11 @@ class IrbSubForm extends Model
         'revised_irb_pdf',
         'status',
         'stage',
-        'student_comments',
-        'supervisor_comments',
-        'phd_coordinator_comments',
-        'hod_comments',
+        'supervisor_approval',
+        'hod_approval',
+        'phd_coordinator_approval',
+        'dra_approval',
+        'dordc_approval',
         'student_lock',
         'supervisor_lock',
         'hod_lock',
@@ -40,7 +41,7 @@ class IrbSubForm extends Model
         'SuperVisorComments',
         'HODComments',
         'DORDCComments',
-        'DRAComments'
+        'DRAComments',
         
     ];
 
@@ -73,7 +74,9 @@ class IrbSubForm extends Model
                 return [
                     'name' => $supervisor->user->name(),
                     'designation' => $supervisor->designation,
-                    'department' => $supervisor->department->name
+                    'department' => $supervisor->department->name,
+                    'outside' => $supervisor->supervised_outside,
+                    'campus' => $supervisor->supervised_campus,
                 ];
             }),
             'status' => $this->status,
@@ -88,7 +91,7 @@ class IrbSubForm extends Model
             'supervisor_lock' => $this->supervisor_lock,
             'dordc_lock' => $this->dordc_lock,
             'dra_lock' => $this->dra_lock,
-            'supervisorApprovals' => $this->researchExtentionsApprovals->map(function($approval){
+            'supervisorApprovals' => $this->supervisorApprovals->map(function($approval){
                 return [
                     'supervisor_id' => $approval->supervisor_id,
                     'status' => $approval->status,
@@ -96,7 +99,6 @@ class IrbSubForm extends Model
                     'name' => $approval->supervisor->user->name(),
                 ];
             }),
-            'user_name'=>$user->name(),
         ];
     }
     // Relationships
@@ -113,5 +115,11 @@ class IrbSubForm extends Model
     public function objectives()
     {
         return $this->hasMany(IrbFormObjective::class, 'irb_form_id', 'id');
+    }
+
+    public function supervisorApprovals()
+    {
+        
+        return $this->hasMany(IrbSupervisorApproval::class,'irb_sub_form_id','id');
     }
 }

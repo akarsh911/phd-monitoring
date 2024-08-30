@@ -16,19 +16,28 @@ return new class extends Migration
             $table->primary('id');
             $table->integer('student_id')->unsigned()->index();
             $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
-            $table->enum('form_type',['draft','revised']);
-            $table->text('phd_title');
+            $table->enum('form_type',['draft','revised'])->default('draft');
+            $table->text('phd_title')->nullable();
             $table->text('revised_phd_title')->nullable();
-            $table->text('irb_pdf');
+            $table->text('irb_pdf')->nullable();
             $table->text('revised_irb_pdf')->nullable();
-            $table->text('date_of_irb');
+            $table->text('date_of_irb')->nullable();
             $table->enum('status',['awaited','approved','rejected'])->default('awaited');
-            $table->enum('stage',['student','supervisor','phd_coordinator','hod'])->default('student');
-            $table->text('student_comments')->nullable();
-            $table->text('supervisor_comments')->nullable();
-            $table->text('phd_coordinator_comments')->nullable();
-            $table->text('hod_comments')->nullable();
-
+            $table->enum('stage',['student','supervisor','phd_coordinator','hod','dordc','dra'])->default('student');
+            $table->enum('supervisor_approval',['approved','rejected','awaited'])->nullable();
+            $table->enum('hod_approval',['approved','rejected','awaited'])->nullable();
+            $table->enum('phd_coordinator_approval',['approved','rejected','awaited'])->nullable();
+            $table->enum('dra_approval',['approved','rejected','awaited'])->nullable();
+            $table->enum('dordc_approval',['approved','rejected','awaited'])->nullable();
+            $table->boolean('student_lock')->default(false); 
+            $table->boolean('supervisor_lock')->default(true);
+            $table->boolean('hod_lock')->default(true);
+            $table->boolean('dordc_lock')->default(true);
+            $table->boolean('dra_lock')->default(true);
+            $table->text('SuperVisorComments')->nullable();
+            $table->text('HODComments')->nullable();
+            $table->text('DORDCComments')->nullable();
+            $table->text('DRAComments')->nullable();
 
             $table->timestamps();
         });

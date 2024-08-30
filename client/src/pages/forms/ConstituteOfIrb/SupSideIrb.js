@@ -260,8 +260,8 @@ const SupSideIrb = ({
                       {filteredOptions(index).length > 0 ? (
                         filteredOptions(index).map((option, idx) => (
                           <option key={idx} value={option.faculty_code}>
-                            {option.name} ({option.department}, {option.email},{" "}
-                            {option.faculty_code})
+                            {option.name} ({option.department}, {option.email}
+                        )
                           </option>
                         ))
                       ) : (

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './IrbSubmissionSup.css';
 
-const Irb = () => {
+const IrbSup = () => {
   const initialFormData = {
     name: '',
     department: '',
@@ -363,4 +363,4 @@ const Irb = () => {
   );
 };
 
-export default Irb;
+export default IrbSup;

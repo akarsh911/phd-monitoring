@@ -10,7 +10,9 @@ class Student extends Model
     use HasFactory;
 
     protected $table = 'students';
-
+    protected $primaryKey = 'roll_no'; 
+    public $incrementing = false;
+    
     protected $fillable = [
         'user_id',
         'roll_no',

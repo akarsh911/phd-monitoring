@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./IrbSubmission.css";
 import StatusModal from "./Modal/Modal";
+import IrbSup from "./IrbSubmissionSup";
 
 const Irb = () => {
   const [formData, setFormData] = useState({
@@ -264,7 +265,9 @@ const Irb = () => {
           )}
         </form>
       </div>
+        <IrbSup/>
     </div>
+  
   );
 };
 
