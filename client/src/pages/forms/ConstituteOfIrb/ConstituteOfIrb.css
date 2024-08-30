@@ -125,3 +125,38 @@
   margin-bottom: 30px;
   margin-top: 25px;
 }
+
+
+
+.suggestions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.expert-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+.expert-form input {
+  flex: 1 1 calc(50% - 20px); /* Width of each input for paired fields */
+  box-sizing: border-box;
+}
+
+.expert-form .full-width {
+  flex: 1 1 100%; /* Full width for the Institution field */
+}
+
+.suggestion-item {
+  background-color: #f0f0f0;
+  padding: 8px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #e0e0e0;
+}

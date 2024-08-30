@@ -293,86 +293,94 @@ const HodSideIrb = ({
             {experts.map((expert, index) => (
               <tr key={index}>
                 <td>
-                  <div className="suggestions-list">
-                    <input
-                      type="text"
-                      placeholder='First Name'
-                      autoComplete='allo'
-                      value={expert.firstName}
-                      onChange={(e) => {
-                        handleExpertChange(index, 'firstName', e.target.value);
-                        fetchSuggestions(e.target.value, index);
-                      }}
-                      readOnly={formData.hod_lock}
-                    />
-                    <input
-                      type="text"
-                      placeholder='Last Name'
-                      value={expert.lastName}
-                      autoComplete='allo'
-                      onChange={(e) => handleExpertChange(index, 'lastName', e.target.value)}
-                      readOnly={formData.hod_lock}
-                    />
-                    {expert.suggestions.map((suggestion, i) => (
-                      <div
-                        key={i}
-                        className="suggestion-item"
-                        onClick={() => handleSuggestionSelect(index, suggestion)}
-                      >
-                        {`${suggestion.first_name} ${suggestion.last_name} - ${suggestion.institution} (${suggestion.department})`}
-                      </div>
-                    ))}
-                  </div>
-                  <input
-                    type="text"
-                    value={expert.email}
-                    onChange={(e) => handleExpertChange(index, 'email', e.target.value)}
-                    placeholder='Email'
-                    readOnly={formData.hod_lock}
-                  />
-                  <input
-                    type="text"
-                    value={expert.designation}
-                    onChange={(e) => handleExpertChange(index, 'designation', e.target.value)}
-                    placeholder='Designation'
-                    readOnly={formData.hod_lock}
-                  />
-                  <input
-                    type="text"
-                    value={expert.department}
-                    onChange={(e) => handleExpertChange(index, 'department', e.target.value)}
-                    placeholder='Department'
-                    readOnly={formData.hod_lock}
-                  />
-                  <div className="suggestions-list">
-                    <input
-                      type="text"
-                      value={expert.institution}
-                      autoComplete='allo'
-                      onChange={(e) => {
-                        handleExpertChange(index, 'institution', e.target.value);
-                        fetchInstituteSuggestions(e.target.value, index);
-                      }}
-                      placeholder='institution'
-                      readOnly={formData.hod_lock}
-                    />
-                    {expert.instituteSuggestions.map((suggestion, i) => (
-                      <div
-                        key={i}
-                        className="suggestion-item"
-                        onClick={() => handleInstituteSuggestionSelect(index, suggestion)}
-                      >
-                        {suggestion}
-                      </div>
-                    ))}
-                  </div>
-                  <input
-                    type="text"
-                    value={expert.phone}
-                    onChange={(e) => handleExpertChange(index, 'phone', e.target.value)}
-                    placeholder='Phone Number'
-                    readOnly={formData.hod_lock}
-                  />
+                <div className="expert-form">
+  {/* <div className="suggestions-list"> */}
+    <input
+      type="text"
+      placeholder="First Name"
+      autoComplete="allo"
+      value={expert.firstName}
+      onChange={(e) => {
+        handleExpertChange(index, "firstName", e.target.value);
+        fetchSuggestions(e.target.value, index);
+      }}
+      readOnly={formData.hod_lock}
+    />
+    {/* </div> */}
+    {/* <div className="suggestion-list"> */}
+    <input
+      type="text"
+      placeholder="Last Name"
+      value={expert.lastName}
+      autoComplete="allo"
+      onChange={(e) => handleExpertChange(index, "lastName", e.target.value)}
+      readOnly={formData.hod_lock}
+    />
+    {expert.suggestions.map((suggestion, i) => (
+      <div
+        key={i}
+        className="suggestion-item"
+        onClick={() => handleSuggestionSelect(index, suggestion)}
+      >
+        {`${suggestion.first_name} ${suggestion.last_name} - ${suggestion.institution} (${suggestion.department})`}
+      </div>
+    ))}
+ {/* </div> */}
+
+  <input
+    type="text"
+    value={expert.email}
+    onChange={(e) => handleExpertChange(index, "email", e.target.value)}
+    placeholder="Email"
+    readOnly={formData.hod_lock}
+  />
+  <input
+    type="text"
+    value={expert.phone}
+    onChange={(e) => handleExpertChange(index, "phone", e.target.value)}
+    placeholder="Mobile No."
+    readOnly={formData.hod_lock}
+  />
+  <input
+    type="text"
+    value={expert.designation}
+    onChange={(e) => handleExpertChange(index, "designation", e.target.value)}
+    placeholder="Designation"
+    readOnly={formData.hod_lock}
+  />
+  <input
+    type="text"
+    value={expert.department}
+    onChange={(e) => handleExpertChange(index, "department", e.target.value)}
+    placeholder="Department"
+    readOnly={formData.hod_lock}
+  />
+
+  <div className="suggestions-list full-width">
+    <input
+      type="text"
+      value={expert.institution}
+      autoComplete="allo"
+      onChange={(e) => {
+        handleExpertChange(index, "institution", e.target.value);
+        fetchInstituteSuggestions(e.target.value, index);
+      }}
+      placeholder="Institution"
+      readOnly={formData.hod_lock}
+    />
+    {expert.instituteSuggestions.map((suggestion, i) => (
+      <div
+        key={i}
+        className="suggestion-item"
+        onClick={() => handleInstituteSuggestionSelect(index, suggestion)}
+      >
+        {suggestion}
+      </div>
+    ))}
+  </div>
+</div>
+
+                 
                   {!formData.hod_lock && (
                     <button type="button" onClick={() => addExpert(index)}>{expert.id ? "Edit" : "Save"}</button>
                   )}

@@ -193,13 +193,18 @@ overflow-y: hidden;
   background-color: white;
   overflow-y: hidden; /* Enable vertical scrolling */
 }
-
+.group{
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  
+}
 
 .button-group {
-  margin-top: -8px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 }
 
 /* .button-group button {
@@ -216,7 +221,8 @@ overflow-y: hidden;
 
 
 .button-group button {
-  padding: 18px 30px; /* Adjusted padding for better aesthetics */
+  width: 400px;
+  padding: 18px 30px; 
   font-size: 16px;
   font-weight: 600; /* Makes the text bold */
   color: #fff;

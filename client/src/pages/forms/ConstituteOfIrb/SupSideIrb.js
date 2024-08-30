@@ -218,6 +218,17 @@ const SupSideIrb = ({
           </label>
         </div>
       </div>
+      <div className="data-input">
+        <label htmlFor="supCom">Remarks (if any)</label>
+        <input
+          type="text"
+          className="comments"
+          id="supCom"
+          value={comments}
+          onChange={(e) => setComments(e.target.value)}
+          disabled={!isEditable}
+        />
+      </div>
 
       <div className="data-input">
         <label>
@@ -277,17 +288,7 @@ const SupSideIrb = ({
           </tbody>
         </table>
       </div>
-      <div className="data-input">
-        <label htmlFor="supCom">Comments</label>
-        <input
-          type="text"
-          className="comments"
-          id="supCom"
-          value={comments}
-          onChange={(e) => setComments(e.target.value)}
-          disabled={!isEditable}
-        />
-      </div>
+     
       {formData.role === "faculty" && isEditable && (
         <div className="supervisor-button-div">
           <button className="send" type="button" onClick={updatePrefs}>
