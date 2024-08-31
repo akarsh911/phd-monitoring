@@ -81,7 +81,7 @@ const IrbSup = () => {
   };
 
 
-  const handleChange = (e, formId) => {q
+  const handleChange = (e, formId) => {
     const { name, value } = e.target;
     if (formId === "form1") {
       setFormData(prevData => ({
