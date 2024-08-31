@@ -7,6 +7,7 @@ import DoRDCSideIrb from "./DoRDCSideIrb";
 import { SERVER_URL } from "../../../config";
 import { useParams } from "react-router-dom";
 import StatusModal from "../Modal/Modal";
+import { toast } from "react-toastify";
 
 const Irb = () => {
   const [formData, setFormData] = useState({
@@ -57,6 +58,7 @@ const Irb = () => {
           },
           body: JSON.stringify({
             student_id: params.id,
+     
           }), // Replace with actual id
         });
         // const response=await
@@ -64,7 +66,7 @@ const Irb = () => {
         if (response.ok) {
           const data = await response.json();
           console.log(data);
-          if (data.nominee_cognates.length < 3) {
+          if (data.nominee_cognates?.length < 3) {
             for (let i = data.nominee_cognates.length; i < 3; i++) {
               data.nominee_cognates.push({});
             }
@@ -80,10 +82,10 @@ const Irb = () => {
               .split("T")[0],
             regno: data.roll_no,
             department: data.department,
-            semester: "", // Map accordingly if available
-            session: "", // Map accordingly if available
+            semester: data.semester, // Map accordingly if available
+            session: data.semester, // Map accordingly if available
             cgpa: data.cgpa,
-            chairman: data.chairman.name,
+            chairman: data.chairman?.name,
             supervisor: data.supervisors.map((s) => s.name).join(", "),
             experts: data.outside_experts?.name || ["", "", ""], // Map accordingly if available
             nominees: data.nominee_cognates || [{}, {}, {}], // Map accordingly if available
@@ -102,12 +104,12 @@ const Irb = () => {
             status: data.status,
           });
           const update =
-            data.form_histories[data.form_histories.length - 1].change;
+            data.form_histories[data.form_histories?.length - 1]?.change;
           const time = new Date(
-            data.form_histories[data.form_histories.length - 1].created_at
+            data.form_histories[data.form_histories?.length - 1]?.created_at
           ).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
           const date = new Date(
-            data.form_histories[data.form_histories.length - 1].created_at
+            data.form_histories[data.form_histories?.length - 1]?.created_at
           ).toLocaleDateString();
           const formattedDateTime = `${date} at ${time}`;
           setLastUpdate({
@@ -128,6 +130,7 @@ const Irb = () => {
           error
             .json()
             .then((data) => {
+              toast.error(data.message);
               if (error.status === 422) {
                 alert(data.message);
               } else if (error.status === 401) {
@@ -140,12 +143,13 @@ const Irb = () => {
               console.error("Error parsing JSON:", jsonError);
             });
         } else {
+
           console.error("Unexpected error:", error);
         }
       }
     };
 
-    // fetchData();
+    fetchData();
   }, []);
 
   const handleExpertChange = (index, value) => {

@@ -182,6 +182,9 @@ class IrbFormController extends Controller
 
         try {
             $user = Auth::user();
+            $request->validate([
+                'semester' => 'required|integer',
+            ]);
             if ($user->role->role == 'student') {
                 $student = Student::findByUserId($user->id);
                 $irbForm = $student->irbForm;
@@ -194,6 +197,7 @@ class IrbFormController extends Controller
                         'status' => 'awaited',
                         'supervisor_lock' => false,
                         'student_lock' => true,
+                        'semester' => $request->semester,
                     ]);
                     IrbFormHistory::create([
                         'irb_form_id' => $irbForm->id,

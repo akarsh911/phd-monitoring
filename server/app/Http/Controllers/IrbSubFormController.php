@@ -77,10 +77,12 @@ class IrbSubFormController extends Controller
     protected function handleFacultyForm($user, $request)
     {
         $request->validate([
-            'form_id' => 'required|integer'
+            'student_id' => 'required|integer'
         ]);
-        $formId = $request->input('form_id');
-        $form = IrbForm::find($formId);
+        $student=Student::find($request->input('student_id'));
+        $form=$student->irbForm;
+        $formId = $form->id;
+        // $form = IrbForm::find($formId);
         if (!$form) {
             return response()->json(['message' => 'Form not found'], 404);
         }

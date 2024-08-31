@@ -17,7 +17,12 @@ const StudentSideIrb = ({ formData }) => {
               'Content-Type': 'application/json',
               'Accept': 'application/json',
               'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
+            },
+            body: JSON.stringify(
+              {
+                semester:formValues.semester,
+              }
+            )
           });
           // const response=await
   
@@ -28,7 +33,7 @@ const StudentSideIrb = ({ formData }) => {
             toast.success("Success Submitting form")
           } else {
             var msg=await response.json()
-            
+
             toast.error(msg.message);
             throw response;
           }
@@ -38,6 +43,7 @@ const StudentSideIrb = ({ formData }) => {
           console.log("Error has occurred:", error);
           if (error instanceof Response) {
             error.json().then(data => {
+              toast.error(data.message);
               if (error.status === 422) {
                 alert(data.message);
               } else if (error.status === 401) {
@@ -212,14 +218,12 @@ const StudentSideIrb = ({ formData }) => {
           required
         />
       </div>
-    {/* {formData.role=='student' &&(
+    {formData.role=='student' &&(
       <div className='supervisor-button-div'>
         <button className='send' type="submit" onClick={submitStudent}>SEND TO SUPERVISOR</button>
       </div>
-    )} */}
-     <div className='supervisor-button-div'>
-        <button className='send' type="submit" onClick={submitStudent}>SEND TO SUPERVISOR</button>
-      </div>
+    )}
+   
     </div>
   );
 };
