@@ -6,10 +6,11 @@ import StudentList from '../teachers_view/StudentList.js';
 import Forms from "./Forms";
 import FormCard from './FormCard';
 import ProgressMonitoring from '../forms/ProgressMonitoring/ProgressMonitoring.js';
+import FormsView from './Forms';
 
 
 
-const SideLeftMenu = () => {
+const SideLeftMenu = ({ type }) => {
  
   const [activeForm, setActiveForm] = useState(null);
 
@@ -18,20 +19,6 @@ const SideLeftMenu = () => {
   };
 
   const formCards = [
-    // { component: <StudentList />, title: "Student List", icon: "/graph-1.svg" },
-    // { component: <ResearchProposalExtensionForm />, title: "Research Proposal Extension", icon: "/group.svg" },
-    // { component: <ConstituteOfIrb />, title: "Constitute of IRB", icon: "/iconoutlineshoppingcart.svg" },
-    // { component: <Publications />, title: "Publications", icon: "/interface--chart-line.svg" },
-    // { component: <StatusChange />, title: "Status Change", icon: "/mdimessageprocessingoutline.svg" },
-    // { component: <SupervisorChange />, title: "Supervisor Change", icon: "/mdicogoutline.svg" },
-    // { component: <ProgressMonitoring />, title: "Progress Monitoring", icon: "/iconoutlineshoppingcart.svg" },
-    // { component: <SupAllocation />, title: "Supervisor Allocation", icon: "/iconoutlineshoppingcart.svg" },
-    // { component: <StatusChangeForm />, title: "Status Change Form", icon: "/iconoutlineshoppingcart.svg" },
-    // { component: <IrbSubmission />, title: "IRB Submission", icon: "/iconoutlineshoppingcart.svg" },
-    // { component: <IrbSubmissionSup />, title: "IRB Submission Sup", icon: "/iconoutlineshoppingcart.svg" },
-    // { component: <ListOfExaminer />, title: "List of Examiner", icon: "/iconoutlineshoppingcart.svg" },
-    // { component: <ThesisSubForm />, title: "Thesis Submission", icon: "/iconoutlineshoppingcart.svg" },
-    // {  title: "Thesis Extension", icon: "/iconoutlineshoppingcart.svg" },
     {  title: "Profile", icon: <i class="fa-solid fa-user"></i> },
     {  title: "Dashboard", icon: <i class="fa-solid fa-chart-simple"></i> },
     {  title: "Publications", icon: <i class="fa-sharp fa-solid fa-newspaper"></i> },
@@ -47,7 +34,7 @@ const SideLeftMenu = () => {
     <div className="side-left-menu">
       
        <div className="tietlogo">
-       <img src="../tiet-logoremovebgpreview-1@2x.png" alt="My Image" />
+       <img src="/tiet-logoremovebgpreview-1@2x.png" alt="My Image" />
        </div>
       <div className="icons">
           {formCards.map((formCard, index) => (
@@ -61,16 +48,10 @@ const SideLeftMenu = () => {
         </div>
     </div >
     {/* Render body component here */}
-    <StudentList/>
-    {/* <ResearchProposalExtensionForm/> */}
-    {/* <ConstituteOfIrb/> */}
+    {/* <StudentList/> */}
+    {type === 'students' && <StudentList />}
+    {type === 'form' && < FormsView/>}
   
-    {/* <IrbSubmission/> */}
-    {/* <IrbSubmissionSup/> */}
-    
-    {/* <ProgressMonitoring/> */}
-    
-    {/* <Publications/> */}
     </div>
   );
 };

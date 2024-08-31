@@ -13,7 +13,7 @@ import ResearchProposalExtensionForm from '../forms/FormForExtension/Extension.j
 import ThesisSubForm from '../forms/ThesisSubmission/ThesisSub.js';
 import Publications from '../forms/Publications/Publications.js';
 
-const Forms = () => {
+const FormsView = () => {
   const [selectedForm, setSelectedForm] = useState(null);
 
   const renderForm = () => {
@@ -76,4 +76,4 @@ const Forms = () => {
   );
 };
 
-export default Forms;
+export default FormsView;
