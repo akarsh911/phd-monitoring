@@ -380,7 +380,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
                 </div>
                 <div className="first">
                   <div className="modal-input">
-                    <label htmlFor="universityInput">Name of University</label>
+                    <label htmlFor="universityInput"> University</label>
                     <input
                       type="text"
                       id="universityInput"
@@ -390,8 +390,10 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
                       required
                     />
                   </div>
+                  </div>
+                  <div className="first">
                   <div className="modal-input">
-                    <label htmlFor="cityInput">Name of City</label>
+                    <label htmlFor="cityInput">City</label>
                     <input
                       type="text"
                       id="cityInput"
@@ -401,7 +403,19 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
                       required
                     />
                   </div>
-                </div>
+                  <div className="modal-input">
+                    <label htmlFor="cityInput">State</label>
+                    <input
+                      type="text"
+                      id="stateInput"
+                      name="state"
+                      value={FormData.state}
+                      onChange={HandleChange}
+                      required
+                    />
+                  </div>
+                  </div>
+               
                 <div className="first">
                   <div className="modal-input">
                     <label htmlFor="pincodeInput">Pincode</label>
@@ -415,7 +429,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
                     />
                   </div>
                   <div className="modal-input">
-                    <label htmlFor="countryInput">Name of Country</label>
+                    <label htmlFor="countryInput"> Country</label>
                     <input
                       type="text"
                       id="countryInput"
