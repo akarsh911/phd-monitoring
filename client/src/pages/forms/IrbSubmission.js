@@ -54,8 +54,6 @@ const Irb = () => {
           revisedObjectives: data.revisedObjectives,
           revisedPdf: null,
         });
-        console.log("formData");
-        console.log(formData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -99,7 +97,6 @@ const Irb = () => {
         address: formData.address,
       }),
     });
-    console.log(response);
     const data = await response.json();
 
   };

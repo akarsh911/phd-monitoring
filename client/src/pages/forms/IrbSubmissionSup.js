@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from "react";
 import './IrbSubmissionSup.css';
+import { SERVER_URL } from "../../config";
+import { useParams } from "react-router-dom";
 
 const IrbSup = () => {
   const initialFormData = {
@@ -8,6 +10,12 @@ const IrbSup = () => {
     designation: '',
     numberOfStudentsInside: '',
     numberOfStudentsOutside: '',  
+    hodRecommendation: '',
+    hodRemarks: '',
+    draRecommendation: '',
+    draRemark: '',
+    dordcRecommendation: '',
+    dordcRemarks: ''
   };
   
   const initialFormData2 = {
@@ -18,6 +26,44 @@ const IrbSup = () => {
     number: '',
     email: ''
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${SERVER_URL}/forms/irb/submission/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify({
+            student_id: params.id,
+          }),
+        });
+        const data = await response.json();
+        console.log(data);
+        setFormData({
+          name: data.supervisors[0].name,
+          department: data.supervisors[0].department,
+          designation: data.supervisors[0].designation,
+          numberOfStudentsInside: data.supervisors[0].campus,
+          numberOfStudentsOutside: data.supervisors[0].outside,  
+          hodRecommendation: data.HODRecommendation,
+          hodRemarks: data.HODComments,
+          draRecommendation:data.DRARecommendation,
+          draRemark: data.DRAComments,
+          dordcRecommendation: data.DORDCRecommendation,
+          dordcRemarks: data.DORDCComments,
+        });
+        console.log("formData");
+        console.log(formData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const [formData, setFormData] = useState(initialFormData);
   const [formData2, setFormData2] = useState(initialFormData2);
@@ -35,7 +81,7 @@ const IrbSup = () => {
   };
 
 
-  const handleChange = (e, formId) => {
+  const handleChange = (e, formId) => {q
     const { name, value } = e.target;
     if (formId === "form1") {
       setFormData(prevData => ({
@@ -64,7 +110,7 @@ const IrbSup = () => {
     e.preventDefault();
     console.log(selectedFile);
   };
-
+const params = useParams();
   return (
     <div className='studentsideBody-div'>
       <div className='studentsideform-div'>
@@ -80,7 +126,7 @@ const IrbSup = () => {
             type="text"
             id="firstNameInput"
             name="firstName"
-            value={formData.firstName}
+            value={formData.name}
             readOnly
             required
           />
@@ -93,7 +139,7 @@ const IrbSup = () => {
             type="text"
             id="firstNameInput"
             name="firstName"
-            value={formData.firstName}
+            value={formData.department}
             readOnly
             required
           />
@@ -104,7 +150,7 @@ const IrbSup = () => {
             type="text"
             id="firstNameInput"
             name="firstName"
-            value={formData.firstName}
+            value={formData.designation}
             readOnly
             required
           />
@@ -193,7 +239,7 @@ const IrbSup = () => {
             id="approved"
             name="hodRecommendation"
             value="approved"
-            checked={formData.hodRecommendation === 'approved'}
+            checked={formData.draRecommendation === 'approved'}
             onChange={handleHodRecommendationChange}
             required
           />
@@ -205,7 +251,7 @@ const IrbSup = () => {
             id="notApproved"
             name="hodRecommendation"
             value="notApproved"
-            checked={formData.hodRecommendation === 'notApproved'}
+            checked={formData.draRecommendation === 'notApproved'}
             onChange={handleHodRecommendationChange}
             required
           />
@@ -218,7 +264,7 @@ const IrbSup = () => {
           type="text"
           id="hodRemarks"
           name="hodRemarks"
-          value={formData.hodRemarks}
+          value={formData.draRemark}
         />
       </div>
       <div className='supervisor-button-div'>
@@ -234,7 +280,7 @@ const IrbSup = () => {
             id="approved"
             name="hodRecommendation"
             value="approved"
-            checked={formData.hodRecommendation === 'approved'}
+            checked={formData.dordcRecommendation === 'approved'}
             onChange={handleHodRecommendationChange}
             required
           />
@@ -246,7 +292,7 @@ const IrbSup = () => {
             id="notApproved"
             name="hodRecommendation"
             value="notApproved"
-            checked={formData.hodRecommendation === 'notApproved'}
+            checked={formData.dordcRecommendation === 'notApproved'}
             onChange={handleHodRecommendationChange}
             required
           />
@@ -259,7 +305,7 @@ const IrbSup = () => {
           type="text"
           id="hodRemarks"
           name="hodRemarks"
-          value={formData.hodRemarks}
+          value={formData.dordcRemarks}
         />
       </div>
       <div className='supervisor-button-div'>

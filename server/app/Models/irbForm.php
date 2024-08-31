@@ -24,7 +24,8 @@ class IrbForm extends Model
         'hod_lock',
         'supervisor_lock',
         'dordc_lock',
-        'dra_lock'
+        'dra_lock',
+        'semester'
     ];
     public function fullForm($user)
     {
@@ -39,6 +40,7 @@ class IrbForm extends Model
             'gender' => $this->student->user->gender,
             'cgpa' => $this->student->cgpa,
             'role'=>$user->role->role,
+            'semester' => $this->semester,  
             'chairman' => [
                 'name' => $this->student->department->hod->user->name(),
                 'designation' => $this->student->department->hod->designation,

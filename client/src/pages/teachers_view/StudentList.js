@@ -53,7 +53,7 @@ const StudentList = () => {
     setSearchTerm(event.target.value);
   }; 
   const callBack = (id) => {
-    window.location.href = `/dashboard/students/forms/irbconstitution/${id}`;
+    window.location.href = `/dashboard/forms/${id}`;
     console.log(id);
   }
   const handleSort = (event) => {
