@@ -7,15 +7,16 @@ import DrASideStatusChange from './DrASideStatusChange';
 import DoRDCSideStatusChange from './DoRDCSideStatusChange';
 import DirectorSideStatusChange from './DirectorSideStatusChange';
 import StatusModal from '../Modal/Modal';
+import { toast } from 'react-toastify';
 const StatusChangeForm = () => {
     const [formData, setFormData] = useState({
-        name: '',
-        regno: '',
-        dateOfAdmission: '',
-        email:'',
-        researchTitle: '',
-        mobile: '',
-        status: '',
+        name: 'John Srivastava',
+        regno: '102203462',
+        dateOfAdmission: '2024-02-02',
+        email:'stu1@gmail.com',
+        researchTitle: 'Why the Universe Work?',
+        mobile: '9305267855',
+        status: 'Part Time',
         supervisors: ['', '', ''],
         hodRecommendation: '',
         hodRemarks: '',
@@ -28,9 +29,9 @@ const StatusChangeForm = () => {
         DirectorRecommendation:'',
         DirectorRemarks:'',
         fatherName: '', // New field for Father's Name
-        dateOfStatusChange: '', // New field for Date of change of Status
+        dateOfStatusChange: '2024-04-04', // New field for Date of change of Status
         publicationLink: '', // New field for Details of Publication link
-        dateOfSynopsisPresentation: '', // New field for Date of Synopsis Presentation
+        dateOfSynopsisPresentation: '2024-04-04', // New field for Date of Synopsis Presentation
         receiptNumber: '', // New field for Receipt Number
         receiptDate: '', // New field for Receipt Date
       });
@@ -50,7 +51,7 @@ const StatusChangeForm = () => {
     };
   })
 
-
+ 
    
 
   const handleChange = (e) => {
@@ -121,6 +122,7 @@ const StatusChangeForm = () => {
         </div>
         <form onSubmit={handleSubmit} className='extensionSideform'>
         
+
         <StudentSideStatusChange formData={formData} handleChange={handleChange} />
           
       {/* Student side ends */}

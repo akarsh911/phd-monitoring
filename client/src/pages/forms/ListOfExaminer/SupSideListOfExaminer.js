@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ListOfExaminer.css";
 import "../FormForExtension/SupervisorSideExtension.css";
 import Modal from "react-modal";
+import { toast } from "react-toastify";
 
 Modal.setAppElement("#root"); // Make sure to bind modal to your appElement
 
 const SupSideListOfExaminer = ({ formData, handleChange }) => {
   const [supervisors, setSupervisors] = useState([
-    { serialno: "1", name: "", recommended: null, remarks: "" },
-    { serialno: "2", name: "", recommended: null, remarks: "" },
-    { serialno: "3", name: "", recommended: null, remarks: "" },
+    { serialno: "1", name: "Sup 1", recommended: null, remarks: "" ,contactno:"9999666669",email:"sup1@gmail.com"},
+    { serialno: "2", name: "Sup 2", recommended: null, remarks: "", contactno:"8888898908",email:"sup2@gmail.com" },
   ]);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -29,6 +29,8 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
     mobile: "",
     email: "",
     referenceNo: "",
+    regno:"",
+
   });
   const [modalHeading, setModalHeading] = useState(""); // New state for modal heading
 
@@ -36,11 +38,23 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
     const { name, value } = e.target;
     setFormData({ ...FormData, [name]: value });
   };
-
+  const hello = () => {
+    localStorage.setItem("datalist", JSON.stringify(FormData));
+    localStorage.setItem("Indian", JSON.stringify(nationalExaminers));
+    localStorage.setItem("International", JSON.stringify(internationalExaminers));
+    toast.success("Send to DoRDC successfully");
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
     if (editIndex !== null) {
       if (editNationality === "Indian") {
+        console.log(FormData);
+        if(FormData.email=="hello@gmail.com")
+        {
+
+          alert("Examiner with this email was used for last student");
+          return;
+        }
         const updatedExaminers = [...nationalExaminers];
         updatedExaminers[editIndex] = FormData;
         setNationalExaminers(updatedExaminers);
@@ -66,6 +80,8 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
         }
       }
     }
+  
+
     setFormData({
       nationality: "Indian",
       examinerName: "",
@@ -122,7 +138,20 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
       );
     }
   };
-
+  useEffect(() => {
+    const data = localStorage.getItem("datalist");
+    if (data) {
+      setFormData(JSON.parse(data));
+    }
+    const indianData = localStorage.getItem("Indian");
+    if (indianData) {
+      setNationalExaminers(JSON.parse(indianData));
+    }
+    const internationalData = localStorage.getItem("International");
+    if (internationalData) {
+      setInternationalExaminers(JSON.parse(internationalData));
+    }
+  }, []);
   return (
     <div>
       <div className="student-form">
@@ -133,7 +162,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
               type="number"
               id="regnoInput"
               name="regno"
-              value={FormData.regno}
+              value="102203462"
               readOnly
               required
             />
@@ -143,7 +172,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
             <input
               id="nameInput"
               name="name"
-              value={FormData.name}
+              value="John Srivastava"
               readOnly
               required
             />
@@ -156,7 +185,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
             type="date"
             id="dateOfAdmissionInput"
             name="dateOfAdmission"
-            value={FormData.dateOfAdmission}
+            value="2021-08-01"
             readOnly
             required
           />
@@ -167,7 +196,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
           <input
             id="researchTitleInput"
             name="researchTitle"
-            value={FormData.researchTitle}
+            value="Why Universe Works"
             onChange={handleChange}
             required
           />
@@ -188,9 +217,9 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
             {supervisors.map((supervisor, index) => (
               <tr key={index}>
                 <td>{supervisor.serialno}</td>
-                <td>{/* Supervisor name input */}</td>
-                <td>{/* Supervisor contact number input */}</td>
-                <td>{/* Supervisor email input */}</td>
+                <td>{supervisor.name}</td>
+                <td>{supervisor.contactno}</td>
+                <td>{supervisor.email}</td>
               </tr>
             ))}
           </tbody>
@@ -484,7 +513,7 @@ const SupSideListOfExaminer = ({ formData, handleChange }) => {
         </div>
 
         <div className="supervisor-button-div">
-          <button className="send" type="submit">
+          <button className="send" type="submit" onClick={hello}>
             SEND TO DoRDC
           </button>
         </div>

@@ -12,6 +12,8 @@ import ListOfExaminer from '../forms/ListOfExaminer/ListOfExaminer.js'
 import ResearchProposalExtensionForm from '../forms/FormForExtension/Extension.js';
 import ThesisSubForm from '../forms/ThesisSubmission/ThesisSub.js';
 import Publications from '../forms/Publications/Publications.js';
+import ProgressMonitoring from '../forms/ProgressMonitoring/ProgressMonitoring.js';
+import HorizontalProfilePage from '../HorizontalPage.js';
 
 const FormsView = () => {
   const [selectedForm, setSelectedForm] = useState(null);
@@ -36,6 +38,8 @@ const FormsView = () => {
           return <ThesisSubForm/>;
           case 'Publications':
             return <Publications/>;
+          case 'Progress':
+            return <ProgressMonitoring/>;
       default:
         return (
           <div className='StudenttSidebody-div'>
@@ -43,6 +47,7 @@ const FormsView = () => {
               <div className='heading'>
                 <h1>Forms</h1>
               </div>
+              <HorizontalProfilePage/>
               <div className="group">
               <div className='button-group'>
                 <button onClick={() => setSelectedForm('Constitute of IRB')}>Constitute of Institutional Research Board</button>
@@ -56,6 +61,7 @@ const FormsView = () => {
                 <button onClick={() => setSelectedForm('List of Examiner')}>List of Examiner</button>
                 <button onClick={() => setSelectedForm('Thesis Submission')}>Thesis Submission</button>
                 <button onClick={() => setSelectedForm('Publications')}>Publications</button>
+                <button onClick={() => setSelectedForm('Progress')}>Progress Monitoring</button>
               </div>
               </div>
             </div>

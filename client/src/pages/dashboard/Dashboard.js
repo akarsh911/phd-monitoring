@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import Forms from "./Forms";
 import FormCard from './FormCard';
 import ProgressMonitoring from "../forms/ProgressMonitoring/ProgressMonitoring";
+import ProfilePage from "../ProfilePage";
 
 const SideLeftMenu = () => {
   const [activeForm, setActiveForm] = useState(null);
@@ -27,7 +28,7 @@ const SideLeftMenu = () => {
     // { component: <ListOfExaminer />, title: "List of Examiner", icon: "/iconoutlineshoppingcart.svg" },
     // { component: <ThesisSubForm />, title: "Thesis Submission", icon: "/iconoutlineshoppingcart.svg" },
     // {  title: "Thesis Extension", icon: "/iconoutlineshoppingcart.svg" },
-    {  title: "Profile", icon: <i class="fa-solid fa-user"></i> },
+    {  component:<ProfilePage/> ,title: "Profile", icon: <i class="fa-solid fa-user"></i> },
     {  title: "Dashboard", icon: <i class="fa-solid fa-chart-simple"></i> },
     {  title: "Publications", icon: <i class="fa-sharp fa-solid fa-newspaper"></i> },
     {  component:<ProgressMonitoring/>,title: "Progress Monitoring", icon: <i class="fa-solid fa-bars-progress"></i>},

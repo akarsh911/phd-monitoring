@@ -190,7 +190,7 @@ const ProgressMonitoring = () => {
         {formData.role === "student" && (
             <StudentSideProgress formData={formData} />
           )}
-          {formData.role === "supervisor" && (
+          {formData.role === "faculty" && (
             <div>
               <StudentSideProgress formData={formData} />
               <SupervisorSideProgress formData={formData} handleSupRecommendationChange={handleSupRecommendationChange} />

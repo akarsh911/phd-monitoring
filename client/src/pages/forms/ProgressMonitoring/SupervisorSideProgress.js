@@ -48,7 +48,7 @@ const SupervisorSideProgress = ({ formData, handleHodRecommendationChange }) => 
       );
       if (response.ok) {
         const data = await response.json();
-        toast.success("Successfully updated preferences");
+        toast.success("Successfully Submitted");
       } else {
         const msg = await response.json();
         toast.error(msg.message);
