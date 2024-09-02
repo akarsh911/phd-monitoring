@@ -40,6 +40,8 @@ const FormsView = () => {
             return <Publications/>;
           case 'Progress':
             return <ProgressMonitoring/>;
+            case 'Extension':
+              return <ResearchProposalExtensionForm/>
       default:
         return (
           <div className='StudenttSidebody-div'>
@@ -55,6 +57,7 @@ const FormsView = () => {
                 <button onClick={() => setSelectedForm('Supervisor Allocation')}>Supervisor Allocation</button>
                 <button onClick={() => setSelectedForm('IRB Submission')}>IRB Submission</button>
                 <button onClick={() => setSelectedForm('Extension for Thesis Submission')}>Extension for Thesis Submission</button>
+                <button onClick={() => setSelectedForm('Extension')}>Extension for submission of research proposal</button>
                 </div>
                 <div className='button-group'>
                 <button onClick={() => setSelectedForm('Supervisor Change')}>Supervisor Change</button>
