@@ -97,6 +97,18 @@ const IrbSup = () => {
       hodRecommendation: e.target.value
     }));
   };
+  const handleDrARecommendationChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      draRecommendation: e.target.value
+    }));
+  };
+  const handleDordcRecommendationChange = (e) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      dordcRecommendation: e.target.value
+    }));
+  };
 
 
   const handleChange = (e, formId) => {
@@ -261,7 +273,7 @@ const params = useParams();
             name="hodRecommendation"
             value="approved"
             checked={formData.draRecommendation === 'approved'}
-            onChange={handleHodRecommendationChange}
+            onChange={handleDrARecommendationChange}
             required
           />
           <label htmlFor="approved" className="small-label">Approved</label>
@@ -273,7 +285,7 @@ const params = useParams();
             name="hodRecommendation"
             value="notApproved"
             checked={formData.draRecommendation === 'notApproved'}
-            onChange={handleHodRecommendationChange}
+            onChange={handleDrARecommendationChange}
             required
           />
            <label htmlFor="notApproved" className="small-label">Not Approved</label>
@@ -302,7 +314,7 @@ const params = useParams();
             name="hodRecommendation"
             value="approved"
             checked={formData.dordcRecommendation === 'approved'}
-            onChange={handleHodRecommendationChange}
+            onChange={handleDordcRecommendationChange}
             required
           />
           <label htmlFor="approved" className="small-label">Approved</label>
@@ -314,7 +326,7 @@ const params = useParams();
             name="hodRecommendation"
             value="notApproved"
             checked={formData.dordcRecommendation === 'notApproved'}
-            onChange={handleHodRecommendationChange}
+            onChange={handleDordcRecommendationChange}
             required
           />
            <label htmlFor="notApproved" className="small-label">Not Approved</label>
