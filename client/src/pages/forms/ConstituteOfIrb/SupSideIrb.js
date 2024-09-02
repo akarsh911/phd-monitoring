@@ -242,67 +242,82 @@ const SupSideIrb = ({
       </div>
 
       <div className="data-input">
-      <label>
-        List of 3 nominees of the DoRDC in cognate area from the institute
-      </label>
-      <table>
-        <tbody>
-          {selectedNominee.slice(0, 3).map((nominee, index) => (
-            <tr key={index}>
-              <td>
-                <div className="select-wrapper">
-                  <input
-                    type="text"
-                    className="search-bar"
-                    placeholder="Search by Name or Department"
-                    value={searchQuery[index]}
-                    onChange={(e) => handleSearchChange(index, e.target.value)}
-                    onFocus={() => handleInputFocus(index)}
-                    disabled={!isEditable}
-                  />
-                  {showOptions[index] && (
-                    <select
-                      onChange={(e) =>
-                        handleNomineeChangeWithCheck(
-                          index,
-                          formData.suggestions.find(
-                            (opt) =>
-                              opt.faculty_code === parseInt(e.target.value)
-                          )
-                        )
-                      }
-                      disabled={!isEditable}
-                      required
-                      value={selectedNominee[index].faculty_code || ""}
-                    >
-                      <option value="">Select Nominee</option>
-                      {filteredOptions(index).length > 0 ? (
-                        filteredOptions(index).map((option, idx) => (
-                          <option key={idx} value={option.faculty_code}>
-                            {`${option.name} (${option.department})`}
-                          </option>
-                        ))
-                      ) : (
-                        <option value="" disabled>
-                          No names
-                        </option>
-                      )}
-                    </select>
+  <label>
+    List of 3 nominees of the DoRDC in the cognate area from the institute
+  </label>
+  <table>
+    <tbody>
+      {selectedNominee.slice(0, 3).map((nominee, index) => (
+        <tr key={index}>
+          <td>
+            <div className="select-wrapper">
+              <input
+                type="text"
+                className="search-bar"
+                placeholder="Search by Name or Department"
+                value={searchQuery[index]}
+                onChange={(e) => handleSearchChange(index, e.target.value)}
+                onFocus={() => handleInputFocus(index)}
+                disabled={!isEditable}
+              />
+              {showOptions[index] && (
+                <select
+                  onChange={(e) =>
+                    handleNomineeChangeWithCheck(
+                      index,
+                      formData.suggestions.find(
+                        (opt) =>
+                          opt.faculty_code === parseInt(e.target.value)
+                      )
+                    )
+                  }
+                  disabled={!isEditable}
+                  required
+                  value={selectedNominee[index]?.faculty_code || ""}
+                >
+                  <option value="">Select Nominee</option>
+                  {filteredOptions(index).length > 0 ? (
+                    filteredOptions(index).map((option, idx) => (
+                      <option key={idx} value={option.faculty_code}>
+                        {`${option.name} (${option.department})`}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>
+                      No names
+                    </option>
                   )}
-                </div>
-                {selectedNominee[index] && (
-                  <div className="nominee-details">
-                    <p>{`Name: ${selectedNominee[index].name}`}</p>
-                    <p>{`Department: ${selectedNominee[index].department}`}</p>
-                    <p>{`Email ID: ${selectedNominee[index].email}`}</p>
-                  </div>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+                </select>
+              )}
+            </div>
+
+            {selectedNominee[index] && selectedNominee[index].name && (
+              <div className="nominee-details">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Department</th>
+                      <th>Email ID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>{selectedNominee[index].name}</td>
+                      <td>{selectedNominee[index].department}</td>
+                      <td>{selectedNominee[index].email}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
 
      
       {formData.role === "faculty" && isEditable && (
