@@ -101,7 +101,7 @@ const ProgressMonitoring = () => {
           supervisor_lock: data.supervisor_lock,
           dordc_lock: data.dordc_lock,
           dra_lock: data.dra_lock,
-          role: data.role,
+          role: 'dra',
         }));
 
         setOptions({
@@ -221,7 +221,7 @@ const ProgressMonitoring = () => {
               <DoRDCSideProgress formData={formData} handleDoRDCRecommendationChange={handleDoRDCRecommendationChange} />
               </div>
           )}
-          {formData.role === "dra" && (
+          {formData.role === "student" && (
             <div>
               <StudentSideProgress formData={formData} />
               <SupervisorSideProgress formData={formData} handleSupRecommendationChange={handleSupRecommendationChange} />

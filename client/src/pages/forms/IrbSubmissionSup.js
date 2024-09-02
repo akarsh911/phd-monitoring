@@ -26,6 +26,24 @@ const IrbSup = () => {
     number: '',
     email: ''
   };
+  const handleUpdate = (e) => async (e) => {
+    e.preventDefault();
+    const response = await fetch(`${SERVER_URL}/forms/irb/submission/submit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({
+        revised_phd_title: formData.revisedTitle,
+        objectives: formData.objectives,
+      }),
+    });
+    console.log(response);
+    const data = await response.json();
+
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -182,7 +200,7 @@ const params = useParams();
   </div>
 </div>
 <div className='supervisor-button-div'>
-        <button className='send' type='submit'>Update</button>
+        <button className='send' type='submit' onSubmit={handleUpdate}>Update</button>
       </div>
 <div className='supervisor-button-div'>
         <button className='send' type='submit'>SEND TO HOD</button>
