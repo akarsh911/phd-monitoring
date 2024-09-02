@@ -98,6 +98,8 @@ const Irb = () => {
       }),
     });
     const data = await response.json();
+    console.log("sumit");
+    console.log(data);
 
   };
   const handleRevisedSubmitStudent = (e) => async (e) => {
