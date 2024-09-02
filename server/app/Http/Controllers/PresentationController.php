@@ -216,17 +216,13 @@ class PresentationController extends Controller{
                       return response()->json(['message' => 'You have pending reviews from other Supervisors'], 403);
                     }
                 }
-                if($request->percent)
-                {
+           
                     $presentation->progress = $request->percent;
                     $presentation->supervisor_lock=true;
                     $presentation->hod_lock=false;
                     $presentation->save();
                     return response()->json(['message' => 'Progress percentage updated successfully'], 200);
-                }
-                else{
-                    return response()->json(['message' => 'Progress percentage is required'], 400);
-                }
+           
                 
             }
             else{

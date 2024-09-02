@@ -54,7 +54,7 @@ const StudentSideProgress = ({ formData }) => {
     }
     
     try {
-      const response = await fetch(`${SERVER_URL}/forms/irb/constitutuion/submit`, {
+      const response = await fetch(`${SERVER_URL}/presentation/submit`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

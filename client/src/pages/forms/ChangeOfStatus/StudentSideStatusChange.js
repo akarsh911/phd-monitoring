@@ -1,12 +1,16 @@
 import { useState,React }  from 'react';
 import './StatusChange.css';
+import { toast } from 'react-toastify';
 
 const StudentSideStatusChange = ({ formData, handleChange }) => {
   const [statusChange, setstatusChange] = useState(null);
-
   const handlestatusChange = (event) => {
     setstatusChange(event.target.value);
   };
+  const submitData = async () => {
+    toast.success('sent to supervisor');
+    localStorage.setItem('datalist', JSON.stringify(formData));
+  }
   return (
     <div className='student-form'>
       <div className='first'>
@@ -164,7 +168,7 @@ const StudentSideStatusChange = ({ formData, handleChange }) => {
 </div>
       
      
-      
+    
      
       
       
@@ -173,7 +177,7 @@ const StudentSideStatusChange = ({ formData, handleChange }) => {
       
      
       <div className='supervisor-button-div'>
-        <button className='send' type="submit">SEND TO SUPERVISOR</button>
+        <button className='send' type="submit" onClick={submitData}>SEND TO SUPERVISOR</button>
       </div>
     </div>
   );

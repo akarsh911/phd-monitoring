@@ -25,7 +25,7 @@ const App = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/students" element={<SupDashboard type="students" />} />
           <Route path="/dashboard/forms/:id" element={<SupDashboard type="form" />} />
-
+      
         </Routes>
       </Router>
     </div>

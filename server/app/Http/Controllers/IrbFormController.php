@@ -243,7 +243,7 @@ class IrbFormController extends Controller
             if ($user->role->role == 'faculty') {
                 $request->validate([
                     'student_id' => 'required|integer',
-                    'comments' => 'required|string',
+                    // 'comments' => 'required|string',
                     'nomineeCognates' => 'required|array',
                 ]);
                
@@ -315,7 +315,7 @@ class IrbFormController extends Controller
         IrbNomineeCognate::where('irb_form_id', $irbForm->id)->delete();
 
         $irbForm->update([
-            'SuperVisorComments' => $request->comments,
+            // 'SuperVisorComments' => $request->comments,
             'stage' => 'supervisor',
             'status' => 'approved'
         ]);
