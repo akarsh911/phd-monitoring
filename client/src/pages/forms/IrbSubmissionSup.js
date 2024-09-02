@@ -182,6 +182,9 @@ const params = useParams();
   </div>
 </div>
 <div className='supervisor-button-div'>
+        <button className='send' type='submit'>Update</button>
+      </div>
+<div className='supervisor-button-div'>
         <button className='send' type='submit'>SEND TO HOD</button>
       </div>
       {/* </div> */}
