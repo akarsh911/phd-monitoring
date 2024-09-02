@@ -228,7 +228,7 @@ const Irb = () => {
           <div className="data-input">
             <label htmlFor="objectivesInput">Objectives</label>
             <ol className="objectives-list">
-              {formData.objectives.map((objective, index) => {
+              {formData.objectives?.map((objective, index) => {
                 if(objective.type==='draft') {
                   return (
                     <li key={index}>
