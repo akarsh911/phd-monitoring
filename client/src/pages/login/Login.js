@@ -9,7 +9,7 @@
 //   };
 
 //   const handleLoginSubmit = (event) => {
-//     event.preventDefault(); 
+//     event.preventDefault();
 
 //     const email = event.target.email.value;
 //     const password = event.target.password.value;
@@ -30,8 +30,8 @@
 //       .then(response => {
 //         if(response.status==200)
 //           return  response.json()
-//         else 
-//           throw response;      
+//         else
+//           throw response;
 //       })
 //       .then(data => {
 //         // Handle response data as needed
@@ -44,7 +44,7 @@
 //           alert("Login Token: "+data.token)
 //           localStorage.setItem('token', data.token);
 //           window.location.href = '/dashboard';
-      
+
 //           if(data.user.role.role!='student')
 //             window.location.href='/students'
 //         // }
@@ -68,7 +68,7 @@
 //           console.error('Unexpected error:', error);
 //         }
 //       });
-      
+
 //   };
 
 //   const currentViewContent = () => {
