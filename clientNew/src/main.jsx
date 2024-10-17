@@ -5,6 +5,7 @@ import App from "./App.jsx";
 import "./index.css";
 
 import Login from "./Pages/Login/Login.jsx";
+import ConstituteOfInstitutionalResearchBoard from "./Pages/Constitute of Institutional Research Board/ConstituteOfInstitutionalResearchBoard.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
 	{
 		path: "/login",
 		element: <Login />,
+	},
+	{
+		path: "/constitute-of-institutional-research-board",
+		element: <ConstituteOfInstitutionalResearchBoard />,
 	},
 ]);
 
