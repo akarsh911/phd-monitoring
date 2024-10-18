@@ -3,6 +3,7 @@ import inputFields from "./SupervisorAllocation.data.jsx";
 
 // Simple InputLabel component
 const InputLabel = ({ label, name, placeholder, type, className, register }) => (
+    
   <div className={`tw-flex tw-flex-col tw-gap-y-0.5 ${className}`}>
     <label className="tw-font-bold" htmlFor={name}>
       {label}

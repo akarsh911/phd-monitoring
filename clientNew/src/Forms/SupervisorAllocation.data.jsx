@@ -36,6 +36,7 @@ export default [
           <label className="tw-font-bold" htmlFor="researchArea1">
             Broad Areas of Research
           </label>
+          
           {[1, 2, 3].map((num) => (
             <select
               key={`researchArea${num}`}
