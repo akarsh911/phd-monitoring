@@ -6,6 +6,9 @@ import "./index.css";
 
 import Login from "./Pages/Login/Login.jsx";
 import ConstituteOfInstitutionalResearchBoard from "./Pages/Constitute of Institutional Research Board/ConstituteOfInstitutionalResearchBoard.jsx";
+import SupervisorAllocationForm from "./Forms/SupervisorAllocationForm.jsx";
+
+//! TODO: add a main layout using <Outlet> for all forms.
 
 const router = createBrowserRouter([
 	{
@@ -19,6 +22,10 @@ const router = createBrowserRouter([
 	{
 		path: "/constitute-of-institutional-research-board",
 		element: <ConstituteOfInstitutionalResearchBoard />,
+	},
+	{
+		path: "/supervisor-allocation-form",
+		element: <SupervisorAllocationForm />,
 	},
 ]);
 
