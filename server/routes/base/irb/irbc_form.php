@@ -1,10 +1,18 @@
 <?php
+
+use App\Http\Controllers\ConstituteOfIRBController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-use App\Http\Controllers\IrbFormController;
+use App\Http\Controllers\IrbSubFormController;
 
+// Route::post('',[IrbSubFormController::class, 'load'])->middleware('auth:sanctum');
+// Route::post('update',[IrbSubFormController::class, 'update'])->middleware('auth:sanctum');
+// Route::post('submit',[IrbSubFormController::class, 'submit'])->middleware('auth:sanctum');
 
-Route::post('',[IrbFormController::class, 'loadForm'])->middleware('auth:sanctum');
-Route::post('update',[IrbFormController::class, 'superVisorPrefs'])->middleware('auth:sanctum');
-Route::post('submit',[IrbFormController::class, 'submit'])->middleware('auth:sanctum');
-
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('', [ConstituteOfIRBController::class, 'listForm']);
+    Route::post('', [ConstituteOfIRBController::class, 'createForm']);
+    Route::get('/form', [ConstituteOfIRBController::class, 'loadForm'])->name('form.load');
+    Route::get('/form/{form_id}', [ConstituteOfIRBController::class, 'loadForm'])->name('form.load');
+    Route::post('/form/{form_id}', [ConstituteOfIRBController::class, 'submit'])->name('form.submit');
+});

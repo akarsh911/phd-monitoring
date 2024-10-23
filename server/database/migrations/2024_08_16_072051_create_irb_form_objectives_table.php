@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('thesis_extentions', function (Blueprint $table) {
+        Schema::create('irb_sub_objectives', function (Blueprint $table) {
             $table->increments('id');
             $table->primary('id');
-            $table->integer('student_id')->unsigned()->index();
-            $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
-            $table->date('period_of_extention')->nullable()->default(12);
-            $table->text('reason')->nullable();
+            $table->integer('irb_form_id')->unsigned()->index();
+            $table->foreign('irb_form_id')->references('id')->on('irb_sub_forms')->onDelete('cascade');
+            $table->string('objective');
+            $table->enum('type',['draft','revised']);
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('thesis_extentions');
+        Schema::dropIfExists('irb_sub_objectives');
     }
 };

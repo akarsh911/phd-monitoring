@@ -1,9 +1,14 @@
 <?php
+
+
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use App\Http\Controllers\IrbSubFormController;
+use App\Http\Controllers\IrbSubController;
 
-Route::post('',[IrbSubFormController::class, 'load'])->middleware('auth:sanctum');
-Route::post('update',[IrbSubFormController::class, 'update'])->middleware('auth:sanctum');
-Route::post('submit',[IrbSubFormController::class, 'submit'])->middleware('auth:sanctum');
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('', [IrbSubController::class, 'listForms']);
+    Route::post('', [IrbSubController::class, 'createForm']);
+    Route::get('/form', [IrbSubController::class, 'loadForm'])->name('form.load');
+    Route::get('/form/{form_id}', [IrbSubController::class, 'loadForm'])->name('form.load');
+    Route::post('/form/{form_id}', [IrbSubController::class, 'submit'])->name('form.submit');
+});

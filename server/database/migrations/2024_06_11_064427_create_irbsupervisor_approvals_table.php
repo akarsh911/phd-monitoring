@@ -14,15 +14,12 @@ return new class extends Migration
         Schema::create('irb_supervisor_approvals', function (Blueprint $table) {
             $table->increments('id');
             $table->primary('id');
-            $table->enum('form_type',['irb','irb_sub']);
-            $table->integer('irb_form_id')->unsigned()->index()->nullable();
-            $table->foreign('irb_form_id')->references('id')->on('irb_forms')->onDelete('cascade');
-            $table->integer('irb_sub_form_id')->unsigned()->index()->nullable();
+            $table->integer('irb_sub_form_id')->unsigned()->index();
             $table->foreign('irb_sub_form_id')->references('id')->on('irb_sub_forms')->onDelete('cascade');
             $table->integer('supervisor_id')->unsigned()->index();
             $table->foreign('supervisor_id')->references('faculty_code')->on('faculty')->onDelete('cascade');
             $table->enum('status',['awaited','approved','rejected']);
-            $table->unique(['form_type','irb_form_id','irb_sub_form_id','supervisor_id'],'uiniqe_approval');
+            $table->unique(['irb_sub_form_id','supervisor_id'],'uiniqe_approval');
             $table->timestamps();
         });
     }

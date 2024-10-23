@@ -15,7 +15,7 @@ return new class extends Migration
             $table->increments('id');
             $table->primary('id');
             $table->integer('irb_form_id')->unsigned();
-            $table->foreign('irb_form_id')->references('id')->on('irb_forms')->onDelete('cascade');
+            $table->foreign('irb_form_id')->references('id')->on('constitute_of_irb')->onDelete('cascade');
             $table->integer('supervisor_id')->unsigned()->index()->nullable();
             $table->foreign('supervisor_id')->references('faculty_code')->on('faculty')->onDelete('set null');
             $table->integer('nominee_id')->unsigned()->index();

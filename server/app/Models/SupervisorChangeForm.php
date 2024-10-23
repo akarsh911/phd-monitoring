@@ -4,99 +4,69 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\ModelCommonFormFields;
 
 class SupervisorChangeForm extends Model
 {
-    use HasFactory;
+    use HasFactory, ModelCommonFormFields;
 
+    // The table associated with the model
     protected $table = 'supervisor_change_forms';
 
-    protected $fillable = [
-        'student_id',
-        'status',
-        'stage',
-        'broader_area_of_research',
-        'reason',
-        'hod_approval',
-        'dra_approval',
-        'student_lock',
-        'hod_lock',
-        'dordc_lock',
-        'dra_lock',
-        'HODComments',
-        'DORDCComments',
-        'DRAComments'
+    // The primary key associated with the table
+    protected $primaryKey = 'id';
+
+    // Indicates if the IDs are auto-incrementing
+    public $incrementing = true;
+
+    // The attributes that are mass assignable
+    protected $fillable;
+
+    // The attributes that should be cast to native types
+    protected $casts = [
+        'to_change' => 'array',
+        'preferences' => 'array',
+        'current_supervisors' => 'array',
+        'new_supervisors' => 'array',
+        'steps' => 'array',
+        'history' => 'array', // Ensure history is treated as an array
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        // Merge common fields with specific fillable fields
+        $commonFieldKeys = array_keys($this->getCommonFields() ?? []);
+        $this->fillable = array_merge([
+            'reason',
+            'to_change',
+            'preferences',
+            'current_supervisors',
+            'new_supervisors',
+        ], $commonFieldKeys);
+
+        parent::__construct($attributes);
+    }
 
     public function fullForm($user)
     {
-        return [
-            'form_id' => $this->id,
-            'name' => $this->student->user->name(),
-            'email' => $this->student->user->email,
-            'roll_no' => $this->student->roll_no,
-            'title_of_phd' => $this->student->phd_title,    
-            'department' => $this->student->department->name,
-            'phone' => $this->student->user->phone,
-            'date_of_registration' => $this->student->date_of_registration,
-            'irb_completed'=> $this->student->checkIrbCompletionStatus(),
-            'date_of_supervisor_allocation' => $this->student->supervisor_update_date(),
-            'broad_area_of_research' => $this->student->broad_area_specialization,
+        // Use the common form data and merge with specific form data
+        $commonJSON = $this->fullCommonForm($user);
+        $formData = array_merge($commonJSON, [
             'reason' => $this->reason,
-            'supervisors' => $this->student->supervisors->map(function($supervisor){
+            'to_change' => $this->to_change,
+            'preferences' => $this->preferences,
+            'current_supervisors' => $this->current_supervisors,
+            'new_supervisors' => $this->new_supervisors,
+            'supervisorApprovals' => $this->supervisorApprovals->map(function($approval){
                 return [
-                    'name' => $supervisor->user->name(),
-                    'designation' => $supervisor->designation,
-                    'department' => $supervisor->department->name,
-                    'faculty_code' => $supervisor->faculty_code,
+                    'supervisor_id' => $approval->supervisor_id,
+                    'status' => $approval->status,
+                    'comments' => $approval->comments,
+                    'name' => $approval->supervisor->user->name(),
                 ];
             }),
-            'preferences' => $this->preferences?->map(function($preference){
-                return [
-                    'faculty_code' => $preference?->supervisor_id,
-                    'name' => $preference?->supervisor?->user->name(),
-                    'preference' => $preference?->preference,
-                ];
-            }),
-            'updated_supervisors' => $this->updatedSupervisors?->map(function($updatedSupervisor){
-                return [
-                    'old_supervisor' => $updatedSupervisor->oldSupervisor?->user?->name(),
-                    'old_supervisor_id' => $updatedSupervisor->oldSupervisor->faculty_code,
-                    'new_supervisor' => $updatedSupervisor->newSupervisor?->user?->name(),
-                   'new_supervisor_id' => $updatedSupervisor->newSupervisor?->faculty_code,
-                ];
-            }),
-            'status' => $this->status,
-            'stage' => $this->stage,
-            'hod_approval' => $this->hod_approval,
-            'dra_approval' => $this->dra_approval,
-            'dordc_approval' => $this->dordc_approval,
-            'HODComments' => $this->HODComments,
-            'DORDCComments' => $this->DORDCComments,
-            'DRAComments' => $this->DRAComments,
-            'student_lock' => $this->student_lock,
-            'hod_lock' => $this->hod_lock,
-            'dordc_lock' => $this->dordc_lock,
-            'dra_lock' => $this->dra_lock,
-            'role' => $user->role->role,
-        ];
-    }
-
-    public function student()
-    {
-        return $this->belongsTo(Student::class, 'student_id', 'roll_no');
-    }
-
-    public function preferences()
-    {
-        return $this->hasMany(SupervisorChangeFormPreference::class, 'form_id', 'id');
-    }
-
-    public function updatedSupervisors()
-    {
-        return $this->hasMany(SupervisorChangeFormUpdatedSupervisor::class, 'form_id');
-    }
+        ]);
+        return $formData;
     
-
+ }
 }
-

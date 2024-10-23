@@ -57,4 +57,10 @@ class Department extends Model
     {
         return $this->hasMany(BroadAreaSpecialization::class);
     }
+
+    public function checkCoordinates($facultyId)
+    {
+        return $this->phdCoordinators()->where('faculty_id', $facultyId)->exists();
+    }
+    
 }

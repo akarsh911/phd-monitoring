@@ -10,3 +10,4 @@ Route::get('',function (Request $request){
 });
 Route::post('/add', [DepartmentController::class, 'add'])->middleware('auth:sanctum');
 Route::post('/specialization/add', [DepartmentController::class, 'addBroadAreaSpecialization'])->middleware('auth:sanctum');
+Route::post('/phd_coordinator', [DepartmentController::class, 'addCoordinator'])->middleware('auth:sanctum');

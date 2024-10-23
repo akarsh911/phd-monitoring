@@ -1,7 +1,10 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\StudentStatusChangeFormsController;
+use App\Http\Controllers\StatusChangeFormController;
 
-Route::post('',[StudentStatusChangeFormsController::class, 'loadForm'])->middleware('auth:sanctum');
-Route::post('submit',[StudentStatusChangeFormsController::class, 'submitForm'])->middleware('auth:sanctum');
-
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('', [StatusChangeFormController::class, 'listForms']);
+    Route::post('', [StatusChangeFormController::class, 'createForm']);
+    Route::get('/form/{form_id}', [StatusChangeFormController::class, 'loadForm'])->name('form.load');
+    Route::post('/form/{form_id}', [StatusChangeFormController::class, 'submit'])->name('form.submit');
+});

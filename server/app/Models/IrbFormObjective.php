@@ -10,7 +10,7 @@ class IrbFormObjective extends Model
     use HasFactory;
 
     // The table associated with the model
-    protected $table = 'irb_form_objectives';
+    protected $table = 'irb_sub_objectives';
 
     // The primary key associated with the table
     protected $primaryKey = 'id';

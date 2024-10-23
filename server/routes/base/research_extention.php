@@ -1,8 +1,12 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ResearchExtentionsController;
+use App\Http\Controllers\ResearchExtentionController;
 
-Route::post('',[ResearchExtentionsController::class, 'loadForm'])->middleware('auth:sanctum');
-Route::post('update',[ResearchExtentionsController::class, 'approve'])->middleware('auth:sanctum');
-Route::post('submit',[ResearchExtentionsController::class, 'submit'])->middleware('auth:sanctum');
 
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('', [ResearchExtentionController::class, 'listForm']);
+    Route::post('', [ResearchExtentionController::class, 'createForm']);
+    Route::get('/form', [ResearchExtentionController::class, 'loadForm'])->name('form.load');
+    Route::get('/form/{form_id}', [ResearchExtentionController::class, 'loadForm'])->name('form.load');
+    Route::post('/form/{form_id}', [ResearchExtentionController::class, 'submit'])->name('form.submit');
+});

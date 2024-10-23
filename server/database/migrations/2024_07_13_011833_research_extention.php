@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Traits\MigrationCommonFormFields;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -9,14 +10,14 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    use MigrationCommonFormFields;
     public function up(): void
     {
-        Schema::create('thesis_extentions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->primary('id');
-            $table->integer('student_id')->unsigned()->index();
-            $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
-            $table->date('period_of_extention')->nullable()->default(12);
+        //
+        Schema::create('research_extentions_form', function (Blueprint $table) {
+            $this->addCommonFields($table); 
+            $table->integer('period_of_extention')->nullable()->default(6);
+            $table->text('research_pdf')->nullable();
             $table->text('reason')->nullable();
             $table->timestamps();
         });
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('thesis_extentions');
+        //
     }
 };

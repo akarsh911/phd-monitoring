@@ -187,20 +187,23 @@ const ProgressMonitoring = () => {
         </div>
         </div>
         <form onSubmit={handleSubmit} className='studentSideform'>
-        {formData.role === "student" && (
+ 
             <StudentSideProgress formData={formData} />
-          )}
+            <SupervisorSideProgress formData={formData} handleSupRecommendationChange={handleSupRecommendationChange} />
+            <DocComSideProgress formData={formData} handleDocComRecommendationChange={handleDocComRecommendationChange} />
+            <HodSideProgress formData={formData} handleHodRecommendationChange={handleHodRecommendationChange} />
+              <DoRDCSideProgress formData={formData} handleDoRDCRecommendationChange={handleDoRDCRecommendationChange} />
+              <DRASideProgress formData={formData} handleDRARecommendationChange={handleDRARecommendationChange} />
+             
           {formData.role === "faculty" && (
             <div>
               <StudentSideProgress formData={formData} />
-              <SupervisorSideProgress formData={formData} handleSupRecommendationChange={handleSupRecommendationChange} />
               </div>
           )}
           {formData.role === "doccom" && (
             <div>
               <StudentSideProgress formData={formData} />
               <SupervisorSideProgress formData={formData} handleSupRecommendationChange={handleSupRecommendationChange} />
-              <DocComSideProgress formData={formData} handleDocComRecommendationChange={handleDocComRecommendationChange} />
               </div>
           )}
           {formData.role === "hod" && (
@@ -226,9 +229,6 @@ const ProgressMonitoring = () => {
               <StudentSideProgress formData={formData} />
               <SupervisorSideProgress formData={formData} handleSupRecommendationChange={handleSupRecommendationChange} />
               <DocComSideProgress formData={formData} handleDocComRecommendationChange={handleDocComRecommendationChange} />
-              <HodSideProgress formData={formData} handleHodRecommendationChange={handleHodRecommendationChange} />
-              <DoRDCSideProgress formData={formData} handleDoRDCRecommendationChange={handleDoRDCRecommendationChange} />
-              <DRASideProgress formData={formData} handleDRARecommendationChange={handleDRARecommendationChange} />
               </div>
           )}
         </form>

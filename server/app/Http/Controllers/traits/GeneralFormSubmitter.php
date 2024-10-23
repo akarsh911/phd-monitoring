@@ -1,0 +1,295 @@
+<?php
+
+namespace App\Http\Controllers\Traits;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
+
+trait GeneralFormSubmitter
+{
+    private function submitForm($user, Request $request, $form_id, $model, $role, $previousLevel,$nextLevel, callable $extraSteps = null)
+    {
+        
+        if ($role != 'student') {
+            $request->validate([
+                'approval' => 'required|boolean',
+                'comments' => 'string|nullable',
+            ]);
+        }
+  
+        // Check if comments are required
+        if ($role != 'student' && !$request->approval && empty($request->comments)) {
+            return response()->json(['message' => 'Comments are required when approval is false'], 403);
+        }
+        
+        try {
+            $formInstance = $model::where('id', $form_id)->first();
+            if (!$formInstance) {
+                return response()->json(['message' => 'No form found'], 404);
+            }
+            if ($formInstance->completion == 'complete') {
+                return response()->json(['message' => 'Form already completed'], 403);
+            }
+            
+            if ($formInstance->{$role . '_lock'}||($role=='faculty' && $formInstance->supervisor_lock)) {
+                return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+            }
+            
+            $this->handleRoleSpecificLogic($user, $formInstance, $role, $extraSteps);
+            
+            // Process approval logic
+            if ($role != 'student') {
+                if (!$request->approval) {   
+                   $this->updateApprovalAndComments($formInstance, $request, $role);
+                   return $this->handleFallbackToPreviousLevel($user,$formInstance, $previousLevel, $request->comments);
+                }
+            }
+
+     
+            if ($extraSteps) {
+                $extraSteps($formInstance, $user);
+            }
+
+            if ($role != 'student') {
+                $this->updateApprovalAndComments($formInstance, $request, $role);
+            }
+            else{
+                $formInstance->student_lock = true;
+            }
+            $this->handleMoveToNextLevel($formInstance, $nextLevel);
+
+            $formInstance->addHistoryEntry($this->getSubmissionMessage($user->role, $user->name()), $user->name());
+            $formInstance->save();
+            return response()->json(['message' => 'Form submitted successfully']);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+            if($e->getCode()==201){
+                return response()->json(['message' => $e->getMessage()], 201);
+            }
+            return response()->json(['message' => $e->getMessage()], 403);
+        }
+    }
+
+    private function updateApprovalAndComments($formInstance, Request $request, $role)
+    {
+        // Update approval fields based on role
+        if ($request->approval) {
+            switch ($role) {
+                case 'faculty':
+                    $formInstance->supervisor_approval = true;
+                    break;
+
+                case 'phd_coordinator':
+                    $formInstance->phd_coordinator_approval = true;
+                    break;
+
+                case 'hod':
+                    $formInstance->hod_approval = true;
+             
+                    break;
+
+                case 'dordc':
+                    $formInstance->dordc_approval = true;
+                
+                    break;
+
+                case 'dra':
+                    $formInstance->dra_approval = true;
+          
+                    break;
+                case 'external':
+                        $formInstance->external_approval = true;
+              
+                        break;
+
+                case 'director':
+                    $formInstance->director_approval = true;
+                 
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        // Update comments fields based on role
+        switch ($role) {
+            case 'faculty':
+                $formInstance->supervisor_comments = $request->comments;
+                $formInstance->supervisor_lock = true;
+                break;
+
+            case 'phd_coordinator':
+                $formInstance->phd_coordinator_comments = $request->comments;
+                $formInstance->phd_coordinator_lock = true;
+                break;
+
+            case 'hod':
+                $formInstance->hod_comments = $request->comments;
+                $formInstance->hod_lock = true;
+                break;
+
+            case 'dordc':
+                $formInstance->dordc_comments = $request->comments;
+                $formInstance->dordc_lock = true;
+                break;
+
+            case 'dra':
+                $formInstance->dra_comments = $request->comments;
+                $formInstance->dra_lock = true;
+                break;
+            
+            case 'external':
+                $formInstance->external_comments = $request->comments;
+                $formInstance->external_lock = true;
+                break;
+
+            case 'director':
+                $formInstance->director_comments = $request->comments;
+                $formInstance->director_lock = true;
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private function handleFallbackToPreviousLevel($user,$formInstance, $previousLevel, $comments)
+    {
+        if($previousLevel == 'faculty'){
+            $previousLevel = 'supervisor';
+        }
+        $index = array_search($previousLevel, $formInstance->steps);
+        $formInstance->update([
+            'stage' => $previousLevel,
+            'current_step' => $index,
+            // Unlock the current level's lock
+            $this->getUnlockField($previousLevel) => false,
+        ]);
+
+        $formInstance->addHistoryEntry($this->getRejectionMessage($user->role, $user->name()),  $user->name(), $comments);
+        
+        return response()->json(['message' => 'Form Rejected successfully'],200);
+    }
+
+    private function handleMoveToNextLevel($formInstance, $nextLevel)
+    {
+        $index = array_search($nextLevel, $formInstance->steps);
+        if($nextLevel == 'faculty'){
+            $nextLevel = 'supervisor';
+        }
+        $formInstance->update([
+            'stage' => $nextLevel,
+            $nextLevel.'_approval' => false,
+            $nextLevel.'_comments' => null,
+            'current_step' => $index,
+            $this->getUnlockField($nextLevel) => false,
+        ]);
+    }
+    
+
+    private function getUnlockField($stage)
+    {
+        return match ($stage) {
+            'student'=> 'student_lock',
+            'supervisor' => 'supervisor_lock',
+            'phd_coordinator' => 'phd_coordinator_lock',
+            'hod' => 'hod_lock',
+            'dordc' => 'dordc_lock',
+            'dra' => 'dra_lock',
+            'external' => 'external_lock',
+            'director' => 'director_lock',
+            default => null,
+        };
+    }
+
+
+
+    private function handleRoleSpecificLogic($user, $formInstance, $role)
+    {
+        switch ($role) {
+            case 'student':
+                if ($formInstance->student_id != $user->student->roll_no) {
+                    throw new \Exception('You are not authorized to access this resource');
+                }
+                break;
+
+            case 'faculty':
+                if (!$formInstance->student->checkSupervises($user->faculty->faculty_code)) {
+                    throw new \Exception('You are not authorized to access this resource');
+                }
+                break;
+
+            case 'phd_coordinator':
+                if (!$formInstance->student->department->checkCoordinates($user->faculty->faculty_code)) {
+                    throw new \Exception('You are not authorized to access this resource');
+                }
+                break;
+
+            case 'hod':
+                if ($formInstance->student->department->hod_id != $user->faculty->faculty_code) {
+                    throw new \Exception('You are not authorized to access this resource');
+                }
+                break;
+
+            case 'external':
+                if (!$formInstance->student->checkSupervises($user->faculty->faculty_code)) {
+                    throw new \Exception('You are not authorized to access this resource');
+                }
+                break;
+
+            case 'dordc':
+                if ($user->role->role != 'dordc') {
+                    throw new \Exception('You are not authorized to access this resource');
+                }
+                break;
+
+            case 'dra':
+                if ($user->role->role != 'dra') {
+                    throw new \Exception('You are not authorized to access this resource');
+                }
+                break;
+
+            case 'director':
+                if ($user->role->role != 'director') {
+                    throw new \Exception('You are not authorized to access this resource');
+                }
+                break;
+
+            default:
+                throw new \Exception('Invalid role for submission');
+        }
+
+    }
+
+    private function getSubmissionMessage($role, $name)
+    {
+        return match ($role->role) {
+            'student' => "$name (Student) submitted the form",
+            'faculty' => "$name (Supervisor) submitted the form",
+            'phd_coordinator' => "$name (PhD Coordinator) submitted the form",
+            'hod' => "$name (HOD) submitted the form",
+            'dordc' => "$name (DORDC) submitted the form",
+            'dra' => "$name (DRA) submitted the form",
+            'director' => "$name (Director) submitted the form",
+            default => "$name submitted the form",
+        };
+    }
+
+    private function getRejectionMessage($role, $name)
+    {
+        return match ($role->role) {
+            'student' => "$name (Student) Rejected the form",
+            'faculty' => "$name (Supervisor) Rejected the form",
+            'phd_coordinator' => "$name (PhD Coordinator) Rejected the form",
+            'external' => "$name (External) Rejected the form",
+            'hod' => "$name (HOD) Rejected the form",
+            'dordc' => "$name (DORDC) Rejected the form",
+            'dra' => "$name (DRA) Rejected the form",
+            'director' => "$name (Director) Rejected the form",
+            default => "$name Rejected the form",
+        };
+    }
+}

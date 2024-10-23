@@ -11,21 +11,12 @@ class IrbSupervisorApproval extends Model
 
     protected $table = 'irb_supervisor_approvals';
     protected $fillable = [
-        'form_type',
-        'irb_form_id',
         'irb_sub_form_id',
         'supervisor_id',
         'status'
     ];
 
-    /**
-     * Get the IRB form associated with the approval.
-     */
-    public function irbForm()
-    {
-        return $this->belongsTo(IrbForm::class, 'irb_form_id');
-    }
-
+  
     /**
      * Get the IRB sub-form associated with the approval.
      */

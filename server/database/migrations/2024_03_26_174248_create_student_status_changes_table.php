@@ -15,11 +15,8 @@ return new class extends Migration
             $table->id();
             $table->integer('student_id')->unsigned()->index();
             $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
-            $table->enum('previous_status',['part-time','full-time']);
-            $table->enum('new_status',['part-time','full-time']);
+            $table->enum('type_of_change', ['full-time to part-time', 'part-time to full-time'])->nullable();
             $table->text('reason');
-            $table->enum('status',['applied','allowed','rejected']);
-            $table->date('date');
             $table->timestamps();
         });
     }

@@ -192,6 +192,7 @@ class Student extends Model
         return $this->hasMany(StudentBroadAreaSpecialization::class, 'student_id', 'roll_no');
     }
 
+
     public function publications()
     {
         return $this->hasMany(Publication::class, 'student_id', 'roll_no');

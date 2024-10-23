@@ -2,4 +2,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SuggestionController;
 
-Route::post('specialization',[SuggestionController::class, 'suggestSpecialization'])->middleware('auth:sanctum');
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('specialization',[SuggestionController::class, 'suggestSpecialization']);
+    Route::get('faculty', [SuggestionController::class, 'suggestFaculty']);
+});

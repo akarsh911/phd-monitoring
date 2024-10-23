@@ -20,6 +20,10 @@ Route::prefix('supervisor/change')->group(function () {
     require base_path('routes/base/supervisor_change.php');
 });
 
+Route::prefix('supervisor/allocation')->group(function () {
+    require base_path('routes/base/supervisor_allocation.php');
+});
+
 Route::prefix('status-change')->group(function () {
     require base_path('routes/base/student_status_change.php');
 });

@@ -1,72 +1,65 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\ModelCommonFormFields;
 
 class SupervisorAllocation extends Model
 {
-    use HasFactory;
-
-    protected $table = 'supervisor_allocations';
-
-    protected $fillable = [
-        'student_id',
-        'status',
-        'stage',
-        'requires_period',
-        'reason',
-        'hod_approval',
-        'student_lock',
-        'HODComments',
-        'prefrence1',
-        'prefrence2',
-        'prefrence3',
-        'prefrence4',
-        'prefrence5'
-    ];
-
-    // Define relationships
-    public function student()
-    {
-        return $this->belongsTo(Student::class, 'student_id', 'roll_no');
-    }
-
-    public function faculty1()
-    {
-        return $this->belongsTo(Faculty::class, 'prefrence1', 'faculty_code');
-    }
-
-    public function faculty2()
-    {
-        return $this->belongsTo(Faculty::class, 'prefrence2', 'faculty_code');
-    }
-
-    public function faculty3()
-    {
-        return $this->belongsTo(Faculty::class, 'prefrence3', 'faculty_code');
-    }
-
-    public function faculty4()
-    {
-        return $this->belongsTo(Faculty::class, 'prefrence4', 'faculty_code');
-    }
-
-    public function faculty5()
-    {
-        return $this->belongsTo(Faculty::class, 'prefrence5', 'faculty_code');
-    }
-
-    // Function to return array of preferences
-    public function getPreferencesArray()
-    {
-        return [
-            'prefrence1' => $this->prefrence1,
-            'prefrence2' => $this->prefrence2,
-            'prefrence3' => $this->prefrence3,
-            'prefrence4' => $this->prefrence4,
-            'prefrence5' => $this->prefrence5,
+    use HasFactory, ModelCommonFormFields;
+    
+        protected $table = 'supervisor_allocation_form';
+        protected $fillable;
+    
+        protected $casts = [
+            'history' => 'array', 
+            'steps' => 'array',
+            'prefrences' => 'array',
+            'supervisors' => 'array',
         ];
-    }
+    
+        public function __construct(array $attributes = [])
+        {
+            $commonFieldKeys = array_keys($this->getCommonFields() ?? []);
+            $this->fillable = array_merge([
+                'prefrences',
+                'supervisors',
+            ], $commonFieldKeys);
+    
+            parent::__construct($attributes);
+        }
+    
+        public function fullForm($user)
+        {
+            $commonJSON = $this->fullCommonForm($user);
+            return array_merge($commonJSON, [
+                'broad_area_of_research' => $this->student->broad_area_specialization->map(function($broad_area){
+                    return $broad_area->specialization->broad_area;
+                }),
+                
+                'prefrences' => collect($this->prefrences)->map(function ($prefrence) {
+                    $faculty = Faculty::where('faculty_code', $prefrence)->first();
+                    return [
+                        'name' => $faculty->user->name(),
+                        'designation' => $faculty->designation,
+                        'department' => $faculty->department->name,
+                    ];
+                }),
+                
+                'supervisors' => collect($this->supervisors)->map(function ($supervisor) {
+                    $faculty = Faculty::where('faculty_code', $supervisor)->first();
+                    return [
+                        'name' => $faculty->user->name(),
+                        'designation' => $faculty->designation,
+                        'department' => $faculty->department->name,
+                    ];
+                }),
+            ]);
+        }
+        
 }
+
+    

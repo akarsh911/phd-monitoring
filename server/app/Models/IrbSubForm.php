@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\ModelCommonFormFields;
 
 class IrbSubForm extends Model
 {
     use HasFactory;
+    use ModelCommonFormFields;
 
     // The table associated with the model
     protected $table = 'irb_sub_forms';
@@ -19,102 +21,89 @@ class IrbSubForm extends Model
     public $incrementing = true;
 
     // The attributes that are mass assignable
-    protected $fillable = [
-        'student_id',
-        'form_type',
-        'phd_title',
-        'revised_phd_title',
-        'irb_pdf',
-        'revised_irb_pdf',
-        'status',
-        'stage',
-        'supervisor_approval',
-        'hod_approval',
-        'phd_coordinator_approval',
-        'dra_approval',
-        'dordc_approval',
-        'student_lock',
-        'supervisor_lock',
-        'hod_lock',
-        'dordc_lock',
-        'dra_lock',
-        'SuperVisorComments',
-        'HODComments',
-        'DORDCComments',
-        'DRAComments',
-        
-    ];
+    protected $fillable;
 
     // The attributes that should be cast to native types
     protected $casts = [
         'form_type' => 'string',
         'status' => 'string',
         'stage' => 'string',
+        'steps' => 'array',
+        'history' => 'array', // Ensure history is treated as an array
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        // Merge common fields with specific fillable fields
+        $commonFieldKeys = array_keys($this->getCommonFields() ?? []);
+        $this->fillable = array_merge([
+            'form_type',
+            'phd_title',
+            'revised_phd_title',
+            'irb_pdf',
+            'revised_irb_pdf',
+        ], $commonFieldKeys);
+
+        parent::__construct($attributes);
+    }
+
     public function fullForm($user)
     {
-        return [
-            'form_id'=>$this->id,
-            'name'=> $this->student->user->name(),
-            'roll_no' => $this->student->roll_no,
-            'department' => $this->student->department->name,
-            'cgpa' => $this->student->user->phone,
-            'phd_title' => $this->student->phd_title,
-            'address' => $this->student->user->address,
-            'formtype' => $this->form_type,
-            'role'=>$user->role->role,
-            'objectives' => $this->objectives->map(function($objective){
-                return [
-                    'objective' => $objective->objective,
-                    'type' => $objective->type,
-                ];
-            }),
+        // Use the common form data and merge with specific form data
+        $commonJSON = $this->fullCommonForm($user);
+        $formData=array_merge($commonJSON, [
+            'form_type' => $this->form_type,
+            'objectives' => [
+                'revised' => $this->objectives->where('type', 'revised')->map(function($objective){
+                    return [
+                        'objective' => $objective->objective,
+                        'type' => $objective->type,
+                    ];
+                }),
+                'draft' => $this->objectives->where('type', 'draft')->map(function($objective){
+                    return [
+                        'objective' => $objective->objective,
+                        'type' => $objective->type,
+                    ];
+                }),
+            ],
+            'date_of_irb' => $this->student->date_of_irb,
+            'address' => $this->student->address,
             'revised_phd_title' => $this->revised_phd_title,
             'irb_pdf' => $this->irb_pdf,
             'revised_irb_pdf' => $this->revised_irb_pdf,
-            'supervisors' => $this->student->supervisors->map(function($supervisor){
-                return [
-                    'name' => $supervisor->user->name(),
-                    'designation' => $supervisor->designation,
-                    'department' => $supervisor->department->name,
-                    'outside' => $supervisor->supervised_outside,
-                    'campus' => $supervisor->supervised_campus,
-                ];
-            }),
-            'status' => $this->status,
-            'stage' => $this->stage,
-            'SuperVisorComments' => $this->SuperVisorComments,
-            'hod_approval' => $this->hod_approval,
-            'HODComments' => $this->HODComments,
-            'DORDCComments' => $this->DORDCComments,
-            'DRAComments' => $this->DRAComments,
-            'DRARecommendation' => $this->dra_approval,
-            'DORDCRecommendation' => $this->dordc_approval,
-            'HODRecommendation' => $this->phd_coordinator_approval,
-            'student_lock' => $this->student_lock,
-            'hod_lock' => $this->hod_lock,
-            'supervisor_lock' => $this->supervisor_lock,
-            'dordc_lock' => $this->dordc_lock,
-            'dra_lock' => $this->dra_lock,
             'supervisorApprovals' => $this->supervisorApprovals->map(function($approval){
                 return [
                     'supervisor_id' => $approval->supervisor_id,
                     'status' => $approval->status,
                     'comments' => $approval->comments,
                     'name' => $approval->supervisor->user->name(),
+                
                 ];
             }),
-        ];
-    }
-    // Relationships
-    public function student()
-    {
-        return $this->belongsTo(Student::class, 'student_id', 'roll_no');
-    }
-
-    public function history()
-    {
-        return $this->hasMany(IrbSubFormHistory::class, 'sub_form_id', 'id');
+        ]);
+        $formData['supervisors']=$this->student->supervisors->map(function ($supervisor) {
+            return [
+                'name' => $supervisor->user->name(),
+                'designation' => $supervisor->designation,
+                'department' => $supervisor->department->name,
+                'supervised_campus'=>$supervisor->supervised_campus,
+                'supervised_outside'=>$supervisor->supervised_outside,
+            ];
+        });
+        if($user->role->role){
+            $currentSupervisor = $this->student->supervisors->where('faculty_code', $user->faculty->faculty_code)->first();
+            if ($currentSupervisor) {
+            $formData['current_supervisor'] = [
+                'name' => $currentSupervisor->user->name(),
+                'designation' => $currentSupervisor->designation,
+                'department' => $currentSupervisor->department->name,
+                'supervised_campus' => $currentSupervisor->supervised_campus,
+                'supervised_outside' => $currentSupervisor->supervised_outside,
+            ];
+            }
+        }
+        return $formData;
     }
 
     public function objectives()
@@ -124,7 +113,6 @@ class IrbSubForm extends Model
 
     public function supervisorApprovals()
     {
-        
-        return $this->hasMany(IrbSupervisorApproval::class,'irb_sub_form_id','id');
+        return $this->hasMany(IrbSupervisorApproval::class, 'irb_sub_form_id', 'id');
     }
 }
