@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('supervisor_change_forms', function (Blueprint $table) {
             $this->addCommonFields($table);   
             $table->text('reason')->nullable();
+            $table->boolean('irb_submitted')->default(false);
             $table->json('to_change')->nullable();
             $table->json('prefrences')->nullable();
             $table->json('current_supervisors')->nullable();

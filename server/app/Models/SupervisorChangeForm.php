@@ -25,7 +25,7 @@ class SupervisorChangeForm extends Model
     // The attributes that should be cast to native types
     protected $casts = [
         'to_change' => 'array',
-        'preferences' => 'array',
+        'prefrences' => 'array',
         'current_supervisors' => 'array',
         'new_supervisors' => 'array',
         'steps' => 'array',
@@ -39,9 +39,10 @@ class SupervisorChangeForm extends Model
         $this->fillable = array_merge([
             'reason',
             'to_change',
-            'preferences',
+            'prefrences',
             'current_supervisors',
             'new_supervisors',
+            'irb_submitted',
         ], $commonFieldKeys);
 
         parent::__construct($attributes);
@@ -53,19 +54,52 @@ class SupervisorChangeForm extends Model
         $commonJSON = $this->fullCommonForm($user);
         $formData = array_merge($commonJSON, [
             'reason' => $this->reason,
-            'to_change' => $this->to_change,
-            'preferences' => $this->preferences,
-            'current_supervisors' => $this->current_supervisors,
-            'new_supervisors' => $this->new_supervisors,
-            'supervisorApprovals' => $this->supervisorApprovals->map(function($approval){
+            'to_change' => collect($this->to_change)->map(function ($supervisor) {
+                $faculty = Faculty::where('faculty_code', $supervisor)->first();
                 return [
-                    'supervisor_id' => $approval->supervisor_id,
-                    'status' => $approval->status,
-                    'comments' => $approval->comments,
-                    'name' => $approval->supervisor->user->name(),
+                    'name' => $faculty?->user->name(),
+                    'designation' => $faculty?->designation,
+                    'department' => $faculty?->department->name,
                 ];
+                }),
+            'prefrences' => collect($this->prefrences)->map(function ($preference) {
+            $faculty = Faculty::where('faculty_code', $preference)->first();
+            if(!$faculty){
+                return null;
+            }
+            return [
+                'name' => $faculty->user->name(),
+                'designation' => $faculty->designation,
+                'department' => $faculty->department->name,
+            ];
             }),
+            'current_supervisors' => collect($this->current_supervisors)->map(function ($supervisor) {
+            $faculty = Faculty::where('faculty_code', $supervisor)->first();
+            return [
+                'name' => $faculty?->user->name(),
+                'designation' => $faculty?->designation,
+                'department' => $faculty?->department->name,
+            ];
+            }),
+            'new_supervisors' => collect($this->new_supervisors)->map(function ($supervisor) {
+            $faculty = Faculty::where('faculty_code', $supervisor)->first();
+            return [
+                'name' => $faculty->user->name(),
+                'designation' => $faculty->designation,
+                'department' => $faculty->department->name,
+            ];
+            }),
+            'irb_submitted' => $this->irb_submitted,
         ]);
+        $formData['supervisors'] = $this->student->supervisors->map(function ($supervisor) {
+            return [
+                'name' => $supervisor->user->name(),
+                'designation' => $supervisor->designation,
+                'department' => $supervisor->department->name,
+                'faculty_code' => $supervisor->faculty_code,
+            ];
+        });
+
         return $formData;
     
  }

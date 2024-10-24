@@ -111,7 +111,7 @@ class Student extends Model
         return $this->hasOne(IrbForm::class, 'student_id', 'roll_no');
     }
 
-    public function irbSubForms()
+    public function irbSubForm()
     {
         return $this->hasOne(IrbSubForm::class, 'student_id', 'roll_no');
     }
@@ -141,15 +141,6 @@ class Student extends Model
         return $this->department->phdCoordinators->contains($facultyId);
     }
 
-    public function getIrbFormWithHistory()
-    {
-        $irbForm = $this->irbForm()->first();
-        if ($irbForm) {
-            $irbHistory = IrbFormHistory::where('irb_form_id', $irbForm->id)->get();
-            return ['irbForm' => $irbForm, 'irbHistory' => $irbHistory];
-        }
-        return null;
-    }
 
     public static function createIrbFormForStudent($student)
     {
