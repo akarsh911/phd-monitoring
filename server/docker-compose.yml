@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: laravel-app
+    container_name: laravel_app
+    ports:
+      - "4477:80" # Map host port 4477 to container port 80
+    volumes:
+      - .:/var/www/html # Bind the application directory to the container
