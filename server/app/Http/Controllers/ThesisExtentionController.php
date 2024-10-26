@@ -9,8 +9,7 @@ use App\Http\Controllers\Traits\GeneralFormSubmitter;
 
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Traits\SaveFile;
-use App\Models\Patent;
-use App\Models\Publication;
+
 use App\Models\ThesisExtentionForm;
 
 class ThesisExtentionController extends Controller

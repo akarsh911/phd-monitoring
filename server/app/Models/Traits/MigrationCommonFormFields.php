@@ -20,7 +20,7 @@ trait MigrationCommonFormFields
    
         $table->enum('completion', ['incomplete', 'complete'])->nullable()->default('incomplete');
         $table->enum('status', ['draft','pending', 'approved', 'rejected'])->nullable()->default('pending'); // Common field
-        $table->enum('stage', ['student', 'hod','phd_coordinator', 'supervisor','external', 'dordc', 'dra'])->nullable()->default('student'); // Common field
+        $table->enum('stage', ['student', 'hod','phd_coordinator', 'supervisor','doctoral','external', 'dordc', 'dra'])->nullable()->default('student'); // Common field
         $table->json('history')->nullable(); 
         $table->json('steps')->nullable();
         $table->integer('current_step')->nullable()->default(0); 
@@ -33,6 +33,7 @@ trait MigrationCommonFormFields
         $table->boolean('dra_approval')->nullable()->default(false);
         $table->boolean('director_approval')->nullable()->default(false);
         $table->boolean('external_approval')->nullable()->default(false);
+        $table->boolean('doctoral_approval')->nullable()->default(false);
 
 
         // Common lock fields
@@ -43,7 +44,7 @@ trait MigrationCommonFormFields
         $table->boolean('dordc_lock')->nullable()->default(true); 
         $table->boolean('dra_lock')->nullable()->default(true); 
         $table->boolean('director_lock')->nullable()->default(true);
-        $table->boolean('external_lock')->nullable()->default(true);
+        $table->boolean('doctoral_lock')->nullable()->default(true);
 
         // Comments fields for each role (nullable)
         $table->text('student_comments')->nullable();
@@ -54,5 +55,6 @@ trait MigrationCommonFormFields
         $table->text('dra_comments')->nullable();
         $table->text('director_comments')->nullable();
         $table->text('external_comments')->nullable();
+        $table->text('doctoral_comments')->nullable();
     }
 }

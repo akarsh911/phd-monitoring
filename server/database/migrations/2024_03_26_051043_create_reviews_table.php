@@ -16,11 +16,15 @@ return new class extends Migration
             $table->primary('id');
             $table->integer('presentation_id')->unsigned()->index();
             $table->foreign('presentation_id')->references('id')->on('presentations')->onDelete('cascade');
+
             $table->integer('faculty_id')->unsigned()->index();
             $table->foreign('faculty_id')->references('faculty_code')->on('faculty')->onDelete('cascade');
-            $table->enum('progress',['satifactory','not satisfactory'])->nullable();
-            $table->enum('is_supervisor',['yes','no'])->default('no');
+
+            $table->enum('progress',['satisfactory','not satisfactory'])->nullable();
+
+            $table->boolean('is_supervisor')->default(false);
             $table->text('comments')->nullable();
+            
             $table->enum('review_status',['pending','completed']);
             $table->timestamps();
         });

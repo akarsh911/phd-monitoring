@@ -132,4 +132,26 @@ trait GeneralFormHandler
             return response()->json(['errors' => $e->errors()], 422);
         }
     }
+
+    private function handleDoctoralForm($user, $form_id, $modelClass){
+        try {
+            $formInstance = $modelClass::find($form_id);
+            if ($formInstance) {
+                $student = $formInstance->student;
+                if ($student->checkDoctoralCommittee($user->faculty->faculty_code)) {
+                    $index=array_search('doctoral',$formInstance->steps);
+                    if($index!==false && $index<=$formInstance->current_step)
+                    return response()->json($formInstance->fullForm($user));
+                    else
+                    return response()->json(['message' => 'The form is not yet assigned to you for review or action.'], 404);
+                } else {
+                    return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+                }
+            } else {
+                return response()->json(['message' => 'No form found'], 404);
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        }
+    }
 }

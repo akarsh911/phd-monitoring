@@ -96,7 +96,7 @@ class Student extends Model
 
     public function doctoralCommittee()
     {
-        return $this->belongsToMany(Faculty::class, 'doctoral_committee', 'student_id', 'faculty_id', 'roll_no', 'faculty_code');
+        return $this->belongsToMany(Faculty::class, 'doctoral_commitee', 'student_id', 'faculty_id', 'roll_no', 'faculty_code');
     }
 
     public function checkDoctoralCommittee($facultyId)
@@ -111,7 +111,7 @@ class Student extends Model
 
     public function irbForm()
     {
-        return $this->hasOne(IrbForm::class, 'student_id', 'roll_no');
+        return $this->hasOne(ConstituteOfIRB::class, 'student_id', 'roll_no');
     }
 
     public function irbSubForm()
@@ -142,28 +142,6 @@ class Student extends Model
     public function checkPhdCoordinator($facultyId)
     {
         return $this->department->phdCoordinators->contains($facultyId);
-    }
-
-
-    public static function createIrbFormForStudent($student)
-    {
-        $irbNewForm = IrbForm::create([
-            'student_id' => $student->roll_no,
-            'status' => 'awaited',
-            'stage' => 'student',
-            'SuperVisorComments' => null,
-            'HODComments' => null,
-            'DORDCComments' => null,
-            'DRAComments' => null,
-        ]);
-        IrbFormHistory::create([
-            'irb_form_id' => $irbNewForm->id,
-            'user_id' => $student->user_id,
-            'status' => 'awaited',
-            'stage' => 'student',
-            'change' => "Form created by student",
-        ]);
-        return $irbNewForm;
     }
 
     public function researchExtentionsForm()

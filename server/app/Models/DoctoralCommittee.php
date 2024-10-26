@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DoctoralCommittee extends Model
 {
     use HasFactory;
-    protected $table = 'doctoral_committee';
+    protected $table = 'doctoral_commitee';
     /**
      * The attributes that are mass assignable.
      *

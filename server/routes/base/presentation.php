@@ -1,10 +1,13 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 use App\Http\Controllers\PresentationController;
-use Illuminate\Support\Facades\Auth;
 
 
-Route::post('/', [PresentationController::class, 'load'])->middleware('auth:sanctum');
-Route::post('/update', [PresentationController::class, 'update'])->middleware('auth:sanctum');
-Route::post('/submit', [PresentationController::class, 'submit'])->middleware('auth:sanctum');
+Route::middleware('auth:sanctum')->group(function () {
+    // Route::get('', [PresentationController::class, 'listForm']);
+    // Route::post('', [PresentationController::class, 'createForm']);
+    Route::get('/form', [PresentationController::class, 'loadForm'])->name('form.load');
+    Route::get('/form/{form_id}', [PresentationController::class, 'loadForm'])->name('form.load');
+    Route::post('/form/{form_id}', [PresentationController::class, 'submit'])->name('form.submit');
+});

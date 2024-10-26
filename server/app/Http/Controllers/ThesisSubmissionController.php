@@ -112,7 +112,6 @@ class ThesisSubmissionController extends Controller
                     }
                 }
                 if(count($request->publications) != 0){
-                 
                 foreach ($request->publications as $publication) {
                     $publication = Publication::find($publication);
                     if (!$publication) {

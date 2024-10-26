@@ -4,129 +4,127 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Traits\ModelCommonFormFields;
 
 class Presentation extends Model
 {
     use HasFactory;
-    protected $table='presentations';
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'student_id',
-        'date',
-        'time',
-        'period_of_report',
-        'teaching_work',
-        'status',
-        'locked',
-        'progress',
-        'overall_progress',
-        'student_lock',
-        'supervisor_lock',
-        'hod_lock',
-        'dordc_lock',
-        'dra_lock',
-        'SuperVisorComments',
-        'HODComments',
-        'DORDCComments',
-        'DRAComments',
-    ];
+    use ModelCommonFormFields;
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+    // The table associated with the model
+    protected $table = 'presentations';
+
+    // The primary key associated with the table
+    protected $primaryKey = 'id';
+
+    // Indicates if the IDs are auto-incrementing
+    public $incrementing = true;
+
+    // The attributes that are mass assignable
+    protected $fillable;
+
+    // The attributes that should be cast to native types
     protected $casts = [
-        'date' => 'date',
+        'teaching_work' => 'string',
+        'overall_progress' => 'string',
         'progress' => 'integer',
-        'student_lock' => 'boolean',
-        'supervisor_lock' => 'boolean',
-        'hod_lock' => 'boolean',
-        'dordc_lock' => 'boolean',
-        'dra_lock' => 'boolean',
+        'current_progress' => 'integer',
+        'total_progress' => 'integer',
+        'contact_hours' => 'integer',
+        'attendance' => 'float',
+        'history' => 'array',
+        'steps' => 'array',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'created_at',
-        'updated_at',
-    ];
-
-    /**
-     * Get the student associated with the presentation.
-     */
-    public function fullData($user)
+    public function __construct(array $attributes = [])
     {
-        return [
-            'name'=> $this->student->user->name(),
-            'roll_no' => $this->student->roll_no,
-            'department' => $this->student->department->name,
-            'date_of_registration' => $this->student->date_of_registration,
-            'phd_title' => $this->student->phd_title,
-            'period_of_report' => $this->period_of_report,
-            'date_of_irb'=>$this->student->date_of_irb,
-            'teaching_work'=>$this->teaching_work,
-            'prev_progress'=>$this->student->overall_progress,
-            'progress'=>$this->progress,
-            'extention'=>$this->student->researchExtentions,
-            'publications' => $this->student->publications->map(function($publication){
-                return [
-                    'publication'=>$publication,
-                    'authors'=>$publication->authors->map(function($author){
-                        $name=$author->user?->name;
-                        if($name!=null) return $name;
-                        else return $author->name;
-                    })->all(),
-                    ];
-            })->all(),
-            'supervisorReviews'=> $this->supervisorReviews?->map(function($review){
-                return [
-                    'faculty'=>$review->faculty->user->name(),
-                    'progress'=>$review->progress,
-                    'comments'=>$review->comments,
-                    'review_status'=>$review->review_status,
-                ];
-            }),
-            'doctoralCommitteeReviews'=> $this->doctoralCommitteeReviews?->map(function($review){
-                return [
-                    'faculty'=>$review->faculty->user->name(),
-                    'progress'=>$review->progress,
-                    'comments'=>$review->comments,
-                    'review_status'=>$review->review_status,
-                ];
-            }),
-            'status'=>$this->status,
-            'HODComments' => $this->HODComments,
-            'DORDCComments' => $this->DORDCComments,
-            'DRAComments' => $this->DRAComments,
-            'student_lock' => $this->student_lock,
-            'hod_lock' => $this->hod_lock,
-            'supervisor_lock' => $this->supervisor_lock,
-            'dordc_lock' => $this->dordc_lock,
-            'dra_lock' => $this->dra_lock,
-            'role' => $user->role->role,
-        ];
+        // Merge common fields with specific fillable fields
+        $commonFieldKeys = array_keys($this->getCommonFields() ?? []);
+        $this->fillable = array_merge([
+            'date',
+            'time',
+            'venue',
+            'period_of_report',
+            'teaching_work',
+            'presentation_pdf',
+            'progress',
+            'total_progress',
+            'current_progress',
+            'contact_hours',
+            'attendance',
+            'overall_progress',
+        ], $commonFieldKeys);
+
+        parent::__construct($attributes);
     }
 
-    public function student()
+    public function fullForm($user)
     {
-        return $this->belongsTo(Student::class, 'student_id', 'roll_no');
+        // Use the common form data and merge with specific form data
+        $commonJSON = $this->fullCommonForm($user);
+        $formData = array_merge($commonJSON, [
+            'doctoral_committee' => $this->student->doctoralCommittee->map(function ($committee) {
+                return [
+                    'name' => $committee->faculty->user->name(),
+                    'department' => $committee->faculty->department->name,
+                    'designation' => $committee->faculty->designation,
+                ];
+            }),
+            'date' => $this->date,
+            'time' => $this->time,
+            'venue' => $this->venue,
+            'current_progress' => $this->current_progress,
+            'period_of_report' => $this->period_of_report,
+
+
+            'teaching_work' => $this->teaching_work,
+            
+            'progress' => $this->progress,
+            'total_progress' => $this->total_progress,
+            'contact_hours' => $this->contact_hours,
+            'attendance' => $this->attendance,
+          
+            'overall_progress' => $this->overall_progress,
+            'presentation_pdf' => $this->presentation_pdf,
+
+            'supervisorReviews' => $this->supervisorReviews->map(function ($review) {
+                return [
+                    'faculty' => $review->faculty->user->name(),
+                    'progress' => $review->progress,
+                    'comments' => $review->comments,
+                    'review_status' => $review->review_status,
+                ];
+            }),
+
+            'doctoralCommitteeReviews' => $this->doctoralCommitteeReviews->map(function ($review) {
+                return [
+                    'faculty' => $review->faculty->user->name(),
+                    'progress' => $review->progress,
+                    'comments' => $review->comments,
+                    'review_status' => $review->review_status,
+                ];
+            }),
+
+        ]);
+        $fac_id=$user->faculty?->faculty_code;
+
+        if($this->student->checkDoctoralCommittee($fac_id)){
+            $formData['current_review'] = $this->doctoralCommitteeReviews->where('faculty_id', $fac_id)->first();
+        }
+        if($this->student->checkSupervises($fac_id)){
+            $formData['current_review'] = $this->supervisorReviews->where('faculty_id', $fac_id)->first();
+        }
+
+        return $formData;
     }
 
     public function supervisorReviews()
     {
-        return $this->hasMany(PresentationReview::class, 'presentation_id', 'id')->where('is_supervisor', 'Yes');
+        return $this->hasMany(PresentationReview::class, 'presentation_id', 'id')->where('is_supervisor', 1);
     }
+
     public function doctoralCommitteeReviews()
     {
-        return $this->hasMany(PresentationReview::class, 'presentation_id', 'id')->where('is_supervisor', 'No');
+        return $this->hasMany(PresentationReview::class, 'presentation_id', 'id')->where('is_supervisor', 0);
     }
 }
