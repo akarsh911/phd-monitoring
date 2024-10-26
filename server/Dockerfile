@@ -1,39 +1,29 @@
-# Use the official PHP image with Apache
-FROM php:8.2-apache
+FROM php:8.2.4
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    zip \
-    unzip \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
+# Install Composer
+RUN curl -sS https://getcomposer.org/installer | php -- \
+     --install-dir=/usr/local/bin --filename=composer
+
+# Install required PHP extensions
+RUN apt-get update && apt-get install -y zlib1g-dev \
     libzip-dev \
-    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+    unzip \
+    && docker-php-ext-install pdo pdo_mysql sockets zip
 
-# Enable Apache mod_rewrite
-RUN a2enmod rewrite
+# Create the app directory
+RUN mkdir /app
 
-# Set working directory
-WORKDIR /var/www/html
+# Copy the application code to the container
+ADD . /app
 
-# Copy existing application directory contents
-COPY . /var/www/html
+# Set the working directory
+WORKDIR /app
 
-# Install Composer and optimize autoload
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install --optimize-autoloader --no-dev
+# Install Composer dependencies
+RUN composer install
 
-# Cache configuration and routes
-RUN php artisan config:cache 
-# && php artisan route:cache
+# Start the PHP application
+CMD php artisan serve --host=0.0.0.0 --port=8000
 
-# Set file permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 775 /var/www/html/storage \
-    && chmod -R 775 /var/www/html/bootstrap/cache
-
-# Run migrations and start the server
-CMD php artisan migrate && php artisan serve --host=0.0.0.0 --port=8000
+# Expose the application port
+EXPOSE 8000
