@@ -176,6 +176,16 @@ class Student extends Model
         return $this->hasMany(ResearchExtentions::class, 'student_id', 'roll_no');
     }
 
+    public function thesisExtentions()
+    {
+        return $this->hasMany(ThesisExtension::class, 'student_id', 'roll_no');
+    }
+
+    public function thesisExtentionsForm()
+    {
+        return $this->hasMany(ThesisExtentionForm::class, 'student_id', 'roll_no');
+    }
+
     public function supervisorChangeForm()
     {
         return $this->hasOne(SupervisorChangeForm::class, 'student_id', 'roll_no');
@@ -184,6 +194,16 @@ class Student extends Model
     public function broad_area_specialization()
     {
         return $this->hasMany(StudentBroadAreaSpecialization::class, 'student_id', 'roll_no');
+    }
+
+    public function initialStatus()
+    {
+        $changes= $this->statusChanges()->orderBy('created_at', 'asc')?->first();
+        if(!$changes){
+            return $this->current_status;
+        }
+        $init=$changes->type_of_change=='full-time to part-time'?'full-time':'part-time';
+        return $init;
     }
 
 

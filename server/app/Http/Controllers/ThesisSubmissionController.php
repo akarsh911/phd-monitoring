@@ -159,9 +159,6 @@ class ThesisSubmissionController extends Controller
             'faculty',
             'student',
             'phd_coordinator',
-            function ($formInstance) use ($request, $user) {
-                $formInstance->supervisor_id = $user->faculty->id;
-            }
         );
     }
 

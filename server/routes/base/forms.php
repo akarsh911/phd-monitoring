@@ -16,6 +16,10 @@ Route::prefix('thesis/submission')->group(function () {
     require base_path('routes/base/thesis_submission.php');
 });
 
+Route::prefix('thesis/extension')->group(function () {
+    require base_path('routes/base/thesis_extention.php');
+});
+
 Route::prefix('research/extension')->group(function () {
     require base_path('routes/base/research_extention.php');
 });

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('phone')->unique();
             $table->string('email')->unique();
-            $table->enum('gender',['Male','Female','Others'])->default('Others');
+            $table->enum('gender',['Male','Female'])->default('Female');
            
             $table->integer('role_id')->unsigned()->index();
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');

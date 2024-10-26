@@ -16,8 +16,10 @@ return new class extends Migration
             $table->primary('id');
             $table->integer('student_id')->unsigned()->index();
             $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
-            $table->date('period_of_extention')->nullable()->default(12);
+            $table->integer('period_of_extention')->nullable()->default(12);
             $table->text('reason')->nullable();
+            $table->integer('form_id')->unsigned()->index()->nullable();
+            $table->foreign('form_id')->references('id')->on('thesis_extentions_form')->onDelete('cascade');
             $table->timestamps();
         });
     }
