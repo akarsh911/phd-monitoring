@@ -5,4 +5,4 @@ use App\Http\Controllers\PublicationController;
 use Illuminate\Support\Facades\Auth;
 
 
-Route::post('/add', [PublicationController::class, 'store'])->middleware('auth:sanctum');
+Route::post('/', [PublicationController::class, 'store'])->middleware('auth:sanctum');

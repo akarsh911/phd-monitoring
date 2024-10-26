@@ -114,6 +114,10 @@ Route::prefix('publications')->group(function () {
     require base_path('routes/base/publications.php');
 });
 
+Route::prefix('patents')->group(function () {
+    require base_path('routes/base/patents.php');
+});
+
 Route::prefix('faculties')->group(function () {
     require base_path('routes/base/faculties.php');
 });
@@ -142,6 +146,8 @@ Route::prefix('suggestions')->group(function () {
 Route::prefix('presentation')->group(function () {
     require base_path('routes/base/presentation.php');
 });
+
+
 // Route::get('/init',function (){
     
 //     User::factory()->count(10)->create();

@@ -36,7 +36,7 @@ class Publication extends Model
         'type',
         'impact_factor',
     ];
-
+    protected $table = 'publications';
     /**
      * The attributes that should be cast to native types.
      *

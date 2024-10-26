@@ -19,6 +19,7 @@ class Student extends Model
         'department_id',
         'date_of_registration',
         'date_of_irb',
+        'date_of_synopsis',
         'phd_title',
         'fathers_name',
         'address',
@@ -30,6 +31,7 @@ class Student extends Model
     protected $casts = [
         'date_of_registration' => 'date',
         'date_of_irb' => 'date',
+        'date_of_synopsis' => 'date',
         'overall_progress' => 'float',
     ];
 
@@ -50,6 +52,7 @@ class Student extends Model
             'department'=>$this->department->name,
             'date_of_registration'=>$this->date_of_registration,
             'date_of_irb'=>$this->date_of_irb,
+            'date_of_synopsis'=>$this->date_of_synopsis,
             'phd_title'=>$this->phd_title,
             'fathers_name'=>$this->fathers_name,
             'address'=>$this->address,
@@ -187,5 +190,10 @@ class Student extends Model
     public function publications()
     {
         return $this->hasMany(Publication::class, 'student_id', 'roll_no');
+    }
+
+    public function semester_offs()
+    {
+        return $this->hasMany(StudentSemesterOff::class, 'student_id', 'roll_no');
     }
 }

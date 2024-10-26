@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('department_id')->unsigned()->nullable();
             $table->date('date_of_registration');
             $table->date('date_of_irb');
+            $table->date('date_of_synopsis');
             $table->text('phd_title');
             $table->text('fathers_name');
             $table->text('address');

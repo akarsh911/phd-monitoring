@@ -26,7 +26,7 @@ class Patent extends Model
         'status',
         'country',
     ];
-
+    protected $table = 'patents';
     /**
      * The attributes that should be cast to native types.
      *

@@ -58,7 +58,7 @@ class PublicationController extends Controller
         $publication->year=$request->year;
         $publication->name=$request->name;
         
-        $link=$this->saveUploadedFile($request->first_page,'publication'.$request->title,$user->student->roll_no);
+        $link=$this->saveUploadedFile($request->first_page,'publication',$user->student->roll_no);
         $publication->first_page=$link;
         $publication->status=$request->status;
 
