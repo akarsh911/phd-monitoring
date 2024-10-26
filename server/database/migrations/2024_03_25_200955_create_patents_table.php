@@ -14,15 +14,21 @@ return new class extends Migration
         Schema::create('patents', function (Blueprint $table) {
             $table->increments('id');
             $table->primary('id');
-            $table->text('title');
-            $table->string('patent_number');
-            $table->date('date_of_filing');
-            $table->date('date_of_issue');
-            $table->enum('status', ['pending', 'issued', 'rejected']);
-            $table->text('description');
-            $table->enum('country',['India','Others'])->default('India')->nullable();
+
             $table->integer('student_id')->unsigned()->index();
             $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
+            $table->integer('form_id')->unsigned()->nullable();
+            $table->enum('form_type', ['progress', 'thesis','synopsis'])->nullable();
+
+            $table->text('title')->nullable();
+            $table->string('patent_number')->nullable();
+            $table->string('first_page')->nullable();
+            $table->text('authors')->nullable();
+            $table->date('year')->nullable();
+            $table->text('doi_link')->nullable();
+            $table->enum('status', ['filed', 'published', 'granted']);
+            $table->enum('country',['National','International'])->default('National')->nullable();
+          
             $table->timestamps();
         });
     }

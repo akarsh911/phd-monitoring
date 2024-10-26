@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\SaveFile;
 use App\Models\Publication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,6 +15,7 @@ class PublicationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    use SaveFile;
     public function index()
     {
         $publications = Publication::all();
@@ -30,6 +32,13 @@ class PublicationController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
+            'publication_type' => ['required', 'in:journal,conference,book'],
+            'authors'=>'required|string',
+            'status'=>'required|in:published,accepted',
+            'doi_link'=>'required|string',
+            'first_page'=>'required|file|mimes:pdf|max:2048',
+            'year'=>'required|string',
+            'name'=>'required|string'
         ]);
         $user = Auth::user();
         $role = $user->role->role;
@@ -42,42 +51,63 @@ class PublicationController extends Controller
 
         $publication = new Publication();
         $publication->student_id = $user->student->roll_no;
+
         $publication->title = $request->title;
-        $authors = $request->authors;
+        $publication->authors = $request->authors;
+        $publication->doi_link=$request->doi_link;
+        $publication->year=$request->year;
+        $publication->name=$request->name;
         
-        $publication->title=$request->title;
-        $publication->date_filed=$request->date_filed;
-        $publication->year_filed=$request->year_filed;
+        $link=$this->saveUploadedFile($request->first_page,'publication'.$request->title,$user->student->roll_no);
+        $publication->first_page=$link;
         $publication->status=$request->status;
-        $type=$request->type;
+
+        $type=$request->publication_type;
         switch($type){
             case 'journal':
-                $publication->journal_name=$request->journal_name;
+                $request->validate(
+                    [
+                        'impact_factor' => 'required|numeric',
+                        'type'=>'required|in:sci,non-sci',
+                        'volume'=>'required|integer',
+                        'page_no'=>'required|integer',
+                    ]
+                );
                 $publication->volume=$request->volume;
                 $publication->page_no=$request->page_no;
-                $publication->date_of_publication=$request->date_of_publication;
-                $publication->year_of_publication=$request->year_of_publication;
                 $publication->impact_factor=$request->impact_factor;
-                $publication->publisher=$request->publisher;
-                $publication->journal_type=$request->journal_type;
+                $publication->type=$request->type;
                 break;
             case 'conference':
-                $publication->conference_name=$request->conference_name;
-                $publication->conference_location=$request->conference_location;
-                $publication->date_of_publication=$request->date_of_publication;
-                $publication->year_of_publication=$request->year_of_publication;
-                $publication->conference_type=$request->conference_type;
+                $request->validate(
+                    [
+                        'country'=>'required|string',
+                        'state'=>'required|string',
+                        'city'=>'required|string',
+                        'type'=>'required|in:national,international'
+                    ]
+                );
+    
+                $publication->country=$request->country;
+                $publication->state=$request->state;
+                $publication->city=$request->city;
+                $publication->type=$request->type;
                 break;
             case 'book':
-                $publication->book_name=$request->book_name;
+                $request->validate(
+                    [
+                        'issn'=>'required|integer',
+                        'volume'=>'required|integer',
+                        'page_no'=>'required|integer',
+                        'publisher'=>'required|string',
+                    ]
+                );
+
+                $publication->issn=$request->issn;
+                $publication->volume=$request->volume;
+                $publication->page_no=$request->page_no;
                 $publication->publisher=$request->publisher;
-                $publication->date_of_publication=$request->date_of_publication;
-                $publication->year_of_publication=$request->year_of_publication;
                 break;
-        }
-        $publication->save();
-        foreach ($authors as $author) {
-            $publication->addAuthor($author['name'], $author['user_id'] ?? null);
         }
         $publication->save();
         return response()->json($publication, 201);
@@ -100,80 +130,18 @@ class PublicationController extends Controller
         return response()->json($publication);
     }
 
-    public function update(Request $request)
-{
-    // Validation rules
-    $validator = Validator::make($request->all(), [
-        'title' => 'required|string|max:255',
-        'author' => 'required|string|max:255',
-        'published_at' => 'nullable|date',
-        'id' => 'required|integer'
-    ]);
-    $id=$request->id;
-
-    // Check authorization
-    $user = Auth::user();
-    $role = $user->role;
-    if ($role != 'student') {
-        return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+    /**
+     * Update the specified publication in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        //coming soon
+        //TODO: Implement update method
     }
-  
-    // Check validation
-    if ($validator->fails()) {
-        return response()->json(['errors' => $validator->errors()], 400);
-    }
-
-    // Find existing publication
-    $publication = Publication::find($id);
-    if (!$publication) {
-        return response()->json(['message' => 'Publication not found'], 404);
-    }
-    if($publication->student_id!=$user->student->roll_no){
-        return response()->json(['message' => 'You are not authorized to access this resource'], 403);
-    }
-
-    $publication->title = $request->title;
-    $authors = $request->author;
-    $publication->authors()->delete();
-    foreach ($authors as $author) {
-        $publication->addAuthor($author['name'], $author['user_id'] ?? null);
-    }
-    $publication->title = $request->title;
-    $publication->date_filed = $request->date_filed;
-    $publication->year_filed = $request->year_filed;
-    $publication->status = $request->status;
-    $type = $request->type;
-    
-    switch ($type) {
-        case 'journal':
-            $publication->journal_name = $request->journal_name;
-            $publication->volume = $request->volume;
-            $publication->page_no = $request->page_no;
-            $publication->date_of_publication = $request->date_of_publication;
-            $publication->year_of_publication = $request->year_of_publication;
-            $publication->impact_factor = $request->impact_factor;
-            $publication->journal_type = $request->journal_type;
-            break;
-        case 'conference':
-            $publication->conference_name = $request->conference_name;
-            $publication->conference_location = $request->conference_location;
-            $publication->date_of_publication = $request->date_of_publication;
-            $publication->year_of_publication = $request->year_of_publication;
-            $publication->conference_type = $request->conference_type;
-            break;
-        case 'book':
-            $publication->book_name = $request->book_name;
-            $publication->publisher = $request->publisher;
-            $publication->date_of_publication = $request->date_of_publication;
-            $publication->year_of_publication = $request->year_of_publication;
-            break;
-    }
-
-    // Save updated publication
-    $publication->save();
-
-    return response()->json($publication, 200);
-}
 
    
 }

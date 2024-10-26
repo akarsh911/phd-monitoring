@@ -16,24 +16,24 @@ class Publication extends Model
      */
     protected $fillable = [
         'student_id',
+        'form_id',
+        'form_type',
         'title',
-        'author',
-        'co_author',
-        'journal_name',
-        'book_name',
-        'conference_name',
-        'conference_location',
+        'authors',
+        'doi_link',
+        'first_page',
+        'year',
+        'name',
+        'status',
+        'country',
+        'state',
+        'city',
         'publisher',
         'volume',
         'page_no',
+        'issn',
+        'publication_type',
         'type',
-        'status',
-        'conference_type',
-        'journal_type',
-        'date_filed',
-        'year_filed',
-        'date_of_publication',
-        'year_of_publication',
         'impact_factor',
     ];
 
@@ -43,8 +43,7 @@ class Publication extends Model
      * @var array
      */
     protected $casts = [
-        'date_filed' => 'date',
-        'date_of_publication' => 'date',
+        'year' => 'date',
         'impact_factor' => 'float',
     ];
 
@@ -61,28 +60,8 @@ class Publication extends Model
     /**
      * Get the student associated with the publication.
      */
-
-    public function authors()
-    {
-        return $this->hasMany(PublicationAuthors::class);
-    }
-
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id', 'roll_no');
-    }
-
-    public function addAuthor($name, $userId = null)
-    {
-        return PublicationAuthors::create([
-            'publication_id' => $this->id,
-            'name' => $name,
-            'user_id' => $userId,
-        ]);
-    }
-
-    public function removeAllAuthors()
-    {
-        return $this->authors()->delete();
     }
 }

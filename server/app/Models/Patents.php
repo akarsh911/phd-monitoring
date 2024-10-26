@@ -15,14 +15,16 @@ class Patent extends Model
      * @var array
      */
     protected $fillable = [
+        'student_id',
+        'form_id',
+        'form_type',
         'title',
         'patent_number',
-        'date_of_filing',
-        'date_of_issue',
+        'first_page',
+        'year',
+        'doi_link',
         'status',
-        'description',
         'country',
-        'student_id',
     ];
 
     /**
@@ -31,8 +33,7 @@ class Patent extends Model
      * @var array
      */
     protected $casts = [
-        'date_of_filing' => 'date',
-        'date_of_issue' => 'date',
+        'year' => 'date',
     ];
 
     /**
@@ -50,6 +51,6 @@ class Patent extends Model
      */
     public function student()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(Student::class, 'student_id', 'roll_no');
     }
 }
