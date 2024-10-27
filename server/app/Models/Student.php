@@ -197,6 +197,16 @@ class Student extends Model
     
     public function forms()
     {
-        return $this->hasMany(Forms::class, 'student_id', 'roll_no')->where('student_available', true);
+        $forms = $this->hasMany(Forms::class, 'student_id', 'roll_no')->where('student_available', true)->get();
+        $ret = [];
+        foreach ($forms as $form) {
+            if ($form->stage === 'student') {
+                $form['action_required'] = true;
+            } else {
+                $form['action_required'] = false;
+            }
+            $ret[] = $form;
+        }
+        return $ret;
     }
 }

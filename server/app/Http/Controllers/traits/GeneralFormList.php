@@ -64,7 +64,8 @@ trait GeneralFormList
             return $index !== false && $index <= $form->current_step;
         });
     
-        return $filteredForms->values();
+        return  response()->json($filteredForms, 200); 
+
     }
 
 
@@ -86,7 +87,7 @@ trait GeneralFormList
                 return [];
             }
             $index = array_search($role, $form->steps);
-            return $index !== false && $index >= $form->current_step;
+            return $index !== false && $index <= $form->current_step;
         });
     
         return $filteredForms->values();

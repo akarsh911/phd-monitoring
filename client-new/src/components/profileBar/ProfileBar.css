@@ -1,0 +1,38 @@
+.profile-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr; /* Three columns: two flexible and one fixed for progress */
+    align-items: center;
+    justify-items: center;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-height: 100px;
+  }
+  
+  .progress-container {
+    max-height: 100px;
+    height: 80px;
+    width: 80px;
+  }
+  
+  .dates {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center the dates vertically */
+  }
+  
+  .phd-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px; /* Optional, if you want to add a title */
+  }
+  
+  .student-name,
+  .roll-number,
+  .irb-date,
+  .synopsis-date {
+    margin: 4px 0;
+    font-size: 14px;
+  }
+  

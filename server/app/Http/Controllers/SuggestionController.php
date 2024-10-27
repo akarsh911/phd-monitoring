@@ -72,7 +72,7 @@ class SuggestionController extends Controller {
             'department_id' => 'nullable|integer',
         ]);
 
-        if (!$request->text || strlen($request->text) < 3) {
+        if (!$request->text) {
             return response()->json([], 200);
         }
 
@@ -109,7 +109,7 @@ class SuggestionController extends Controller {
             'text' => 'required|string',
         ]);
     
-        if (!$request->has('text') || strlen($request->text) < 3) {
+        if (!$request->has('text') ) {
             return response()->json([], 200);
         }
     

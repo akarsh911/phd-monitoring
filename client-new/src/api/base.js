@@ -1,16 +1,21 @@
 import { toast } from "react-toastify";
 
-export const customFetch = async (link,body={}) => {
+export const customFetch = async (link,method,body={}) => {
     try {
-      const response = await fetch(link, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(body), 
-      });
+    const options = {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    };
+
+    if (method === "POST") {
+      options.body = JSON.stringify(body);
+    }
+
+    const response = await fetch(link, options);
 
       if (response.ok) {
 

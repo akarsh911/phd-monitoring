@@ -11,32 +11,16 @@ trait GeneralFormHandler
             if (!$student) {
                 return response()->json(['message' => 'Student not found'], 404);
             }
-            if(!$form_id)
-            $form_id =  $modelClass::where('student_id', $student->roll_no)->first()?->id;
-            $formInstance = $modelClass::find($form_id);
+        
+        
+            $formInstance = $modelClass::where('id',$form_id)->where('student_id', $student->roll_no)->first();
             if ($formInstance) {
                 if ($formInstance->student->id == $student->id) {
                     return response()->json($formInstance->fullForm($user));
                 } else {
                     return response()->json(['message' => 'You are not authorized to access this resource'], 403);
                 }
-            } else if(!$form_id){ 
-            
-                $newForm = new $modelClass([
-                    'student_id' => $student->roll_no,
-                    'status' => 'draft',
-                    'stage' => 'student',
-                    'student_lock' => false,
-                    'steps'=>$steps
-                ]);
-                if($callback){
-                    $callback($newForm);
-                }
-
-                $newForm->save();
-                $newForm->addHistoryEntry('Student Initiated Form', $user->name());
-                return response()->json($newForm->fullForm($user));
-            }
+            } 
             else{
                 return response()->json(['message' => 'No form found'], 404);
             }

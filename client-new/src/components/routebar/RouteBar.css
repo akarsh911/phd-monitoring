@@ -25,6 +25,6 @@
   
   .route-bar a:hover {
     text-decoration: underline; /* Underline on hover */
-    color: var(--secondary-color); /* Change color on hover */
+    color: var(--hover-color); /* Change color on hover */
   }
   

@@ -12,3 +12,4 @@ Route::get('/', [StudentController::class, 'list'])->middleware('auth:sanctum');
   
 
 Route::post('/add', [StudentController::class, 'add'])->middleware('auth:sanctum');
+Route::get('/{id}', [StudentController::class, 'get'])->middleware('auth:sanctum');

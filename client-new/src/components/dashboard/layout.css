@@ -22,13 +22,11 @@
 /* Top bar styles */
 .topbar {
     color: white; /* White text in top bar */
-    margin-bottom: 20px; 
 }
 
 /* Content area */
 .content {
-    padding: 10px; /* Padding inside the content area */
-    background-color: #ecf0f1; /* Light grey background for content */
-    border-radius: 8px; /* Rounded corners for content area */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+    /* padding: 10px 20px;  */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
 }

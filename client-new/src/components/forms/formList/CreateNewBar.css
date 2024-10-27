@@ -1,0 +1,6 @@
+.form-list-bar{
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    padding: 0px 20px; 
+}

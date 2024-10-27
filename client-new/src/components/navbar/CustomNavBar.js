@@ -1,62 +1,50 @@
-// NavBar.jsx
 import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom'; 
 import './NavBar.css';
 
-const CustomNavBar = ({ activeButton }) => {
-    activeButton = 'home';
-  const userRole = 'admin';
-  return (
-    <div className="side-left-menu">
-      <div className="tietlogo">
-        <img src="/images/tiet_logo.png" alt="Logo" />
-      </div>
-      <div className="icons">
-        <button 
-          className={`menu-button ${activeButton === 'home' ? 'active' : ''}`} 
-          onClick={() => console.log('Navigate to Home')}
-        >
-          <span className="icon">🏠</span>
-          <span className="text">Home</span>
-        </button>
-        
-        {userRole === 'admin' && (
-          <button 
-            className={`menu-button ${activeButton === 'admin' ? 'active' : ''}`} 
-            onClick={() => console.log('Navigate to Admin')}
-          >
-            <span className="icon">🛠️</span>
-            <span className="text">Admin Panel</span>
-          </button>
-        )}
+const buttonConfig = {
+    student: [
+        { path: '/home', icon: '🏠', text: 'Home' },
+        { path: '/forms', icon: '📃', text: 'Forms' },
+        { path: '/about', icon: 'ℹ️', text: 'About' },
+        { path: '/contact', icon: '✉️', text: 'Contact' }
+    ],
+    admin: [
+        { path: '/home', icon: '🏠', text: 'Home' },
+        { path: '/admin', icon: '🛠️', text: 'Admin Panel' },
+        { path: '/about', icon: 'ℹ️', text: 'About' },
+        { path: '/contact', icon: '✉️', text: 'Contact' }
+    ]
+};
 
-        {userRole === 'user' && (
-          <button 
-            className={`menu-button ${activeButton === 'user' ? 'active' : ''}`} 
-            onClick={() => console.log('Navigate to User')}
-          >
-            <span className="icon">👤</span>
-            <span className="text">User Dashboard</span>
-          </button>
-        )}
+const CustomNavBar = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
 
-        <button 
-          className={`menu-button ${activeButton === 'about' ? 'active' : ''}`} 
-          onClick={() => console.log('Navigate to About')}
-        >
-          <span className="icon">ℹ️</span>
-          <span className="text">About</span>
-        </button>
-        
-        <button 
-          className={`menu-button ${activeButton === 'contact' ? 'active' : ''}`} 
-          onClick={() => console.log('Navigate to Contact')}
-        >
-          <span className="icon">✉️</span>
-          <span className="text">Contact</span>
-        </button>
-      </div>
-    </div>
-  );
+    const userRole = localStorage.getItem('userRole');
+    const activeButton = location.pathname.startsWith('/forms') ? '/forms' : location.pathname;
+
+    const buttons = buttonConfig[userRole] || [];
+
+    return (
+        <div className="side-left-menu">
+            <div className="tietlogo">
+                <img src="/images/tiet_logo.png" alt="Logo" />
+            </div>
+            <div className="icons">
+                {buttons.map(({ path, icon, text }) => (
+                    <button 
+                        key={path}
+                        className={`menu-button ${activeButton === path || (path === '/forms' && activeButton.startsWith('/forms')) ? 'active' : ''}`} 
+                        onClick={() => navigate(path)}
+                    >
+                        <span className="icon">{icon}</span>
+                        <span className="text">{text}</span>
+                    </button>
+                ))}
+            </div>
+        </div>
+    );
 };
 
 export default CustomNavBar;

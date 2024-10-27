@@ -24,7 +24,7 @@ class UserController extends Controller{
         $data = null;
         switch ($role->role) {
             case 'student':
-                $data = $user->student->forms;
+                $data = $user->student->forms();
                 break;
             case 'hod':
             case 'phd_coordinator':
