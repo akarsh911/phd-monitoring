@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Traits;
 
+
+use App\Models\Forms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -57,7 +59,7 @@ trait GeneralFormSubmitter
             else{
                 $formInstance->student_lock = true;
             }
-            $this->handleMoveToNextLevel($formInstance, $nextLevel);
+            $this->handleMoveToNextLevel($formInstance, $nextLevel,$model);
 
             $formInstance->addHistoryEntry($this->getSubmissionMessage($user->role, $user->name()), $user->name());
             $formInstance->save();
@@ -174,8 +176,9 @@ trait GeneralFormSubmitter
         return response()->json(['message' => 'Form Rejected successfully'],200);
     }
 
-    private function handleMoveToNextLevel($formInstance, $nextLevel)
+    private function handleMoveToNextLevel($formInstance, $nextLevel,$model)
     {
+        $student_id=$formInstance->student->roll_no;
         $index = array_search($nextLevel, $formInstance->steps);
         if($nextLevel == 'faculty'){
             $nextLevel = 'supervisor';
@@ -187,6 +190,7 @@ trait GeneralFormSubmitter
             'current_step' => $index,
             $this->getUnlockField($nextLevel) => false,
         ]);
+        $this->updateForm($model,$student_id,$nextLevel);
     }
     
 
@@ -291,5 +295,30 @@ trait GeneralFormSubmitter
             'director' => "$name (Director) Rejected the form",
             default => "$name Rejected the form",
         };
+    }
+
+    private function getFormType($model){
+        $model = (new \ReflectionClass($model))->getShortName();
+        return match ($model) {
+            'SupervisorAllocation' => 'supervisor-allocation',
+            'SupervisorChangeForm' => 'supervisor-change',
+            'StudentSemesterOffForm' => 'semester-off',
+            'StudentStatusChangeForms' => 'status-change',
+            'ConstituteOfIRB' => 'irb-constitution',
+            'IrbSubForm' => 'irb-submission',
+            'ResearchExtentionsForm' => 'irb-extension',
+            'ThesisSubmission' => 'thesis-submission',
+            'ThesisExtentionForm' => 'thesis-extension',
+            'ListOfExaminers' => 'list-of-examiners',
+            'SynopsisSubmission' => 'synopsis-submission',           
+        };
+    }
+
+    private function updateForm($model,$student_id,$next){
+        $form=Forms::where('form_type',$this->getFormType($model))->where('student_id',$student_id)->first();
+        $field=$next.'_available';
+        $form->$field=true;
+        $form->stage=$next;
+        $form->save();
     }
 }

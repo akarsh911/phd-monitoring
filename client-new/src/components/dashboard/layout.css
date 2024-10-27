@@ -1,0 +1,34 @@
+/* Main layout styles */
+.layout {
+    display: flex; /* Aligns sidebar and main content side by side */
+    height: 100vh; /* Full viewport height */
+}
+
+
+.sidebar {
+    width: 225px; 
+    background-color: #2c3e50; /* Dark background for sidebar */
+    color: white; /* White text */
+}
+
+
+
+/* Main content styles */
+.main-content {
+    flex-grow: 1; /* Fills the remaining space */
+    background-color: white; /* White background for main content */
+}
+
+/* Top bar styles */
+.topbar {
+    color: white; /* White text in top bar */
+    margin-bottom: 20px; 
+}
+
+/* Content area */
+.content {
+    padding: 10px; /* Padding inside the content area */
+    background-color: #ecf0f1; /* Light grey background for content */
+    border-radius: 8px; /* Rounded corners for content area */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
+}

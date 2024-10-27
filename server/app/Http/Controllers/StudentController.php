@@ -1,9 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Forms;
 use Illuminate\Http\Request;    
 use Illuminate\Support\Facades\Auth;
 use App\Models\Role;
+use App\Models\Student;
 use Illuminate\Support\Str;
 
 class StudentController extends Controller {
@@ -67,11 +70,84 @@ class StudentController extends Controller {
              $student->overall_progress = $request->overall_progress;
         else
              $student->overall_progress = 0.0;
+        
+     
+
         $student->save();
         //create new entry in students table
-
+        Forms::create([
+            'student_id' => $student->roll_no,
+            'department_id' => $student->department_id,
+            'count'=>1,
+            'student_available'=>true,
+            'form_type'=>'supervisor-allocation',
+            'form_name'=>'Supervisor Allocation Form',            
+        ]);
         return response()->json($password,200);
         //return the password to the user
         //TODO: Send email to the user with the password        
+    }
+    public function list(Request $request)
+    {
+        $loggenInUser = Auth::user();
+        $role=$loggenInUser->role->role;
+        switch($role){
+            case 'admin':
+            case 'director':
+            case 'dra':
+            case 'dordc':
+                $students = Student::all();
+                break;
+            case 'hod':
+            case 'phd_coordinator':
+                $students = Student::where('department_id',$loggenInUser->faculty->department_id)->get();
+                break;
+            case 'faculty':
+                $students = $loggenInUser->faculty->students();
+                break;
+            case 'student':
+                $students = Student::where('user_id',$loggenInUser->id)->get();
+                break;
+            default:
+                return response()->json([
+                    'message' => 'You do not have permission to view students'
+                ], 403);
+        }
+
+        return response()->json($students,200);
+    }
+
+    public function get(Request $request, $roll_no)
+    {
+        $loggenInUser = Auth::user();
+        $role=$loggenInUser->role->role;
+        switch($role){
+            case 'admin':
+            case 'director':
+            case 'dra':
+            case 'dordc':
+                $student = Student::find($roll_no);
+                break;
+            case 'hod':
+            case 'phd_coordinator':
+                $student = Student::where('department_id',$loggenInUser->faculty->department_id)->where('roll_no',$roll_no)->first();
+                break;
+            case 'faculty':
+                $student = $loggenInUser->faculty->students()->where('roll_no',$roll_no)->first();
+                break;
+            case 'student':
+                $student = Student::where('user_id',$loggenInUser->id)->where('roll_no',$roll_no)->first();
+                break;
+            default:
+                return response()->json([
+                    'message' => 'You do not have permission to view student'
+                ], 403);
+        }
+        if($student == null){
+            return response()->json([
+                'message' => 'Student not found'
+            ], 404);
+        }
+        return response()->json($student,200);
     }
 }

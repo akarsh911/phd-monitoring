@@ -194,4 +194,9 @@ class Student extends Model
     {
         return $this->hasMany(StudentSemesterOff::class, 'student_id', 'roll_no');
     }
+    
+    public function forms()
+    {
+        return $this->hasMany(Forms::class, 'student_id', 'roll_no')->where('student_available', true);
+    }
 }

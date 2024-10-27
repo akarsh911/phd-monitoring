@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\GeneralFormCreate;
 use Illuminate\Http\Request;
 
 use App\Http\Controllers\Traits\GeneralFormHandler;
@@ -21,11 +22,31 @@ class SynopsisSubmissionController extends Controller
     use GeneralFormSubmitter;
     use GeneralFormList;
     use SaveFile;
+    use GeneralFormCreate;
 
-    public function listForm(Request $request, $student_id = null)
+    public function listForm(Request $request, $student_id=null)
+    {
+       $user = Auth::user();
+       if($student_id)
+         return $this->listFormsStudent($user, SynopsisSubmission::class, $student_id);
+       return $this->listForms($user, SynopsisSubmission::class);
+    }
+
+    public function createForm(Request $request)
     {
         $user = Auth::user();
-        return $this->listForms($user, SynopsisSubmission::class);
+        $role = $user->role;
+        $steps=['student','faculty','phd_coordinator','hod','dra','dordc','director'];
+        if($role->role != 'student'){
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $data=[
+            'roll_no'=>$user->student->roll_no,
+            'steps'=>$steps,
+            'role'=>$role->role,
+            'name'=>$user->first_name.' '.$user->last_name
+        ];
+        return $this->createForms(SynopsisSubmission::class, $data);
     }
 
     

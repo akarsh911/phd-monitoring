@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\GeneralFormCreate;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Traits\GeneralFormHandler;
 use App\Http\Controllers\Traits\GeneralFormList;
@@ -18,11 +19,31 @@ class ThesisExtentionController extends Controller
     use GeneralFormSubmitter;
     use GeneralFormList;
     use SaveFile;
+    use GeneralFormCreate;
 
-    public function listForm(Request $request, $student_id = null)
+    public function listForm(Request $request, $student_id=null)
+    {
+       $user = Auth::user();
+       if($student_id)
+         return $this->listFormsStudent($user, ThesisExtentionForm::class, $student_id);
+       return $this->listForms($user, ThesisExtentionForm::class);
+    }
+
+    public function createForm(Request $request)
     {
         $user = Auth::user();
-        return $this->listForms($user, ThesisExtentionForm::class);
+        $role = $user->role;
+        $steps=['student','faculty','phd_coordinator','hod','dra','dordc'];
+        if($role->role != 'student'){
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $data=[
+            'roll_no'=>$user->student->roll_no,
+            'steps'=>$steps,
+            'role'=>$role->role,
+            'name'=>$user->first_name.' '.$user->last_name
+        ];
+        return $this->createForms(ThesisExtentionForm::class, $data);
     }
 
     

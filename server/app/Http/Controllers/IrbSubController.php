@@ -2,20 +2,51 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\GeneralFormCreate;
 use App\Http\Controllers\Traits\GeneralFormHandler;
+use App\Http\Controllers\Traits\GeneralFormList;
 use App\Http\Controllers\Traits\GeneralFormSubmitter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\IrbSubForm;
 use App\Http\Controllers\Traits\SaveFile;
 use App\Models\Faculty;
-use App\Models\Supervisor;
+use App\Models\Forms;
+
 
 class IrbSubController extends Controller
 {
     use GeneralFormHandler;
     use GeneralFormSubmitter;
+    use GeneralFormList;
     use SaveFile;
+    use GeneralFormCreate;
+
+    public function listForm(Request $request, $student_id=null)
+    {
+       $user = Auth::user();
+       if($student_id)
+         return $this->listFormsStudent($user, IrbSubForm::class, $student_id);
+       return $this->listForms($user, IrbSubForm::class);
+    }
+
+    public function createForm(Request $request)
+    {
+        $user = Auth::user();
+        $role = $user->role;
+        $steps=['student','faculty','hod','dra','dordc'];
+        if($role->role != 'student'){
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $data=[
+            'roll_no'=>$user->student->roll_no,
+            'steps'=>$steps,
+            'role'=>$role->role,
+            'name'=>$user->first_name.' '.$user->last_name
+        ];
+        return $this->createForms(IrbSubForm::class, $data);
+    }
+
 
     public function loadForm(Request $request, $form_id=null)
     {
@@ -169,12 +200,54 @@ class IrbSubController extends Controller
                 $formInstance->addHistoryEntry("Form Approved By DORDC and Sent For Revision", $user->name());
                 $formInstance->student_lock = false;
                 $formInstance->dordc_lock = true;
+                $steps=['student','faculty','external','hod','dra','dordc'];
+                $formInstance->steps=$steps;
                 $formInstance->save();
                 throw new \Exception('Form Approved and sent For Revision ', 201);
             }
             else{
                $formInstance->completion='complete';
                $formInstance->status='approved';
+               $forms = [
+                [
+                    'form_type' => 'synopsis-submission',
+                    'form_name' => 'Synopsis Submission',
+                    'max_count' => 1,
+                    'stage' => 'student',
+                ],
+                [
+                    'form_type' => 'thesis-submission',
+                    'form_name' => 'Thesis Submission',
+                    'max_count' => 1,
+                    'stage' => 'student',
+                ],
+                [
+                    'form_type' => 'thesis-extension',
+                    'form_name' => 'Thesis Extension',
+                    'max_count' => 10,
+                    'stage' => 'student',
+                ],
+            ];
+            $student = $formInstance->student;
+            foreach ($forms as $form) {
+                $existingForm = Forms::where('student_id', $student->roll_no)
+                    ->where('form_type', $form['form_type'])
+                    ->first();
+
+                if (!$existingForm) {
+                    Forms::create([
+                        'student_id' => $student->roll_no,
+                        'department_id' => $student->department_id,
+                        'count' => 0,
+                        'student_available' => true,
+                        'form_type' => $form['form_type'],
+                        'form_name' => $form['form_name'],
+                        'max_count' => $form['max_count'],
+                        'stage' => $form['stage'],
+                    ]);
+                }
+                
+            }
             }
 
         });

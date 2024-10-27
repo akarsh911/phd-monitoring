@@ -75,8 +75,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Faculty::class,'user_id');
     }
-    public function authoredPublications()
+   
+    public function notifications()
     {
-        return $this->hasMany(PublicationAuthors::class);
+        return $this->hasMany(Notification::class);
     }
 }

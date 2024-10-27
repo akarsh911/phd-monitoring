@@ -1,0 +1,30 @@
+/* RouteBar.css */
+.route-bar {
+    padding: 12px 20px;
+    background-color: var(--background-color); /* Light background for contrast */
+    color: var(--primary-color);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.route-bar ul {
+    list-style: none; /* Remove default list styling */
+    display: flex; /* Display items in a row */
+    margin: 0; /* Remove default margin */
+}
+
+.route-bar li {
+    margin: 0 2px; /* Spacing between items */
+}
+
+.route-bar a {
+    text-decoration: underline;
+    color: var(--primary-color);
+    transition: color 0.1 ease; /* Smooth color transition */
+  }
+  
+  .route-bar a:hover {
+    text-decoration: underline; /* Underline on hover */
+    color: var(--secondary-color); /* Change color on hover */
+  }
+  

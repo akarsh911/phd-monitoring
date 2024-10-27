@@ -1,0 +1,125 @@
+.topbar_sub {
+  z-index: 1; /* Ensures the navbar is above other content but below the sidebar */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* background-color: var(--primary-color);  */
+  min-height: 50px;
+  padding: 15px 2%;
+}
+
+.topbar_right {
+  width: 30%;
+  min-width: 80px;
+  max-width: 250px;
+  justify-content: space-evenly;
+  display: flex;
+  align-items: center;
+  margin-right: 30px;
+}
+
+.topbar_sub h2 {
+  color: black; 
+  margin: 0;
+  margin-left: 20px;
+  font-size: 32px;
+}
+.user_section{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 150px;
+}
+.user_info{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  width: 100%;
+  font-size: 16px;
+  margin-left: 10px;
+}
+.user_name{
+  font-size: 16px;
+  font-weight: 600;
+  color: black;
+}
+.user_role{
+  font-size: 14px;
+  font-weight: 500;
+  color: black;
+}
+.user_profile_image{
+  width: 45px;
+  height: 45px;
+  object-fit: fill;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.notification_icon {
+  position: relative; /* Positioning for the badge */
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.notif_icon {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+/* Notification badge styling */
+.notification_badge {
+  position: absolute; /* Position the badge relative to the icon */
+  top: 0; /* Align to the top */
+  right: 0; /* Align to the right */
+  width: 15px; /* Width of the badge */
+  height: 15px; /* Height of the badge */
+  padding: 1px; /* Add some padding */
+  min-width: fit-content;
+  background-color: rgb(212, 74, 74); /* Badge color */
+  color: white; /* Text color */
+  border-radius: 50%; /* Make it circular */
+  display: flex; /* Center content */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
+  font-size: 8px; /* Font size */
+  font-weight: bold; /* Make font bold */
+  animation: pulse 1s infinite; /* Pulse animation */
+}
+
+/* Pulse animation for the badge */
+@keyframes pulse {
+  0% {
+      transform: scale(1);
+  }
+  50% {
+      transform: scale(1.4); /* Scale up */
+  }
+  100% {
+      transform: scale(1); /* Scale back to original */
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

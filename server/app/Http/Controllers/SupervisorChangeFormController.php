@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Http\Controllers\Traits\GeneralFormCreate;
 use App\Http\Controllers\Traits\GeneralFormHandler;
 use App\Http\Controllers\Traits\GeneralFormList;
 use App\Http\Controllers\Traits\GeneralFormSubmitter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\IrbSubForm;
-use App\Http\Controllers\Traits\SaveFile;
-use App\Models\BroadAreaSpecialization;
 use App\Models\Faculty;
-use App\Models\Student;
 use App\Models\Supervisor;
 // use App\Models\SupervisorAllocation;
 use App\Models\SupervisorChangeForm;
@@ -21,12 +18,38 @@ class SupervisorChangeFormController extends Controller {
     use GeneralFormHandler;
     use GeneralFormSubmitter;
     use GeneralFormList;
+    use GeneralFormCreate;
 
-    public function listForm(Request $request, $student_id = null)
+    public function listForm(Request $request, $student_id=null)
+    {
+       $user = Auth::user();
+       if($student_id)
+         return $this->listFormsStudent($user, SupervisorChangeForm::class, $student_id);
+       return $this->listForms($user, SupervisorChangeForm::class);
+    }
+
+    public function createForm(Request $request)
     {
         $user = Auth::user();
-
-        return $this->listForms($user, SupervisorChangeForm::class);
+        $role = $user->role;
+        $steps=['student','phd_coordinator','hod','dordc','dra'];
+        
+        if($role->role != 'student'){
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $data=[
+            'roll_no'=>$user->student->roll_no,
+            'steps'=>$steps,
+            'role'=>$role->role,
+            'name'=>$user->first_name.' '.$user->last_name
+        ];
+        return $this->createForms(SupervisorChangeForm::class, $data,function ($formInstance) {
+            $formInstance->current_supervisors = $formInstance->student->supervisors->pluck('faculty_code')->toArray();
+            $formInstance->irb_submitted = $formInstance->student->irbSubForm->completion=='complete'?true:false;
+            if(!$formInstance->irb_submitted){
+                $formInstance->steps=['student','phd_coordinator','hod'];
+            }
+        });
     }
 
     public function loadForm(Request $request, $form_id = null)

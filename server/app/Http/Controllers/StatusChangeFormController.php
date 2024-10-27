@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\GeneralFormCreate;
 use App\Http\Controllers\Traits\GeneralFormHandler;
+use App\Http\Controllers\Traits\GeneralFormList;
 use App\Http\Controllers\Traits\GeneralFormSubmitter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,31 +16,39 @@ class StatusChangeFormController extends Controller
     use GeneralFormHandler;
     use GeneralFormSubmitter;
     use SaveFile;
+    use GeneralFormCreate;
+    use GeneralFormList;
 
-    public function listForms(Request $request, $form_id=null)
+    public function listForm(Request $request, $student_id=null)
     {
-        $user = Auth::user();
-        $role = $user->role;
-
-        switch ($role->role) {
-            case 'student':
-                // return $this->listStudentForms($user);
-            default:
-                return response()->json(['message' => 'You are not authorized to access this resource'], 403);
-        }
+       $user = Auth::user();
+       if($student_id)
+         return $this->listFormsStudent($user, StudentStatusChangeForms::class, $student_id);
+       return $this->listForms($user, StudentStatusChangeForms::class);
     }
+
     public function createForm(Request $request)
     {
         $user = Auth::user();
         $role = $user->role;
-
-        switch ($role->role) {
-            case 'student':
-                // return $this->createNewForm($user);
-            default:
-                return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        $steps=['student','faculty','phd_coordinator','hod','dra','dordc'];
+        if($role->role != 'student'){
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
+        $status_changes=$user->student->statusChanges();
+        if($status_changes->count()>0){
+            $steps=['student','faculty','phd_coordinator','hod','dra','dordc','director'];
+        }
+        $data=[
+            'roll_no'=>$user->student->roll_no,
+            'steps'=>$steps,
+            'role'=>$role->role,
+            'name'=>$user->first_name.' '.$user->last_name
+        ];
+        
+        return $this->createForms(StudentStatusChangeForms::class, $data);
     }
+
 
     public function loadForm(Request $request, $form_id=null)
     {

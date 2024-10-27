@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\GeneralFormCreate;
 use App\Http\Controllers\Traits\GeneralFormHandler;
 use App\Http\Controllers\Traits\GeneralFormList;
 use App\Http\Controllers\Traits\GeneralFormSubmitter;
@@ -9,6 +10,7 @@ use App\Models\ConstituteOfIRB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Faculty;
+use App\Models\Forms;
 use App\Models\irbExpertChairman;
 use App\Models\IrbNomineeCognate;
 use App\Models\IrbOutsideExpert;
@@ -22,10 +24,36 @@ class ConstituteOfIRBController extends Controller
     use GeneralFormHandler;
     use GeneralFormSubmitter;
     use GeneralFormList;
+    use GeneralFormCreate;
+
     public function listForm(Request $request, $student_id=null)
     {
        $user = Auth::user();
+       if($student_id)
+         return $this->listFormsStudent($user, ConstituteOfIRB::class, $student_id);
        return $this->listForms($user, ConstituteOfIRB::class);
+    }
+
+    public function createForm(Request $request)
+    {
+        $user = Auth::user();
+        $role = $user->role;
+        $steps = [
+            'student',
+            'faculty',
+            'hod',
+            'dordc',
+        ];
+        if($role->role != 'student'){
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $data=[
+            'roll_no'=>$user->student->roll_no,
+            'steps'=>$steps,
+            'role'=>$role->role,
+            'name'=>$user->first_name.' '.$user->last_name
+        ];
+        return $this->createForms(ConstituteOfIRB::class, $data);
     }
 
     public function loadForm(Request $request, $form_id=null)
@@ -273,6 +301,40 @@ class ConstituteOfIRBController extends Controller
                         'cognate_expert' => $cognateExpertId,
                         'completion'=>true
                     ]);
+
+                    $forms = [
+                        [
+                            'form_type' => 'irb-submission',
+                            'form_name' => 'IRB Submission',
+                            'max_count' => 1,
+                            'stage' => 'student',
+                        ],
+                        [
+                            'form_type' => 'irb-extension',
+                            'form_name' => 'IRB Extension',
+                            'max_count' => 10,
+                            'stage' => 'student',
+                        ],
+                    ];
+                    $student = $formInstance->student;
+                    foreach ($forms as $form) {
+                        $existingForm = Forms::where('student_id', $student->roll_no)
+                            ->where('form_type', $form['form_type'])
+                            ->first();
+
+                        if (!$existingForm) {
+                            Forms::create([
+                                'student_id' => $student->roll_no,
+                                'department_id' => $student->department_id,
+                                'count' => 0,
+                                'student_available' => true,
+                                'form_type' => $form['form_type'],
+                                'form_name' => $form['form_name'],
+                                'max_count' => $form['max_count'],
+                                'stage' => $form['stage'],
+                            ]);
+                        }
+                    }
             });
     }
 

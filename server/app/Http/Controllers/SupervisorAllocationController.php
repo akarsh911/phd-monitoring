@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\GeneralFormCreate;
 use App\Http\Controllers\Traits\GeneralFormHandler;
 use App\Http\Controllers\Traits\GeneralFormList;
 use App\Http\Controllers\Traits\GeneralFormSubmitter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\IrbSubForm;
-use App\Http\Controllers\Traits\SaveFile;
+
 use App\Models\BroadAreaSpecialization;
 use App\Models\Faculty;
+use App\Models\Forms;
 use App\Models\Supervisor;
 use App\Models\SupervisorAllocation;
 
@@ -19,11 +20,35 @@ class SupervisorAllocationController extends Controller
     use GeneralFormHandler;
     use GeneralFormSubmitter;
     use GeneralFormList;
-
+    use GeneralFormCreate;
+  
     public function listForm(Request $request, $student_id = null)
     {
         $user = Auth::user();
+        if($student_id)
+        return $this->listFormsStudent($user, SupervisorAllocation::class, $student_id);
         return $this->listForms($user, SupervisorAllocation::class);
+    }
+
+    public function createForm(Request $request)
+    {
+        $user = Auth::user();
+        $role = $user->role;
+        $steps = [
+            'student',
+            'phd_coordinator',
+            'hod',
+        ];
+        if($role->role != 'student'){
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $data=[
+            'roll_no'=>$user->student->roll_no,
+            'steps'=>$steps,
+            'role'=>$role->role,
+            'name'=>$user->first_name.' '.$user->last_name
+        ];
+        return $this->createForms(SupervisorAllocation::class, $data);
     }
 
     public function loadForm(Request $request, $form_id = null)
@@ -156,6 +181,59 @@ class SupervisorAllocationController extends Controller
                             'faculty_id' => $supervisor,
                         ]);
                     }
+                    $student = $formInstance->student;
+                    $forms = [
+                        [
+                            'form_type' => 'irb-constitution',
+                            'form_name' => 'Constitute of IRB',
+                            'max_count' => 1,
+                            'stage' => 'student',
+                        ],
+                        [
+                            'form_type' => 'supervisor-change',
+                            'form_name' => 'Supervisor Change',
+                            'max_count' => 10,
+                            'stage' => 'student',
+                        ],
+                        [
+                            'form_type' => 'status-change',
+                            'form_name' => 'Change of Status',
+                            'max_count' => 2,
+                            'stage' => 'student',
+                        ],
+                        [
+                            'form_type' => 'semester-off',
+                            'form_name' => 'Semester Off',
+                            'max_count' => 10,
+                            'stage' => 'student',
+                        ],
+                        [
+                            'form_type' => 'list-of-examiners',
+                            'form_name' => 'List of Examiners',
+                            'max_count' => 1,
+                            'stage' => 'supervisor',
+                        ],
+                    ];
+
+                    foreach ($forms as $form) {
+                        $existingForm = Forms::where('student_id', $student->roll_no)
+                            ->where('form_type', $form['form_type'])
+                            ->first();
+
+                        if (!$existingForm) {
+                            Forms::create([
+                                'student_id' => $student->roll_no,
+                                'department_id' => $student->department_id,
+                                'count' => 0,
+                                'student_available' => true,
+                                'form_type' => $form['form_type'],
+                                'form_name' => $form['form_name'],
+                                'max_count' => $form['max_count'],
+                                'stage' => $form['stage'],
+                            ]);
+                        }
+                    }
+
                     $formInstance->addHistoryEntry("Supervisors allocated by HOD", $user->name());
                 }
             }

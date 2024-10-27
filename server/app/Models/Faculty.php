@@ -68,12 +68,35 @@ class Faculty extends Model
 
     public function doctoredStudents()
     {
-        return $this->belongsToMany(Student::class, 'doctoral_committee', 'faculty_id', 'student_id');
+        return $this->belongsToMany(Student::class, 'doctoral_commitee', 'faculty_id', 'student_id');
 
     }
-    public function supervisedForms()
-    {
-        return $this->hasMany(IrbForm::class, 'supervisor_id');
+    public function students(){
+        $sup= $this->supervisedStudents;
+        $doc= $this->doctoredStudents;
+        $final_sup=[];
+        $out=[];
+        foreach($doc as $d){
+            $d['type']='Doctoral Committee';
+            $final_sup['name']=$d->user->name();
+            $final_sup['roll_no']=$d->roll_no;
+            $final_sup['type']='Doctoral Committee';
+            $final_sup['department']=$d->department->name;
+            $final_sup['current_status']=$d->current_status;
+            $final_sup['phd_title']=$d->phd_title;
+            $out[]=$final_sup;
+        }
+        foreach($sup as $s){
+            $s['type']='Supervisor';
+            $final_sup['name']=$s->user->name();
+            $final_sup['roll_no']=$s->roll_no;
+            $final_sup['type']='Supervisor';
+            $final_sup['department']=$s->department->name;
+            $final_sup['current_status']=$s->current_status;
+            $final_sup['phd_title']=$s->phd_title;
+            $out[]=$final_sup;
+        }
+        return $out;
     }
 
     public function irbNomineeCognates()
@@ -88,6 +111,89 @@ class Faculty extends Model
     public static function findByUserId($userId)
     {
         return self::where('user_id', $userId)->first();
+    }
+
+    public function forms(){
+        $data=[];
+        if($this->user->role->role=='faculty'){
+            $super= $this->supervisedStudents;
+            $doc= $this->doctoredStudents;
+            $data=[];
+            foreach($super as $s){
+                $forms= $s->forms;
+                foreach($forms as $f){
+                    if($f->stage=='supervisor'){
+                        $f['action_required']=true;
+                    }
+                    else
+                    $d['action_required']=false;
+                    if($f->supervisor_available==true){
+                        $data[]=$f;
+                    }
+                }
+            }
+            foreach($doc as $d){
+                $forms= $d->forms;
+                foreach($forms as $f){
+                    if($f->stage=='doctoral'){
+                        $f['action_required']=true;
+                        
+                    }
+                    else
+                    $d['action_required']=false;
+                    if($f->doctoral_available==true){
+                        $data[]=$f;
+                    }
+                }
+            }
+        }
+        else if($this->user->role->role=='dra'){
+            $data= Forms::where('dra_available',true)->get();
+            foreach($data as $d){
+                if($d->stage=='dra')
+                $d['action_required']=true;
+                else
+                $d['action_required']=false;
+            }
+        }
+        else if($this->user->role->role=='dordc'){
+            $data= Forms::where('dordc_available',true)->get();
+            foreach($data as $d){
+                if($d->stage=='dordc')
+                $d['action_required']=true;
+                else
+                $d['action_required']=false;
+            }
+        }
+        else if($this->user->role->role=='director'){
+            $data= Forms::where('director_available',true)->get();
+            foreach($data as $d){
+                if($d->stage=='director')
+                $d['action_required']=true;
+                else
+                $d['action_required']=false;
+            }
+        }
+        else if($this->user->role->role=='phd_coordinator'){
+            $data= Forms::where('phd_coordinator_available',true)->where('department_id',$this->department_id)->get();
+            foreach($data as $d){
+                if($d->stage=='phd_coordinator')
+                $d['action_required']=true;
+                else
+                $d['action_required']=false;
+            }
+        }
+        else if($this->user->role->role=='hod'){
+            $data= Forms::where('hod_available',true)->where('department_id',$this->department_id)->get();
+            foreach($data as $d){
+                if($d->stage=='hod')
+                $d['action_required']=true;
+                else
+                $d['action_required']=false;
+            }
+        }
+        return $data;
+      
     }
 
 }

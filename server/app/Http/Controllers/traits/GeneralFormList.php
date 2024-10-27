@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Traits;
 
+use App\Models\Student;
+
 trait GeneralFormList
 {
     private function listForms($user,$model,$filters=null){
@@ -25,6 +27,46 @@ trait GeneralFormList
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
     }
+
+    private function listFormsStudent($user, $model, $student_id)
+    {
+        $role = $user->role->role;
+        $student=Student::find($student_id);
+        if(!$student){
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+        switch ($role) {
+            case 'hod':
+            case 'phd_coordinator':
+                if($student->department_id!=$user->department_id){
+                    return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+                }
+                break;
+            case 'faculty':
+                if(!$user->faculty->supervisedStudents()->contains('roll_no',$student_id)){
+                    return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+                }
+                break;
+            case 'doctoral':
+                if(!$user->faculty->doctoredStudents()->contains('roll_no',$student_id)){
+                    return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+                }
+                break;
+            case 'student':
+                    return response()->json(['message' => 'You are not authorized to access this resource'], 403);  
+                break;
+            default:
+            break;
+          }
+        $formsQuery = $model::where('student_id', $student_id);
+        $filteredForms = $formsQuery->get()->filter(function ($form) use ($role) {
+            $index = array_search($role, $form->steps);
+            return $index !== false && $index <= $form->current_step;
+        });
+    
+        return $filteredForms->values();
+    }
+
 
     private function listStudentForms($user, $model, $filters = null)
     {

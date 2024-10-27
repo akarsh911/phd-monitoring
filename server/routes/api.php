@@ -30,7 +30,8 @@ Route::post('/login',function (Request $request){
       /** @var \App\Models\MyUserModel $user **/
         $user = Auth::user();
         $user->role = Role::find(Auth::user()->role_id);
-        $token = $user->createToken('auth_token', ['server:access'],now()->addDays(1))->plainTextToken;
+        
+        $token = $user->createToken('auth_token', ['server:access'],now()->addDays(10))->plainTextToken;
             // ->withTtl(now()->addMinute())
             // ->plainTextToken
            ;
