@@ -8,7 +8,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 Artisan::command('setup', function () {
-    $this->call('migrate');
+    // $this->call('migrate');
     $this->comment("Migrated tables");
     $role = new \App\Models\Role();
     $role->role = 'Admin';
@@ -19,7 +19,7 @@ Artisan::command('setup', function () {
     $user->first_name = 'Admin';
     $user->last_name = 'Admin';
     $user->phone = '1234567890';
-    $user->email = 'admin@example.com';
+    $user->email = 'admin@gmail.com';
     $user->password = bcrypt('Password@123');
     $user->role_id = $role->id;
     $user->save();
