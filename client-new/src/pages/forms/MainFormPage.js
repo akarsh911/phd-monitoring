@@ -1,7 +1,7 @@
 import React, { useEffect,useState } from 'react';
 import Layout from '../../components/dashboard/layout';
 import SupervisorAllocation from '../../components/forms/supervisorAllocation/SupervisorAllocation';
-
+import './forms.css'
 const MainFormPage = () => {
     return (
         <Layout children={

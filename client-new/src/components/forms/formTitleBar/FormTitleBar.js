@@ -18,7 +18,7 @@ const FormTitleBar = ({ formName,formData }) => {
     return (
     <>
             <div className="form-title-bar">
-                <h1 className="form-title">{formName}</h1>
+                <h1 className="form-title-bar-t">{formName}</h1>
                 <div className="form-title-bar-right">
                     <span className="form-title-bar-right-item">Form ID: {formData.form_id}</span>
                     <span className="form-title-bar-right-item">Stage: {getRoleName(formData.stage)}</span>

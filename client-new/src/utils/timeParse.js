@@ -13,3 +13,13 @@ export const parseDateTime= (isoString)=> {
 
     return date.toLocaleString('en-US', options);
 }
+
+// utils/dateFormatter.js
+export function formatDate(isoString) {
+    const date = new Date(isoString);
+    return date.toLocaleDateString('en-GB', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    });
+}

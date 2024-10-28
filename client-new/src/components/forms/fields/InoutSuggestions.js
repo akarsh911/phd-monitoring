@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { customFetch } from '../../../api/base';
 import "./Fields.css";
 
-const InputSuggestions = ({ apiUrl,hint, initialValue, onSuggestionSelect,label ,lock=false }) => {
+const InputSuggestions = ({ apiUrl,hint, initialValue, onSelect,label ,lock=false,showLabel=true }) => {
     const [inputValue, setInputValue] = useState(initialValue || '');
     const [suggestions, setSuggestions] = useState([]);
     const [isLocked, setIsLocked] = useState(lock || false);
@@ -25,15 +25,15 @@ const InputSuggestions = ({ apiUrl,hint, initialValue, onSuggestionSelect,label 
     const handleSuggestionClick = (suggestion) => {
         setInputValue(suggestion.name); 
         setSuggestions([]);
-        if (onSuggestionSelect) {
-            onSuggestionSelect(suggestion); // Call the callback with the entire suggestion
+        if (onSelect) {
+            onSelect(suggestion); // Call the callback with the entire suggestion
         }
     };
 
     return (
         <div className="input-suggestions-container">
              <div className="input-field-container">
-            <label className="input-label">{label}</label>
+            {showLabel && (<label className="input-label">{label}</label>)}
             <input
                 type="text"
                 value={inputValue}
@@ -43,7 +43,7 @@ const InputSuggestions = ({ apiUrl,hint, initialValue, onSuggestionSelect,label 
                 disabled={isLocked}
             />
            </div>
-            {suggestions.length > 0 ? (
+            {suggestions.length > 0 && (
                 <ul className="suggestions-list">
                     {suggestions.map((suggestion) => (
                         <li
@@ -56,13 +56,6 @@ const InputSuggestions = ({ apiUrl,hint, initialValue, onSuggestionSelect,label 
                     ))}
                 </ul>
             ) 
-            : (
-                initialValue && !lock && (
-                    <ul className="suggestions-list">
-                        <p>No Suggestions Available</p>
-                    </ul>
-                )
-            )
             }
             
         </div>

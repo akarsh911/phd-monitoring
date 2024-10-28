@@ -29,13 +29,13 @@ class SuggestionController extends Controller {
                 'text' => 'required|string',
             ]
             );
-            if (!$request->has('text') || strlen($request->query('text')) < 3) {
-                return response()->json([], 200);
-            }
+          
             $specializations = BroadAreaSpecialization::where('department_id', $department->id)
             ->where('broad_area', 'LIKE', '%' . $request->text . '%')
             ->get();
-    
+            foreach($specializations as $specialization){
+                $specialization->name = $specialization->broad_area;
+            }
         // Return the specializations as a JSON response
         return response()->json($specializations);
       

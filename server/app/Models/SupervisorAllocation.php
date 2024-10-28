@@ -39,22 +39,27 @@ class SupervisorAllocation extends Model
                 'broad_area_of_research' => $this->student->broad_area_specialization->map(function($broad_area){
                     return $broad_area->specialization->broad_area;
                 }),
-                
+                'broad_area_of_research_id' => $this->student->broad_area_specialization->map(function($broad_area){
+                    return $broad_area->specialization->id;
+                }),
                 'prefrences' => collect($this->prefrences)->map(function ($prefrence) {
                     $faculty = Faculty::where('faculty_code', $prefrence)->first();
                     return [
                         'name' => $faculty->user->name(),
                         'designation' => $faculty->designation,
                         'department' => $faculty->department->name,
+                        'faculty_code' => $faculty->faculty_code,
                     ];
-                }),
-                
+                }),                
                 'supervisors' => collect($this->supervisors)->map(function ($supervisor) {
                     $faculty = Faculty::where('faculty_code', $supervisor)->first();
                     return [
                         'name' => $faculty->user->name(),
                         'designation' => $faculty->designation,
                         'department' => $faculty->department->name,
+                        'faculty_code' => $faculty->faculty_code,
+                        'supervised_campus' => $faculty->supervised_campus,
+                        'supervised_outside' => $faculty->supervised_outside,
                     ];
                 }),
             ]);

@@ -151,6 +151,9 @@ class SupervisorAllocationController extends Controller
                     'supervisors' => 'required|array',
                 ]);
                 $supervisors = $request->supervisors;
+                if (count($supervisors) != count(array_unique($supervisors))) {
+                    throw new \Exception("Please select unique supervisors");
+                }
                 foreach ($supervisors as $supervisor) {
                     if (!Faculty::find($supervisor)) {
                         throw new \Exception("Invalid supervisor selected");
@@ -174,6 +177,9 @@ class SupervisorAllocationController extends Controller
             'hod',
             function ($formInstance) use ($request, $user) {
                 if ($request->approval) {
+                    $formInstance->completion='complete';
+                    $formInstance->status='approved';
+                    
                     $supervisors = $formInstance->supervisors;
                     foreach ($supervisors as $supervisor) {
                         Supervisor::create([

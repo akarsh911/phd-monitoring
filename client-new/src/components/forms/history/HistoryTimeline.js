@@ -19,6 +19,7 @@ const HistoryTimeline = ({ formData }) => {
                                 })}
                             </span>
                             <span className="history-timeline-text">{item.action}</span>
+                           {item.comment && (<span className="history-timeline-text">Comments: {item.comment}</span>)} 
                            
                         </div>
                     </div>

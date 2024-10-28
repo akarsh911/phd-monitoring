@@ -4,11 +4,15 @@ import { baseURL } from "../../../api/urls";
 import { customFetch } from "../../../api/base";
 import { useLoading } from "../../../context/LoadingContext";
 import Student from './roles/Student';
+import FormTitleBar from '../formTitleBar/FormTitleBar';
+import PhDCoordinator from './roles/PhDCoordinator';
+import Recommendation from '../layouts/Recommendation';
 
 const SupervisorAllocation = () => {
 
     const [formData, setFormData] = useState({});
     const {setLoading } = useLoading();
+    const [isLoaded, setIsLoaded] = useState(false);
     const location = useLocation();
 
     useEffect(() => {
@@ -18,8 +22,10 @@ const SupervisorAllocation = () => {
             .then((data) => {
                 if (data && data.success) {
                     setFormData(data.response);
+                    setIsLoaded(true);
                 }
                 setLoading(false);
+
             })
             .catch((error) => {
                 console.log(error);
@@ -31,7 +37,16 @@ const SupervisorAllocation = () => {
 
     return (
         <>
-           {formData && ( <Student formData={formData}></Student>)}
+        {isLoaded && formData  && (
+            <>
+            <FormTitleBar formName="Supervisor Allocation" formData={formData} />
+         <div className='form-container'>
+          <Student formData={formData}></Student>
+          <PhDCoordinator formData={formData}></PhDCoordinator>
+          <Recommendation formData={formData} role="hod" allowRejection={false}></Recommendation>
+          </div>
+            </>     
+        )}
         </>
     );
 }

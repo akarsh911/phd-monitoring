@@ -5,12 +5,16 @@ import GridContainer from '../fields/GridContainer';
 import CustomButton from '../fields/CustomButton';
 import InputField from '../fields/InputField';
 import { getRoleName } from '../../../utils/roleName';
+import { useLoading } from '../../../context/LoadingContext';
+import { submitForm } from '../../../api/form';
 
 const Recommendation = ({formData,allowRejection,role}) => {
     const [roleName, setRoleName] = useState('');
     const [body, setBody] = useState({});
     const [lock, setLock] = useState(false);
-   
+    const [isLoaded, setIsLoaded] = useState(false);
+    const location = useLocation();
+    const { setLoading } = useLoading();
    
     useEffect(() => {
         if (role && formData) {
@@ -31,9 +35,6 @@ const Recommendation = ({formData,allowRejection,role}) => {
         body.rejected = data.rejected;
     };
 
-    const callAPI = async (data) => {
-        console.log(body);
-    };
 
     return (
         <>
@@ -44,7 +45,7 @@ const Recommendation = ({formData,allowRejection,role}) => {
             space={2}
             />
             { !lock && ( <GridContainer elements={[
-                <CustomButton text='Submit' onClick={callAPI} />
+                <CustomButton text='Submit' onClick={()=>{submitForm(body,location,setLoading)}} />
             ]}/>)}
 
         </>

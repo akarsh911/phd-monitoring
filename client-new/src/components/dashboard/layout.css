@@ -17,6 +17,7 @@
 .main-content {
     flex-grow: 1; /* Fills the remaining space */
     background-color: white; /* White background for main content */
+    height: fit-content;
 }
 
 /* Top bar styles */
