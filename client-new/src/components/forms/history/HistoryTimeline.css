@@ -1,0 +1,58 @@
+.history-timeline-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    position: relative;
+}
+
+.history-timeline-item-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.history-timeline-item {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.history-timeline-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #888; /* Gray color for history dots */
+    margin-right: 10px;
+    z-index: 1; /* Dot should be above the line */
+}
+
+.history-timeline-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.history-timeline-text {
+    text-align: left;
+    font-size: 16px;
+    color: #555; /* Gray text */
+}
+
+.history-timeline-timestamp {
+    font-size: 14px;
+    text-align: left;
+    color: #777; /* Lighter gray for timestamp */
+}
+
+/* Line connecting the dots */
+.history-timeline-line {
+    width: 2px;
+    height: 100%;
+    background-color: #888; /* Same gray color as dots */
+    position: absolute;
+    left: 6px; /* Align the line with the center of the dots */
+    top: 50%; /* Adjust this to center the line */
+    z-index: 0; /* Line should be behind the dots */
+}

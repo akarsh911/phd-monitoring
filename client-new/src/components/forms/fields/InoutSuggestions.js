@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { customFetch } from '../../../api/base';
+import "./Fields.css";
 
 const InputSuggestions = ({ apiUrl,hint, initialValue, onSuggestionSelect,label ,lock=false }) => {
     const [inputValue, setInputValue] = useState(initialValue || '');

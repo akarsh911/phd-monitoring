@@ -1,0 +1,64 @@
+/* Container for the form title bar */
+.form-title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #f8f9fa5f; /* Light gray background */
+    border-bottom: 1px solid #e0e0e0; /* Subtle bottom border */
+}
+
+/* Style for the form title */
+.form-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+/* Container for the right side of the title bar */
+.form-title-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Items on the right side of the title bar */
+.form-title-bar-right-item {
+    font-size: 0.9rem;
+    color: #555;
+    background-color: #eef1f5;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+/* Style for the button on the right side */
+.form-title-bar-right-button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    color: #fff;
+    background-color: #007bff; /* Primary blue color */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for the button */
+.form-title-bar-right-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Ensure consistent spacing on smaller devices */
+@media (max-width: 600px) {
+    .form-title-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form-title-bar-right {
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 10px;
+    }
+}

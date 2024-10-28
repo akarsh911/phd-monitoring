@@ -1,0 +1,22 @@
+.status-box-container {
+    width: 750px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 50px;
+    padding: 20px;
+}
+
+.status-box-container-box{
+    max-height: 350px;
+    overflow-y: auto;
+}
+.first{
+    border-right: 1px solid rgba(0, 0, 0, 0.286);
+}
+
+.status-box-container h2{
+    font-size: 18px;
+}
+.status-heading{
+    font-size: 24px;
+}

@@ -16,14 +16,7 @@
 
 
 
-.loader {
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 14px;
-    color: #888;
-}
+
 
 
 .suggestions-list {
@@ -117,4 +110,49 @@
 
 .input-field[readonly] {
     background-color: #f9f9f9;
+}
+.recommendation-field {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.recommendation-field strong {
+    margin-right: 10px;
+}
+
+.options {
+    display: flex;
+    gap: 15px;
+    font-weight: 400;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+input[type="radio"] {
+    margin-right: 5px;
+}
+
+input[type="radio"]:disabled:checked::before {
+    content: "";
+    display: block;
+    width: 14px;
+    height: 14px;
+    background-color: var(--primary-color); /* Custom color for checked state */
+    border-radius: 50%;
+    position: absolute;
+  }
+  
+/* Apply to all form elements that can be disabled */
+input:disabled:hover,
+button:disabled:hover,
+select:disabled:hover,
+textarea:disabled:hover,
+fieldset:disabled:hover,
+label:disabled:hover {
+    cursor: not-allowed;
 }

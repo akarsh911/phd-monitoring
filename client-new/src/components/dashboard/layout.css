@@ -28,5 +28,6 @@
 .content {
     /* padding: 10px 20px;  */
     width: 100%; /* Full width */
-    height: 100%; /* Full height */
+    min-height: fit-content;
+    padding: 15px 10px;
 }

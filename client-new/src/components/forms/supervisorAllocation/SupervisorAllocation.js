@@ -8,7 +8,7 @@ import Student from './roles/Student';
 const SupervisorAllocation = () => {
 
     const [formData, setFormData] = useState({});
-    const { setLoading } = useLoading();
+    const {setLoading } = useLoading();
     const location = useLocation();
 
     useEffect(() => {
@@ -31,8 +31,7 @@ const SupervisorAllocation = () => {
 
     return (
         <>
-            <h1>Supervisor Allocation</h1>
-            <Student></Student>
+           {formData && ( <Student formData={formData}></Student>)}
         </>
     );
 }
