@@ -11,16 +11,10 @@
 
 .input-suggestions-container {
     position: relative;
-    width: 300px; /* Adjust width as needed */
+    width: 100%;
 }
 
-.custom-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-}
+
 
 .loader {
     position: absolute;
@@ -31,6 +25,7 @@
     color: #888;
 }
 
+
 .suggestions-list {
     position: absolute;
     top: 100%;
@@ -40,11 +35,12 @@
     border-radius: 4px;
     background-color: #fff;
     z-index: 10;
-    max-height: 150px; /* Limit height of suggestions */
+    max-height: 150px; 
     overflow-y: auto;
     margin: 0;
     padding: 0;
     list-style: none;
+    font-weight: 400;
 }
 
 .suggestion-item {
@@ -58,4 +54,67 @@
 
 .suggestion-list p{
     padding: 10px;
+}
+
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.grid-item {
+    padding: 10px 10px;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.span-1 {
+    grid-column: span 1; /* Occupy 1 column */
+}
+
+.span-2 {
+    grid-column: span 2; /* Occupy 2 columns */
+}
+
+.span-3 {
+    grid-column: span 3; /* Occupy 3 columns */
+}
+
+.input-field-container {
+    display: flex;
+    flex-direction: column;
+    margin: 0px 0;
+}
+
+.input-label {
+    font-weight: bold;
+    margin-bottom: 1px; 
+    font-size: 14px;
+    min-height: 20px; 
+    text-align: left;
+    display: flex; 
+    align-items: center; 
+}
+
+
+.input-field {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    font-size: 16px;
+    font-weight: 400;
+   
+}
+
+.input-field:focus {
+    border-color: #007bff;
+}
+
+.input-field[readonly] {
+    background-color: #f9f9f9;
 }

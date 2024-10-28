@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { customFetch } from '../../../api/base';
 
-const InputSuggestions = ({ apiUrl,hint, initialValue, onSuggestionSelect ,lock }) => {
+const InputSuggestions = ({ apiUrl,hint, initialValue, onSuggestionSelect,label ,lock=false }) => {
     const [inputValue, setInputValue] = useState(initialValue || '');
     const [suggestions, setSuggestions] = useState([]);
     const [isLocked, setIsLocked] = useState(lock || false);
@@ -31,15 +31,17 @@ const InputSuggestions = ({ apiUrl,hint, initialValue, onSuggestionSelect ,lock 
 
     return (
         <div className="input-suggestions-container">
+             <div className="input-field-container">
+            <label className="input-label">{label}</label>
             <input
                 type="text"
                 value={inputValue}
                 onChange={handleInputChange}
                 placeholder={hintText}
-                className="custom-input"
+                className="input-field"
                 disabled={isLocked}
             />
-           
+           </div>
             {suggestions.length > 0 ? (
                 <ul className="suggestions-list">
                     {suggestions.map((suggestion) => (
@@ -52,13 +54,15 @@ const InputSuggestions = ({ apiUrl,hint, initialValue, onSuggestionSelect ,lock 
                         </li>
                     ))}
                 </ul>
-            ) : (
-                initialValue && (
+            ) 
+            : (
+                initialValue && !lock && (
                     <ul className="suggestions-list">
                         <p>No Suggestions Available</p>
                     </ul>
                 )
-            )}
+            )
+            }
             
         </div>
     );
