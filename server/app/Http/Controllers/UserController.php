@@ -18,7 +18,7 @@ class UserController extends Controller{
         return response()->json($user);
     }
 
-    public function listForms(Request $request){
+    public function listForms(Request $request, $roll_no = null){
         $user = Auth::user();
         $role = $user->role;
         $data = null;
@@ -32,11 +32,13 @@ class UserController extends Controller{
             case 'dordc':
             case 'director':
             case 'faculty':
-                $data = $user->faculty->forms();
+                $data = $user->faculty->forms($roll_no);
                 break;
             default:
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
         return response()->json($data, 200);
     }
+
+
 }

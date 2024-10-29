@@ -1,0 +1,34 @@
+.not-found-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40%;
+    flex-direction: column;
+}
+.not-found-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    height: 100vh;
+    background-image: url('/public/image-1@2x.png');
+    background-size: cover;
+}
+.not-found-container h1{
+    font-size: 108px;
+    color: #333;
+}
+.not-found-container p{
+    font-size: 24px;
+    color: #333;
+}
+.not-found-container a{
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}

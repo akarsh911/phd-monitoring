@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [UserController::class,'listForms'])->middleware('auth:sanctum');
 
-Route::prefix('irb-constitutuion')->group(function () {
+Route::prefix('irb-constitution')->group(function () {
     require base_path('routes/base/irb/irbc_form.php');
 });
 

@@ -1,0 +1,129 @@
+.student-table-container {
+    width: 100%;
+    max-width: 850px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  
+  .table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .search-input {
+    padding: 8px;
+    font-size: 14px;
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .year-filter {
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  .add-student-btn {
+    background-color: #6a0dad;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .student-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+  }
+  
+  .student-table thead {
+    background-color: #f8f8f8;
+    cursor: pointer;
+  }
+  
+  .student-table th, .student-table td {
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+    font-weight: 400;
+  }
+  
+  .student-table th {
+    position: relative;
+    font-weight: 600;
+  }
+  
+  .student-table th:after {
+    content: " ⇅";
+    font-size: 12px;
+    position: absolute;
+    right: 5px;
+    opacity: 0.5;
+  }
+  
+  .student-table tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .pagination-btn {
+    background-color: #6a0dad;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  
+  .pagination span {
+    font-size: 14px;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    gap: 10px;
+  }
+  
+  .pagination button {
+    padding: 8px 12px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pagination button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  .pagination button:hover:not(:disabled) {
+    background-color: #0056b3;
+  }
+  
+  .pagination span {
+    font-size: 14px;
+    color: #333;
+  }
+  

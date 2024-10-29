@@ -89,33 +89,62 @@ class StudentController extends Controller {
     }
     public function list(Request $request)
     {
-        $loggenInUser = Auth::user();
-        $role=$loggenInUser->role->role;
-        switch($role){
+        $loggedInUser = Auth::user();
+        $role = $loggedInUser->role->role;
+    
+        // Use eager loading to optimize performance
+        switch ($role) {
             case 'admin':
             case 'director':
             case 'dra':
             case 'dordc':
-                $students = Student::all();
+                $students = Student::with(['user', 'department', 'supervisors.user'])->get();
                 break;
             case 'hod':
             case 'phd_coordinator':
-                $students = Student::where('department_id',$loggenInUser->faculty->department_id)->get();
+                $students = Student::with(['user', 'department', 'supervisors.user'])
+                    ->where('department_id', $loggedInUser->faculty->department_id)
+                    ->get();
                 break;
             case 'faculty':
-                $students = $loggenInUser->faculty->students();
+                $students = $loggedInUser->faculty->students()->with(['user', 'department', 'supervisors.user'])->get();
                 break;
             case 'student':
-                $students = Student::where('user_id',$loggenInUser->id)->get();
+                $students = Student::with(['user', 'department', 'supervisors.user'])
+                    ->where('user_id', $loggedInUser->id)
+                    ->get();
                 break;
             default:
                 return response()->json([
                     'message' => 'You do not have permission to view students'
                 ], 403);
         }
-
-        return response()->json($students,200);
+    
+        $result = $students->map(function ($student) {
+            return [
+                'name' => $student->user->name(),
+                'phd_title' => $student->phd_title,
+                'overall_progress' => $student->overall_progress,
+                'roll_no' => $student->roll_no,
+                'department' => $student->department->name,
+                'supervisors' => $student->supervisors->map(function ($supervisor) {
+                    return $supervisor->user->name();
+                }),
+                'cgpa' => $student->cgpa,
+                'email' => $student->user->email,
+                'phone' => $student->user->phone,
+                'current_status' => $student->current_status,
+                'fathers_name' => $student->fathers_name,
+                'address' => $student->address,
+                'date_of_registration' => $student->date_of_registration,
+                'date_of_irb' => $student->date_of_irb,
+                'date_of_synopsis' => $student->date_of_synopsis,
+            ];
+        });
+    
+        return response()->json($result, 200);
     }
+    
 
     public function get(Request $request, $roll_no)
     {

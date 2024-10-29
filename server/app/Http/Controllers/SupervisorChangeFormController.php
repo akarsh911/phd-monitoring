@@ -45,7 +45,7 @@ class SupervisorChangeFormController extends Controller {
         ];
         return $this->createForms(SupervisorChangeForm::class, $data,function ($formInstance) {
             $formInstance->current_supervisors = $formInstance->student->supervisors->pluck('faculty_code')->toArray();
-            $formInstance->irb_submitted = $formInstance->student->irbSubForm->completion=='complete'?true:false;
+            $formInstance->irb_submitted = $formInstance->student->irbSubForm?->completion=='complete'?true:false;
             if(!$formInstance->irb_submitted){
                 $formInstance->steps=['student','phd_coordinator','hod'];
             }
@@ -68,7 +68,7 @@ class SupervisorChangeFormController extends Controller {
             case 'student':
                 return $this->handleStudentForm($user, $form_id, $model, $steps, function ($formInstance) {
                     $formInstance->current_supervisors = $formInstance->student->supervisors->pluck('faculty_code')->toArray();
-                    $formInstance->irb_submitted = $formInstance->student->irbSubForm->completion=='complete'?true:false;
+                    $formInstance->irb_submitted = $formInstance->student->irbSubForm?->completion=='complete'?true:false;
                 });
             case 'hod':
                 return $this->handleHodForm($user, $form_id, $model);

@@ -56,6 +56,7 @@ const FormList = () => {
                             {(form.completion === 'complete' && form.status === 'rejected') && (
                                 <span className="action-label-list"></span>
                             )}
+                            
                             <p className="form-title"><b>Stage:</b> <br /> {form.stage}</p>
                             <p className="form-title"><b>Status:</b> <br /> {form.status}</p>
                             <p className="form-title"><b>Created:</b> <br /> {parseDateTime(form.created_at)}</p>

@@ -18,6 +18,7 @@
     flex-grow: 1; /* Fills the remaining space */
     background-color: white; /* White background for main content */
     height: fit-content;
+    min-height: 100vh;
 }
 
 /* Top bar styles */
