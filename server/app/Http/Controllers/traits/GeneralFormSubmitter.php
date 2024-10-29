@@ -167,6 +167,7 @@ trait GeneralFormSubmitter
         $formInstance->update([
             'stage' => $previousLevel,
             'current_step' => $index,
+            'maximum_step' => max($index, $formInstance->maximum_step),
             // Unlock the current level's lock
             $this->getUnlockField($previousLevel) => false,
         ]);
@@ -188,6 +189,7 @@ trait GeneralFormSubmitter
             $nextLevel.'_approval' => false,
             $nextLevel.'_comments' => null,
             'current_step' => $index,
+            'maximum_step' => max($index, $formInstance->maximum_step),
             $this->getUnlockField($nextLevel) => false,
         ]);
         $this->updateForm($model,$student_id,$nextLevel);

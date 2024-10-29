@@ -32,7 +32,11 @@ const FormList = () => {
     }, [location.pathname, setLoading]); // Added location.pathname as a dependency
 
     const handleClick = (form) => {
-        const newUrl = `${location.pathname}/${form.id}`;
+        let path = location.pathname;
+        if (path.endsWith('/')) {
+            path = path.slice(0, -1);
+        }
+        const newUrl = `${path}/${form.id}`;
         window.location.href = newUrl;
     };
 
@@ -56,7 +60,7 @@ const FormList = () => {
                             {(form.completion === 'complete' && form.status === 'rejected') && (
                                 <span className="action-label-list"></span>
                             )}
-                            
+
                             <p className="form-title"><b>Stage:</b> <br /> {form.stage}</p>
                             <p className="form-title"><b>Status:</b> <br /> {form.status}</p>
                             <p className="form-title"><b>Created:</b> <br /> {parseDateTime(form.created_at)}</p>

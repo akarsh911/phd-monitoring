@@ -24,6 +24,7 @@ trait MigrationCommonFormFields
         $table->json('history')->nullable(); 
         $table->json('steps')->nullable();
         $table->integer('current_step')->nullable()->default(0); 
+        $table->integer('maximum_step')->nullable()->default(0); 
         
         //Common Approval fields
         $table->boolean('supervisor_approval')->nullable()->default(false);

@@ -7,7 +7,7 @@ const StudentProfile = () => {
         <Layout children={
             <>
             {
-               <ProfileCard />
+               <ProfileCard/>
             }
              
             </>

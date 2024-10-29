@@ -1,0 +1,81 @@
+import React, { useEffect,useState } from 'react';
+import Layout from '../../components/dashboard/layout';
+import FormGrid from '../../components/forms/formGrid/FormGrid';
+import ProfileBar from '../../components/profileBar/ProfileBar';
+import { customFetch } from '../../api/base';
+import { baseURL, ENDPOINTS } from '../../api/urls';
+import { useLoading } from '../../context/LoadingContext';
+import { useLocation } from 'react-router-dom';
+
+const FacultyFormsPage = () => {
+    const role = localStorage.getItem('userRole');
+    const [user, setUser] = useState();
+    const { setLoading } = useLoading();
+    const [forms, setForms] = useState([]);
+    const location = useLocation();
+
+
+    useEffect(() => {
+        setForms([
+            {
+                form_type: "supervisor-allocation",
+                form_name: "Supervisor Allocation",
+            },
+            {
+                form_type: "irb-constitution",
+                form_name: "IRB Constitution",
+            },
+            {
+                form_type: "status-change",
+                form_name: "Status Change",
+            },
+            {
+                form_type: "semester-off",
+                form_name: "Semester Off",
+            },
+            {
+                form_type: "list-of-examiners",
+                form_name: "List of Examiners",
+            },
+            {
+                form_type: "irb-submission",
+                form_name: "IRB Submission",
+            },
+            {
+                form_type: 'irb-extention',
+                form_name: 'Research Extension',
+            },
+            {
+                form_type: "synopsis-submission",
+                form_name: "Synopsis Submission",
+            },
+            {
+                form_type: "supervisor-change",
+                form_name: "Supervisor Change",
+            },
+            {
+                form_type: 'thesis-submission',
+                form_name: 'Thesis Submission',
+            },
+            {
+                form_type: 'thesis-extention',
+                form_name: 'Thesis Extension',
+            },
+        ]);
+        
+    }, [role]);
+
+  return (
+    <>
+
+       <Layout children={
+        <>
+          <FormGrid forms={forms}/>
+        </>
+        }/>
+
+    </>
+  );
+}
+
+export default FacultyFormsPage;

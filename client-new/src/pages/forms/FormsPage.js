@@ -3,14 +3,36 @@ import Layout from '../../components/dashboard/layout';
 import FormGrid from '../../components/forms/formGrid/FormGrid';
 import ProfileBar from '../../components/profileBar/ProfileBar';
 import { customFetch } from '../../api/base';
-import { ENDPOINTS } from '../../api/urls';
+import { ENDPOINTS,baseURL } from '../../api/urls';
 import { useLoading } from '../../context/LoadingContext';
+import { useLocation } from 'react-router-dom';
+
+
 
 const FormsPage = () => {
     const role = localStorage.getItem('userRole');
     const [user, setUser] = useState();
     const { setLoading } = useLoading();
+    const [forms, setForms] = useState([]);
+    const location = useLocation();
+
+
     useEffect(() => {
+        
+      setLoading(true);
+      const url= baseURL+location.pathname;
+      customFetch(url, "GET")
+          .then((data) => {
+              if(data && data.success)
+              setForms(data.response);
+              setLoading(false);
+          })
+          .catch((error) => {
+              console.log(error);
+              setLoading(false);
+     
+          });
+
           if(role === 'student' ){
               setLoading(true);
               customFetch(ENDPOINTS.STUDENT_PROFILE, 'GET')
@@ -25,6 +47,8 @@ const FormsPage = () => {
                 console.log(error);
               });
           }
+
+        
     }, [role]);
     
   return (
@@ -40,7 +64,7 @@ const FormsPage = () => {
             synopsisDate={user?.date_of_synopsis}
         />
         <div style={{marginTop:"30px"}}>
-        <FormGrid/>
+        <FormGrid forms={forms}/>
         </div>
         </>
         }/>

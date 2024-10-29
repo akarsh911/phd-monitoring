@@ -1,16 +1,57 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import { useLocation } from "react-router-dom"; // Import useLocation
+import { useLocation, useParams } from "react-router-dom";
 import "react-circular-progressbar/dist/styles.css";
 import "./ProfileCard.css";
 import { formatDate } from "../../utils/timeParse";
+import { baseURL } from "../../api/urls";
+import { customFetch } from "../../api/base";
 
-function ProfileCard({ dataIP }) {
-    let { state } = useLocation(); // Access the passed state
-    if (!state) state=dataIP; // Return null if state is not
-    if(!state) 
-        return (<div>Student not found</div>);
+function ProfileCard({ dataIP = null, link=false }) {
+    const { state: locationState } = useLocation(); 
+    const { roll_nos } = useParams();
+    const [state, setState] = useState(locationState || dataIP);
+    const [loading, setLoading] = useState(!state); // Start in loading if no initial state
 
+    useEffect(() => {
+        if (!state) {
+            const rollNumber = roll_nos || "";
+            const url = `${baseURL}/students/${rollNumber}`;
+
+            customFetch(url, "GET").then((data) => {
+                if (data && data.success) {
+                    setState(data.response[0]);
+                } else {
+                    console.error("No data found or unauthorized access.");
+                }
+                setLoading(false); // Stop loading regardless of outcome
+            });
+        } else {
+            setLoading(false); // Stop loading if state is already set
+        }
+    }, [roll_nos, state]);
+
+   
+    const handleForms = () => {
+        if(link){
+            window.location.href= '/forms';
+        }
+        else
+        window.location.href = `${window.location.pathname}/forms`;
+    };
+
+    const handleProgress = () => {
+        if(link){
+            window.location.href= '/progress';
+        }
+        else
+        window.location.href = `${window.location.pathname}/progress`;
+
+    };
+
+    if (loading) {
+        return <p>Loading...</p>;
+    }
 
     const {
         name,
@@ -26,15 +67,9 @@ function ProfileCard({ dataIP }) {
         address,
         date_of_registration,
         date_of_irb,
-        date_of_synopsis,cgpa
-    } = state; // Destructure the passed data
-
-    const handleForms = () => {
-        window.location.href = window.location.href + "/forms";
-    }
-    const handleProgress = () => {
-        window.location.href = window.location.href + "/progress";
-    }
+        date_of_synopsis,
+        cgpa
+    } = state;
 
     const data = [
         { label: "Roll Number", value: roll_no },
@@ -46,12 +81,10 @@ function ProfileCard({ dataIP }) {
         { label: "Father's Name", value: fathers_name },
         { label: "Address", value: address },
         { label: "Current Status", value: current_status },
-        { label: "Date of Admission", value: formatDate(date_of_registration) }, // Formatting date
-        { label: "Date of IRB", value: formatDate(date_of_irb) }, // Formatting date
-        { label: "Date of Synopsis", value: formatDate(date_of_synopsis) }, // Formatting date
+        { label: "Date of Admission", value: formatDate(date_of_registration) },
+        { label: "Date of IRB", value: formatDate(date_of_irb) },
+        { label: "Date of Synopsis", value: formatDate(date_of_synopsis) },
     ];
-
-
 
     return (
         <div className="profile-card">

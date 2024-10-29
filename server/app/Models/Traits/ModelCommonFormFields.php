@@ -138,6 +138,7 @@ trait ModelCommonFormFields
             ],
             'steps' => $this->steps,
             'current_step' => $this->current_step,
+            'maximum_step' => $this->maximum_step,
             'history' => $this->history,  
             'role' => $user->role->role,    
         ], $extraData);

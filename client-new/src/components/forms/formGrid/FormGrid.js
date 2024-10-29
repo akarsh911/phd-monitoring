@@ -1,32 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "./FormGrid.css";
 import { useLocation } from 'react-router-dom';
-import { baseURL } from "../../../api/urls";
-import { customFetch } from "../../../api/base";
-import { useLoading } from "../../../context/LoadingContext";
 
-const FormGrid = () => {
-    const [forms, setForms] = useState([]);
-    const { setLoading } = useLoading();
+
+const FormGrid = ({forms}) => {
     const location = useLocation();
-    useEffect(() => {
-        setLoading(true);
-        const url= baseURL+location.pathname;
-        customFetch(url, "GET")
-            .then((data) => {
-                if(data && data.success)
-                setForms(data.response);
-                setLoading(false);
-            })
-            .catch((error) => {
-                console.log(error);
-                setLoading(false);
-       
-            });
-    }, []);
+
 
     const handleClick = (form) => {
-        const newUrl = `${location.pathname}/${form.form_type}`;
+        let path = location.pathname;
+        if (path.endsWith('/')) {
+            path = path.slice(0, -1);
+        }
+        const newUrl = `${path}/${form.form_type}`;
         window.location.href = newUrl;
     }
     return (
