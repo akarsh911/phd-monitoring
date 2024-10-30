@@ -38,7 +38,7 @@ trait GeneralFormHandler
                 $student = $formInstance->student;
                 if ($student->department->checkCoordinates($user->faculty->faculty_code)) {
                     $index=array_search('phd_coordinator',$formInstance->steps);
-                    if($index!==false && $index<=$formInstance->current_step)
+                    if($index!==false && $index<=$formInstance->maximum_step)
                     return response()->json($formInstance->fullForm($user));
                     else
                     return response()->json(['message' => 'The form is not yet assigned to you for review or action.'], 404);
@@ -61,7 +61,7 @@ trait GeneralFormHandler
                 $student = $formInstance->student;
                 if ($student->department->hod->faculty_code == $user->faculty->faculty_code) {
                     $index=array_search('hod',$formInstance->steps);
-                    if($index!==false && $index<=$formInstance->current_step)
+                    if($index!==false && $index<=$formInstance->maximum_step)
                     return response()->json($formInstance->fullForm($user));
                     else
                     return response()->json(['message' => 'The form is not yet assigned to you for review or action.'], 404);
@@ -82,7 +82,7 @@ trait GeneralFormHandler
             $formInstance = $modelClass::find($form_id);
             if ($formInstance) {
                 $index=array_search($user->role->role,$formInstance->steps);
-                if($index!==false && $index<=$formInstance->current_step)
+                if($index!==false && $index<=$formInstance->maximum_step)
                 return response()->json($formInstance->fullForm($user));
                 else
                 return response()->json(['message' => 'The form is not yet assigned to you for review or action.'], 404);
@@ -102,7 +102,7 @@ trait GeneralFormHandler
                 $student = $formInstance->student;
                 if ($student->checkSupervises($user->faculty->faculty_code)) {
                     $index=array_search('faculty',$formInstance->steps);
-                    if($index!==false && $index<=$formInstance->current_step)
+                    if($index!==false && $index<=$formInstance->maximum_step)
                     return response()->json($formInstance->fullForm($user));
                     else
                     return response()->json(['message' => 'The form is not yet assigned to you for review or action.'], 404);
@@ -124,7 +124,7 @@ trait GeneralFormHandler
                 $student = $formInstance->student;
                 if ($student->checkDoctoralCommittee($user->faculty->faculty_code)) {
                     $index=array_search('doctoral',$formInstance->steps);
-                    if($index!==false && $index<=$formInstance->current_step)
+                    if($index!==false && $index<=$formInstance->maximum_step)
                     return response()->json($formInstance->fullForm($user));
                     else
                     return response()->json(['message' => 'The form is not yet assigned to you for review or action.'], 404);

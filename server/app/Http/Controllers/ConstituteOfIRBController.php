@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\GeneralFormHandler;
 use App\Http\Controllers\Traits\GeneralFormList;
 use App\Http\Controllers\Traits\GeneralFormSubmitter;
 use App\Models\ConstituteOfIRB;
+use App\Models\DoctoralCommittee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Faculty;
@@ -15,6 +16,8 @@ use App\Models\irbExpertChairman;
 use App\Models\IrbNomineeCognate;
 use App\Models\IrbOutsideExpert;
 use App\Models\OutsideExpert;
+use App\Models\Role;
+use App\Models\User;
 
 //TODO: add outside expert not in the system
 
@@ -104,23 +107,53 @@ class ConstituteOfIRBController extends Controller
     private function studentSubmit($user, Request $request, $form_id)
     {
         $request->validate([
-            'semester' => 'required|integer',
+            'semester' => 'integer',
+            'gender' => 'string|in:Male,Female',
+            'cgpa' => 'numeric',
         ]);
         return $this->submitForm($user,$request, $form_id, ConstituteOfIRB::class, 'student','student','faculty',  function ($formInstance) use ($request, $user) {
+            if(!$formInstance->student->gender) {
+                $request->validate([
+                    'cgpa' => 'required|numeric',
+                ]);
+            }
+            if(!$formInstance->student->cgpa) {
+                $request->validate([
+                    'gender' => 'required|string|in: Male,Female'
+                ]);}
             $formInstance->update([
                 'semester' => $request->semester,
             ]);
+            $gender = $request->gender;
+            $cgpa = $request->cgpa;
+            if($gender){
+                $formInstance->student->user->update([
+                    'gender' => $gender,
+                ]);
+            }
+            if($cgpa){
+                $formInstance->student->update([
+                    'cgpa' => $cgpa,
+                ]);
+            }
+            $formInstance->student->save();
+            $formInstance->student->user->save();
         });
     }
 
     private function supervisorSubmit($user, Request $request, $form_id)
     {
-        $request->validate([
-            'nominee_cognates' => 'array|nullable',
-        ]);
+       
     
         return $this->submitForm($user,$request, $form_id, ConstituteOfIRB::class, 'faculty','student','hod', function ($formInstance) use ($request, $user) {
             // Check if nominee cognates are valid
+            $request->validate([
+                'nominee_cognates' => 'array|required',
+                'nominee_cognates.*' => 'integer|required',
+                'outside_experts' => 'array|required',
+                'outside_experts.*' => 'integer|required',
+            ]);
+
             $nomineeCognates = $request->nominee_cognates;
             if (!$nomineeCognates) {
                 throw new \Exception('Nominee cognates are required');
@@ -165,8 +198,30 @@ class ConstituteOfIRBController extends Controller
                 ]);
             }
 
-            // Update the form instance and create a supervisor approval record
-    
+            $uniqueOutsideExperts = array_unique($request->outside_experts);
+            if (count($uniqueOutsideExperts) != 3) {
+                throw new \Exception('Outside experts must be unique and exactly 3');
+            }
+
+            $oldOutsideExperts=IrbOutsideExpert::where('irb_form_id',$formInstance->id)->get();
+            if(count($oldOutsideExperts) != 0){
+                foreach($oldOutsideExperts as $oldOutsideExpert){
+                    $oldOutsideExpert->delete();
+                }
+                $formInstance->addHistoryEntry("Supervisor changed outside experts", $user->name());
+            }
+
+            foreach ($request->outside_experts as $outsideExpert) {
+                $expert=OutsideExpert::find($outsideExpert);
+                if(!$expert){
+                    throw new \Exception('Invalid outside expert');
+                }
+                IrbOutsideExpert::create([
+                    'irb_form_id' => $formInstance->id,
+                    'expert_id' => $outsideExpert,
+                    'hod_id' => $user->id,
+                ]);
+            } 
         });
     }
     
@@ -184,18 +239,11 @@ class ConstituteOfIRBController extends Controller
             function ($formInstance, $user) use ($request) {
                 $request->validate([
                     'chairman_experts' => 'array|required',
-                    'outside_experts' => 'array|required',
-                    'outside_experts.*.first_name' => 'string|required_with:outside_experts',
-                    'outside_experts.*.last_name' => 'string|required_with:outside_experts',
-                    'outside_experts.*.designation' => 'string|required_with:outside_experts',
-                    'outside_experts.*.institution' => 'string|required_with:outside_experts',
-                    'outside_experts.*.email' => 'email|required_with:outside_experts',
-                    'outside_experts.*.phone' => 'string|required_with:outside_experts',
-                    'outside_experts.*.department' => 'string|required_with:outside_experts',
-                ]);
+                    'chairman_experts.*' => 'integer|required',
+                  ]);
 
-                if(!$request->chairman_experts || !$request->outside_experts){
-                    throw new \Exception('Chairman Experts and Outside Experts are Required');
+                if(!$request->chairman_experts){
+                    throw new \Exception('Chairman Experts are Required');
                 }
                 // Handling cognate experts
                 $oldChairmanExperts=irbExpertChairman::where('irb_form_id',$formInstance->id)->get();
@@ -224,43 +272,6 @@ class ConstituteOfIRBController extends Controller
                     }
                 }
                 $formInstance->addHistoryEntry("HOD added cognate experts", $user->name());
-    
-                // Handling outside experts
-                $oldOutsideExperts=IrbOutsideExpert::where('irb_form_id',$formInstance->id)->get();
-                if(count($oldOutsideExperts) != 0){
-                    foreach($oldOutsideExperts as $oldOutsideExpert){
-                        $oldOutsideExpert->delete();
-                    }
-                    $formInstance->addHistoryEntry("HOD changed outside experts", $user->name());
-                }
-
-                foreach ($request->outside_experts as $outsideExpert) {
-                    if (array_key_exists('expert_id', $outsideExpert) && $outsideExpert['expert_id'] != null) {
-                        IrbOutsideExpert::create([
-                            'irb_form_id' => $formInstance->id,
-                            'expert_id' => $outsideExpert['expert_id'],
-                            'hod_id' => $user->id,
-                        ]);
-                    } else {
-                        // Create new expert and link
-                        // $expert = OutsideExpert::create([
-                        //     'first_name' => $outsideExpert['first_name'],
-                        //     'last_name' => $outsideExpert['last_name'],
-                        //     'designation' => $outsideExpert['designation'],
-                        //     'institution' => $outsideExpert['institution'],
-                        //     'email' => $outsideExpert['email'],
-                        //     'phone' => $outsideExpert['phone'],
-                        //     'department' => $outsideExpert['department'],
-                        // ]);
-                        // IrbOutsideExpert::create([
-                        //     'irb_form_id' => $formInstance->id,
-                        //     'expert_id' => $expert->id,
-                        //     'hod_id' => $user->id,
-                        // ]);
-                    }
-                }
-                $formInstance->addHistoryEntry("HOD added outside experts", $user->name());
-        
              
             }
         );
@@ -280,28 +291,51 @@ class ConstituteOfIRBController extends Controller
             'dra',
             function ($formInstance, $user) use ($request) {
                     $request->validate([
-                        'outside_expert' =>"integer|nullable",
-                        'cognate_expert' => 'integer|nullable',
+                        'outside_expert' =>"integer|required",
+                        'cognate_expert' => 'integer|required',
                     ]);
-                    if ($formInstance->dra_lock) {
-                        throw new \Exception('Form is unavailable for submission');
-                    }
-
+            
                     $outsideExpertId = $request->outside_expert;
                     $cognateExpertId = $request->cognate_expert;
 
                     $outsideExpert = IrbOutsideExpert::where('irb_form_id', $formInstance->id)->where('expert_id', $outsideExpertId)->first();
-                    $cognateExpert = irbExpertChairman::where('irb_form_id', $formInstance->id)->where('expert_id', $cognateExpertId)->first();
+                    $cognateExpert = IrbNomineeCognate::where('irb_form_id', $formInstance->id)->where('nominee_id', $cognateExpertId)->first();
+
                     if(!$outsideExpert || !$cognateExpert) {
                         throw new \Exception('Invalid expert selection');
                     }
+                    $outsideExpert=OutsideExpert::find($outsideExpertId);
+                    $OutSideUser=User::where('email',$outsideExpert->email)->first();
+                    if(!$OutSideUser){
+                        $OutSideUser=User::create([
+                            'email'=>$outsideExpert->email,
+                            'password'=>bcrypt('password'),
+                            'first_name'=>$outsideExpert->first_name,
+                            'last_name'=>$outsideExpert->last_name,
+                            'phone'=>$outsideExpert->phone,
+                            'role_id'=>Role::where('role','external')->first()->id,
+                        ]);
+                        $OutSideUser->faculty()->create([
+                            'faculty_code'=>$outsideExpert->id,
+                            'designation'=>$outsideExpert->designation,
+                            'department_id'=>$user->faculty->department_id,
+                        ]);
+                    }
+                    DoctoralCommittee::create([
+                        'student_id' => $formInstance->student->roll_no,
+                        'faculty_id' => $outsideExpertId,
+                    ]);
 
+                    DoctoralCommittee::create([
+                        'student_id' => $formInstance->student->roll_no,
+                        'faculty_id' => $cognateExpertId,
+                    ]);
                     $formInstance->update([
                         'outside_expert' => $outsideExpertId,
                         'cognate_expert' => $cognateExpertId,
-                        'completion'=>true
+                        'completion'=>'complete',
                     ]);
-
+                    $formInstance->save();
                     $forms = [
                         [
                             'form_type' => 'irb-submission',

@@ -9,17 +9,18 @@ import { customFetch } from "../../api/base";
 
 function ProfileCard({ dataIP = null, link=false }) {
     const { state: locationState } = useLocation(); 
-    const { roll_nos } = useParams();
+    let { roll_no } = useParams();
     const [state, setState] = useState(locationState || dataIP);
     const [loading, setLoading] = useState(!state); // Start in loading if no initial state
 
     useEffect(() => {
         if (!state) {
-            const rollNumber = roll_nos || "";
+            const rollNumber = roll_no || "";
             const url = `${baseURL}/students/${rollNumber}`;
 
             customFetch(url, "GET").then((data) => {
                 if (data && data.success) {
+                    roll_no = data.response[0].id;
                     setState(data.response[0]);
                 } else {
                     console.error("No data found or unauthorized access.");
@@ -29,7 +30,7 @@ function ProfileCard({ dataIP = null, link=false }) {
         } else {
             setLoading(false); // Stop loading if state is already set
         }
-    }, [roll_nos, state]);
+    }, [roll_no, state]);
 
    
     const handleForms = () => {
@@ -57,7 +58,6 @@ function ProfileCard({ dataIP = null, link=false }) {
         name,
         phd_title,
         overall_progress,
-        roll_no,
         department,
         supervisors,
         email,

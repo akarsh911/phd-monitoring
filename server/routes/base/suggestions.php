@@ -6,5 +6,6 @@ use App\Http\Controllers\SuggestionController;
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('specialization',[SuggestionController::class, 'suggestSpecialization']);
     Route::post('faculty', [SuggestionController::class, 'suggestFaculty']);
+    Route::post('outside-expert', [SuggestionController::class, 'suggestOutsideExpert']);
 
 });

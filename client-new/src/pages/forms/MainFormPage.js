@@ -3,16 +3,18 @@ import Layout from "../../components/dashboard/layout";
 import SupervisorAllocation from "../../components/forms/supervisorAllocation/SupervisorAllocation";
 import "./forms.css";
 import { useLoading } from "../../context/LoadingContext";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { customFetch } from "../../api/base";
 import { baseURL } from "../../api/urls";
+import ConstituteOfIRB from "../../components/forms/constituteOfIRB/ConstituteOfIRB";
 const MainFormPage = () => {
 
     const [formData, setFormData] = useState({});
     const { setLoading } = useLoading();
     const [isLoaded, setIsLoaded] = useState(false);
     const location = useLocation();
-  
+    const {form_type} = useParams();
+
     useEffect(() => {
       setLoading(true);
       const url = baseURL + location.pathname;
@@ -36,9 +38,18 @@ const MainFormPage = () => {
       children={
         <>
           {isLoaded && formData && (
-            <>
-              <SupervisorAllocation formData={formData} />
-            </>
+          <>
+          {(() => {
+              switch (form_type) {
+                  case 'supervisor-allocation':
+                      return <SupervisorAllocation formData={formData} />;
+                  case 'irb-constitution':
+                        return <ConstituteOfIRB formData={formData} />;
+                  default:
+                      return <p>Are You Sure this is a FORM?</p>;
+              }
+          })()}
+         </>
           )}
         </>
       }

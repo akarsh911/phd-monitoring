@@ -35,6 +35,11 @@ class ConstituteOfIRB extends Model
     {
         $commonJSON = $this->fullCommonForm($user);
         return array_merge($commonJSON, [
+            'chairman' => [
+                'name' => $this->student->department->hod->user->name(),
+                'designation' => $this->student->department->hod->designation,
+                'department' => $this->student->department->name
+            ],
             'nominee_cognates' => $this->nomineeCognates->map(function ($nominee) {
                 return [
                     'faculty_code' => $nominee->nominee->faculty_code,
@@ -47,8 +52,7 @@ class ConstituteOfIRB extends Model
                 $expert = $expert->expert;
                 return [
                     'id' => $expert->id,
-                    'first_name' => $expert->first_name,
-                    'last_name' => $expert->last_name,
+                    'name' => $expert->first_name . ' ' . $expert->last_name,
                     'designation' => $expert->designation,
                     'department' => $expert->department,
                     'institution' => $expert->institution,
@@ -70,8 +74,7 @@ class ConstituteOfIRB extends Model
             ] : null,
             'outside_expert' => $this->expertOutside ? [
                 'id' => $this->expertOutside->id,
-                'first_name' => $this->expertOutside->first_name,
-                'last_name' => $this->expertOutside->last_name,
+                'name'=> $this->expertOutside->first_name . ' ' . $this->expertOutside->last_name,
                 'designation' => $this->expertOutside->designation,
                 'department' => $this->expertOutside->department,
                 'institution' => $this->expertOutside->institution,
@@ -110,11 +113,11 @@ class ConstituteOfIRB extends Model
 
     public function expertCognate()
     {
-        return $this->belongsTo(Faculty::class, 'expert_cognate', 'faculty_code');
+        return $this->belongsTo(Faculty::class, 'cognate_expert', 'faculty_code');
     }
 
     public function expertOutside()
     {
-        return $this->belongsTo(OutsideExpert::class, 'expert_outside', 'id');
+        return $this->belongsTo(OutsideExpert::class, 'outside_expert', 'id');
     }
 }

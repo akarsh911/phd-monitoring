@@ -36,7 +36,9 @@ const FormList = () => {
         if (path.endsWith('/')) {
             path = path.slice(0, -1);
         }
-        const newUrl = `${path}/${form.id}`;
+        if(form.form_id===undefined)
+            form.form_id=form.id;
+        const newUrl = `${path}/${form.form_id}`;
         window.location.href = newUrl;
     };
 

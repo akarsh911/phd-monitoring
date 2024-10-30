@@ -87,7 +87,7 @@ class SuggestionController extends Controller {
             if(!$department){
                 return response()->json(['message' => 'Department not found'], 404);
             }
-            $facultyQuery->where('department_id', $request->query('department_id'));
+            $facultyQuery->where('department_id', $request->department_id);
         }
     
         $faculty = $facultyQuery->get()->map(function ($faculty) {
@@ -118,8 +118,19 @@ class SuggestionController extends Controller {
             ->orWhere('designation', 'LIKE', '%' . $request->text . '%')
             ->orWhere('email', 'LIKE', '%' . $request->text . '%')
             ->orWhere('phone', 'LIKE', '%' . $request->text. '%')
-            ->get();
-    
+            ->get()->map(function ($faculty) {
+                return [
+                    'id' => $faculty->id,
+                    'name' => $faculty->first_name.' '.$faculty->last_name,
+                    'email' => $faculty->email,
+                    'designation' => $faculty->designation,
+                    'department' => $faculty->department?? 'N/A',
+                    'institution' => $faculty->institution,
+                    'phone' => $faculty->phone,
+
+                ];
+            });
+       
         return response()->json($outsideExperts);
     }
 

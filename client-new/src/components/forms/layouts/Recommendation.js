@@ -8,7 +8,7 @@ import { getRoleName } from '../../../utils/roleName';
 import { useLoading } from '../../../context/LoadingContext';
 import { submitForm } from '../../../api/form';
 
-const Recommendation = ({formData,allowRejection,role}) => {
+const Recommendation = ({formData,allowRejection,role,moreFields,handleRecommendationChange,isLocked}) => {
     const [roleName, setRoleName] = useState('');
     const [body, setBody] = useState({});
     const [lock, setLock] = useState(false);
@@ -18,7 +18,6 @@ const Recommendation = ({formData,allowRejection,role}) => {
    
     useEffect(() => {
         if (role && formData) {
-            console.log('hello',formData.approvals[role])
             setRoleName(getRoleName(role));
             setBody({
                 approval: formData.approvals[role],
@@ -27,12 +26,17 @@ const Recommendation = ({formData,allowRejection,role}) => {
             });
             setLock(!!formData.locks[role]);
         }
+        if(isLocked===true){
+            setLock(true);
+        }
     }, [role, formData]);
 
     const onRecommendationChange = (data) => {
-        console.log("Recommendation Data:", data);
         body.approval = data.approval;
         body.rejected = data.rejected;
+        if(handleRecommendationChange){
+            handleRecommendationChange(body);
+        }
     };
 
 
@@ -44,7 +48,7 @@ const Recommendation = ({formData,allowRejection,role}) => {
             ]}
             space={2}
             />
-            { !lock && ( <GridContainer elements={[
+            { !lock && moreFields!==true && ( <GridContainer elements={[
                 <CustomButton text='Submit' onClick={()=>{submitForm(body,location,setLoading)}} />
             ]}/>)}
 

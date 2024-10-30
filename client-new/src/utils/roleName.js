@@ -4,6 +4,8 @@ export const getRoleName = (role) => {
            return 'Student'
        case 'supervisor':
            return 'Supervisor';
+        case 'faculty':
+            return 'Superior';
         case 'hod':
             return 'HOD'
         case 'phd_coordinator':

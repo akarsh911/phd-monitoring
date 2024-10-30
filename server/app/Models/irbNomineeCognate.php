@@ -18,11 +18,6 @@ class IrbNomineeCognate extends Model
         'status',
     ];
 
-    public function irbForm()
-    {
-        return $this->belongsTo(IrbForm::class, 'irb_form_id');
-    }
-
     public function supervisor()
     {
         return $this->belongsTo(Faculty::class, 'supervisor_id');

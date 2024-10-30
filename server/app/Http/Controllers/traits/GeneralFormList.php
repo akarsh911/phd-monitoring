@@ -43,7 +43,7 @@ trait GeneralFormList
                 }
                 break;
             case 'faculty':
-                if(!$user->faculty->supervisedStudents()->contains('roll_no',$student_id)){
+                if(!$user->faculty->supervisedStudents->contains('roll_no',$student_id)){
                     return response()->json(['message' => 'You are not authorized to access this resource'], 403);
                 }
                 break;
@@ -61,7 +61,7 @@ trait GeneralFormList
         $formsQuery = $model::where('student_id', $student_id);
         $filteredForms = $formsQuery->get()->filter(function ($form) use ($role) {
             $index = array_search($role, $form->steps);
-            return $index !== false && $index <= $form->current_step;
+            return $index !== false && $index <= $form->maximum_step;
         });
     
         return  response()->json($filteredForms, 200); 
@@ -87,7 +87,7 @@ trait GeneralFormList
                 return [];
             }
             $index = array_search($role, $form->steps);
-            return $index !== false && $index <= $form->current_step;
+            return $index !== false && $index <= $form->maximum_step;
         })->map(function ($form) {
             return [
                 'name' => $form->student->name, // Assumes there's a `name` field on the student model
@@ -98,7 +98,7 @@ trait GeneralFormList
                 'created_at' => $form->created_at,
                 'updated_at' => $form->updated_at,
                 'action_req' => $form->student_lock,
-                'id' => $form->id,
+                'form_id' => $form->id,
             ];
         });
     
@@ -121,7 +121,7 @@ trait GeneralFormList
         
         $filteredForms = $formsQuery->get()->filter(function ($form) use ($role) {
             $index = array_search($role, $form->steps);
-            return $index !== false && $index <= $form->current_step;
+            return $index !== false && $index <= $form->maximum_step;
         })->map(function ($form) use ($role) {
             // Dynamically access the lock field based on the role
             $lockField =  'hod_lock';
@@ -137,7 +137,7 @@ trait GeneralFormList
                 'created_at' => $form->created_at,
                 'updated_at' => $form->updated_at,
                 'action_req' => $form->action_req,
-                'id' => $form->id,
+                'form_id' => $form->id,
             ];
         });
 
@@ -157,7 +157,7 @@ trait GeneralFormList
     // Fetch forms and filter them based on role and step conditions
     $filteredForms = $formsQuery->get()->filter(function ($form) use ($role) {
         $index = array_search($role, $form->steps);
-        return $index !== false && $index <= $form->current_step;
+        return $index !== false && $index <= $form->maximum_step;
     })->map(function ($form) use ($role) {
         // Dynamically access the lock field based on the role
         $lockField = $role . '_lock';
@@ -173,7 +173,7 @@ trait GeneralFormList
             'created_at' => $form->created_at,
             'updated_at' => $form->updated_at,
             'action_req' => $form->action_req,
-            'id' => $form->id,
+            'form_id' => $form->id,
         ];
     });
 
@@ -198,7 +198,7 @@ trait GeneralFormList
         // Fetch forms and filter them based on role and step conditions
         $filteredForms = $formsQuery->get()->filter(function ($form) use ($role) {
             $index = array_search($role, $form->steps);
-            return $index !== false && $index <= $form->current_step;
+            return $index !== false && $index <= $form->maximum_step;
         })->map(function ($form) {
             $form->action_req = !$form->supervisor_lock;
             return $form;

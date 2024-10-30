@@ -15,6 +15,7 @@ trait ModelCommonFormFields
             'completion' => $this->completion,
             'steps' => $this->steps,
             'current_step' => $this->current_step,
+            'maximum_step' => $this->maximum_step,
             'student_lock' => $this->student_lock,
             'hod_lock' => $this->hod_lock,
             'supervisor_lock' => $this->supervisor_lock,
@@ -77,7 +78,7 @@ trait ModelCommonFormFields
 
     public function fullCommonForm($user, array $extraData = [])
     {
-        return array_merge([
+        $arr= array_merge([
             'form_id' => $this->id,
             'name' => $this->student->user->name(),
             'roll_no' => $this->student->roll_no,
@@ -90,11 +91,6 @@ trait ModelCommonFormFields
             'cgpa' => $this->student->cgpa,
             'role' => $user->role->role,
             'semester' => $this->semester,
-            'chairman' => [
-                'name' => $this->student->department->hod->user->name(),
-                'designation' => $this->student->department->hod->designation,
-                'department' => $this->student->department->name
-            ],
             'supervisors' => $this->student->supervisors?->map(function ($supervisor) {
                 return [
                     'name' => $supervisor->user->name(),
@@ -140,7 +136,13 @@ trait ModelCommonFormFields
             'current_step' => $this->current_step,
             'maximum_step' => $this->maximum_step,
             'history' => $this->history,  
-            'role' => $user->role->role,    
+            'role' => $user->role->role,   
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ], $extraData);
+        if($user->role->role!='student'){
+            $arr['department_id'] = $this->student->department->id;
+        }
+        return $arr;
     }
 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { customFetch } from '../../../api/base';
 import "./Fields.css";
 
-const InputSuggestions = ({ apiUrl,hint, initialValue, onSelect,label ,lock=false,showLabel=true }) => {
+const InputSuggestions = ({ apiUrl,hint, initialValue, onSelect,label ,lock=false,showLabel=true,body }) => {
     const [inputValue, setInputValue] = useState(initialValue || '');
     const [suggestions, setSuggestions] = useState([]);
     const [isLocked, setIsLocked] = useState(lock || false);
@@ -13,7 +13,9 @@ const InputSuggestions = ({ apiUrl,hint, initialValue, onSelect,label ,lock=fals
         setInputValue(value);
         
         if (value) {
-            const data = await customFetch(apiUrl, 'POST', { text: value });
+            
+            const finalBody = body ? {...body, text: value} : {text: value};
+            const data = await customFetch(apiUrl, 'POST',finalBody,false);
             if (data && data.success) {
                 setSuggestions(data.response || []); // Adjust according to your API response structure
             }

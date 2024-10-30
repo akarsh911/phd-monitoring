@@ -107,7 +107,7 @@ class StudentController extends Controller {
                     ->get();
                 break;
             case 'faculty':
-                $students = $loggedInUser->faculty->students()->with(['user', 'department', 'supervisors.user'])->get();
+                $students = $loggedInUser->faculty->supervisedStudents;
                 break;
             case 'student':
                 $students = Student::with(['user', 'department', 'supervisors.user'])
@@ -119,28 +119,28 @@ class StudentController extends Controller {
                     'message' => 'You do not have permission to view students'
                 ], 403);
         }
-    
-        $result = $students->map(function ($student) {
-            return [
-                'name' => $student->user->name(),
-                'phd_title' => $student->phd_title,
-                'overall_progress' => $student->overall_progress,
-                'roll_no' => $student->roll_no,
-                'department' => $student->department->name,
-                'supervisors' => $student->supervisors->map(function ($supervisor) {
-                    return $supervisor->user->name();
-                }),
-                'cgpa' => $student->cgpa,
-                'email' => $student->user->email,
-                'phone' => $student->user->phone,
-                'current_status' => $student->current_status,
-                'fathers_name' => $student->fathers_name,
-                'address' => $student->address,
-                'date_of_registration' => $student->date_of_registration,
-                'date_of_irb' => $student->date_of_irb,
-                'date_of_synopsis' => $student->date_of_synopsis,
-            ];
-        });
+        $result=[];
+        foreach($students as $student){
+                $result[]=[
+                    'name' => $student->user->name(),
+                    'phd_title' => $student->phd_title,
+                    'overall_progress' => $student->overall_progress,
+                    'roll_no' => $student->roll_no,
+                    'department' => $student->department->name,
+                    'supervisors' => $student->supervisors->map(function ($supervisor) {
+                        return $supervisor->user->name();
+                    }),
+                    'cgpa' => $student->cgpa,
+                    'email' => $student->user->email,
+                    'phone' => $student->user->phone,
+                    'current_status' => $student->current_status,
+                    'fathers_name' => $student->fathers_name,
+                    'address' => $student->address,
+                    'date_of_registration' => $student->date_of_registration,
+                    'date_of_irb' => $student->date_of_irb,
+                    'date_of_synopsis' => $student->date_of_synopsis,
+                ];
+        }
     
         return response()->json($result, 200);
     }

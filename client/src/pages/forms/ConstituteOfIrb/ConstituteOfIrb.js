@@ -33,7 +33,7 @@ const Irb = () => {
     supervisor_lock: false,
     hod_lock: false,
     dordc_lock: true,
-    role: "dordc",
+    role: "faculty",
     suggestions: [],
     status: "awaited",
   });

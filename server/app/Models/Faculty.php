@@ -117,10 +117,9 @@ class Faculty extends Model
         $data=[];
         if($this->user->role->role=='faculty' && !$roll_no){
             $super= $this->supervisedStudents;
-            $doc= $this->doctoredStudents;
             $data=[];
             foreach($super as $s){
-                $forms= $s->forms;
+                $forms= $s->student->forms();
                 foreach($forms as $f){
                     if($f->stage=='supervisor'){
                         $f['action_required']=true;
@@ -128,20 +127,6 @@ class Faculty extends Model
                     else
                     $d['action_required']=false;
                     if($f->supervisor_available==true){
-                        $data[]=$f;
-                    }
-                }
-            }
-            foreach($doc as $d){
-                $forms= $d->forms;
-                foreach($forms as $f){
-                    if($f->stage=='doctoral'){
-                        $f['action_required']=true;
-                        
-                    }
-                    else
-                    $d['action_required']=false;
-                    if($f->doctoral_available==true){
                         $data[]=$f;
                     }
                 }
@@ -149,10 +134,11 @@ class Faculty extends Model
         }
         else if($this->user->role->role=='faculty' && $roll_no){
             $super= Forms::where('student_id',$roll_no)->where('supervisor_available',true)->get();
-            $doc= Forms::where('student_id',$roll_no)->where('doctoral_available',true)->get();
             $data=[];
+            if($super)
             foreach($super as $s){
-                $forms= $s->forms;
+                $forms= $s->student->forms();
+                if($forms)
                 foreach($forms as $f){
                     if($f->stage=='supervisor'){
                         $f['action_required']=true;
@@ -164,20 +150,7 @@ class Faculty extends Model
                     }
                 }
             }
-            foreach($doc as $d){
-                $forms= $d->forms;
-                foreach($forms as $f){
-                    if($f->stage=='doctoral'){
-                        $f['action_required']=true;
-                        
-                    }
-                    else
-                    $d['action_required']=false;
-                    if($f->doctoral_available==true){
-                        $data[]=$f;
-                    }
-                }
-            }
+          
         }
         else if($this->user->role->role=='dra'){
            if($roll_no){
