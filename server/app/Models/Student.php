@@ -73,15 +73,16 @@ class Student extends Model
 
     public function checkIrbCompletionStatus()
     {
-        $irbForm = $this->irbForm()->first();
-        $irbSubForm = $this->irbSubForms()->first();
 
-        if ($irbForm && $irbSubForm && $irbForm->status == 'approved' && $irbSubForm->status == 'dra') {
+        $irbSubForm = IrbSubForm::where('student_id', $this->roll_no)->first();
+
+        if ( $irbSubForm && $irbSubForm->status == 'approved' && $irbSubForm->status == 'complete') {
             return true;
         } else {
             return false;
         }
     }
+
     
     public function statusChanges()
     {

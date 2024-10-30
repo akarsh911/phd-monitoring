@@ -20,7 +20,7 @@ const Student = ({ formData }) => {
     setLock(formData.locks?.student);
     setBody({
         cgpa: formData.cgpa,
-        gender: formData
+        gender: formData.gender
     })
     setIsLoaded(true);
   }, [formData]);

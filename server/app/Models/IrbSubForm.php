@@ -53,19 +53,14 @@ class IrbSubForm extends Model
         $commonJSON = $this->fullCommonForm($user);
         $formData=array_merge($commonJSON, [
             'form_type' => $this->form_type,
+            'address' => $this->student->address,
             'objectives' => [
-                'revised' => $this->objectives->where('type', 'revised')->map(function($objective){
-                    return [
-                        'objective' => $objective->objective,
-                        'type' => $objective->type,
-                    ];
-                }),
-                'draft' => $this->objectives->where('type', 'draft')->map(function($objective){
-                    return [
-                        'objective' => $objective->objective,
-                        'type' => $objective->type,
-                    ];
-                }),
+                'revised' => $this->objectives->where('type', 'revised')->map(function ($objective) {
+                    return $objective->objective;
+                })->values(),
+                'draft' => $this->objectives->where('type', 'draft')->map(function ($objective) {
+                    return $objective->objective;
+                })->values(),
             ],
             'date_of_irb' => $this->student->date_of_irb,
             'address' => $this->student->address,
@@ -90,7 +85,7 @@ class IrbSubForm extends Model
                 'supervised_outside'=>$supervisor->supervised_outside,
             ];
         });
-        if($user->role->role){
+        if($user->role->role==='faculty'){
             $currentSupervisor = $this->student->supervisors->where('faculty_code', $user->faculty->faculty_code)->first();
             if ($currentSupervisor) {
             $formData['current_supervisor'] = [

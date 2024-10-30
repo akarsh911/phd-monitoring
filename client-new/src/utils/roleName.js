@@ -5,7 +5,7 @@ export const getRoleName = (role) => {
        case 'supervisor':
            return 'Supervisor';
         case 'faculty':
-            return 'Superior';
+            return 'Supervisor';
         case 'hod':
             return 'HOD'
         case 'phd_coordinator':
@@ -14,5 +14,9 @@ export const getRoleName = (role) => {
             return 'DORDC'
         case 'dra':
             return 'DRA'
+        case 'external':
+            return 'External Member'
+        case 'complete':
+            return 'Form Complete'
     }
 }

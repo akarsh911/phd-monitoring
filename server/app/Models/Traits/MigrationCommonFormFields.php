@@ -46,7 +46,8 @@ trait MigrationCommonFormFields
         $table->boolean('dra_lock')->nullable()->default(true); 
         $table->boolean('director_lock')->nullable()->default(true);
         $table->boolean('doctoral_lock')->nullable()->default(true);
-
+        $table->boolean('external_lock')->nullable()->default(true);
+        
         // Comments fields for each role (nullable)
         $table->text('student_comments')->nullable();
         $table->text('phd_coordinator_comments')->nullable();

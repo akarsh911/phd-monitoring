@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import "./Fields.css";
 
-const InputField = ({ label, initialValue, isLocked, onChange,hint=null }) => {
+const InputField = ({ label, initialValue, isLocked, onChange,hint=null,showLabel=true }) => {
     const [hintText, setHintText] = useState(hint || 'Enter Value...');
     const [value, updateValue] = useState(initialValue);
     return (
         <div className="input-field-container">
-            <label className="input-label">{label}</label>
+            {showLabel && (<label className="input-label">{label}</label>)}
             <input
                 type="text"
                 className="input-field"

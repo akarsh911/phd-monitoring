@@ -29,6 +29,9 @@ const Recommendation = ({formData,allowRejection,role,moreFields,handleRecommend
         if(isLocked===true){
             setLock(true);
         }
+        if(formData.role!==role && role!=="supervisor"){
+            setLock(true);
+        }
     }, [role, formData]);
 
     const onRecommendationChange = (data) => {
@@ -44,7 +47,7 @@ const Recommendation = ({formData,allowRejection,role,moreFields,handleRecommend
         <>
             <RecommendationField role={roleName} allowRejection={allowRejection} onRecommendationChange={(data)=>{onRecommendationChange(data)}} initialValue={body} lock={lock} />
             <GridContainer elements={[
-                <InputField label="Remarks (if any)" initialValue={body.comments} isLocked={lock} hint="Enter Student ID..." onChange={(value) => body.comments=value} />
+                <InputField label="Remarks (if any)" initialValue={body.comments} isLocked={lock} hint="Enter Comments.." onChange={(value) => body.comments=value} />
             ]}
             space={2}
             />

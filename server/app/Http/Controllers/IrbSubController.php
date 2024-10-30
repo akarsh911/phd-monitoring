@@ -130,6 +130,9 @@ class IrbSubController extends Controller
             if($type=='draft'){
                 $formInstance->objectives()->delete();
             }
+            else{
+                $formInstance->objectives()->where('type', 'revised')->delete();
+            }
             foreach ($objectives as $objective) {
                 $formInstance->objectives()->create([
                     'objective' => $objective,
@@ -269,11 +272,13 @@ class IrbSubController extends Controller
                 $faculty=$user->faculty;
                 $faculty->supervised_outside=$request->supervised_outside;
                 $supervised_campus = Faculty::where('faculty_code', $faculty_code)
-                    ->whereHas('supervisedStudents', function ($query) {
-                        $query->whereHas('irbSubForms', function ($query) {
-                            $query->where('completion', 'complete');
-                        });
+                ->whereHas('supervisedStudents', function ($query) {
+                    // Use a raw query to directly check the completion status
+                    $query->whereHas('irbSubForm', function ($subQuery) {
+                        $subQuery->where('status', 'approved')
+                                  ->where('status', 'complete');
                     });
+                });            
                 $faculty->supervised_campus=$supervised_campus->count();
                 $faculty->save();
             }

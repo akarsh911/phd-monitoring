@@ -7,6 +7,7 @@ import { useLocation, useParams } from "react-router-dom";
 import { customFetch } from "../../api/base";
 import { baseURL } from "../../api/urls";
 import ConstituteOfIRB from "../../components/forms/constituteOfIRB/ConstituteOfIRB";
+import IRBSubmission from "../../components/forms/irbSubmission/IRBSubmission";
 const MainFormPage = () => {
 
     const [formData, setFormData] = useState({});
@@ -45,6 +46,8 @@ const MainFormPage = () => {
                       return <SupervisorAllocation formData={formData} />;
                   case 'irb-constitution':
                         return <ConstituteOfIRB formData={formData} />;
+                  case 'irb-submission':
+                        return <IRBSubmission formData={formData} />;
                   default:
                       return <p>Are You Sure this is a FORM?</p>;
               }

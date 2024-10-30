@@ -20,6 +20,7 @@ trait GeneralFormSubmitter
             ]);
         }
 
+
         // Check if comments are required
         if ($role != 'student' && !$request->approval && empty($request->comments)) {
             return response()->json(['message' => 'Comments are required when approval is false'], 403);
@@ -40,7 +41,6 @@ trait GeneralFormSubmitter
 
             $this->handleRoleSpecificLogic($user, $formInstance, $role, $extraSteps);
 
-            // Process approval logic
             if ($role != 'student') {
                 if (!$request->approval) {
                     $this->updateApprovalAndComments($formInstance, $request, $role);
