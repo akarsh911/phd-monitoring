@@ -39,6 +39,7 @@ class ResearchExtentionController extends Controller
             'hod',
             'dra',
             'dordc',
+            'complete'
         ];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
@@ -52,7 +53,8 @@ class ResearchExtentionController extends Controller
                 'hod',
                 'dra',
                 'dordc',
-                'director'
+                'director',
+                'complete'
             ];
         }
         $data=[
@@ -168,8 +170,8 @@ class ResearchExtentionController extends Controller
         $model = ResearchExtentionsForm::class;
         $form=ResearchExtentionsForm::find($form_id);
         $prevExtentions=$form->student->researchExtentions();
-        if($prevExtentions->count()>0)
-        return $this->submitForm($user, $request, $form_id, $model, 'dordc', 'dra', 'director',
+        if($prevExtentions->count()==0)
+        return $this->submitForm($user, $request, $form_id, $model, 'dordc', 'dra', 'complete',
         function ($formInstance) use ($request, $user) {
             $formInstance->status='approved';
             $formInstance->completion='completed';
@@ -188,7 +190,7 @@ class ResearchExtentionController extends Controller
     private function directorSubmit($user, $request, $form_id)
     {
         $model = ResearchExtentionsForm::class;
-        return $this->submitForm($user, $request, $form_id, $model, 'director', 'dordc', 'dordc',
+        return $this->submitForm($user, $request, $form_id, $model, 'director', 'dordc', 'complete',
         function ($formInstance) use ($request, $user) {
             $formInstance->status='approved';
             $formInstance->completion='completed';

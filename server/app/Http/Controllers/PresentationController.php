@@ -36,7 +36,7 @@ class PresentationController extends Controller{
     public function loadForm(Request $request, $form_id=null)
     {
         $user = Auth::user();
-        $steps=['student','faculty','doctoral','hod','dra','dordc'];
+        $steps=['student','faculty','doctoral','hod','dra','dordc','complete'];
         $model = Presentation::class;
         $form=Presentation::find($form_id);
         $role = $user->role;
@@ -333,7 +333,7 @@ class PresentationController extends Controller{
             $model,
             'dra',
             'dordc',
-            'dra',
+            'complete',
             function ($formInstance) use ($request, $user) {
                 $formInstance->status = 'approved';
                 $formInstance->completion='complete';

@@ -34,7 +34,7 @@ class IrbSubController extends Controller
     {
         $user = Auth::user();
         $role = $user->role;
-        $steps=['student','faculty','hod','dra','dordc'];
+        $steps=['student','faculty','hod','dra','dordc','complete'];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
@@ -193,14 +193,14 @@ class IrbSubController extends Controller
     private function dordcSubmit($user, $request, $form_id)
     {
         $model = IrbSubForm::class;
-        return $this->submitForm($user, $request, $form_id, $model, 'dordc', 'dra', 'dra', function ($formInstance) use ($request, $user) {
+        return $this->submitForm($user, $request, $form_id, $model, 'dordc', 'dra', 'complete', function ($formInstance) use ($request, $user) {
             if($formInstance->form_type=='draft'){
                 $formInstance->form_type = 'revised';
                 $formInstance->stage = 'student';
                 $formInstance->addHistoryEntry("Form Approved By DORDC and Sent For Revision", $user->name());
                 $formInstance->student_lock = false;
                 $formInstance->dordc_lock = true;
-                $steps=['student','faculty','external','hod','dra','dordc'];
+                $steps=['student','faculty','external','hod','dra','dordc','complete'];
                 $formInstance->steps=$steps;
                 $formInstance->save();
                 throw new \Exception('Form Approved and sent For Revision ', 201);

@@ -32,7 +32,7 @@ class SupervisorChangeFormController extends Controller {
     {
         $user = Auth::user();
         $role = $user->role;
-        $steps=['student','phd_coordinator','hod','dordc','dra'];
+        $steps=['student','phd_coordinator','hod','dordc','dra','complete'];
         
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
@@ -47,7 +47,7 @@ class SupervisorChangeFormController extends Controller {
             $formInstance->current_supervisors = $formInstance->student->supervisors->pluck('faculty_code')->toArray();
             $formInstance->irb_submitted = $formInstance->student->irbSubForm?->completion=='complete'?true:false;
             if(!$formInstance->irb_submitted){
-                $formInstance->steps=['student','phd_coordinator','hod'];
+                $formInstance->steps=['student','phd_coordinator','hod','complete'];
             }
         });
     }
@@ -194,7 +194,7 @@ class SupervisorChangeFormController extends Controller {
                 $model,
                 'hod',
                 'phd_coordinator',
-                'hod',
+                'complete',
                 function ($formInstance) use ($request, $user) {
                     if ($request->approval) {
                         $to_change = $formInstance->to_change;
@@ -226,7 +226,7 @@ class SupervisorChangeFormController extends Controller {
     private function draSubmit($user, $request, $form_id)
     {
         $model = IrbSubForm::class;
-        return $this->submitForm($user, $request, $form_id, $model, 'dra', 'dordc', 'dra',
+        return $this->submitForm($user, $request, $form_id, $model, 'dra', 'dordc', 'complete',
         function ($formInstance) use ($request, $user) {
             if ($request->approval) {
                 $to_change = $formInstance->to_change;
@@ -237,7 +237,7 @@ class SupervisorChangeFormController extends Controller {
                     $this->changeSupervisor($formInstance->student->roll_no,$supervisor,$new_supervisor);
                 }
                 $formInstance->completion='complete';
-                $formInstance->addHistoryEntry("Supervisors change request approved by HOD", $user->name());
+                $formInstance->addHistoryEntry("Supervisors change request approved by DRA", $user->name());
             }
         });
     }

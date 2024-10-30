@@ -38,6 +38,7 @@ class SupervisorAllocationController extends Controller
             'student',
             'phd_coordinator',
             'hod',
+            'complete'
         ];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
@@ -174,7 +175,7 @@ class SupervisorAllocationController extends Controller
             $model,
             'hod',
             'phd_coordinator',
-            'hod',
+            'complete',
             function ($formInstance) use ($request, $user) {
                 if ($request->approval) {
                     $formInstance->completion='complete';

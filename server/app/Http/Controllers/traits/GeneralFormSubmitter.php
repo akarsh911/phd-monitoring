@@ -10,21 +10,21 @@ use Illuminate\Validation\ValidationException;
 
 trait GeneralFormSubmitter
 {
-    private function submitForm($user, Request $request, $form_id, $model, $role, $previousLevel,$nextLevel, callable $extraSteps = null)
+    private function submitForm($user, Request $request, $form_id, $model, $role, $previousLevel, $nextLevel, callable $extraSteps = null)
     {
-        
+
         if ($role != 'student') {
             $request->validate([
                 'approval' => 'required|boolean',
                 'comments' => 'string|nullable',
             ]);
         }
-  
+
         // Check if comments are required
         if ($role != 'student' && !$request->approval && empty($request->comments)) {
             return response()->json(['message' => 'Comments are required when approval is false'], 403);
         }
-        
+
         try {
             $formInstance = $model::where('id', $form_id)->first();
             if (!$formInstance) {
@@ -33,33 +33,32 @@ trait GeneralFormSubmitter
             if ($formInstance->completion == 'complete') {
                 return response()->json(['message' => 'Form already completed'], 403);
             }
-            
-            if ($formInstance->{$role . '_lock'}||($role=='faculty' && $formInstance->supervisor_lock)) {
+
+            if ($formInstance->{$role . '_lock'} || ($role == 'faculty' && $formInstance->supervisor_lock)) {
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
             }
-            
+
             $this->handleRoleSpecificLogic($user, $formInstance, $role, $extraSteps);
-            
+
             // Process approval logic
             if ($role != 'student') {
-                if (!$request->approval) {   
-                   $this->updateApprovalAndComments($formInstance, $request, $role);
-                   return $this->handleFallbackToPreviousLevel($user,$formInstance, $previousLevel, $request->comments);
+                if (!$request->approval) {
+                    $this->updateApprovalAndComments($formInstance, $request, $role);
+                    return $this->handleFallbackToPreviousLevel($user, $formInstance, $previousLevel, $request->comments);
                 }
             }
 
-     
+
             if ($extraSteps) {
                 $extraSteps($formInstance, $user);
             }
 
             if ($role != 'student') {
                 $this->updateApprovalAndComments($formInstance, $request, $role);
-            }
-            else{
+            } else {
                 $formInstance->student_lock = true;
             }
-            $this->handleMoveToNextLevel($formInstance, $nextLevel,$model);
+            $this->handleMoveToNextLevel($formInstance, $nextLevel, $model);
 
             $formInstance->addHistoryEntry($this->getSubmissionMessage($user->role, $user->name()), $user->name());
             $formInstance->save();
@@ -67,7 +66,7 @@ trait GeneralFormSubmitter
         } catch (ValidationException $e) {
             return response()->json(['errors' => $e->errors()], 422);
         } catch (\Exception $e) {
-            if($e->getCode()==201){
+            if ($e->getCode() == 201) {
                 return response()->json(['message' => $e->getMessage()], 201);
             }
             return response()->json(['message' => $e->getMessage()], 403);
@@ -89,26 +88,26 @@ trait GeneralFormSubmitter
 
                 case 'hod':
                     $formInstance->hod_approval = true;
-             
+
                     break;
 
                 case 'dordc':
                     $formInstance->dordc_approval = true;
-                
+
                     break;
 
                 case 'dra':
                     $formInstance->dra_approval = true;
-          
+
                     break;
                 case 'external':
-                        $formInstance->external_approval = true;
-              
-                        break;
+                    $formInstance->external_approval = true;
+
+                    break;
 
                 case 'director':
                     $formInstance->director_approval = true;
-                 
+
                     break;
 
                 default:
@@ -142,7 +141,7 @@ trait GeneralFormSubmitter
                 $formInstance->dra_comments = $request->comments;
                 $formInstance->dra_lock = true;
                 break;
-            
+
             case 'external':
                 $formInstance->external_comments = $request->comments;
                 $formInstance->external_lock = true;
@@ -158,9 +157,9 @@ trait GeneralFormSubmitter
         }
     }
 
-    private function handleFallbackToPreviousLevel($user,$formInstance, $previousLevel, $comments)
+    private function handleFallbackToPreviousLevel($user, $formInstance, $previousLevel, $comments)
     {
-        if($previousLevel == 'faculty'){
+        if ($previousLevel == 'faculty') {
             $previousLevel = 'supervisor';
         }
         $index = array_search($previousLevel, $formInstance->steps);
@@ -173,34 +172,40 @@ trait GeneralFormSubmitter
         ]);
 
         $formInstance->addHistoryEntry($this->getRejectionMessage($user->role, $user->name()),  $user->name(), $comments);
-        
-        return response()->json(['message' => 'Form Rejected successfully'],200);
+
+        return response()->json(['message' => 'Form Rejected successfully'], 200);
     }
 
-    private function handleMoveToNextLevel($formInstance, $nextLevel,$model)
+    private function handleMoveToNextLevel($formInstance, $nextLevel, $model)
     {
-        $student_id=$formInstance->student->roll_no;
+        $student_id = $formInstance->student->roll_no;
         $index = array_search($nextLevel, $formInstance->steps);
-        if($nextLevel == 'faculty'){
+        if ($nextLevel == 'faculty') {
             $nextLevel = 'supervisor';
         }
-        $formInstance->update([
-            'stage' => $nextLevel,
-            $nextLevel.'_approval' => false,
-            $nextLevel.'_comments' => null,
-            'current_step' => $index,
-            'maximum_step' => $index > $formInstance->maximum_step ? $index : $formInstance->maximum_step,
-            $this->getUnlockField($nextLevel) => false,
-        ]);
-        $formInstance->save();
-        $this->updateForm($model,$student_id,$nextLevel);
+        if ($nextLevel == 'complete') {
+            $formInstance->completion = 'complete';
+            $formInstance->stage = 'complete';
+            $formInstance->save();
+        } else {
+            $formInstance->update([
+                'stage' => $nextLevel,
+                $nextLevel . '_approval' => false,
+                $nextLevel . '_comments' => null,
+                'status' => 'pending',
+                'current_step' => $index,
+                'maximum_step' => $index > $formInstance->maximum_step ? $index : $formInstance->maximum_step,
+                $this->getUnlockField($nextLevel) => false,
+            ]);
+        }
+        $this->updateForm($model, $student_id, $nextLevel);
     }
-    
+
 
     private function getUnlockField($stage)
     {
         return match ($stage) {
-            'student'=> 'student_lock',
+            'student' => 'student_lock',
             'supervisor' => 'supervisor_lock',
             'phd_coordinator' => 'phd_coordinator_lock',
             'hod' => 'hod_lock',
@@ -268,7 +273,6 @@ trait GeneralFormSubmitter
             default:
                 throw new \Exception('Invalid role for submission');
         }
-
     }
 
     private function getSubmissionMessage($role, $name)
@@ -300,7 +304,8 @@ trait GeneralFormSubmitter
         };
     }
 
-    private function getFormType($model){
+    private function getFormType($model)
+    {
         $model = (new \ReflectionClass($model))->getShortName();
         return match ($model) {
             'SupervisorAllocation' => 'supervisor-allocation',
@@ -313,15 +318,18 @@ trait GeneralFormSubmitter
             'ThesisSubmission' => 'thesis-submission',
             'ThesisExtentionForm' => 'thesis-extension',
             'ListOfExaminers' => 'list-of-examiners',
-            'SynopsisSubmission' => 'synopsis-submission',           
+            'SynopsisSubmission' => 'synopsis-submission',
         };
     }
 
-    private function updateForm($model,$student_id,$next){
-        $form=Forms::where('form_type',$this->getFormType($model))->where('student_id',$student_id)->first();
-        $field=$next.'_available';
-        $form->$field=true;
-        $form->stage=$next;
+    private function updateForm($model, $student_id, $next)
+    {
+        $form = Forms::where('form_type', $this->getFormType($model))->where('student_id', $student_id)->first();
+        if ($next != 'complete') {
+            $field = $next . '_available';
+            $form->$field = true;
+        }
+        $form->stage = $next;
         $form->save();
     }
 }

@@ -33,7 +33,7 @@ class ThesisExtentionController extends Controller
     {
         $user = Auth::user();
         $role = $user->role;
-        $steps=['student','faculty','phd_coordinator','hod','dra','dordc'];
+        $steps=['student','faculty','phd_coordinator','hod','dra','dordc','complete'];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
@@ -198,7 +198,7 @@ class ThesisExtentionController extends Controller
             $model,
             'dordc',
             'dra',
-            'dordc',
+            'complete',
             function ($formInstance) use ($request, $user) {
                 if ($request->approval) {
                     $formInstance->completion='complete';
@@ -219,7 +219,7 @@ class ThesisExtentionController extends Controller
             $model,
             'director',
             'dordc',
-            'dra',
+            'complete',
             function ($formInstance) use ($request, $user) {
                 if ($request->approval) {
                     $formInstance->completion='complete';

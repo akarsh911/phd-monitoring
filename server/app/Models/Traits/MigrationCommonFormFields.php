@@ -20,7 +20,7 @@ trait MigrationCommonFormFields
    
         $table->enum('completion', ['incomplete', 'complete'])->nullable()->default('incomplete');
         $table->enum('status', ['draft','pending', 'approved', 'rejected'])->nullable()->default('pending'); // Common field
-        $table->enum('stage', ['student', 'hod','phd_coordinator', 'supervisor','doctoral','external', 'dordc', 'dra'])->nullable()->default('student'); // Common field
+        $table->enum('stage', ['student', 'hod','phd_coordinator', 'supervisor','doctoral','external', 'dordc', 'dra','complete'])->nullable()->default('student'); // Common field
         $table->json('history')->nullable(); 
         $table->json('steps')->nullable();
         $table->integer('current_step')->nullable()->default(0); 

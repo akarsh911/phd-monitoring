@@ -46,6 +46,7 @@ class ConstituteOfIRBController extends Controller
             'faculty',
             'hod',
             'dordc',
+            'complete'
         ];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
@@ -288,7 +289,7 @@ class ConstituteOfIRBController extends Controller
             ConstituteOfIRB::class, 
             'dordc', 
             'hod', 
-            'dra',
+            'complete',
             function ($formInstance, $user) use ($request) {
                     $request->validate([
                         'outside_expert' =>"integer|required",

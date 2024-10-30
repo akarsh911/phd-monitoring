@@ -36,7 +36,7 @@ class SynopsisSubmissionController extends Controller
     {
         $user = Auth::user();
         $role = $user->role;
-        $steps=['student','faculty','phd_coordinator','hod','dra','dordc','director'];
+        $steps=['student','faculty','phd_coordinator','hod','dra','dordc','director','complete'];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
@@ -261,6 +261,20 @@ class SynopsisSubmissionController extends Controller
             'dordc',
             'dra',
             'director',
+        );
+    }
+
+    private function directorSubmit($user, $request, $form_id)
+    {
+        $model = SynopsisSubmission::class;
+        return $this->submitForm(
+            $user,
+            $request,
+            $form_id,
+            $model,
+            'director',
+            'dordc',
+            'complete',
             function ($formInstance) use ($request, $user) {
                 if ($request->approval) {
                     $formInstance->completion='complete';

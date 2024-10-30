@@ -77,8 +77,7 @@ class IrbSubForm extends Model
                     'supervisor_id' => $approval->supervisor_id,
                     'status' => $approval->status,
                     'comments' => $approval->comments,
-                    'name' => $approval->supervisor->user->name(),
-                
+                    'name' => $approval->supervisor->user->name(),                
                 ];
             }),
         ]);
@@ -87,7 +86,7 @@ class IrbSubForm extends Model
                 'name' => $supervisor->user->name(),
                 'designation' => $supervisor->designation,
                 'department' => $supervisor->department->name,
-                'supervised_campus'=>$supervisor->supervised_campus,
+                'supervised_campus'=>$supervisor->supervised_campus+1,
                 'supervised_outside'=>$supervisor->supervised_outside,
             ];
         });

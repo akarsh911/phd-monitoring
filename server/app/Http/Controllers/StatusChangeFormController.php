@@ -31,13 +31,13 @@ class StatusChangeFormController extends Controller
     {
         $user = Auth::user();
         $role = $user->role;
-        $steps=['student','faculty','phd_coordinator','hod','dra','dordc'];
+        $steps=['student','faculty','phd_coordinator','hod','dra','dordc','complete'];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
         $status_changes=$user->student->statusChanges();
         if($status_changes->count()>0){
-            $steps=['student','faculty','phd_coordinator','hod','dra','dordc','director'];
+            $steps=['student','faculty','phd_coordinator','hod','dra','dordc','director','complete'];
         }
         $data=[
             'roll_no'=>$user->student->roll_no,
@@ -157,7 +157,7 @@ class StatusChangeFormController extends Controller
             return $this->submitForm($user, $request, $form_id, $model, 'dordc', 'dra', 'director');
         }
         else{
-            return $this->submitForm($user, $request, $form_id, $model, 'dordc', 'dra', 'dra',
+            return $this->submitForm($user, $request, $form_id, $model, 'dordc', 'dra', 'complete',
             function ($formInstance) use ($request, $user) {
                 if($request->approval){
                     $formInstance->status = 'approved';
@@ -182,7 +182,7 @@ class StatusChangeFormController extends Controller
     private function directorSubmit($user, $request, $form_id)
     {
         $model = StudentStatusChangeForms::class;
-        return $this->submitForm($user, $request, $form_id, $model, 'director', 'dordc', 'dra',
+        return $this->submitForm($user, $request, $form_id, $model, 'director', 'dordc', 'complete',
         function ($formInstance) use ($request, $user) {
             if($request->approval){
                 $formInstance->status = 'approved';
