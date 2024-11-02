@@ -7,7 +7,7 @@ import { useLoading } from "../../../context/LoadingContext";
 import { parseDateTime } from "../../../utils/timeParse";
 import CreateNewBar from "./CreateNewBar";
 
-const FormList = () => {
+const FormList = ({showButton=true}) => {
     const [forms, setForms] = useState([]);
     const { setLoading } = useLoading();
     const location = useLocation();
@@ -44,11 +44,9 @@ const FormList = () => {
 
     return (
         <>
-            {role === 'student' && (
+            {role === 'student' && showButton && (
                   <CreateNewBar /> 
             )}
-            <h2>Available Forms</h2>
-            <br></br>
             {forms.length > 0 ? (
                 <div className="form-list-container">
                     {forms.map((form) => (

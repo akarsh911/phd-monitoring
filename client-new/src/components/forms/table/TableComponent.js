@@ -1,7 +1,13 @@
 import React from 'react';
 import './TableComponent.css';
 
-const TableComponent = ({ data, keys, titles }) => {
+const TableComponent = ({ data, keys, titles, components = [] }) => {
+    // Create a dictionary from components for easy lookup
+    const componentMap = components.reduce((acc, comp) => {
+        acc[comp.key] = comp.component;
+        return acc;
+    }, {});
+
     return (
         <div className="table-container">
             <table className="custom-table">
@@ -17,9 +23,24 @@ const TableComponent = ({ data, keys, titles }) => {
                     {data.map((item, index) => (
                         <tr key={index}>
                             <td>{index + 1}</td> {/* S.No */}
-                            {keys.map((key, keyIndex) => (
-                                <td key={keyIndex}>{item[key]}</td>
-                            ))}
+                            {keys.map((key, keyIndex) => {
+                                const value = item[key];
+                                const CustomComponent = componentMap[key];
+                                
+                                return (
+                                    <td key={keyIndex}>
+                                        {CustomComponent ? (
+                                            <CustomComponent data={value} />
+                                        ) : (
+                                            typeof value === 'string' && value.startsWith('http') ? (
+                                                <a href={value} target="_blank" rel="noopener noreferrer">link</a>
+                                            ) : (
+                                                value
+                                            )
+                                        )}
+                                    </td>
+                                );
+                            })}
                         </tr>
                     ))}
                 </tbody>

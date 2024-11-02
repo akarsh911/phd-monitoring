@@ -6,7 +6,7 @@ use App\Models\Student;
 
 trait GeneralFormList
 {
-    private function listForms($user,$model,$filters=null){
+    private function listForms($user,$model,$filters=null,$override=false){
         $role=$user->role->role;
         switch ($role) {
             case 'student':
@@ -19,7 +19,7 @@ trait GeneralFormList
             case 'director':
                 return $this->listAdminForms($user, $model, $filters);
             case 'faculty':
-                return $this->listFacultyForms($user, $model, $filters);
+                return $this->listFacultyForms($user, $model, $filters,$override);
             // case 'external':
             //     return $this->listExternalForms($user, $model, $filters);
             //TODO: Add external forms
@@ -90,7 +90,7 @@ trait GeneralFormList
             return $index !== false && $index <= $form->maximum_step;
         })->map(function ($form) {
             return [
-                'name' => $form->student->name, // Assumes there's a `name` field on the student model
+                'name' => $form->student->user->name(), // Assumes there's a `name` field on the student model
                 'stage' => $form->stage,
                 'roll_no' => $form->student->roll_no, // Adjusted to retrieve roll_no from related student
                 'status' => $form->status,
@@ -181,7 +181,7 @@ trait GeneralFormList
 }
 
 
-    private function listFacultyForms($user, $model, $filters = null)
+    private function listFacultyForms($user, $model, $filters = null,$override=false)
     {
         $role = $user->role->role;
         $faculty = $user->faculty;
@@ -196,8 +196,10 @@ trait GeneralFormList
         }
     
         // Fetch forms and filter them based on role and step conditions
-        $filteredForms = $formsQuery->get()->filter(function ($form) use ($role) {
+        $filteredForms = $formsQuery->get()->filter(function ($form) use ($role,$override) {
             $index = array_search($role, $form->steps);
+            if($override)
+            return $index !== false;
             return $index !== false && $index <= $form->maximum_step;
         })->map(function ($form) {
             $form->action_req = !$form->supervisor_lock;

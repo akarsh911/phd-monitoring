@@ -16,6 +16,10 @@ import StudentProfile from './pages/students/StudentProfile';
 import NotFound from './pages/404/NotFound';
 import FacultyFormsPage from './pages/forms/FacultyFormsPage';
 import Dashboard from './pages/dashboard/Dashboard';
+import Publications from './pages/publications/Publications';
+import PresentationListPage from './pages/presentations/PresentationListPage';
+import Presentation from './pages/presentations/PresentationForm';
+
 
 const App = () => {
   return (
@@ -47,8 +51,16 @@ const AppContent = () => {
          
           <Route path="/home" element={<Dashboard/>} />
           {role==='student' && (
+            <>
             <Route path="/forms" element={<FormsPage/>} />
+            
+            <Route path="/publications" element={<Publications/>} />  
+            </>
           )}
+          <Route path="/presentation" element={<PresentationListPage/>} />  
+          <Route path="/presentation/form" element={<PresentationListPage/>} />  
+          <Route path="/presentation/form/:id" element={<Presentation/>} />  
+
           <Route path="/forms/:form_type" element={<FormListPage/>} />
           <Route path="/forms/:form_type/:id" element={<MainFormPage/>} />
           {(role === 'faculty' || role === 'phd_coordinator' || role==='hod' || role==='dordc'  || role==='dra' || role==='director') && (

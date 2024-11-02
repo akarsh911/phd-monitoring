@@ -10,17 +10,25 @@
 }
 
 .custom-table thead th {
-    background-color: #f0f0f0;
+    background-color: var(--secondary-color);
     padding: 8px;
     text-align: left;
+    color: black;
     border-bottom: 2px solid #e0e0e0;
 }
 
 .custom-table tbody td {
     padding: 8px;
+    text-align: left;
     border-bottom: 1px solid #e0e0e0;
+    font-weight: 400;
 }
 
 .custom-table tr:hover {
     background-color: #f9f9f9;
+}
+
+.custom-table a{
+    color: blue;
+    text-decoration: underline;
 }

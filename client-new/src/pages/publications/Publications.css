@@ -1,0 +1,15 @@
+.publication-top-bar{
+    height: 100px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding:  0px 30px;
+}
+.publication-top-bar-right{
+    width: 200px;
+}
+.publication-top-bar-left h1{
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+}

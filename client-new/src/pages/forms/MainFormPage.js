@@ -8,6 +8,7 @@ import { customFetch } from "../../api/base";
 import { baseURL } from "../../api/urls";
 import ConstituteOfIRB from "../../components/forms/constituteOfIRB/ConstituteOfIRB";
 import IRBSubmission from "../../components/forms/irbSubmission/IRBSubmission";
+import PresentationForm from "../../components/forms/presentations/PresentationForm";
 const MainFormPage = () => {
 
     const [formData, setFormData] = useState({});
@@ -48,6 +49,8 @@ const MainFormPage = () => {
                         return <ConstituteOfIRB formData={formData} />;
                   case 'irb-submission':
                         return <IRBSubmission formData={formData} />;
+                  case 'presentation':
+                        return <PresentationForm formData={formData} />;
                   default:
                       return <p>Are You Sure this is a FORM?</p>;
               }

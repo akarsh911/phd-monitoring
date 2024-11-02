@@ -8,13 +8,15 @@ const CustomModal = ({
     minWidth = '300px', 
     maxWidth = '800px', 
     minHeight = '200px', 
-    maxHeight = '600px' 
+    maxHeight = '600px' ,
+    closeOnOutsideClick = true
 }) => {
     
     // Close the modal on outside click
     useEffect(() => {
         const handleOutsideClick = (e) => {
             if (e.target.classList.contains('modal-overlay')) {
+                if(closeOnOutsideClick)
                 onClose();
             }
         };

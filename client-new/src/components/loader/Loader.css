@@ -6,7 +6,7 @@
     height: 100vh; /* Full viewport height */
     width: 100vw; /* Full viewport width */
     position: fixed; /* Fixed position */
-    z-index: 999;
+    z-index: 999999;
     background-color: rgba(0, 0, 0, 0.5); /* Translucent background */
 }
   

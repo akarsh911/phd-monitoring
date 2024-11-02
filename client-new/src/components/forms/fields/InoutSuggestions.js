@@ -13,7 +13,6 @@ const InputSuggestions = ({ apiUrl,hint, initialValue, onSelect,label ,lock=fals
         setInputValue(value);
         
         if (value) {
-            
             const finalBody = body ? {...body, text: value} : {text: value};
             const data = await customFetch(apiUrl, 'POST',finalBody,false);
             if (data && data.success) {

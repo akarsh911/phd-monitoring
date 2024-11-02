@@ -16,6 +16,8 @@ export const getRoleName = (role) => {
             return 'DRA'
         case 'external':
             return 'External Member'
+        case 'doctoral':
+            return 'Doctoral Committee'
         case 'complete':
             return 'Form Complete'
     }

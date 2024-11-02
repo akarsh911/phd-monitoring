@@ -15,6 +15,7 @@ use App\Models\Patent;
 use App\Models\Presentation;
 use App\Models\PresentationReview;
 use App\Models\Publication;
+use App\Models\Student;
 
 class PresentationController extends Controller{
     use GeneralFormHandler;
@@ -25,12 +26,47 @@ class PresentationController extends Controller{
     public function listForm(Request $request, $student_id = null)
     {
         $user = Auth::user();
-        return $this->listForms($user, Presentation::class);
+        return $this->listForms($user, Presentation::class,null,true);
     }
 
     public function createForm(Request $request)
     {
-      //schedule a presentation
+       $user = Auth::user();
+        $role = $user->role;
+        $cur=$role->role;
+        if($cur=='faculty'){
+                $request->validate([
+                    'student_id' => 'required|string',
+                    'date'=> 'required|date',
+                    'time'=> 'required|string',
+                    'venue'=> 'required|string',
+                    'period_of_report'=> 'required|string',
+                ]);
+                $student = Student::where('roll_no', $request->student_id)->first();
+                if (!$student) {
+                    return response()->json(['message' => 'Student not found'], 404);
+                }
+                if(!$student->checkSupervises($user->faculty->faculty_code)){
+                    return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+                }
+                $old=Presentation::where('student_id',$request->student_id)->where('period_of_report',$request->period_of_report)->get();
+                if(count($old)!=0){
+                    return response()->json(['message' => 'Presentation already scheduled for this period'], 403);
+                }
+                $form = Presentation::create([
+                    'student_id' => $request->student_id,
+                    'date'=> $request->date,
+                    'time'=> $request->time,
+                    'venue'=> $request->venue,
+                    'period_of_report'=> $request->period_of_report,
+                    'status' => 'pending',
+                    'completion' => 'incomplete',
+                    'steps'=>['student','faculty','doctoral','hod','dra','dordc','complete'],
+                ]);
+                $form->addHistoryEntry("Presentation Scheduled by Supervisor", $user->first_name);
+                return response()->json($form);
+        }
+        return response()->json(['message' => 'You are not authorized to access this resource'], 403);
     }
     
     public function loadForm(Request $request, $form_id=null)

@@ -5,6 +5,7 @@ import { baseURL } from "../../../api/urls";
 import { customFetch } from "../../../api/base";
 import { useLoading } from "../../../context/LoadingContext";
 import CustomButton from '../fields/CustomButton';
+import GridContainer from '../fields/GridContainer';
 
 const CreateNewBar = () => {
     const { setLoading } = useLoading();
@@ -27,9 +28,15 @@ const CreateNewBar = () => {
     };
 
     return (
-        <div className='form-list-bar'>
+        <GridContainer
+        elements={[
+          <></>,
+          <></>,
+          <>
             <CustomButton onClick={handleClick} text='Create New Form +' />
-        </div>
+        </>
+        ]}
+        />
     );
 };
 

@@ -2,6 +2,7 @@ import React from 'react';
 import './ProfileBar.css';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import { formatDate } from '../../utils/timeParse';
 
 const ProfileBar = ({ progress, phdTitle, studentName, irbDate, synopsisDate, rollNumber }) => {
 return (
@@ -12,8 +13,8 @@ return (
             <div className="roll-number">Roll No: {rollNumber}</div>
         </div>
         <div className="dates">
-            <div className="irb-date">IRB Date: {irbDate}</div>
-            <div className="synopsis-date">Synopsis Date: {synopsisDate}</div>
+            <div className="irb-date">IRB Date: {formatDate(irbDate)}</div>
+            <div className="synopsis-date">Synopsis Date: {formatDate(synopsisDate)}</div>
         </div>
         <div className="progress-container">
             <CircularProgressbar 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\SaveFile;
+use App\Models\Patent;
 use App\Models\Publication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,12 +17,30 @@ class PublicationController extends Controller
      * @return \Illuminate\Http\Response
      */
     use SaveFile;
-    public function index()
-    {
-        $publications = Publication::all();
-        return response()->json($publications);
-    }
+  
 
+    public function get(Request $request)
+    {
+        $user=Auth::user();
+        $role=$user->role->role;
+        if($role!='student'){
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $id=$user->student->roll_no;
+        $publicationsQuery = Publication::where('student_id', $id);
+        $patents = Patent::where('student_id', $id)->get();
+        
+        $ret = [
+            'sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->where('type', 'sci')->get(),
+            'non_sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->get(),
+            'national' => $publicationsQuery->clone()->where('publication_type', 'conference')->where('type', 'national')->get(),
+            'international' => $publicationsQuery->clone()->where('publication_type', 'conference')->where('type', 'international')->get(),
+            'book' => $publicationsQuery->clone()->where('publication_type', 'book')->get(),
+            'patents' => $patents
+        ];
+        
+        return response()->json($ret);
+    }
     /**
      * Store a newly created publication in storage.
      *

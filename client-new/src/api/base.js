@@ -35,7 +35,9 @@ export const customFetch = async (
     } else {
       throw response;
     }
+
   } catch (error) {
+    console.error("Error fetching data:", error);
     if (error instanceof Response) {
       error
         .json()
@@ -49,7 +51,18 @@ export const customFetch = async (
           } else if (error.status === 500) {
             if (showToast) toast.error("Internal server error");
             return { success: false, response: data };
-          } else {
+          } 
+          else if (error.status === 400) {
+            let errorString = "";
+
+            for (const key in data) {
+              errorString += `${key}: ${data[key]}\n`;
+            }
+            console.log(errorString);
+            if (showToast) toast.error(errorString);
+            return { success: false, response: data };
+          }
+          else {
             if (showToast) toast.error(data.message);
             return { success: false, response: data };
           }
@@ -60,7 +73,7 @@ export const customFetch = async (
         });
     } else {
       if (showToast) toast.error("Unexpected error: " + error);
-      console.error("Unexpected error:", error);
+    
       return { success: false, response: error };
     }
   }

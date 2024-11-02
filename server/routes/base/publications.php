@@ -6,3 +6,4 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::post('/', [PublicationController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/', [PublicationController::class, 'get'])->middleware('auth:sanctum');
