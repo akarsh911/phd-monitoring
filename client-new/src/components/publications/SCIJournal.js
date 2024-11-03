@@ -5,7 +5,7 @@ import DropdownField from '../forms/fields/DropdownField';
 import FileUploadField from '../forms/fields/FileUploadField';
 import CustomButton from '../forms/fields/CustomButton';
 
-const SCIJournal = ({callback,updateValue,data}) => {
+const SCIJournal = ({callback,updateValue,data={}}) => {
     const [body, setBody] = useState({});
     const year = new Date().getFullYear();
     const yearRange = Array.from({ length: 7 }, (_, i) => year - 3 + i);    

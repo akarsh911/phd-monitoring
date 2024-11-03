@@ -27,8 +27,8 @@ class PublicationController extends Controller
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
         $id=$user->student->roll_no;
-        $publicationsQuery = Publication::where('student_id', $id);
-        $patents = Patent::where('student_id', $id)->get();
+        $publicationsQuery = Publication::where('student_id', $id)->where('form_id', null);
+        $patents = Patent::where('student_id', $id)->get()->where('form_id', null);
         
         $ret = [
             'sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->where('type', 'sci')->get(),

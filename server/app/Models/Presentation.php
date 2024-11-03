@@ -62,6 +62,11 @@ class Presentation extends Model
     {
         // Use the common form data and merge with specific form data
         $commonJSON = $this->fullCommonForm($user);
+
+        $publicationsQuery = Publication::where('student_id', $this->student_id)->where('form_type', 'progress')->where('form_id', $this->id);
+        $patents = Patent::where('student_id', $this->student_id)->where('form_id', $this->id)->get();
+
+
         $formData = array_merge($commonJSON, [
             'doctoral_committee' => $this->student->doctoralCommittee->map(function ($committee) {
                 return [
@@ -75,7 +80,7 @@ class Presentation extends Model
             'venue' => $this->venue,
             'current_progress' => $this->current_progress,
             'period_of_report' => $this->period_of_report,
-
+            'extention_availed' => ResearchExtentions::where('student_id', $this->student_id)->count()>0?true:false,
 
             'teaching_work' => $this->teaching_work,
             
@@ -86,7 +91,7 @@ class Presentation extends Model
           
             'overall_progress' => $this->overall_progress,
             'presentation_pdf' => $this->presentation_pdf,
-
+            
             'supervisorReviews' => $this->supervisorReviews->map(function ($review) {
                 return [
                     'faculty' => $review->faculty->user->name(),
@@ -104,8 +109,39 @@ class Presentation extends Model
                     'review_status' => $review->review_status,
                 ];
             }),
+            'publication_count'=> $publicationsQuery->clone()->count(),
+            'sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->where('type', 'sci')->get(),
+            'non_sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->get(),
+            'national' => $publicationsQuery->clone()->where('publication_type', 'conference')->where('type', 'national')->get(),
+            'international' => $publicationsQuery->clone()->where('publication_type', 'conference')->where('type', 'international')->get(),
+            'book' => $publicationsQuery->clone()->where('publication_type', 'book')->get(),
+            'patents' => $patents,
 
         ]);
+        $extraData=[
+            'no_paper_sci_journal'=>$formData['sci']->count(),
+            'no_paper_scopus_journal'=>$formData['non_sci']->count(),
+            'no_paper_conference'=>$formData['national']->count()+$formData['international']->count(),
+            'no_paper_book'=>$formData['book']->count(),
+            'no_patents'=>$formData['patents']->count(),
+            'total_paper_sci_journal'=>Publication::where('student_id', $this->student_id)->where('publication_type', 'journal')->where('type', 'sci')->where('form_id',null)->count(),
+        ];
+        if($user->role->role==='student'){
+            $publicationsQuery = Publication::where('student_id', $this->student_id)->where('form_id', null);
+            $patents = Patent::where('student_id', $this->student_id)->where('form_id', null)->get();
+            
+            $ret = [
+                'sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->where('type', 'sci')->get(),
+                'non_sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->get(),
+                'national' => $publicationsQuery->clone()->where('publication_type', 'conference')->where('type', 'national')->get(),
+                'international' => $publicationsQuery->clone()->where('publication_type', 'conference')->where('type', 'international')->get(),
+                'book' => $publicationsQuery->clone()->where('publication_type', 'book')->get(),
+                'patents' => $patents
+            ];
+            $extraData['student_publications']=$ret;
+        }
+
+        $formData=array_merge($formData,$extraData);
         $fac_id=$user->faculty?->faculty_code;
 
         if($this->student->checkDoctoralCommittee($fac_id)){

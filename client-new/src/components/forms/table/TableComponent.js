@@ -1,7 +1,7 @@
 import React from 'react';
 import './TableComponent.css';
 
-const TableComponent = ({ data, keys, titles, components = [] }) => {
+const TableComponent = ({ data, keys, titles, components = [], rowStyle }) => {
     // Create a dictionary from components for easy lookup
     const componentMap = components.reduce((acc, comp) => {
         acc[comp.key] = comp.component;
@@ -14,19 +14,19 @@ const TableComponent = ({ data, keys, titles, components = [] }) => {
                 <thead>
                     <tr>
                         <th>S.No</th>
-                        {titles.map((title, index) => (
+                        {titles?.map((title, index) => (
                             <th key={index}>{title}</th>
                         ))}
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((item, index) => (
-                        <tr key={index}>
+                    {data?.map((item, index) => (
+                        <tr key={index} style={rowStyle ? rowStyle(item) : {}}>
                             <td>{index + 1}</td> {/* S.No */}
-                            {keys.map((key, keyIndex) => {
+                            {keys?.map((key, keyIndex) => {
                                 const value = item[key];
                                 const CustomComponent = componentMap[key];
-                                
+
                                 return (
                                     <td key={keyIndex}>
                                         {CustomComponent ? (
