@@ -129,7 +129,7 @@ class ResearchExtentionController extends Controller
         function ($formInstance) use ($request, $user) {
             $request->validate([
                 'reason' => 'required|string',
-                'duration' => 'nullable|integer',
+                'duration' => 'integer',
                 'research_pdf' => 'required|file|mimes:pdf|max:2048',
             ]);
             $formInstance->reason = $request->reason;

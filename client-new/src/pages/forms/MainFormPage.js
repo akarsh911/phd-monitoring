@@ -13,6 +13,7 @@ import SynopsisSubmission from "../../components/forms/synopsisSubmission/Synops
 import ThesisSubmission from "../../components/forms/thesisSubmission/ThesisSubmission";
 import SemesterOff from "../../components/forms/semesterOff/SemesterOff";
 import StatusChange from "../../components/forms/statusChange/StatusChange";
+import IrbExtention from "../../components/forms/irbExtention/IrbExtention";
 const MainFormPage = () => {
   const [formData, setFormData] = useState({});
   const { setLoading } = useLoading();
@@ -61,6 +62,8 @@ const MainFormPage = () => {
                     return <SemesterOff formData={formData} />;
                     case "status-change":
                       return <StatusChange formData={formData} />;
+                  case "irb-extension":
+                    return <IrbExtention formData={formData}/>
                   default:
                     return <p>Are You Sure this is a FORM?</p>;
                 }
