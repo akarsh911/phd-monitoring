@@ -28,20 +28,20 @@ const Student = ({ formData }) => {
   const [temp, setTemp] = useState([]);
   const [files, setFiles] = useState([]);
 
-  const [prevOff,setPrevOff]= useState(null);
-
+  const [prevOff, setPrevOff] = useState(null);
+  const [prevDate,setPrevDate] = useState(null);
   useEffect(() => {
-
-    if(formData.previous_off?.length>0){
-      let prev=formData.previous_off[formData.previous_off.length-1].semester_off_required
-      setPrevOff(prev);
+    if (formData.previous_changes?.length > 0) {
+      setPrevOff("Yes");
+      setPrevDate(formData.previous_changes[formData.previous_changes?.length-1].created_at)
+    }
+    else
+    {
+      setPrevOff("No");
     }
     setLock(formData?.locks?.student);
     setIsLoaded(true);
   }, []);
-
-
-
 
   useEffect(() => {
     console.log(body);
@@ -81,7 +81,7 @@ const Student = ({ formData }) => {
             ]}
           />
 
-    <GridContainer
+          <GridContainer
             elements={[
               <InputField
                 label="Email"
@@ -95,7 +95,6 @@ const Student = ({ formData }) => {
               />,
             ]}
           />
-        
 
           <GridContainer
             elements={[
@@ -108,48 +107,69 @@ const Student = ({ formData }) => {
             space={2}
           />
 
-
-          <GridContainer elements={[
+          <GridContainer
+            elements={[
               <InputField
-              label="Semester Off (if any earlier)"
-              initialValue={prevOff?prevOff:"N/A"}
-              isLocked={true}
-            />,
+                label="Status of Student at Time of Admission"
+                initialValue={formData.initial_status}
+                isLocked={true}
+              />,
+            ]}
+            space={2}
+          />
+
+          <GridContainer
+            elements={[
+              <InputField
+                label="Change of Status Availed (if any earlier)"
+                initialValue={prevOff?prevOff:"No"}
+                isLocked={true}
+              />,
+            ]}
+             space={2}/>
+
             <>
-            {prevOff && (    
-              <FileUploadField
-            label={"Attach Previous Approval"}
-            onChange={(file) => {
-              setFiles([{ key: "previous_approval_pdf", file }]);
-            }}
-            isLocked={prevOff && lock}
-            initialValue={formData.previous_approval_pdf}
-          />)}
+              {prevOff==="Yes" && (
+                <GridContainer elements={[
+               <InputField label={"Date of Previous Extension"}
+               initialValue={prevDate}
+               isLocked={true}
+               />,
+               <InputField label={"Date of IRB Meeting"}
+               initialValue={formatDate(formData.date_of_irb)}
+               isLocked={true}
+               />,
+              ]}/>
+              )}
             </>
-          ]} />
-
-
-
-        
-        
-
-      
-           <GridContainer elements={[
-             <InputField
-             label="Reason for Semester Off"
-             initialValue={formData.reason}
-             isLocked={lock}
-             onChange={(value)=>{
-              setBody((prev) => ({
-                ...prev,
-                reason: value,
-              }));
-            }}
-           />
-           ]} space={2}/>
+            <GridContainer
+            elements={[
+              <InputField
+                label="Required Status Change"
+                initialValue={formData.type_of_change}
+                isLocked={true}
+               
+              />,
+            ]}
+            space={2}
+          />
+          <GridContainer
+            elements={[
+              <InputField
+                label="Reason for Semester Off"
+                initialValue={formData.reason}
+                isLocked={lock}
+                onChange={(value) => {
+                  setBody((prev) => ({
+                    ...prev,
+                    reason: value,
+                  }));
+                }}
+              />,
+            ]}
+            space={2}
+          />
         </>
-
-
       )}
       {formData?.role === "student" && !lock && (
         <>

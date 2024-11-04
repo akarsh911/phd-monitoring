@@ -46,7 +46,11 @@ class StatusChangeFormController extends Controller
             'name'=>$user->first_name.' '.$user->last_name
         ];
         
-        return $this->createForms(StudentStatusChangeForms::class, $data);
+        return $this->createForms(StudentStatusChangeForms::class, $data, function ($formInstance) use ($user) {
+            $change = $user->student->current_status == "full-time" ? "full-time to part-time" : "part-time to full-time";
+            $formInstance->type_of_change = $change;
+            $formInstance->save();
+        });
     }
 
 
@@ -75,10 +79,7 @@ class StatusChangeFormController extends Controller
     }
 
     private function customLoadStudent($user, $form_id, $model,$steps) {
-        return $this->handleStudentForm($user, $form_id, $model,$steps, function ($formInstance) use ($user) {
-            $change = $user->student->current_status == "full-time" ? "full-time to part-time" : "part-time to full-time";
-            $formInstance->type_of_change = $change;
-        });
+        return $this->handleStudentForm($user, $form_id, $model,$steps);
     }
     
     public function submit(Request $request, $form_id)
@@ -165,8 +166,6 @@ class StatusChangeFormController extends Controller
                     $formInstance->addHistoryEntry('Status Change Approved', $user->name());
                     $student=$formInstance->student;
                     $student->current_status = $formInstance->type_of_change == "full-time to part-time" ? "part-time" : "full-time";
-                    echo $formInstance->type_of_change;
-                    echo $student->current_status;
                     echo  $formInstance->type_of_change == "full-time to part-time" ? "part-time" : "full-time";;
                     $student->statusChanges()->create([
                         'type_of_change' => $formInstance->type_of_change,

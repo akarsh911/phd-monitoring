@@ -36,6 +36,9 @@ class StudentStatusChangeForms extends Model
         return array_merge($commonJSON, [
             'reason' => $this->reason, // Include specific attributes
             'type_of_change' => $this->type_of_change,
+            'initial_status'=>$this->student->initialStatus(),
+            'previous_changes'=>$this->student->statusChanges(),
+            'date_of_irb'=>$this->student->date_of_irb
         ]);
     }
 
