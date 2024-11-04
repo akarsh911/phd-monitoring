@@ -19,14 +19,14 @@ const PhDCoordinator = ({ formData }) => {
   const location = useLocation();
 
   useEffect(() => {
-    const supervisors = formData?.supervisors.map(
+    const supervisors = formData?.new_supervisors.map(
       (Supervisor) => Supervisor.faculty_code
     );
     if (supervisors.length == 0) {
       supervisors.push(null);
     }
     setBody({
-      supervisors: supervisors,
+      new_supervisors: supervisors,
       approval: true,
     });
     setLock(formData.locks?.phd_coordinator);
@@ -35,13 +35,13 @@ const PhDCoordinator = ({ formData }) => {
   }, [formData]);
 
   const handleSupervisorSelect = (value, index) => {
-    body.supervisors[index] = value.id;
+    body.new_supervisors[index] = value.id;
   };
   const handleAddSupervisor = () => {
     console.log("Add Supervisor");
     setBody((prevBody) => ({
       ...prevBody,
-      supervisors: [...prevBody.supervisors, ""],
+      new_supervisors: [...prevBody.new_supervisors, ""],
     }));
   };
   return (
@@ -62,11 +62,11 @@ const PhDCoordinator = ({ formData }) => {
               />
 
               <GridContainer
-                elements={body.supervisors.map((supervisor, index) => (
+                elements={body.new_supervisors.map((supervisor, index) => (
                   <InputSuggestions
                     apiUrl={apiUrl_suggestion}
                     label={`Supervisor ${index + 1}`}
-                    initialValue={formData.supervisors[index]?.name}
+                    initialValue={formData.new_supervisors[index]?.name}
                     onSelect={(value) => handleSupervisorSelect(value, index)}
                     lock={lock}
                   />
@@ -93,9 +93,9 @@ const PhDCoordinator = ({ formData }) => {
               />
               <GridContainer elements={[
                 <TableComponent 
-                  data={formData.supervisors}
-                  keys={[ "name", "department", "supervised_campus"]}
-                  titles={[ "Name", "Department", "Students Supervised"]}
+                  data={formData.new_supervisors}
+                  keys={[ "name", "department"]}
+                  titles={[ "Name", "Department"]}
 
                   />,
               ]} space={3} />

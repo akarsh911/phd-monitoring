@@ -13,18 +13,19 @@ import { useLoading } from "../../../../context/LoadingContext";
 
 const Student = ({ formData }) => {
   const apiUrl_suggestion = baseURL + "/suggestions/faculty";
-  const apiUrl_broad_suggestion = baseURL + "/suggestions/specialization";
+
   const [body, setBody] = useState({});
   const [lock, setLock] = useState(formData.locks?.student);
   const [isLoaded, setIsLoaded] = useState(false);
   const location = useLocation();
   const { setLoading } = useLoading();
+
   useEffect(() => {
-    const prefrences = formData?.prefrences.map(
+    const prefrences = formData?.prefrences?.map(
       (prefrence) => prefrence.faculty_code
     );
-    if (prefrences.length < 6) {
-      for (let i = prefrences.length; i < 6; i++) prefrences.push(null);
+    if (prefrences.length < 3) {
+      for (let i = prefrences.length; i < 3; i++) prefrences.push(null);
     }
     setBody({
       prefrences: prefrences,
@@ -34,12 +35,30 @@ const Student = ({ formData }) => {
     setIsLoaded(true);
   }, [formData]);
 
-  const handlePrefrenceSelect = (value, index) => {
-    body.prefrences[index] = value.id;
+  const [selectedSupervisors, setSelectedSupervisors] = useState([]);
+
+  // Toggle selection of a supervisor
+  const handleToggle = (faculty_code) => {
+    setSelectedSupervisors((prevSelected) => {
+      if (prevSelected.includes(faculty_code)) {
+        return prevSelected.filter((code) => code !== faculty_code);
+      } else {
+        return [...prevSelected, faculty_code];
+      }
+    });
   };
 
-  const handleBroadAreaSelect = (value, index) => {
-    body.broad_area_of_research[index] = value;
+  useEffect(() => {
+   
+    setBody((prev) => ({
+      ...prev,
+      to_change: selectedSupervisors,
+    }));
+
+  },[selectedSupervisors])
+
+  const handlePrefrenceSelect = (value, index) => {
+    body.prefrences[index] = value.id;
   };
 
   return (
@@ -86,53 +105,94 @@ const Student = ({ formData }) => {
             ]}
           />
 
-          <GridContainer elements={[<p>Select 3 Broad Areas of Research</p>]} />
+          <GridContainer
+            elements={[
+              <InputField
+                label="IRB Completed:"
+                initialValue={formData.irb_submitted ? "Yes" : "No"}
+                isLocked={true}
+              />,
+            ]}
+          />
 
           <GridContainer
             elements={[
-              <InputSuggestions
-                initialValue={formData.broad_area_of_research[0]}
-                apiUrl={apiUrl_broad_suggestion}
-                onSelect={(value) => handleBroadAreaSelect(value, 0)}
-                lock={lock}
-                showLabel={false}
+              <InputField
+                label="Title of Phd Thesis"
+                initialValue={formData.phd_title}
+                isLocked={true}
               />,
             ]}
             space={2}
           />
+
           <GridContainer
-            elements={[
-              <InputSuggestions
-                initialValue={formData.broad_area_of_research[1]}
-                apiUrl={apiUrl_broad_suggestion}
-                onSelect={(value) => handleBroadAreaSelect(value, 1)}
-                lock={lock}
-                showLabel={false}
-              />,
-            ]}
-            space={2}
+            elements={formData.supervisors.map((sup, index) => {
+              return (
+                <InputField
+                  label={"Supervisor " + (index + 1)}
+                  isLocked={true}
+                  initialValue={sup.name}
+                />
+              );
+            })}
           />
+
           <GridContainer
             elements={[
-              <InputSuggestions
-                initialValue={formData.broad_area_of_research[2]}
-                apiUrl={apiUrl_broad_suggestion}
-                onSelect={(value) => handleBroadAreaSelect(value, 2)}
-                lock={lock}
-                showLabel={false}
+              <InputField
+                label={"Date of Allocation of Supervisor"}
+                isLocked={true}
+                initialValue={formatDate(formData.date_of_allocation)}
               />,
             ]}
-            space={2}
           />
         </>
       )}
-      {formData.role === "student" && !lock ? (
-        <>
-          <GridContainer
-            elements={[<p>Select 6 Tentative Name of Supervisor (in order)</p>]}
+
+<GridContainer
+            elements={[
+              <InputField
+                label="Reason for Semester Off"
+                initialValue={formData.reason}
+                isLocked={lock}
+                onChange={(value) => {
+                  setBody((prev) => ({
+                    ...prev,
+                    reason: value,
+                  }));
+                }}
+              />,
+            ]}
             space={2}
           />
 
+      {!lock ? (
+        <>
+          <GridContainer
+            elements={[<p>Select Supervisors to change</p>]}
+            space={2}
+          />
+          <GridContainer
+            elements={formData.supervisors.map((sup, index) => {
+              const isSelected = selectedSupervisors.includes(sup.faculty_code);
+
+              return (
+                <div
+                  key={sup.faculty_code}
+                  onClick={() => handleToggle(sup.faculty_code)}
+                  className={`supervisor-box ${isSelected ? "selected" : ""}`}
+                >
+                  {sup.name}
+                </div>
+              );
+            })}
+          />
+
+          <GridContainer
+            elements={[<p>Select 3 Tentative Name of Supervisor (in order)</p>]}
+            space={2}
+          />
           <GridContainer
             elements={[
               <InputSuggestions
@@ -161,31 +221,6 @@ const Student = ({ formData }) => {
 
           <GridContainer
             elements={[
-              <InputSuggestions
-                initialValue={formData.prefrences[3]?.name}
-                apiUrl={apiUrl_suggestion}
-                onSelect={(value) => handlePrefrenceSelect(value, 3)}
-                lock={lock}
-                label={"Preference 4"}
-              />,
-              <InputSuggestions
-                initialValue={formData.prefrences[4]?.name}
-                apiUrl={apiUrl_suggestion}
-                onSelect={(value) => handlePrefrenceSelect(value, 4)}
-                lock={lock}
-                label={"Preference 5"}
-              />,
-              <InputSuggestions
-                initialValue={formData.prefrences[5]?.name}
-                apiUrl={apiUrl_suggestion}
-                onSelect={(value) => handlePrefrenceSelect(value, 5)}
-                lock={lock}
-                label={"Preference 6"}
-              />,
-            ]}
-          />
-          <GridContainer
-            elements={[
               <CustomButton
                 text="Submit"
                 onClick={() => {
@@ -197,6 +232,17 @@ const Student = ({ formData }) => {
         </>
       ) : (
         <>
+           <GridContainer elements={[<p>Supervisor(s) to be changed</p>]} space={2} />
+          <GridContainer
+            elements={[
+              <TableComponent
+                data={formData.to_change}
+                keys={["name", "department"]}
+                titles={["Supervisor Name", "Department"]}
+              />,
+            ]}
+            space={3}
+          />
           <GridContainer elements={[<p>Student Prefrences</p>]} space={2} />
           <GridContainer
             elements={[

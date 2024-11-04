@@ -95,7 +95,6 @@ const Student = ({ formData }) => {
               />,
             ]}
           />
-
           <GridContainer
             elements={[
               <InputField

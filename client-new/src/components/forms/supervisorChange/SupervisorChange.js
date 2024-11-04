@@ -3,6 +3,7 @@ import Student from "./roles/Student";
 import FormTitleBar from "../formTitleBar/FormTitleBar";
 import PhDCoordinator from "./roles/PhDCoordinator";
 import Recommendation from "../layouts/Recommendation";
+import './SupervisorChange.css'
 
 const SupervisorChange = ({formData}) => {
  

@@ -90,6 +90,7 @@ class SupervisorChangeForm extends Model
             ];
             }),
             'irb_submitted' => $this->irb_submitted,
+            'date_of_allocation'=>Supervisor::where('student_id',$this->student->roll_no)->first()->updated_at
         ]);
         $formData['supervisors'] = $this->student->supervisors->map(function ($supervisor) {
             return [
@@ -99,7 +100,7 @@ class SupervisorChangeForm extends Model
                 'faculty_code' => $supervisor->faculty_code,
             ];
         });
-
+     
         return $formData;
     
  }

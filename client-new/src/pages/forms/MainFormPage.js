@@ -14,6 +14,7 @@ import ThesisSubmission from "../../components/forms/thesisSubmission/ThesisSubm
 import SemesterOff from "../../components/forms/semesterOff/SemesterOff";
 import StatusChange from "../../components/forms/statusChange/StatusChange";
 import IrbExtention from "../../components/forms/irbExtention/IrbExtention";
+import SupervisorChange from "../../components/forms/supervisorChange/SupervisorChange";
 const MainFormPage = () => {
   const [formData, setFormData] = useState({});
   const { setLoading } = useLoading();
@@ -64,6 +65,8 @@ const MainFormPage = () => {
                       return <StatusChange formData={formData} />;
                   case "irb-extension":
                     return <IrbExtention formData={formData}/>
+                  case "supervisor-change":
+                    return <SupervisorChange formData={formData}/>
                   default:
                     return <p>Are You Sure this is a FORM?</p>;
                 }
