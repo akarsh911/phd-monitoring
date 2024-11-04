@@ -11,6 +11,8 @@ import IRBSubmission from "../../components/forms/irbSubmission/IRBSubmission";
 import PresentationForm from "../../components/forms/presentations/PresentationForm";
 import SynopsisSubmission from "../../components/forms/synopsisSubmission/SynopsisSubmission";
 import ThesisSubmission from "../../components/forms/thesisSubmission/ThesisSubmission";
+import SemesterOff from "../../components/forms/semesterOff/SemesterOff";
+import StatusChange from "../../components/forms/statusChange/StatusChange";
 const MainFormPage = () => {
   const [formData, setFormData] = useState({});
   const { setLoading } = useLoading();
@@ -55,6 +57,10 @@ const MainFormPage = () => {
                     return <SynopsisSubmission formData={formData} />;
                   case "thesis-submission":
                     return <ThesisSubmission formData={formData} />;
+                  case "semester-off":
+                    return <SemesterOff formData={formData} />;
+                    case "status-change":
+                      return <StatusChange formData={formData} />;
                   default:
                     return <p>Are You Sure this is a FORM?</p>;
                 }

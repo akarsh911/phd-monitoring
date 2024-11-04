@@ -4,12 +4,12 @@ import FormTitleBar from "../formTitleBar/FormTitleBar";
 import PhDCoordinator from "./roles/PhDCoordinator";
 import Recommendation from "../layouts/Recommendation";
 
-const SupervisorAllocation = ({formData}) => {
+const SupervisorChange = ({formData}) => {
  
 
   return (
     <>
-      <FormTitleBar formName="Supervisor Change" formData={formData} />
+      <FormTitleBar formName="Supervisor Allocation" formData={formData} />
       <div className="form-container">
         <Student formData={formData}></Student>
         <PhDCoordinator formData={formData}></PhDCoordinator>
@@ -23,4 +23,4 @@ const SupervisorAllocation = ({formData}) => {
   );
 };
 
-export default SupervisorAllocation;
+export default SupervisorChange;
