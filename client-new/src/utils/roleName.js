@@ -20,5 +20,7 @@ export const getRoleName = (role) => {
             return 'Doctoral Committee'
         case 'complete':
             return 'Form Complete'
+        case 'director':
+            return 'Director'
     }
 }

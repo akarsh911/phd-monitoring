@@ -15,6 +15,7 @@ import ShowPublications from "../../../publications/ShowPublications";
 import CustomModal from "../../modal/CustomModal";
 import { customFetch } from "../../../../api/base";
 import { toast } from "react-toastify";
+import DateField from "../../fields/DateField";
 
 const Student = ({ formData }) => {
   const [body, setBody] = useState({});
@@ -26,6 +27,7 @@ const Student = ({ formData }) => {
   const [temp, setTemp] = useState([]);
   const [files, setFiles] = useState([]);
 
+
   useEffect(() => {
     setBody({
       sci: formData.sci,
@@ -36,13 +38,6 @@ const Student = ({ formData }) => {
       international: formData.international,
     });
     setLock(formData?.locks?.student);
-    if (formData.publication_count > 0 || formData.patents.length > 0) {
-      setBody((prev) => ({
-        ...prev,
-        publication_under_report: true,
-      }));
-      setShowPublication(true);
-    }
     setIsLoaded(true);
   }, []);
 
@@ -53,7 +48,12 @@ const Student = ({ formData }) => {
   const closeModal = () => {
     setOpen(false);
   };
-
+  const addObjective = () => {
+    setBody((prevBody) => ({
+      ...prevBody,
+      objectives: [...prevBody.objectives, ""],
+    }));
+  };
   const removePublication = (id, type) => {
     const tt = {
       publications: [],
@@ -112,15 +112,15 @@ const Student = ({ formData }) => {
         if (data && data.success) {
           customFetch(baseURL + location.pathname, "GET").then((data) => {
             if (data && data.success) {
-              let formdata=data.response;
+              let formdata = data.response;
               setBody((prev) => ({
                 ...prev,
-                sci:formdata.sci,
-                non_sci:formdata.non_sci,
-                patents:formdata.patents,
-                books:formdata.books,
-                national:formdata.national,
-                international:formdata.international
+                sci: formdata.sci,
+                non_sci: formdata.non_sci,
+                patents: formdata.patents,
+                books: formdata.books,
+                national: formdata.national,
+                international: formdata.international,
               }));
               setLoading(false);
               closeModal();
@@ -183,17 +183,37 @@ const Student = ({ formData }) => {
                 initialValue={formData.name}
                 isLocked={true}
               />,
+              <InputField
+                label="Father’s Name"
+                initialValue={formData.fathers_name}
+                isLocked={true}
+              />,
             ]}
           />
 
           <GridContainer
             elements={[
               <InputField
-                label="Period of Report"
-                initialValue={formData.period_of_report}
+                label="Date of Admission"
+                initialValue={formatDate(formData.date_of_registration)}
+                isLocked={true}
+              />,
+              <InputField
+                label="Department"
+                initialValue={formData.department}
                 isLocked={true}
               />,
             ]}
+          />
+          <GridContainer
+            elements={[
+              <InputField
+                label="Address of Correspondance"
+                initialValue={formData.address}
+                isLocked={true}
+              />,
+            ]}
+            space={2}
           />
 
           <GridContainer
@@ -206,163 +226,115 @@ const Student = ({ formData }) => {
             ]}
             space={2}
           />
-
-          <GridContainer
-            elements={[
+          <GridContainer elements={[
               <InputField
-                label="Extenstion Availed"
-                initialValue={formData.extention_availed ? "Yes" : "No"}
-                isLocked={true}
-              />,
-              <DropdownField
-                label="Teaching Work Done"
-                options={[
-                  { title: "UG", value: "UG" },
-                  { title: "PG", value: "PG" },
-                  { title: "UG & PG (Both)", value: "Both" },
-                  { title: "Not Applicable", value: "None" },
-                ]}
-                initialValue={formData.teaching_work}
-                isLocked={lock}
-                onChange={(value) => {
-                  setBody((prev) => ({
-                    ...prev,
-                    teaching_work: value,
-                  }));
-                }}
-              />,
-            ]}
-          />
+              label="Status of Student at Time of Admission"
+              initialValue={formData.initial_status}
+              isLocked={true}
+            />,
+          ]} space={2}/>
 
-          <GridContainer
-            elements={[
-              <DropdownField
-                label="Publication During the Period Under Report"
-                options={[
-                  { title: "Yes", value: true },
-                  { title: "No", value: false },
-                ]}
-                isLocked={lock}
-                initialValue={body.publication_under_report ? "Yes" : "No"}
-                onChange={(value) => {
-                  setBody((prev) => ({
-                    ...prev,
-                    publication_under_report: value,
-                  }));
-                  setShowPublication(value);
-                }}
-              />,
-            ]}
-            space={2}
-          />
+          <GridContainer elements={[
+              <InputField
+              label="Current Status"
+              initialValue={formData.current_status}
+              isLocked={true}
+            />,
+            <>
+            
+            {formData.previous_extension_date!=='NA' ?(
+            <InputField
+              label="Date of Change of Status"
+              initialValue={formatDate(formData.previous_extension_date)}
+              isLocked={true}
+            />
+          ):(
+            <InputField
+              label="Date of Change of Status"
+              initialValue={formData.previous_extension_date}
+              isLocked={true}
+            />
+          )}
+            </>
+          ]}/>
+            <GridContainer elements={[
+              <DateField
+              label="Date of Synopsis Presentation"
+              initialValue={formData.date_of_synopsis}
+              isLocked={lock}
+              onChange={(value)=>{
+                setBody((prev) => ({
+                  ...prev,
+                  date_of_synopsis: value,
+                }));
+              }}
+            />,
 
-          {(showPublication === "true" ||
-            showPublication === true) && (
-              <>      
-               <GridContainer
-                  elements={[
-                    <InputField
-                      label="No. of Papers in SCI/SCIE/SSCI/ABCD/AHCI Journal"
-                      initialValue={formData.no_paper_sci_journal}
-                      isLocked={lock}
-                      onChange={(value) => {
-                        setBody((prev) => ({
-                          ...prev,
-                          no_paper_sci_journal: value,
-                        }));
-                      }}
-                    />,
-                  ]}
-                  space={2}
-                />
-                <GridContainer
-                  elements={[
-                    <InputField
-                      label="No. of Papers in Scopus Journal"
-                      initialValue={formData.no_paper_scopus_journal}
-                      isLocked={lock}
-                      onChange={(value) => {
-                        setBody((prev) => ({
-                          ...prev,
-                          no_paper_scopus_journal: value,
-                        }));
-                      }}
-                    />,
-                  ]}
-                  space={2}
-                />
-                <GridContainer
-                  elements={[
-                    <InputField
-                      label="No. of Papers in Conferences Under Report"
-                      initialValue={formData.no_paper_conference}
-                      isLocked={lock}
-                      onChange={(value) => {
-                        setBody((prev) => ({
-                          ...prev,
-                          no_paper_conference: value,
-                        }));
-                      }}
-                    />,
-                  ]}
-                  space={2}
-                />
-                <GridContainer
-                  elements={[
-                    <InputField
-                      label="Total of Papers in SCI/SCIE/SSCI/ABCD/AHCI Journal"
-                      initialValue={formData.total_paper_sci_journal}
-                      isLocked={true}
-                      onChange={(value) => {
-                        setBody((prev) => ({
-                          ...prev,
-                          total_paper_sci_journal: value,
-                        }));
-                      }}
-                    />,
-                  ]}
-                  space={2}
-                />
-                {formData?.role === "student" && !lock && (
-                  <GridContainer
-                    elements={[
-                      <>
-                        <h1 style={{ fontSize: "24px", textAlign: "left" }}>
-                          Publications
-                        </h1>
-                      </>,
-                      <></>,
-                      <CustomButton
-                        text="Add Publications"
-                        onClick={() => {
-                          openModal();
-                        }}
-                      />,
-                    ]}
-                  />
-                )}
-                <GridContainer
-                  elements={[
-                    <ShowPublications
-                      formData={body}
-                      enableEdit={!lock}
-                      enableDelete={!lock}
-                      onDelete={removePublication}
-                    />,
-                  ]}
-                  space={3}
-                />
-              </>
+            <InputField
+            label="Receipt Number"
+            initialValue={formData.reciept_no}
+            isLocked={lock}
+            onChange={(value)=>{
+              setBody((prev) => ({
+                ...prev,
+                reciept_no: value,
+              }));
+            }}
+          />,
+          <DateField
+          label="Date of Fee Submission"
+          initialValue={formData.date_of_synopsis}
+          isLocked={lock}
+          onChange={(value)=>{
+            setBody((prev) => ({
+              ...prev,
+              date_of_fee_submission: value,
+            }));
+          }}
+        />,
+            ]}
+            />
+          <>
+            {formData?.role === "student" && !lock && (
+              <GridContainer
+                elements={[
+                  <>
+                    <h1 style={{ fontSize: "24px", textAlign: "left" }}>
+                      Publications
+                    </h1>
+                  </>,
+                  <></>,
+                  <CustomButton
+                    text="Add Publications"
+                    onClick={() => {
+                      openModal();
+                    }}
+                  />,
+                ]}
+              />
             )}
+            <GridContainer
+              elements={[
+                <ShowPublications
+                  formData={body}
+                  enableEdit={!lock}
+                  enableDelete={!lock}
+                  onDelete={removePublication}
+                />,
+              ]}
+              space={3}
+            />
+          </>
+
           <GridContainer
             elements={[
               <FileUploadField
                 label={"Upload PDF"}
                 onChange={(file) => {
-                  setFiles([{ key: "presentation_pdf", file }]);
+                  setFiles([{ key: "thesis_pdf", file }]);
                 }}
-                 isLocked={lock}
-                initialValue={formData.presentation_pdf}
+                isLocked={lock}
+                initialValue={formData.thesis_pdf}
               />,
             ]}
           />
@@ -393,7 +365,12 @@ const Student = ({ formData }) => {
               <CustomButton
                 text="Submit"
                 onClick={() => {
-                  submitForm(body, location, setLoading, files.length > 0 ? files : null);
+                  submitForm(
+                    body,
+                    location,
+                    setLoading,
+                    files.length > 0 ? files : null
+                  );
                 }}
               />,
             ]}

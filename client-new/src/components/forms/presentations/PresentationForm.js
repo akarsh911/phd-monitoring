@@ -2,6 +2,8 @@ import "./Presentation.css";
 import React, { useEffect, useState } from "react";
 import Student from "./roles/Student";
 import FormTitleBar from "../formTitleBar/FormTitleBar";
+import Recommendation from "../layouts/Recommendation";
+import Supervisor from "./roles/Supervisor";
 
 const PresentationForm = ({formData}) => {
   console.log(formData);
@@ -10,6 +12,22 @@ const PresentationForm = ({formData}) => {
       <FormTitleBar formName={"Presentation " + formData.period_of_report} formData={formData} />
       <div className="form-container">
         <Student formData={formData}/>
+        <Supervisor formData={formData}/>
+        <Recommendation
+          formData={formData}
+          role="hod"
+          allowRejection={false}
+        ></Recommendation>
+        <Recommendation
+          formData={formData}
+          role="dra"
+          allowRejection={false}
+        ></Recommendation>
+        <Recommendation
+          formData={formData}
+          role="dordc"
+          allowRejection={false}
+        ></Recommendation>
       </div>
     </>
   );

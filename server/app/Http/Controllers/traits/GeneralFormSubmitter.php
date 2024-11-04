@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Traits;
 
 
 use App\Models\Forms;
+use App\Models\Presentation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -324,6 +325,8 @@ trait GeneralFormSubmitter
 
     private function updateForm($model, $student_id, $next)
     {
+        if($model===Presentation::class)
+        return;
         $form = Forms::where('form_type', $this->getFormType($model))->where('student_id', $student_id)->first();
         if ($next != 'complete') {
             $field = $next . '_available';

@@ -92,7 +92,93 @@ class ThesisSubmissionController extends Controller
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
     }
+    public function linkPublication(Request $request, $form_id)
+    {
+        try{
+        $user = Auth::user();
+        $role = $user->role;
+        if($role->role!='student'){
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $formInstance=ThesisSubmission::find($form_id);
+        if(count($request->publications) != 0){
+            foreach ($request->publications as $publication) {
+                $publication = Publication::find($publication);
+                if (!$publication) {
+                    throw new \Exception("Invalid publication selected");
+                }
+                if($publication->student_id != $user->student->roll_no){
+                    throw new \Exception("Invalid publication selected");
+                }
+                $existingPublication = Publication::where('title', $publication->title)
+                ->where('form_id', $formInstance->id)
+                ->where('publication_type',$publication->publication_type)
+                ->where('form_type','thesis')
+                ->first();
+            if ($existingPublication) {
+                throw new \Exception("Publication with the same title already linked to this form");
+            }
+                $newPublication = $publication->replicate();
+                $newPublication->form_id = $formInstance->id;
+                $newPublication->form_type = 'thesis';
+                
+                $newPublication->save();
+      
+               
+            }
+        }
+        if(count($request->patents) != 0){
+            foreach ($request->patents as $patent) {
+                $patent = Patent::find($patent);
+                if (!$patent) {
+                    throw new \Exception("Invalid patent selected");
+                }
+                if($patent->student_id != $user->student->roll_no){
+                    throw new \Exception("Invalid patent selected");
+                }
+                $existingPatent = Patent::where('title', $patent->title)
+                ->where('form_id', $formInstance->id)
+                ->where('form_type','thesis')
+                ->first();
+            if ($existingPatent) {
+                throw new \Exception("Patent with the same title  already linked to this form");
+            }
+                $newPatent = $patent->replicate();
+                $newPatent->form_id = $formInstance->id;
+                $newPatent->form_type = 'thesis';
+                $newPatent->save();
 
+            }
+        }
+        return response()->json(['message' => 'Publications linked to Presentation'], 200);
+    }
+    catch (\Exception $e) {
+        return response()->json(['message' => $e->getMessage()], 400);
+    }
+    }
+
+    public function unlinkPublication(Request $request, $form_id)
+    {
+        $user = Auth::user();
+        $role = $user->role;
+        if($role->role!='student'){
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $formInstance=ThesisSubmission::find($form_id);
+        if(count($request->publications) != 0){
+            foreach ($request->publications as $publication) {
+                $publication = Publication::where('id',$publication)->where('form_id',$formInstance->id)->where('form_type','thesis');
+                $publication->delete();
+            }
+        }
+        if(count($request->patents) != 0){
+            foreach ($request->patents as $patent) {
+                $patent = Patent::where('id',$patent)->where('form_id',$formInstance->id)->where('form_type','thesis');
+                $patent->delete();
+            }
+        }
+        return response()->json(['message' => 'Publications unlinked from Presentation'], 200);
+    }
 
     private function studentSubmit($user, $request, $form_id)
     {
@@ -112,59 +198,12 @@ class ThesisSubmissionController extends Controller
                     'reciept_no' => 'required|string',
                     'date_of_fee_submission' => 'required|date',
                     'thesis_pdf' => 'required|file|mimes:pdf|max:2048',
-                    'publications' => 'required|array',
-                    'patents' => 'required|array',
                 ]);
                 $formInstance->date_of_synopsis = $request->date_of_synopsis;
                 $formInstance->reciept_no = $request->reciept_no;
                 $formInstance->date_of_fee_submission = $request->date_of_fee_submission;
                 $formInstance->thesis_pdf = $this->saveUploadedFile($request->file('thesis_pdf'), 'thesis', $user->student->roll_no);
                
-                $oldPublications = $formInstance->publications;
-                if($oldPublications){
-                    foreach ($oldPublications as $oldPublication) {
-                        $oldPublication->delete();
-                    }
-                }
-                $oldPatents = $formInstance->patents;
-                if($oldPatents){
-                    foreach ($oldPatents as $oldPatent) {
-                        $oldPatent->delete();
-                    }
-                }
-                if(count($request->publications) != 0){
-                foreach ($request->publications as $publication) {
-                    $publication = Publication::find($publication);
-                    if (!$publication) {
-                        throw new \Exception("Invalid publication selected");
-                    }
-                    if($publication->student_id != $user->student->roll_no){
-                        throw new \Exception("Invalid publication selected");
-                    }
-                    $newPublication = $publication->replicate();
-                    $newPublication->form_id = $formInstance->id;
-                    $newPublication->form_type = 'thesis';
-                    $newPublication->save();
-                   
-                }
-            }
-            if(count($request->patents) != 0){
-                foreach ($request->patents as $patent) {
-                    $patent = Patent::find($patent);
-                    if (!$patent) {
-                        throw new \Exception("Invalid patent selected");
-                    }
-                    if($patent->student_id != $user->student->roll_no){
-                        throw new \Exception("Invalid patent selected");
-                    }
-                    $newPatent = $patent->replicate();
-                    $newPatent->form_id = $formInstance->id;
-                    $newPatent->form_type = 'thesis';
-                    $newPatent->save();
-
-                }
-                
-            }
         }
         );
     }

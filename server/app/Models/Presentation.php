@@ -78,7 +78,7 @@ class Presentation extends Model
             'date' => $this->date,
             'time' => $this->time,
             'venue' => $this->venue,
-            'current_progress' => $this->current_progress,
+            'current_progress' => $this->student->overall_progress  ,
             'period_of_report' => $this->period_of_report,
             'extention_availed' => ResearchExtentions::where('student_id', $this->student_id)->count()>0?true:false,
 
@@ -111,11 +111,12 @@ class Presentation extends Model
             }),
             'publication_count'=> $publicationsQuery->clone()->count(),
             'sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->where('type', 'sci')->get(),
-            'non_sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->get(),
+            'non_sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->where('type', 'non-sci')->get(),
             'national' => $publicationsQuery->clone()->where('publication_type', 'conference')->where('type', 'national')->get(),
             'international' => $publicationsQuery->clone()->where('publication_type', 'conference')->where('type', 'international')->get(),
             'book' => $publicationsQuery->clone()->where('publication_type', 'book')->get(),
             'patents' => $patents,
+            
 
         ]);
         $extraData=[
@@ -132,7 +133,7 @@ class Presentation extends Model
             
             $ret = [
                 'sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->where('type', 'sci')->get(),
-                'non_sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->get(),
+                'non_sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->where('type', 'non-sci')->get(),
                 'national' => $publicationsQuery->clone()->where('publication_type', 'conference')->where('type', 'national')->get(),
                 'international' => $publicationsQuery->clone()->where('publication_type', 'conference')->where('type', 'international')->get(),
                 'book' => $publicationsQuery->clone()->where('publication_type', 'book')->get(),

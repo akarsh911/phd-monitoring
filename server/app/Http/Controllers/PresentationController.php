@@ -130,7 +130,93 @@ class PresentationController extends Controller{
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
     }
+    public function linkPublication(Request $request, $form_id)
+    {
+        try{
+                    $user = Auth::user();
+        $role = $user->role;
+        if($role->role!='student'){
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $formInstance=Presentation::find($form_id);
+        if(count($request->publications) != 0){
+            foreach ($request->publications as $publication) {
+                $publication = Publication::find($publication);
+                if (!$publication) {
+                    throw new \Exception("Invalid publication selected");
+                }
+                if($publication->student_id != $user->student->roll_no){
+                    throw new \Exception("Invalid publication selected");
+                }
+                $existingPublication = Publication::where('title', $publication->title)
+                ->where('form_id', $formInstance->id)
+                ->where('publication_type',$publication->publication_type)
+                ->where('form_type','progress')
+                ->first();
+            if ($existingPublication) {
+                throw new \Exception("Publication with the same title already linked to this form");
+            }
+                $newPublication = $publication->replicate();
+                $newPublication->form_id = $formInstance->id;
+                $newPublication->form_type = 'progress';
+                
+                $newPublication->save();
+      
+               
+            }
+        }
+        if(count($request->patents) != 0){
+            foreach ($request->patents as $patent) {
+                $patent = Patent::find($patent);
+                if (!$patent) {
+                    throw new \Exception("Invalid patent selected");
+                }
+                if($patent->student_id != $user->student->roll_no){
+                    throw new \Exception("Invalid patent selected");
+                }
+                $existingPatent = Patent::where('title', $patent->title)
+                ->where('form_id', $formInstance->id)
+                ->where('form_type','progress')
+                ->first();
+            if ($existingPatent) {
+                throw new \Exception("Patent with the same title  already linked to this form");
+            }
+                $newPatent = $patent->replicate();
+                $newPatent->form_id = $formInstance->id;
+                $newPatent->form_type = 'progress';
+                $newPatent->save();
 
+            }
+        }
+        return response()->json(['message' => 'Publications linked to Presentation'], 200);
+    }
+    catch (\Exception $e) {
+        return response()->json(['message' => $e->getMessage()], 400);
+    }
+    }
+
+    public function unlinkPublication(Request $request, $form_id)
+    {
+        $user = Auth::user();
+        $role = $user->role;
+        if($role->role!='student'){
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $formInstance=Presentation::find($form_id);
+        if(count($request->publications) != 0){
+            foreach ($request->publications as $publication) {
+                $publication = Publication::where('id',$publication)->where('form_id',$formInstance->id)->where('form_type','progress');
+                $publication->delete();
+            }
+        }
+        if(count($request->patents) != 0){
+            foreach ($request->patents as $patent) {
+                $patent = Patent::where('id',$patent)->where('form_id',$formInstance->id)->where('form_type','progress');
+                $patent->delete();
+            }
+        }
+        return response()->json(['message' => 'Publications unlinked from Presentation'], 200);
+    }
 
     private function studentSubmit($user, $request, $form_id)
     {
@@ -146,50 +232,11 @@ class PresentationController extends Controller{
             'faculty',
             function ($formInstance) use ($request, $user) {
                 $request->validate([
-                    'publications' => 'required|array',
-                    'patents' => 'required|array',
-                    'publications.*' => 'required|integer',
-                    'patents.*' => 'required|integer',
                     'teaching_work'=>'required| in:UG,PG,Both,None',
-                    'no_paper_sci_journal'=>'required|integer',
-                    'no_paper_scopus_journal'=>'required|integer',
-                    'no_paper_conference'=>'required|integer',
                     'presentation_pdf'=>'required|file|mimes:pdf|max:2048',
                 ]);
 
-                if(count($request->publications) != 0){
-                    foreach ($request->publications as $publication) {
-                        $publication = Publication::find($publication);
-                        if (!$publication) {
-                            throw new \Exception("Invalid publication selected");
-                        }
-                        if($publication->student_id != $user->student->roll_no){
-                            throw new \Exception("Invalid publication selected");
-                        }
-                        $newPublication = $publication->replicate();
-                        $newPublication->form_id = $formInstance->id;
-                        $newPublication->form_type = 'thesis';
-                        $newPublication->save();
-                       
-                    }
-                }
-                if(count($request->patents) != 0){
-                    foreach ($request->patents as $patent) {
-                        $patent = Patent::find($patent);
-                        if (!$patent) {
-                            throw new \Exception("Invalid patent selected");
-                        }
-                        if($patent->student_id != $user->student->roll_no){
-                            throw new \Exception("Invalid patent selected");
-                        }
-                        $newPatent = $patent->replicate();
-                        $newPatent->form_id = $formInstance->id;
-                        $newPatent->form_type = 'thesis';
-                        $newPatent->save();
-    
-                    }
-                }
-
+              
                 $formInstance->teaching_work=$request->teaching_work;
                 // $formInstance->no_paper_sci_journal=$request->no_paper_sci_journal;
                 // $formInstance->no_paper_scopus_journal=$request->no_paper_scopus_journal;
@@ -225,7 +272,7 @@ class PresentationController extends Controller{
             'doctoral',
             'doctoral',
             function ($formInstance) use ($request, $user) {
-                if(!$formInstance->progress&&!$formInstance->attendance&&!$formInstance->contact_hours){
+                if(!$formInstance->progress||!$formInstance->attendance||!$formInstance->contact_hours){
                     $request->validate([
                         'progress' => 'required|integer|min:0|max:100',
                         'attendance' => 'required|numeric|min:0|max:100',
@@ -234,8 +281,9 @@ class PresentationController extends Controller{
                     $formInstance->progress = $request->progress;
                     $formInstance->attendance = $request->attendance;
                     $formInstance->contact_hours = $request->contact_hours;
-                    $formInstance->current_progress = $formInstance->student->current_progress;
-                    $formInstance->total_progress = $formInstance->student->current_progress+$request->progress;
+                    $formInstance->current_progress = $formInstance->student->overall_progress;
+                    $formInstance->total_progress = $formInstance->student->overall_progress+$request->progress;
+                    $formInstance->save();
                 }
                 $alreadyReviewed=PresentationReview::where('presentation_id',$formInstance->id)->where('faculty_id',$user->faculty->faculty_code)->first();
               
@@ -280,18 +328,6 @@ class PresentationController extends Controller{
             'faculty',
             'hod',
             function ($formInstance) use ($request, $user) {
-                if(!$formInstance->progress&&!$formInstance->attendance&&!$formInstance->contact_hours){
-                    $request->validate([
-                        'progress' => 'required|integer|min:0|max:100',
-                        'attendance' => 'required|numeric|min:0|max:100',
-                        'contact_hours' => 'required|integer|min:0',
-                    ]);
-                    $formInstance->progress = $request->progress;
-                    $formInstance->attendance = $request->attendance;
-                    $formInstance->contact_hours = $request->contact_hours;
-                    $formInstance->current_progress = $request->student->current_progress;
-                    $formInstance->total_progress = $request->student->current_progress+$request->progress;
-                }
                 $alreadyReviewed=PresentationReview::where('presentation_id',$formInstance->id)->where('is_supervisor',0)->where('faculty_id',$user->faculty->faculty_code)->first();
               
                 if($alreadyReviewed->review_status=='completed'){

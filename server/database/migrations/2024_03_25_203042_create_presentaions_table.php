@@ -25,7 +25,7 @@ return new class extends Migration
             $table->enum('teaching_work',['UG','PG','Both','None'])->default('None');
             $table->text('presentation_pdf')->nullable();
 
-            $table->integer('progress')->nullable();
+            $table->integer('progress')->default(0);
             $table->integer('total_progress')->default(0);
             $table->integer('current_progress')->default(0);
             $table->integer('contact_hours')->default(0);

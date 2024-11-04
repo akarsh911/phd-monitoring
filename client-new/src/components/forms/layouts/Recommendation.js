@@ -17,6 +17,7 @@ const Recommendation = ({formData,allowRejection,role,moreFields,handleRecommend
     const { setLoading } = useLoading();
    
     useEffect(() => {
+
         if (role && formData) {
             setRoleName(getRoleName(role));
             setBody({

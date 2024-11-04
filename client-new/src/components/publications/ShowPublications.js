@@ -6,7 +6,7 @@ import CustomButton from '../forms/fields/CustomButton';
 
 const ShowPublications = ({
     formData,
-    enableSelect = true,
+    enableSelect = false,
     enableDelete = false,
     enableEdit = false,
     enableSubmit = false,
@@ -50,7 +50,7 @@ const ShowPublications = ({
            )}
            {enableEdit && (
                <a onClick={() => onEdit && onEdit(publicationId, publicationType)} style={{ cursor: "pointer", marginRight: 10 }}>
-                   <i className="fa fa-pencil"></i>
+                   <i className="fa fa-pencil" ></i>
                </a>
            )}
            {enableDelete && (

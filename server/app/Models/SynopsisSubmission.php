@@ -36,16 +36,22 @@ class SynopsisSubmission extends Model
      */
     public function fullForm($user)
     {
-        $irbFormId = IrbSubForm::where('student_id', $user->student->roll_no)->latest()->first()->id;
+        $irbFormId = IrbSubForm::where('student_id', $this->student_id)->latest()->first()->id;
+        $publicationsQuery = Publication::where('student_id', $this->student_id)->where('form_type', 'synopsis')->where('form_id', $this->id);
+        $patents = Patent::where('student_id', $this->student_id)->where('form_type', 'synopsis')->where('form_id', $this->id)->get();
         $commonJSON = $this->fullCommonForm($user);
-        return array_merge($commonJSON, [
+         $formData=array_merge($commonJSON, [
             'current_progress' => $this->current_progress,
             'revised_title' => $this->revised_title,
             'synopsis_pdf' => $this->synopsis_pdf,
             'total_progress' => $this->total_progress,
             'previous_progress'=>$this->student->overall_progress,
-            'publications' => $this->publications,
-            'patents' => $this->patents,
+            'sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->where('type', 'sci')->get(),
+            'non_sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->where('type', 'non-sci')->get(),
+            'national' => $publicationsQuery->clone()->where('publication_type', 'conference')->where('type', 'national')->get(),
+            'international' => $publicationsQuery->clone()->where('publication_type', 'conference')->where('type', 'international')->get(),
+            'book' => $publicationsQuery->clone()->where('publication_type', 'book')->get(),
+            'patents' => $patents,
             'revised_objectives' => $this->objectives->map(function ($objective) {
                 return $objective->objective;
             }),
@@ -55,7 +61,26 @@ class SynopsisSubmission extends Model
             ->map(function ($objective) {
                 return $objective->objective;
             }),
+            'fathers_name'=>$this->student->fathers_name,
+            'current_status'=>$this->student->current_status,
+            'address'=>$this->student->user->address,
+
         ]);
+        $extraData=[];
+        if($user->role->role==='student'){
+            $publicationsQuery = Publication::where('student_id', $this->student_id)->where('form_id', null);
+            $patents = Patent::where('student_id', $this->student_id)->where('form_id', null)->get();
+            
+            $ret = [
+                'sci' => $publicationsQuery->clone()->where('type', 'sci')->get(),
+                'non_sci' => $publicationsQuery->clone()->where('type', 'non-sci')->get(),
+                'patents' => $patents
+            ];
+            $extraData['student_publications']=$ret;
+        }
+        $formData=array_merge($formData,$extraData);
+
+        return $formData;
     }
 
     public function objectives()

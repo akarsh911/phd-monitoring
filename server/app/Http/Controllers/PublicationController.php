@@ -32,7 +32,7 @@ class PublicationController extends Controller
         
         $ret = [
             'sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->where('type', 'sci')->get(),
-            'non_sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->get(),
+            'non_sci' => $publicationsQuery->clone()->where('publication_type', 'journal')->where('type', 'non-sci')->get(),
             'national' => $publicationsQuery->clone()->where('publication_type', 'conference')->where('type', 'national')->get(),
             'international' => $publicationsQuery->clone()->where('publication_type', 'conference')->where('type', 'international')->get(),
             'book' => $publicationsQuery->clone()->where('publication_type', 'book')->get(),
