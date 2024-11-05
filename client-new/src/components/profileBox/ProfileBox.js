@@ -3,6 +3,7 @@ import "./ProfileBox.css";
 import { generateAvatar } from "../../utils/profileImage";
 import CustomModal from "../forms/modal/CustomModal";
 import SwitchRole from "../switchRole/SwitchRole";
+import { getRoleName } from "../../utils/roleName";
 const ProfileBox = () => {
   const [isOpen, setIsOpen] = useState(false);
   const profileRef = useRef(null);
@@ -13,7 +14,7 @@ const ProfileBox = () => {
     user && user.first_name && user.last_name
       ? `${user.first_name} ${user.last_name}`
       : "Name";
-  const role = localStorage.getItem("userRole") || "Role";
+  const role = getRoleName(localStorage.getItem("userRole")) || "Role";
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 

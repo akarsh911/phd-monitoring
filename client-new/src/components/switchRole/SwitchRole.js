@@ -5,6 +5,7 @@ import { useLoading } from '../../context/LoadingContext';
 import { toast } from 'react-toastify';
 import { baseURL } from '../../api/urls';
 import { customFetch } from '../../api/base';
+import {getRoleName} from '../../utils/roleName';
 const SwitchRole = () => {
     const [body, setBody] = useState({});
     const { setLoading } = useLoading();
@@ -16,7 +17,7 @@ const SwitchRole = () => {
         const rls=[]
         available_roles.forEach(rol => {
             let tt={
-                title:rol,
+                title:getRoleName( rol),
                 value:rol
             }
             rls.push(tt);
