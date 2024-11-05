@@ -33,7 +33,7 @@ class IrbSubController extends Controller
     public function createForm(Request $request)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         $steps=['student','faculty','hod','dra','dordc','complete'];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
@@ -51,7 +51,7 @@ class IrbSubController extends Controller
     public function loadForm(Request $request, $form_id=null)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         $model = IrbSubForm::class;
         $steps=['student','faculty','external','hod','dra','dordc'];
         switch ($role->role) {
@@ -73,7 +73,7 @@ class IrbSubController extends Controller
     public function submit(Request $request, $form_id)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
 
         switch ($role->role) {
             case 'student':

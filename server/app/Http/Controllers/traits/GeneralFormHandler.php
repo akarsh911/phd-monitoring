@@ -81,7 +81,7 @@ trait GeneralFormHandler
         try {
             $formInstance = $modelClass::find($form_id);
             if ($formInstance) {
-                $index=array_search($user->role->role,$formInstance->steps);
+                $index=array_search($user->current_role->role,$formInstance->steps);
                 if($index!==false && $index<=$formInstance->maximum_step)
                 return response()->json($formInstance->fullForm($user));
                 else

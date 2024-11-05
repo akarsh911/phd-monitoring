@@ -10,6 +10,7 @@ export const loginAPI = async (email, password) => {
     if(data && data.success){
         localStorage.setItem("token",data.response.token);
         localStorage.setItem("userRole",data.response.user.role.role);
+        localStorage.setItem("available_roles",JSON.stringify(data.response.available_roles));
         localStorage.setItem("user",JSON.stringify(data.response.user));
         return true;
     }

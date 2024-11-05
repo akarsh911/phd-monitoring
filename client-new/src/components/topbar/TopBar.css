@@ -17,6 +17,7 @@
   align-items: center;
   gap: 20px; /* Set a maximum gap between items */
   justify-content: center;
+  cursor: pointer;
 }
 
 

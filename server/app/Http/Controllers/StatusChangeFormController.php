@@ -30,7 +30,7 @@ class StatusChangeFormController extends Controller
     public function createForm(Request $request)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         $steps=['student','faculty','phd_coordinator','hod','dra','dordc','complete'];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
@@ -58,7 +58,7 @@ class StatusChangeFormController extends Controller
     {
         $model = StudentStatusChangeForms::class;
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         $steps=['student','faculty','phd_coordinator','hod','dra','dordc'];
         switch ($role->role) {
             case 'student':
@@ -85,7 +85,7 @@ class StatusChangeFormController extends Controller
     public function submit(Request $request, $form_id)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
 
         switch ($role->role) {
             case 'student':

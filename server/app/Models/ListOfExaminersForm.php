@@ -34,7 +34,7 @@ class ListOfExaminersForm extends Model
             'roll_no' => $this->student->roll_no,
             'date_of_registration' => $this->student->date_of_registration,
             'phd_title' => $this->student->phd_title,
-            'role' => $user->role->role,
+            'role' => $user->current_role->role,
             'supervisors' => $this->student->supervisors->map(function ($supervisor) {
                 return [
                     'name' => $supervisor->user->name(),

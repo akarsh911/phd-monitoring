@@ -115,7 +115,7 @@ class Faculty extends Model
 
     public function forms($roll_no=null){
         $data=[];
-        if($this->user->role->role=='faculty' && !$roll_no){
+        if($this->user->current_role->role=='faculty' && !$roll_no){
             $super= $this->supervisedStudents;
             $data=[];
             foreach($super as $s){
@@ -132,7 +132,7 @@ class Faculty extends Model
                 }
             }
         }
-        else if($this->user->role->role=='faculty' && $roll_no){
+        else if($this->user->current_role->role=='faculty' && $roll_no){
             $super= Forms::where('student_id',$roll_no)->where('supervisor_available',true)->get();
             $data=[];
             if($super)
@@ -152,7 +152,7 @@ class Faculty extends Model
             }
           
         }
-        else if($this->user->role->role=='dra'){
+        else if($this->user->current_role->role=='dra'){
            if($roll_no){
                 $data= Forms::where('dra_available',true)->where('student_id',$roll_no)->get();
             }else{
@@ -165,7 +165,7 @@ class Faculty extends Model
                 $d['action_required']=false;
             }
         }
-        else if($this->user->role->role=='dordc'){
+        else if($this->user->current_role->role=='dordc'){
             if($roll_no){
                 $data= Forms::where('dordc_available',true)->where('student_id',$roll_no)->get();
             }else{
@@ -178,7 +178,7 @@ class Faculty extends Model
                 $d['action_required']=false;
             }
         }
-        else if($this->user->role->role=='director'){
+        else if($this->user->current_role->role=='director'){
            
             if($roll_no){
                 $data= Forms::where('director_available',true)->where('student_id',$roll_no)->get();
@@ -193,7 +193,7 @@ class Faculty extends Model
                 $d['action_required']=false;
             }
         }
-        else if($this->user->role->role=='phd_coordinator'){
+        else if($this->user->current_role->role=='phd_coordinator'){
            if($roll_no){
                 $data= Forms::where('phd_coordinator_available',true)->where('student_id',$roll_no)->where('department_id',$this->department_id)->get();
             }else{
@@ -207,7 +207,7 @@ class Faculty extends Model
                 $d['action_required']=false;
             }
         }
-        else if($this->user->role->role=='hod'){
+        else if($this->user->current_role->role=='hod'){
             if($roll_no){
                 $data= Forms::where('hod_available',true)->where('department_id',$this->department_id)->where('student_id',$roll_no)->get();
             }else{

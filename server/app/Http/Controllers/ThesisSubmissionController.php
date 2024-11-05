@@ -32,7 +32,7 @@ class ThesisSubmissionController extends Controller
     public function createForm(Request $request)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         $steps=['student','faculty','phd_coordinator','hod','dra','dordc','complete'];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
@@ -50,7 +50,7 @@ class ThesisSubmissionController extends Controller
     public function loadForm(Request $request, $form_id=null)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         $model = ThesisSubmission::class;
         $steps=['student','faculty','phd_coordinator','hod','dra','dordc'];
         switch ($role->role) {
@@ -73,7 +73,7 @@ class ThesisSubmissionController extends Controller
     public function submit(Request $request, $form_id)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
 
         switch ($role->role) {
             case 'student':
@@ -96,7 +96,7 @@ class ThesisSubmissionController extends Controller
     {
         try{
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         if($role->role!='student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
@@ -160,7 +160,7 @@ class ThesisSubmissionController extends Controller
     public function unlinkPublication(Request $request, $form_id)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         if($role->role!='student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }

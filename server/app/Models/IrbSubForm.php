@@ -85,7 +85,7 @@ class IrbSubForm extends Model
                 'supervised_outside'=>$supervisor->supervised_outside,
             ];
         });
-        if($user->role->role==='faculty'){
+        if($user->current_role->role==='faculty'){
             $currentSupervisor = $this->student->supervisors->where('faculty_code', $user->faculty->faculty_code)->first();
             if ($currentSupervisor) {
             $formData['current_supervisor'] = [

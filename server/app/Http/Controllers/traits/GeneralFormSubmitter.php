@@ -61,7 +61,7 @@ trait GeneralFormSubmitter
             }
             $this->handleMoveToNextLevel($formInstance, $nextLevel, $model);
 
-            $formInstance->addHistoryEntry($this->getSubmissionMessage($user->role, $user->name()), $user->name());
+            $formInstance->addHistoryEntry($this->getSubmissionMessage($user->current_role, $user->name()), $user->name());
             $formInstance->save();
             return response()->json(['message' => 'Form submitted successfully']);
         } catch (ValidationException $e) {
@@ -172,7 +172,7 @@ trait GeneralFormSubmitter
             $this->getUnlockField($previousLevel) => false,
         ]);
 
-        $formInstance->addHistoryEntry($this->getRejectionMessage($user->role, $user->name()),  $user->name(), $comments);
+        $formInstance->addHistoryEntry($this->getRejectionMessage($user->current_role, $user->name()),  $user->name(), $comments);
 
         return response()->json(['message' => 'Form Rejected successfully'], 200);
     }
@@ -254,19 +254,19 @@ trait GeneralFormSubmitter
                 break;
 
             case 'dordc':
-                if ($user->role->role != 'dordc') {
+                if ($user->current_role->role != 'dordc') {
                     throw new \Exception('You are not authorized to access this resource');
                 }
                 break;
 
             case 'dra':
-                if ($user->role->role != 'dra') {
+                if ($user->current_role->role != 'dra') {
                     throw new \Exception('You are not authorized to access this resource');
                 }
                 break;
 
             case 'director':
-                if ($user->role->role != 'director') {
+                if ($user->current_role->role != 'director') {
                     throw new \Exception('You are not authorized to access this resource');
                 }
                 break;

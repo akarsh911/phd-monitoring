@@ -32,7 +32,7 @@ class PresentationController extends Controller{
     public function createForm(Request $request)
     {
        $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         $cur=$role->role;
         if($cur=='faculty'){
                 $request->validate([
@@ -75,7 +75,7 @@ class PresentationController extends Controller{
         $steps=['student','faculty','doctoral','hod','dra','dordc','complete'];
         $model = Presentation::class;
         $form=Presentation::find($form_id);
-        $role = $user->role;
+        $role = $user->current_role;
         $cur=$role->role;
         if($form)
         {
@@ -104,7 +104,7 @@ class PresentationController extends Controller{
     public function submit(Request $request, $form_id)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         $form=Presentation::find($form_id);
         $cur=$role->role;
         if($form)
@@ -134,7 +134,7 @@ class PresentationController extends Controller{
     {
         try{
                     $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         if($role->role!='student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
@@ -198,7 +198,7 @@ class PresentationController extends Controller{
     public function unlinkPublication(Request $request, $form_id)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         if($role->role!='student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }

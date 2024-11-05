@@ -14,7 +14,7 @@ class StudentController extends Controller {
     public function add(Request $request)
     {
         $loggenInUser = Auth::user();
-        if($loggenInUser->role->can_add_student == 'false'){
+        if($loggenInUser->current_role->can_add_student == 'false'){
             return response()->json([
                 'message' => 'You do not have permission to create student'
             ], 403);
@@ -51,7 +51,7 @@ class StudentController extends Controller {
 
 
         $role_id = Role::where('role','student')->first()->id;
-        $user->role_id = $role_id;
+        $user->current_role_id = $role_id;
         $user->save();
         //fetch role id of student and save it in user table
 
@@ -90,7 +90,7 @@ class StudentController extends Controller {
     public function list(Request $request)
     {
         $loggedInUser = Auth::user();
-        $role = $loggedInUser->role->role;
+        $role = $loggedInUser->current_role->role;
     
         // Use eager loading to optimize performance
         switch ($role) {
@@ -149,7 +149,7 @@ class StudentController extends Controller {
     public function get(Request $request, $roll_no)
     {
         $loggenInUser = Auth::user();
-        $role=$loggenInUser->role->role;
+        $role=$loggenInUser->current_role->role;
         switch($role){
             case 'admin':
             case 'director':

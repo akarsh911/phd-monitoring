@@ -9,70 +9,93 @@ use App\Models\User;
 use App\Models\Department;
 use App\Models\Faculty;
 use App\Models\Student;
-Route::get('/user', function (Request $request) {
-    
-    $user= \App\Models\User::all();
 
-    return response()->json(
-        [
-            'users'=>$user
-        ],200
-    );
-})->middleware('auth:sanctum');
 
-Route::post('/login',function (Request $request){
-
+Route::post('/login', function (Request $request) {
     $request->validate([
         'email' => 'required|email',
         'password' => 'required',
     ]);
-    if (Auth::attempt($request->only('email','password'))){
-      /** @var \App\Models\MyUserModel $user **/
+    if (Auth::attempt($request->only('email', 'password'))) {
+        /** @var \App\Models\MyUserModel $user **/
         $user = Auth::user();
-        $user->role = Role::find(Auth::user()->role_id);
-        
-        $token = $user->createToken('auth_token', ['server:access'],now()->addDays(10))->plainTextToken;
-            // ->withTtl(now()->addMinute())
-            // ->plainTextToken
-           ;
+
+        if ($user->current_role_id == null) {
+            if ($user->default_role_id == null) {
+                $user->current_role_id = $user->role_id;
+                $user->default_role_id = $user->role_id;
+                $user->save();
+            } else {
+                $user->current_role_id = $user->default_role_id;
+                $user->save();
+            }
+        }
+        $ret['first_name'] = $user->first_name;
+        $ret['last_name'] = $user->last_name;
+        $ret['email'] = $user->email;
+        $ret['phone'] = $user->phone;
+        $ret['gender'] = $user->gender;
+        $ret['role']['role'] = $user->role->role;
+        $token = $user->createToken('auth_token', ['server:access'], now()->addDays(10))->plainTextToken;
         return response()->json([
-            "user" => $user,
+            "user" => $ret,
+            "available_roles" => $user->availableRoles(),
             "token" => $token
-        ],200);
+        ], 200);
     }
     return response()->json([
         'error' => 'Invalid Credentials'
-    ],401);
+    ], 401);
 });
 
 
-Route::post('/login/google/callback',function(Request $request){
-    $request->validate([
-        'email' => 'required|email',
-        'first_name' => 'required|string',
-        'last_name' => 'required|string',
-        'phone' => 'required|string']);
-        
-    $user = User::where('email',$request->email)->first();
-    if (!$user){
-        $user = new User();
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->phone = $request->phone;
-        $user->email = $request->email;
-        $user->password = bcrypt('password');
-        $user->role_id = 1;
-        $user->save();
+Route::post('/switch-role', function (Request $request) {
+    try {
+        $request->validate([
+            'role' => 'required|string',
+        ]);
+        /** @var \App\Models\MyUserModel $user **/
+        $user = Auth::user();
+        $role = Role::where('role', $request->role)->first();
+        if (!$role) {
+            return response()->json([
+                'error' => 'Role not found'
+            ], 404);
+        }
+        if (!$user) {
+            return response()->json([
+                'error' => 'User not found'
+            ], 404);
+        }
+        $allowed = $user->isAuthorized($role->role);
+        if (!$allowed) {
+            return response()->json([
+                'error' => 'Unauthorized'
+            ], 401);
+        } else {
+            $user->current_role_id = $role->id;
+            $user->save();
+            $user->refresh();
+
+            $ret['first_name'] = $user->first_name;
+            $ret['last_name'] = $user->last_name;
+            $ret['email'] = $user->email;
+            $ret['phone'] = $user->phone;
+            $ret['gender'] = $user->gender;
+            $ret['role']['role'] = $role->role;
+            return response()->json([
+                "user" => $ret,
+            ], 200);
+        }
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Invalid Request'
+        ], 401);
     }
-    $user->role = Role::find($user->role_id);
-    $token = $user->createToken('auth_token
-    ', ['server:access'],now()->addDays(1))->plainTextToken;
-    return response()->json([
-        "user" => $user,
-        "token" => $token
-    ],200);
-});
-Route::post('register',function (Request $request){
+})->middleware('auth:sanctum');
+
+
+Route::post('register', function (Request $request) {
     $request->validate([
         'first_name' => 'required|string',
         'last_name' => 'required|string',
@@ -87,20 +110,20 @@ Route::post('register',function (Request $request){
     $user->phone = $request->phone;
     $user->email = $request->email;
     $user->password = bcrypt($request->password);
-    $user->gender= $request->gender;
-    $user->role_id=1;
+    $user->gender = $request->gender;
+    $user->role_id = 1;
     $user->save();
-    return response()->json($user,200);
+    return response()->json($user, 200);
 });
 
-Route::post('create-role',function (Request $request){
+Route::post('create-role', function (Request $request) {
     $request->validate([
         'role' => 'required|string',
     ]);
     $role = new \App\Models\Role();
     $role->role = 'Default';
     $role->save();
-    return response()->json($role,200);
+    return response()->json($role, 200);
 });
 Route::prefix('roles')->group(function () {
     require base_path('routes/base/roles.php');

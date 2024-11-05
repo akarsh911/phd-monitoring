@@ -20,7 +20,7 @@ class UserController extends Controller{
 
     public function listForms(Request $request, $roll_no = null){
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         $data = null;
         switch ($role->role) {
             case 'student':

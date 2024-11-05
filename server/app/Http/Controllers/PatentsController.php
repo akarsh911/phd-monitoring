@@ -34,7 +34,7 @@ class PatentsController extends Controller
             'country'=>'required|in:National,International'
         ]);
         $user = Auth::user();
-        $role = $user->role->role;
+        $role = $user->current_role->role;
         if($role!='student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
@@ -79,7 +79,7 @@ class PatentsController extends Controller
                 'country'=>'required|in:National,International'
             ]);
             $user = Auth::user();
-            $role = $user->role->role;
+            $role = $user->current_role->role;
             if($role!='student'){
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
             }

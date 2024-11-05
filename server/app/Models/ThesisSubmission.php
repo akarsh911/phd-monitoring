@@ -64,7 +64,7 @@ class ThesisSubmission extends Model
 
         ]);
         $extraData=[];
-        if($user->role->role==='student'){
+        if($user->current_role->role==='student'){
             $publicationsQuery = Publication::where('student_id', $this->student_id)->where('form_id', null);
             $patents = Patent::where('student_id', $this->student_id)->where('form_id', null)->get();
             

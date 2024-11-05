@@ -12,7 +12,7 @@ class DepartmentController extends Controller
     public function add(Request $request)
     {
         $loggenInUser = Auth::user();
-        if($loggenInUser->role->can_add_department == 'false'){
+        if($loggenInUser->current_role->can_add_department == 'false'){
             return response()->json([
                 'message' => 'You do not have permission to create department'
             ], 403);
@@ -38,7 +38,7 @@ class DepartmentController extends Controller
         try{
 
         $loggenInUser = Auth::user();
-        if($loggenInUser->role->can_add_department == 'false'){
+        if($loggenInUser->current_role->can_add_department == 'false'){
             return response()->json([
                 'message' => 'You do not have permission to create department'
             ], 403);
@@ -75,7 +75,7 @@ class DepartmentController extends Controller
     {
         try{
         $loggenInUser = Auth::user();
-        if($loggenInUser->role->can_add_department == 'false'){
+        if($loggenInUser->current_role->can_add_department == 'false'){
             return response()->json([
                 'message' => 'You do not have permission to create department'
             ], 403);
@@ -100,7 +100,7 @@ class DepartmentController extends Controller
             ], 404);
         }
         // $user=$faculty->user;
-        // $user->role_id=2;
+        // $user->current_role_id=2;
         $department->hod_id = $request->user_id;
         $department->save();
         return response()->json([
@@ -118,7 +118,7 @@ class DepartmentController extends Controller
     {
         try{
         $loggenInUser = Auth::user();
-        if($loggenInUser->role->can_add_department == 'false'){
+        if($loggenInUser->current_role->can_add_department == 'false'){
             return response()->json([
                 'message' => 'You do not have permission to create department'
             ], 403);

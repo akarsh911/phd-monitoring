@@ -18,7 +18,7 @@ class SuggestionController extends Controller {
     {
         $department=null;
         $loggenInUser = Auth::user();
-        if($loggenInUser->role->role == 'student'){
+        if($loggenInUser->current_role->role == 'student'){
             $department = $loggenInUser->student->department;
         }
         else{
@@ -45,7 +45,7 @@ class SuggestionController extends Controller {
     public function suggestExaminer(Request $request)
     {
         $loggenInUser = Auth::user();
-        if($loggenInUser->role->role!='faculty'){
+        if($loggenInUser->current_role->role!='faculty'){
             return response()->json(["message"=>"Only faculty can view examiners"]);
         }
 

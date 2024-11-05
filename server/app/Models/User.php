@@ -24,6 +24,8 @@ class User extends Authenticatable
         'email',
         'gender',
         'role_id',
+        'current_role_id',
+        'default_role_id',
         'profile_picture',
         'address',
         'password',
@@ -66,6 +68,16 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'role_id');
     }
 
+    public function current_role()
+    {
+        return $this->belongsTo(Role::class, 'current_role_id');
+    }
+
+    public function default_role()
+    {
+        return $this->belongsTo(Role::class, 'default_role_id');
+    }
+
     public function student()
     {
         return $this->hasOne(Student::class,'user_id');
@@ -79,5 +91,46 @@ class User extends Authenticatable
     public function notifications()
     {
         return $this->hasMany(Notification::class);
+    }
+
+    public function availableRoles()
+    {
+        $roles=[];
+        if($this->role->role == 'student'){
+            array_push($roles,'student');
+        }
+        if($this->role->role == 'faculty'){
+            array_push($roles,'doctoral');
+            array_push($roles,'faculty');
+        }
+        if($this->role->role == 'phd_coordinator'){
+            array_push($roles,'doctoral');
+            array_push($roles,'faculty');
+            array_push($roles,'phd_coordinator');
+        }
+        if($this->role->role == 'hod'){
+            array_push($roles,'doctoral');
+            array_push($roles,'faculty');
+            array_push($roles,'phd_coordinator');
+        }
+        if($this->role->role == 'external'){
+            array_push($roles,'doctoral');
+            array_push($roles,'external');  
+        }
+        if($this->role->role == 'dra'){
+            array_push($roles,'dra');
+        }
+        if($this->role->role == 'dordc'){
+            array_push($roles,'dordc');
+        }
+        if($this->role->role == 'director'){
+            array_push($roles,'director');
+        }
+        return $roles;
+    }
+
+    public function isAuthorized($role){
+        $roles = $this->availableRoles();
+        return in_array($role,$roles);
     }
 }

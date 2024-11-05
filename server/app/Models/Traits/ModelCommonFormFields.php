@@ -89,7 +89,7 @@ trait ModelCommonFormFields
             'phd_title' => $this->student->phd_title,
             'gender' => $this->student->user->gender,
             'cgpa' => $this->student->cgpa,
-            'role' => $user->role->role,
+            'role' => $user->current_role->role,
             'semester' => $this->semester,
             'supervisors' => $this->student->supervisors?->map(function ($supervisor) {
                 return [
@@ -136,11 +136,11 @@ trait ModelCommonFormFields
             'current_step' => $this->current_step,
             'maximum_step' => $this->maximum_step,
             'history' => $this->history,  
-            'role' => $user->role->role,   
+            'role' => $user->current_role->role,   
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ], $extraData);
-        if($user->role->role!='student'){
+        if($user->current_role->role!='student'){
             $arr['department_id'] = $this->student->department->id;
         }
         return $arr;

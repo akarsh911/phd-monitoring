@@ -7,7 +7,7 @@ use App\Models\Student;
 trait GeneralFormList
 {
     private function listForms($user,$model,$filters=null,$override=false){
-        $role=$user->role->role;
+        $role=$user->current_role->role;
         switch ($role) {
             case 'student':
                 return $this->listStudentForms($user, $model, $filters);
@@ -30,7 +30,7 @@ trait GeneralFormList
 
     private function listFormsStudent($user, $model, $student_id)
     {
-        $role = $user->role->role;
+        $role = $user->current_role->role;
         $student=Student::find($student_id);
         if(!$student){
             return response()->json(['message' => 'Student not found'], 404);
@@ -72,7 +72,7 @@ trait GeneralFormList
     private function listStudentForms($user, $model, $filters = null)
     {
         $student = $user->student;
-        $role = $user->role->role;
+        $role = $user->current_role->role;
     
         $formsQuery = $model::where('student_id', $student->roll_no);
         
@@ -108,7 +108,7 @@ trait GeneralFormList
     
     private function listHodForms($user, $model, $filters = null)
     {   
-        $role = $user->role->role;
+        $role = $user->current_role->role;
         $department = $user->faculty->department;
 
         $formsQuery = $model::whereHas('student', function ($query) use ($department) {
@@ -146,7 +146,7 @@ trait GeneralFormList
 
     private function listAdminForms($user, $model, $filters = null)
 {
-    $role = $user->role->role;
+    $role = $user->current_role->role;
     $formsQuery = $model::query();
 
     // Apply additional filters if provided
@@ -183,7 +183,7 @@ trait GeneralFormList
 
     private function listFacultyForms($user, $model, $filters = null,$override=false)
     {
-        $role = $user->role->role;
+        $role = $user->current_role->role;
         $faculty = $user->faculty;
         $supervisedStudents = $faculty->supervisedStudents();
         $studentIds = $supervisedStudents->pluck('roll_no');

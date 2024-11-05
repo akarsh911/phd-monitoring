@@ -19,7 +19,7 @@ class ListOfExaminersFormController extends Controller
     public function load(Request $request)
     {
         $user = Auth::user();
-        $role=$user->role->role;
+        $role=$user->current_role->role;
         switch($role){
             case 'faculty':
                 return $this->handleFaculty($user, $request);
@@ -91,7 +91,7 @@ class ListOfExaminersFormController extends Controller
     public function submit(Request $request)
     {
         $user = Auth::user();
-        $role=$user->role->role;
+        $role=$user->current_role->role;
         switch($role){
             case 'faculty':
                 return $this->submitFaculty($user, $request);

@@ -31,7 +31,7 @@ class ResearchExtentionController extends Controller
     public function createForm(Request $request)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         $steps=[
             'student',
             'faculty',
@@ -69,7 +69,7 @@ class ResearchExtentionController extends Controller
     public function loadForm(Request $request, $form_id=null)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
         $model = ResearchExtentionsForm::class;
         $steps=[
             'student',
@@ -101,7 +101,7 @@ class ResearchExtentionController extends Controller
     public function submit(Request $request, $form_id)
     {
         $user = Auth::user();
-        $role = $user->role;
+        $role = $user->current_role;
 
         switch ($role->role) {
             case 'student':

@@ -9,7 +9,7 @@ class SupervisorController extends Controller
     public function assign(Request $request)
     {
         $loggenInUser = Auth::user();
-        if($loggenInUser->role->can_edit_supervisors == 'false'){
+        if($loggenInUser->current_role->can_edit_supervisors == 'false'){
             return response()->json([
                 'message' => 'You do not have permission to create supervisor'
             ], 403);
