@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 
 export const customFetch = async (
   link,
-  method,
+  method="GET",
   body = {},
   showToast = true,
   isFormData = false
