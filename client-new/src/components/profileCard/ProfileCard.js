@@ -16,9 +16,10 @@ function ProfileCard({ dataIP = null, link=false }) {
     useEffect(() => {
         if (!state) {
             const rollNumber = roll_no || "";
-            const url = `${baseURL}/students/${rollNumber}`;
-
-            customFetch(url, "GET").then((data) => {
+            let url = `${baseURL}/students/${rollNumber}`;
+            if(!rollNumber)
+                url = `${baseURL}/students`;
+            customFetch(url, "GET",{},true,false).then((data) => {
                 if (data && data.success) {
                     roll_no = data.response[0].id;
                     setState(data.response[0]);
