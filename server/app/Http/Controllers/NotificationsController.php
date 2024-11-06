@@ -14,8 +14,19 @@ class NotificationsController extends Controller
     {
         $user = Auth::user();
         $notifications = $user->notifications->where('is_read', false);
-
-        return response()->json($notifications);
+        $ret=[];
+        foreach($notifications as $notification)
+        {
+            $ret[]=[
+                'id'=>$notification->id,
+                'title'=>$notification->data['title'],
+                'body'=>$notification->data['body'],
+                'link'=>$notification->data['link'],
+                'created_at'=>$notification->created_at,
+                'role'=>$notification->role->role
+            ];
+        }
+        return response()->json($ret);
     }
 
     public function markAsRead($id)
@@ -56,7 +67,20 @@ class NotificationsController extends Controller
     {
         $user = Auth::user();
         $notifications = $user->notifications;
-        return response()->json($notifications);
+        $ret=[];
+        foreach($notifications as $notification)
+        {
+            $ret[]=[
+                'id'=>$notification->id,
+                'title'=>$notification->data['title'],
+                'body'=>$notification->data['body'],
+                'link'=>$notification->data['link'],
+                'is_read'=>$notification->is_read,
+                'created_at'=>$notification->created_at,
+                'role'=>$notification->role->role
+            ];
+        }
+        return response()->json($ret);
     }
     
 }
