@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Faculty;
 use App\Models\Forms;
-use App\Models\irbExpertChairman;
+use App\Models\IrbExpertChairman;
 use App\Models\IrbNomineeCognate;
 use App\Models\IrbOutsideExpert;
 use App\Models\OutsideExpert;
@@ -247,7 +247,7 @@ class ConstituteOfIRBController extends Controller
                     throw new \Exception('Chairman Experts are Required');
                 }
                 // Handling cognate experts
-                $oldChairmanExperts=irbExpertChairman::where('irb_form_id',$formInstance->id)->get();
+                $oldChairmanExperts=IrbExpertChairman::where('irb_form_id',$formInstance->id)->get();
                 if(count($oldChairmanExperts) != 0){
                     foreach($oldChairmanExperts as $oldChairmanExpert){
                         $oldChairmanExpert->delete();
@@ -263,7 +263,7 @@ class ConstituteOfIRBController extends Controller
                         if($formInstance->student->department_id != $faculty->department_id){
                             throw new \Exception('Cognate experts must be from the same department');
                         }
-                        irbExpertChairman::create([
+                        IrbExpertChairman::create([
                             'irb_form_id' => $formInstance->id,
                             'expert_id' => $chairmanExpert,
                         ]);
@@ -331,7 +331,7 @@ class ConstituteOfIRBController extends Controller
                         'student_id' => $formInstance->student->roll_no,
                         'faculty_id' => $cognateExpertId,
                     ]);
-                    $irbExperts=irbExpertChairman::where('irb_form_id',$formInstance->id)->get();
+                    $irbExperts=IrbExpertChairman::where('irb_form_id',$formInstance->id)->get();
                     foreach($irbExperts as $irbExpert){
                         DoctoralCommittee::create([
                             'student_id' => $formInstance->student->roll_no,

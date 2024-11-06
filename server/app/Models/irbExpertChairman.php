@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class  irbExpertChairman extends Model
+class  IrbExpertChairman extends Model
 {
     use HasFactory;
     protected $table = 'irb_expert_chairmen';

@@ -108,7 +108,7 @@ class ConstituteOfIRB extends Model
 
     public function chairmanExperts()
     {
-        return $this->hasMany(irbExpertChairman::class, 'irb_form_id');
+        return $this->hasMany(IrbExpertChairman::class, 'irb_form_id');
     }
 
     public function expertCognate()
