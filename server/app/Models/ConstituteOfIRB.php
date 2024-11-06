@@ -60,7 +60,7 @@ class ConstituteOfIRB extends Model
                     'phone' => $expert->phone
                 ];
             }),
-            'chairman_experts' => $this->chairmanExperts->map(function ($expert) {
+            'chairman_experts' => $this->chairmanExperts?->map(function ($expert) {
                 return [
                     'name' => $expert->expert->user->name(),
                     'designation' => $expert->expert->designation,
@@ -97,7 +97,7 @@ class ConstituteOfIRB extends Model
 
     public function expertDepartments()
     {
-        return $this->hasMany(IrbExpertDepartment::class, 'irb_form_id');
+        return $this->hasMany(IrbExpertDepartment::class, 'irb_form_id', 'id');
     }
 
     public function supervisorApprovals()
@@ -108,7 +108,7 @@ class ConstituteOfIRB extends Model
 
     public function chairmanExperts()
     {
-        return $this->hasMany(IrbExpertChairman::class, 'irb_form_id');
+        return $this->hasMany(IrbExpertChairman::class, 'irb_form_id', 'id');
     }
 
     public function expertCognate()
