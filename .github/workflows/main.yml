@@ -28,5 +28,5 @@ jobs:
         shell: bash
       - name: SSH into server and git pull
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@13.60.214.147 'cd /var/www/html/phd-monitoring && sudo git pull https://${{secrets.GIT_TOKEN}}@github.com/akarsh911/phd-monitoring.git main'
+          ssh -o StrictHostKeyChecking=no ubuntu@13.60.214.147 'cd /var/www/html/phd-monitoring && sudo git pull https://${{secrets.SSH_USER}}@github.com/akarsh911/phd-monitoring.git main'
           exit 1
