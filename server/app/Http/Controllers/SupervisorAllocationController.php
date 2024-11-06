@@ -178,7 +178,7 @@ class SupervisorAllocationController extends Controller
             'complete',
             function ($formInstance) use ($request, $user) {
                 if ($request->approval) {
-                    $formInstance->completion='complete';
+                   
                     $formInstance->status='approved';
                     
                     $supervisors = $formInstance->supervisors;
