@@ -39,6 +39,7 @@ class Supervisor extends Model
     {
         return $this->belongsTo(Student::class);
     }
+    
     public function irbNomineeCognates()
 {
     return $this->hasMany(IrbNomineeCognate::class, 'supervisor_id');

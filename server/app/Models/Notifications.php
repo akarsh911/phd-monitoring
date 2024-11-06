@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Notification extends Model
+class Notifications extends Model
 {
     use HasFactory;
 
@@ -22,6 +22,7 @@ class Notification extends Model
         'is_read',
         'email_sent',
         'email_req',
+        'role_id',
     ];
 
     /**
@@ -46,5 +47,10 @@ class Notification extends Model
     public function scopeEmailNotSent($query)
     {
         return $query->where('email_sent', false)->where('email_req', true);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
     }
 }

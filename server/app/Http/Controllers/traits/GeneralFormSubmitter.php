@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 
 trait GeneralFormSubmitter
 {
+    use NotificationManager;
     private function submitForm($user, Request $request, $form_id, $model, $role, $previousLevel, $nextLevel, callable $extraSteps = null)
     {
 
@@ -45,7 +46,7 @@ trait GeneralFormSubmitter
             if ($role != 'student') {
                 if (!$request->approval) {
                     $this->updateApprovalAndComments($formInstance, $request, $role);
-                    return $this->handleFallbackToPreviousLevel($user, $formInstance, $previousLevel, $request->comments);
+                    return $this->handleFallbackToPreviousLevel($user, $formInstance, $previousLevel, $request->comments,$model);
                 }
             }
 
@@ -158,8 +159,12 @@ trait GeneralFormSubmitter
         }
     }
 
-    private function handleFallbackToPreviousLevel($user, $formInstance, $previousLevel, $comments)
+    private function handleFallbackToPreviousLevel($user, $formInstance, $previousLevel, $comments,$model)
     {
+
+        $link='/forms/' . $this->getFormType($model).'/'.$formInstance->id;
+        $this->formNotification($formInstance->student, $this->getFormType($model).' form for '.$formInstance->student->user->name().' has been rejected', 'Form has been rejected',  $link, $previousLevel, true);
+    
         if ($previousLevel == 'faculty') {
             $previousLevel = 'supervisor';
         }
@@ -181,6 +186,9 @@ trait GeneralFormSubmitter
     {
         $student_id = $formInstance->student->roll_no;
         $index = array_search($nextLevel, $formInstance->steps);
+        $link='/forms/' . $this->getFormType($model).'/'.$formInstance->id;
+        $this->formNotification($formInstance->student, $this->getFormType($model).' form for '.$formInstance->student->user->name().' has pending action', 'Form has pending  action',  $link, $nextLevel, true);
+    
         if ($nextLevel == 'faculty') {
             $nextLevel = 'supervisor';
         }
@@ -188,6 +196,7 @@ trait GeneralFormSubmitter
             $formInstance->completion = 'complete';
             $formInstance->stage = 'complete';
             $formInstance->save();
+            
         } else {
             $formInstance->update([
                 'stage' => $nextLevel,

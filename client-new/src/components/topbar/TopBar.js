@@ -6,7 +6,7 @@ import ProfileBox from "../profileBox/ProfileBox";
 
 
 const TopBar = ({ headingText }) => {
- 
+  
   return (
     <>
       <div className="topbar_sub">

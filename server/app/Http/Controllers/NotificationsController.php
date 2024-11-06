@@ -1,0 +1,62 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Controllers\Traits\SaveFile;
+use App\Models\Patent;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+
+class NotificationsController extends Controller
+{
+    public function unreadNotifications()
+    {
+        $user = Auth::user();
+        $notifications = $user->notifications->where('is_read', false);
+
+        return response()->json($notifications);
+    }
+
+    public function markAsRead($id)
+    {
+        $user = Auth::user();
+        $notification = $user->notifications->find($id);
+        if ($notification) {
+            $notification->is_read = true;
+            $notification->save();
+            return response()->json(['message' => 'Notification marked as read']);
+        }
+        return response()->json(['message' => 'Notification not found'], 404);
+    }
+
+    public function markAllAsRead()
+    {
+        $user = Auth::user();
+        $notifications = $user->notifications->where('is_read', false)->get();
+        foreach ($notifications as $notification) {
+            $notification->is_read = true;
+            $notification->save();
+        }
+        return response()->json(['message' => 'All notifications marked as read']);
+    }
+
+    public function deleteNotification($id)
+    {
+        $user = Auth::user();
+        $notification = $user->notifications->find($id);
+        if ($notification) {
+            $notification->delete();
+            return response()->json(['message' => 'Notification deleted']);
+        }
+        return response()->json(['message' => 'Notification not found'], 404);
+    }
+
+    public function allNotifications()
+    {
+        $user = Auth::user();
+        $notifications = $user->notifications;
+        return response()->json($notifications);
+    }
+    
+}

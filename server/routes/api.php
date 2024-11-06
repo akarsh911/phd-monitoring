@@ -129,6 +129,10 @@ Route::prefix('roles')->group(function () {
     require base_path('routes/base/roles.php');
 });
 
+Route::prefix('notifications')->group(function () {
+    require base_path('routes/base/notifications.php');
+});
+
 Route::prefix('departments')->group(function () {
     require base_path('routes/base/departments.php');
 });

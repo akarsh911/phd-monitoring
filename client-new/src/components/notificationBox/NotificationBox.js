@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./NotificationBox.css";
+import { APIlistUnreadNotifications, APImarkNotificationAsRead } from "../../api/notifications";
 
 const NotificationBox = () => {
   const [isOpen, setIsOpen] = useState(false);
   const notificationRef = useRef(null);
+  const [notifications, setNotifications] = useState([]);
 
   const toggleNotifications = () => {
     setIsOpen(!isOpen);
@@ -22,11 +24,26 @@ const NotificationBox = () => {
     };
   }, []);
 
+  useEffect(() => {
+    APIlistUnreadNotifications(setNotifications);
+  }, []);
+
+  const onNotificationClick = (notification) => {
+    const role = localStorage.getItem("roleName");
+    // Open notification.link in a new tab
+    if (notification && notification.link) {
+      APImarkNotificationAsRead(notification.id);
+      window.open(notification.link, "_blank");
+    }
+  };
+
   return (
     <div className="notification_wrapper" ref={notificationRef}>
       <div className="notification_icon" onClick={toggleNotifications}>
         <img src="/icons/notifications.svg" alt="Notifications" className="notif_icon" />
-        <div className="notification_badge">34</div>
+        {notifications.length > 0 && (
+          <div className="notification_badge">{notifications.length}</div>
+        )}
       </div>
       {isOpen && (
         <div className="notification_box">
@@ -34,11 +51,16 @@ const NotificationBox = () => {
             <h3>Notifications</h3>
           </div>
           <div className="notification_content">
-          
-            <div className="notification_item">
-              <h4>Main title of notification</h4>
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-            </div>
+            {notifications.map((notification) => (
+              <div
+                className="notification_item"
+                key={notification.id}
+                onClick={() => onNotificationClick(notification)}
+              >
+                <h4>{notification.title}</h4>
+                <p>{notification.body}</p>
+              </div>
+            ))}
           </div>
           <div className="notification_footer">
             <a href="/notifications" className="see_all">See all</a>
