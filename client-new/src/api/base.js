@@ -47,6 +47,7 @@ export const customFetch = async (
             return { success: false, response: data };
           } else if (error.status === 401) {
             if (showToast) toast.error(data.error);
+            window.location.href = "/login";
             return { success: false, response: data };
           } else if (error.status === 500) {
             if (showToast) toast.error("Internal server error");

@@ -16,3 +16,11 @@ export const loginAPI = async (email, password) => {
     }
     return false;
 }
+
+export const logoutAPI = async () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
+    localStorage.removeItem("available_roles");
+    localStorage.removeItem("user");
+    return true;
+}

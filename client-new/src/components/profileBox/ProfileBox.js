@@ -4,6 +4,8 @@ import { generateAvatar } from "../../utils/profileImage";
 import CustomModal from "../forms/modal/CustomModal";
 import SwitchRole from "../switchRole/SwitchRole";
 import { getRoleName } from "../../utils/roleName";
+import { logoutAPI } from "../../api/login";
+import { toast } from "react-toastify";
 const ProfileBox = () => {
   const [isOpen, setIsOpen] = useState(false);
   const profileRef = useRef(null);
@@ -93,7 +95,11 @@ const ProfileBox = () => {
                 </CustomModal>
               </>
             )}
-            <div className="profile_item" onClick={() => alert("Logging Out")}>
+            <div className="profile_item" onClick={() => {
+              logoutAPI();
+              toast.success("Logged out");
+              window.location.href = "/login";
+            }}>
               <h4>Logout</h4>
             </div>
           </div>

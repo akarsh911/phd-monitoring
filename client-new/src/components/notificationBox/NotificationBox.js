@@ -51,7 +51,7 @@ const NotificationBox = () => {
             <h3>Notifications</h3>
           </div>
           <div className="notification_content">
-            {notifications.map((notification) => (
+            {notifications?.map((notification) => (
               <div
                 className="notification_item"
                 key={notification.id}
