@@ -17,26 +17,14 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install openssh-client -y
-      - name: Create SSH directory
-        run: mkdir -p ~/.ssh
-
-      - name: Write SSH key to file
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        shell: bash
-
-      - name: Set permissions for the SSH key
-        run: chmod 600 ~/.ssh/id_rsa
-        shell: bash
-
-      - name: Add SSH key to ssh-agent
-        run: |
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
-        shell: bash
+      - name: Setup SSH Key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: SSH into server and git pull
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@13.60.214.147 'cd /var/www/html/phd-monitoring && sudo git pull https://${{secrets.GIT_TOKEN}}@github.com/akarsh911/phd-monitoring.git main'
+          ssh -o StrictHostKeyChecking=no -i $HOME/.ssh/id_rsa ubuntu@13.60.214.147 'cd /var/www/html/phd-monitoring && sudo git pull https://${{secrets.GIT_TOKEN}}@github.com/akarsh911/phd-monitoring.git main'
      
           
   
