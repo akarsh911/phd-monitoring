@@ -16,10 +16,7 @@ class IrbExpertDepartment extends Model
         'expert_id',
     ];
 
-    public function irbForm()
-    {
-        return $this->belongsTo(IrbForm::class, 'irb_form_id');
-    }
+    
 
     public function expert()
     {

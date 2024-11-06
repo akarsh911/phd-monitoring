@@ -12,11 +12,6 @@ class  irbExpertChairman extends Model
     protected $fillable = ['irb_form_id','expert_id'];
     public $timestamps = false;
 
-    public function irbForm()
-    {
-        return $this->belongsTo(IrbForm::class, 'irb_form_id');
-    }
-    
     public function expert()
     {
         return $this->belongsTo(Faculty::class, 'expert_id','faculty_code');
