@@ -19,9 +19,9 @@ class NotificationsController extends Controller
         {
             $ret[]=[
                 'id'=>$notification->id,
-                'title'=>$notification->data['title'],
-                'body'=>$notification->data['body'],
-                'link'=>$notification->data['link'],
+                'title'=>$notification->title,
+                'body'=>$notification->body,
+                'link'=>$notification->link,
                 'created_at'=>$notification->created_at,
                 'role'=>$notification->role->role
             ];
@@ -72,9 +72,10 @@ class NotificationsController extends Controller
         {
             $ret[]=[
                 'id'=>$notification->id,
-                'title'=>$notification->data['title'],
-                'body'=>$notification->data['body'],
-                'link'=>$notification->data['link'],
+                'id'=>$notification->id,
+                'title'=>$notification->title,
+                'body'=>$notification->body,
+                'link'=>$notification->link,
                 'is_read'=>$notification->is_read,
                 'created_at'=>$notification->created_at,
                 'role'=>$notification->role->role

@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./NotificationBox.css";
 import { APIlistUnreadNotifications, APImarkNotificationAsRead } from "../../api/notifications";
+import { toast } from "react-toastify";
+import { getRoleName } from "../../utils/roleName";
 
 const NotificationBox = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,7 +33,12 @@ const NotificationBox = () => {
   const onNotificationClick = (notification) => {
     const role = localStorage.getItem("roleName");
     // Open notification.link in a new tab
+   
     if (notification && notification.link) {
+      if(role!==notification.role){
+        toast.warn("You need to switch to "+getRoleName( notification.role)+" role to view this notification");
+        return;
+      }
       APImarkNotificationAsRead(notification.id);
       window.open(notification.link, "_blank");
     }
