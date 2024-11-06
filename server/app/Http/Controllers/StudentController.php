@@ -82,7 +82,7 @@ class StudentController extends Controller {
         Forms::create([
             'student_id' => $student->roll_no,
             'department_id' => $student->department_id,
-            'count'=>1,
+            'count'=>0,
             'student_available'=>true,
             'form_type'=>'supervisor-allocation',
             'form_name'=>'Supervisor Allocation Form',            
