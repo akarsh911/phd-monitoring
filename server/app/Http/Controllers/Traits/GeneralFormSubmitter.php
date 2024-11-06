@@ -186,9 +186,9 @@ trait GeneralFormSubmitter
     {
         $student_id = $formInstance->student->roll_no;
         $index = array_search($nextLevel, $formInstance->steps);
+      
         $link='/forms/' . $this->getFormType($model).'/'.$formInstance->id;
         $this->formNotification($formInstance->student, $this->getFormType($model).' form for '.$formInstance->student->user->name().' has pending action', 'Form has pending  action',  $link, $nextLevel, true);
-    
         if ($nextLevel == 'faculty') {
             $nextLevel = 'supervisor';
         }

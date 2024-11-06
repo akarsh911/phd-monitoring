@@ -30,7 +30,7 @@ const Recommendation = ({formData,allowRejection,role,moreFields,handleRecommend
         if(isLocked===true){
             setLock(true);
         }
-        if(formData.role!==role && role!=="supervisor"){
+        if(formData.stage!==role && role!=="supervisor"){
             setLock(true);
         }
     }, [role, formData]);

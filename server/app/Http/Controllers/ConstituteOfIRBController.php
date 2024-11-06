@@ -136,7 +136,7 @@ class ConstituteOfIRBController extends Controller
                 $formInstance->student->update([
                     'cgpa' => $cgpa,
                 ]);
-            }
+            } 
             $formInstance->student->save();
             $formInstance->student->user->save();
         });

@@ -39,7 +39,7 @@ const Student = ({ formData }) => {
   };
 
   const handleBroadAreaSelect = (value, index) => {
-    body.broad_area_of_research[index] = value;
+    body.broad_area_of_research[index] = value.id;
   };
 
   return (

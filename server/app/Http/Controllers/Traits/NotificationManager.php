@@ -88,8 +88,10 @@ trait NotificationManager
     }
     private function phdCoordinatorNotification($student,$title,$body,$link,$email_req=false){
         $phdCoordinator=$student->department->phdCoordinators;
+      
         foreach ($phdCoordinator as $phdCoordinator) {
-            $user=$phdCoordinator->faculty->user;
+            $faculty=Faculty::where('faculty_code',$phdCoordinator->faculty_id)->first();
+            $user= $faculty->user;
             $this->sendNotification($user,$title,$body,$link,null,$email_req);
         }
     }
