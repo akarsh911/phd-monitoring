@@ -19,6 +19,7 @@ class StudentController extends Controller {
                 'message' => 'You do not have permission to create student'
             ], 403);
         }
+        $role_id=Role::where('role','student')->first()->id;
         $request->validate(
             [
                 'first_name' => 'required|string',
@@ -35,6 +36,8 @@ class StudentController extends Controller {
                 'current_status' => 'required|string',
                 'overall_progress' => 'required|decimal:0,3',
                 'cgpa' => 'required|decimal:0,3'
+               
+
             ]
         );
         $password = Str::password(8, true, true, true, false);
@@ -47,6 +50,7 @@ class StudentController extends Controller {
         $user->email = $request->email;
         $user->password = bcrypt($password);
         $user->address = $request->address;
+        $user->role_id = $role_id;
         //crate new entry in users table
 
 

@@ -11,7 +11,7 @@ class FacultyController extends Controller
 
         $user = Auth::user();
 
-        if(!$user->current_role->can_add_faculties)
+        if(!$user->role->can_add_faculties)
         {
             echo $user->current_role;
             return response()->json([
@@ -41,7 +41,7 @@ class FacultyController extends Controller
         $user->password = bcrypt($password);
 
         $role_id = Role::where('role','faculty')->first()->id;
-        $user->current_role_id = $role_id;
+        $user->role_id = $role_id;
         $user->save();
 
         $faculty = new \App\Models\Faculty();
@@ -61,12 +61,12 @@ class FacultyController extends Controller
     public function list(Request $request)
     {
         $user = Auth::user();
-         if($user->current_role->can_read_all_faculties==true)
+         if($user->role->can_read_all_faculties==true)
          {
             $faculties = \App\Models\Faculty::all();
             return response()->json($faculties, 200);
          }
-         else if($user->current_role->can_read_department_faculties==true)
+         else if($user->role->can_read_department_faculties==true)
          {
             $faculties = \App\Models\Faculty::where('department_id', $user->faculty->department_id)->get();
             return response()->json($faculties, 200);         

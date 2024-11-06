@@ -20,6 +20,8 @@ trait GeneralFormList
                 return $this->listAdminForms($user, $model, $filters);
             case 'faculty':
                 return $this->listFacultyForms($user, $model, $filters,$override);
+            case 'doctoral':
+                return $this->listDoctoralForms($user, $model, $filters,$override);
             // case 'external':
             //     return $this->listExternalForms($user, $model, $filters);
             //TODO: Add external forms
@@ -129,7 +131,7 @@ trait GeneralFormList
             return $form;
         })->map(function ($form) {
             return [
-                'name' => $form->student->name, // Assumes there's a `name` field on the student model
+                'name' => $form->student->user->name(), // Assumes there's a `name` field on the student model
                 'stage' => $form->stage,
                 'roll_no' => $form->student->roll_no, // Adjusted to retrieve roll_no from related student
                 'status' => $form->status,
@@ -143,6 +145,45 @@ trait GeneralFormList
 
         return $filteredForms->values();
     }
+private function listDoctoralForms($user, $model, $filters = null,$override=false)
+{
+    $role = $user->current_role->role;
+    $faculty = $user->faculty;
+    $doctoralStudents = $faculty->doctoredStudents();
+    $studentIds = $doctoralStudents->pluck('roll_no');
+    
+    $formsQuery = $model::whereIn('student_id', $studentIds);
+
+    // Apply additional filters if provided
+    if ($filters) {
+        $formsQuery->where($filters);
+    }
+
+    // Fetch forms and filter them based on role and step conditions
+    $filteredForms = $formsQuery->get()->filter(function ($form) use ($role) {
+        $index = array_search($role, $form->steps);
+        return $index !== false && $index <= $form->maximum_step;
+    })->map(function ($form) {
+        $form->action_req = !$form->doctoral_lock;
+        return $form;
+    })->map(function ($form) {
+        return [
+            'name' => $form->student->user->name(), // Assumes there's a `name` field on the student model
+            'stage' => $form->stage,
+            'roll_no' => $form->student->roll_no, // Adjusted to retrieve roll_no from related student
+            'status' => $form->status,
+            'completion' => $form->completion,
+            'created_at' => $form->created_at,
+            'updated_at' => $form->updated_at,
+            'action_req' => $form->action_req,
+            'form_id' => $form->id,
+        ];
+    });
+
+    return $filteredForms->values();
+}
+
+
 
     private function listAdminForms($user, $model, $filters = null)
 {
@@ -165,7 +206,7 @@ trait GeneralFormList
         return $form;
     })->map(function ($form) {
         return [
-            'name' => $form->student->name, // Assumes there's a `name` field on the student model
+            'name' => $form->student->user->name(), // Assumes there's a `name` field on the student model
             'stage' => $form->stage,
             'roll_no' => $form->student->roll_no, // Adjusted to retrieve roll_no from related student
             'status' => $form->status,
@@ -206,7 +247,7 @@ trait GeneralFormList
             return $form;
         })->map(function ($form) {
             return [
-                'name' => $form->student->name, // Assumes there's a `name` field on the student model
+                'name' => $form->student->user->name(), // Assumes there's a `name` field on the student model
                 'stage' => $form->stage,
                 'roll_no' => $form->student->roll_no, // Adjusted to retrieve roll_no from related student
                 'status' => $form->status,

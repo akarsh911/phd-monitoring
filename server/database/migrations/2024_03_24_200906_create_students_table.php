@@ -19,8 +19,8 @@ return new class extends Migration
             $table->unique('user_id');
             $table->integer('department_id')->unsigned()->nullable();
             $table->date('date_of_registration');
-            $table->date('date_of_irb');
-            $table->date('date_of_synopsis');
+            $table->date('date_of_irb')->nullable();
+            $table->date('date_of_synopsis')->nullable();
             $table->text('phd_title');
             $table->text('fathers_name');
             $table->text('address');

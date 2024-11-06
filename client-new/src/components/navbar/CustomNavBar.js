@@ -3,11 +3,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './NavBar.css';
 
 const buttonConfig = [
-    { path: '/home', icon: '🏠', text: 'Home', roles: ['student', 'hod','phd_coordinator','faculty','dordc','dra','director'] },
-    { path: '/forms', icon: '📃', text: 'Forms', roles: ['student','hod','phd_coordinator','faculty','dordc','dra','director'] },
-    { path: '/presentation', icon: 'ℹ️', text: 'Presentations', roles: ['student','hod','phd_coordinator','faculty','dordc','dra','director'] },
+    { path: '/home', icon: '🏠', text: 'Home', roles: ['student', 'hod','phd_coordinator','faculty','dordc','dra','director','doctoral'] },
+    { path: '/forms', icon: '📃', text: 'Forms', roles: ['student','hod','phd_coordinator','faculty','dordc','dra','director','doctoral'] },
+    { path: '/presentation', icon: 'ℹ️', text: 'Presentations', roles: ['student','hod','phd_coordinator','faculty','dordc','dra','director','doctoral'] },
     { path: '/publications', icon: '📰', text: 'Publications', roles: ['student', 'faculty','hod'] },
-    { path: '/students', icon: '🧑‍🎓', text: 'Students', roles: ['hod','phd_coordinator','faculty','dordc','dra','director'] },
+    { path: '/students', icon: '🧑‍🎓', text: 'Students', roles: ['hod','phd_coordinator','faculty','dordc','dra','director','doctoral'] },
 ];
 
 const CustomNavBar = () => {

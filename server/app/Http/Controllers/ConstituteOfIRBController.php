@@ -331,6 +331,13 @@ class ConstituteOfIRBController extends Controller
                         'student_id' => $formInstance->student->roll_no,
                         'faculty_id' => $cognateExpertId,
                     ]);
+                    $irbExperts=irbExpertChairman::where('irb_form_id',$formInstance->id)->get();
+                    foreach($irbExperts as $irbExpert){
+                        DoctoralCommittee::create([
+                            'student_id' => $formInstance->student->roll_no,
+                            'faculty_id' => $irbExpert->expert_id,
+                        ]);
+                    }
                     $formInstance->update([
                         'outside_expert' => $outsideExpertId,
                         'cognate_expert' => $cognateExpertId,
