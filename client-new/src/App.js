@@ -63,7 +63,7 @@ const AppContent = () => {
 
           <Route path="/forms/:form_type" element={<FormListPage/>} />
           <Route path="/forms/:form_type/:id" element={<MainFormPage/>} />
-          {(role === 'faculty' || role === 'phd_coordinator' || role==='hod' || role==='dordc'  || role==='dra' || role==='director') && (
+          {(role === 'faculty' || role === 'phd_coordinator' || role==='hod' || role==='doctoral'|| role==='external'|| role==='dordc'  || role==='dra' || role==='director') && (
             <>
                  <Route path="/forms" element={<FacultyFormsPage/>} />
                 <Route path="/students" element={<StudentsPage />} />
