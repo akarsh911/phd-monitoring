@@ -37,6 +37,7 @@ trait GeneralFormSubmitter
                 return response()->json(['message' => 'Form already completed'], 403);
             }
 
+
             if ($formInstance->{$role . '_lock'} || ($role == 'faculty' && $formInstance->supervisor_lock)) {
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
             }
@@ -258,7 +259,8 @@ trait GeneralFormSubmitter
                 break;
 
             case 'external':
-                if (!$formInstance->student->checkSupervises($user->faculty->faculty_code)) {
+                if (!$formInstance->student->checkSupervises($user->faculty->faculty_code) && !$formInstance->student->checkDoctoralCommittee($user->faculty->faculty_code)) {
+                    
                     throw new \Exception('You are not authorized to access this resource');
                 }
                 break;
