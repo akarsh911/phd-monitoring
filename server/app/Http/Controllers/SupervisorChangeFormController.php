@@ -8,7 +8,7 @@ use App\Http\Controllers\Traits\GeneralFormList;
 use App\Http\Controllers\Traits\GeneralFormSubmitter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\IrbSubForm;
+// use App\Models\IrbSubForm;
 use App\Models\Faculty;
 use App\Models\Supervisor;
 // use App\Models\SupervisorAllocation;
@@ -225,7 +225,7 @@ class SupervisorChangeFormController extends Controller {
     
     private function draSubmit($user, $request, $form_id)
     {
-        $model = IrbSubForm::class;
+        $model = SupervisorChangeForm::class;
         return $this->submitForm($user, $request, $form_id, $model, 'dra', 'dordc', 'complete',
         function ($formInstance) use ($request, $user) {
             if ($request->approval) {
@@ -246,7 +246,7 @@ class SupervisorChangeFormController extends Controller {
 
     private function dordcSubmit($user, $request, $form_id)
     {
-        $model = IrbSubForm::class;
+        $model = SupervisorChangeForm::class;
         return $this->submitForm($user, $request, $form_id, $model, 'dordc', 'hod', 'dra', function ($formInstance) use ($request, $user) {
         
 
