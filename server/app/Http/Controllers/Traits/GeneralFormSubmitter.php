@@ -33,7 +33,7 @@ trait GeneralFormSubmitter
             if (!$formInstance) {
                 return response()->json(['message' => 'No form found'], 404);
             }
-            if ($formInstance->completion == 'complete') {
+            if ($formInstance->completion === 'complete') {
                 return response()->json(['message' => 'Form already completed'], 403);
             }
 
