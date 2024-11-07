@@ -176,7 +176,7 @@ class IrbSubController extends Controller
     private function externalSubmit($user, $request, $form_id)
     {
         $model = IrbSubForm::class;
-        return $this->submitForm($user, $request, $form_id, $model, 'external', 'hod', 'faculty');
+        return $this->submitForm($user, $request, $form_id, $model, 'external', 'faculty', 'hod');
     }
 
     private function hodSubmit($user, $request, $form_id)
