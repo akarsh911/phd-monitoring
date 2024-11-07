@@ -29,6 +29,7 @@ trait NotificationManager
                 $this->sendSupervisorNotification($student, $title, $body, $link, $email_req);
                 break;
             case 'doctoral':
+            case 'external':
                 $this->sendDoctoralNotification($student, $title, $body, $link, $email_req);
                     break;
             case 'phd_coordinator':

@@ -90,6 +90,7 @@ class PresentationController extends Controller{
             case 'hod':
                 return $this->handleHodForm($user, $form_id, $model);
             case 'doctoral':
+            case 'external':
                 return $this->handledoctoralForm($user, $form_id, $model);
             case 'dra':
             case 'dordc':

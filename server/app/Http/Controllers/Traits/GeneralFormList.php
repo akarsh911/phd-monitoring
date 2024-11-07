@@ -21,6 +21,7 @@ trait GeneralFormList
             case 'faculty':
                 return $this->listFacultyForms($user, $model, $filters,$override);
             case 'doctoral':
+            case 'external':
                 return $this->listDoctoralForms($user, $model, $filters,$override);
             // case 'external':
             //     return $this->listExternalForms($user, $model, $filters);
@@ -50,6 +51,7 @@ trait GeneralFormList
                 }
                 break;
             case 'doctoral':
+            case 'external':
                 if(!$user->faculty->doctoredStudents()->contains('roll_no',$student_id)){
                     return response()->json(['message' => 'You are not authorized to access this resource'], 403);
                 }
