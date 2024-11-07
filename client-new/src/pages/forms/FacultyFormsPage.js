@@ -42,7 +42,7 @@ const FacultyFormsPage = () => {
                 form_name: "IRB Submission",
             },
             {
-                form_type: 'irb-extention',
+                form_type: 'irb-extension',
                 form_name: 'Research Extension',
             },
             {
