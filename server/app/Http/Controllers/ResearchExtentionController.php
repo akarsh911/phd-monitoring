@@ -196,7 +196,7 @@ class ResearchExtentionController extends Controller
             $formInstance->status='approved';
             $formInstance->completion='completed';
             $formInstance->student->researchExtentions()->create([
-                'period_of_extension'=>$formInstance->duration,
+                'period_of_extension'=>$formInstance->period_of_extension,
                 'research_pdf'=>$formInstance->research_pdf,
                 'reason'=>$formInstance->reason,
                 'research_extentions_id'=>$formInstance->id
