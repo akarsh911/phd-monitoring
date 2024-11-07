@@ -182,7 +182,7 @@ class ResearchExtentionController extends Controller
                 'research_extentions_id'=>$formInstance->id,
                 
             ]);
-            $formInstance->addHistoryEvent('Form Approved by DORDC', $user->name());
+            $formInstance->addHistoryEntry('Form Approved by DORDC', $user->name());
         });
         else
         return $this->submitForm($user, $request, $form_id, $model, 'dordc', 'dra', 'director');
@@ -201,7 +201,7 @@ class ResearchExtentionController extends Controller
                 'reason'=>$formInstance->reason,
                 'research_extentions_id'=>$formInstance->id
             ]);
-            $formInstance->addHistoryEvent('Form Approved by Director', $user->name());
+            $formInstance->addHistoryEntry('Form Approved by Director', $user->name());
         });
     }
 
