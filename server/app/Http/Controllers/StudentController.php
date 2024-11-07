@@ -113,6 +113,10 @@ class StudentController extends Controller {
             case 'faculty':
                 $students = $loggedInUser->faculty->supervisedStudents;
                 break;
+            case 'doctoral':
+            case 'external':
+                $students = $loggedInUser->faculty->doctoredStudents;
+                break;
             case 'student':
                 $students = Student::with(['user', 'department', 'supervisors.user'])
                     ->where('user_id', $loggedInUser->id)
