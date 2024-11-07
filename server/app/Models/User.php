@@ -111,7 +111,7 @@ class User extends Authenticatable
         if($this->role->role == 'hod'){
             array_push($roles,'doctoral');
             array_push($roles,'faculty');
-            array_push($roles,'phd_coordinator');
+            array_push($roles,'hod');
         }
         if($this->role->role == 'external'){
             array_push($roles,'doctoral');
