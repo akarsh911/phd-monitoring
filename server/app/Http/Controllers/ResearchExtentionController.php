@@ -174,7 +174,6 @@ class ResearchExtentionController extends Controller
         return $this->submitForm($user, $request, $form_id, $model, 'dordc', 'dra', 'complete',
         function ($formInstance) use ($request, $user) {
             $formInstance->status='approved';
-            $formInstance->completion='completed';
             $formInstance->student->researchExtentions()->create([
                 'period_of_extension'=>$formInstance->period_of_extention,
                 'research_pdf'=>$formInstance->research_pdf,
@@ -194,7 +193,6 @@ class ResearchExtentionController extends Controller
         return $this->submitForm($user, $request, $form_id, $model, 'director', 'dordc', 'complete',
         function ($formInstance) use ($request, $user) {
             $formInstance->status='approved';
-            $formInstance->completion='completed';
             $formInstance->student->researchExtentions()->create([
                 'period_of_extension'=>$formInstance->period_of_extention,
                 'research_pdf'=>$formInstance->research_pdf,

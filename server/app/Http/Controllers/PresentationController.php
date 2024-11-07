@@ -407,8 +407,6 @@ class PresentationController extends Controller{
             'dordc',
             'complete',
             function ($formInstance) use ($request, $user) {
-                $formInstance->status = 'approved';
-                $formInstance->completion='complete';
                 $formInstance->student->current_progress=$formInstance->total_progress;
                 $formInstance->student->save();
                 $formInstance->addHistoryEntry("Presentation marked as completed by DRA", $user->name());

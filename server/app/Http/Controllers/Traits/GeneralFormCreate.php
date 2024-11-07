@@ -31,7 +31,7 @@ trait GeneralFormCreate
         $oldForms = $model::where('student_id', $data['roll_no'])->get();
 
         foreach($oldForms as $oldForm){
-            if($oldForm->completion!='completed'){
+            if($oldForm->completion!='complete'){
                 return response()->json(['message' => 'You have a pending form'], 400);
             }
         }
