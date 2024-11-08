@@ -63,7 +63,7 @@ class StudentSemesterOffFormController extends Controller
             case 'hod':
                 return $this->handleHodForm($user, $form_id, $model);
             case 'phd_coordinator':
-                return $this->coordinatorSubmit($user, $form_id, $model);
+                return $this->handleCoordinatorForm($user, $form_id, $model);
             case 'dra':
             case 'dordc':
             case 'director':
@@ -155,7 +155,6 @@ class StudentSemesterOffFormController extends Controller
     private function coordinatorSubmit($user, $request, $form_id)
     {
         $model = StudentSemesterOffForm::class;
-      
         return $this->submitForm(
             $user,
             $request,
