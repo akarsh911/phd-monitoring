@@ -138,7 +138,7 @@ const Supervisor = ({ formData }) => {
             </>
           )}
 
-          {formData.role === "faculty" && !lock && (
+          {formData.role === "faculty" && !lock && formData.form_type !== "revised" &&(
             <>
               <GridContainer
                 elements={[
