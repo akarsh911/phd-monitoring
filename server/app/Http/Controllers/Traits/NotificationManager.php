@@ -78,7 +78,8 @@ trait NotificationManager
         $doctoral=$student->doctoralCommittee;
         $role_id=Role::where('role','doctoral')->first()->id;
         foreach ($doctoral as $doctoral) {
-            $user=$doctoral->faculty->user;
+            $faculty=Faculty::where('faculty_code',$doctoral->faculty_code)->first();
+            $user=$faculty->user;
             $this->sendNotification($user,$title,$body,$link,$role_id,$email_req);
         }
     }
