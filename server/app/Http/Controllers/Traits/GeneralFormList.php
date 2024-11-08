@@ -52,7 +52,7 @@ trait GeneralFormList
                 break;
             case 'doctoral':
             case 'external':
-                if(!$user->faculty->doctoredStudents->contains('roll_no',$student_id)){
+                if($student->checkDoctoralCommittee($user->faculty->faculty_code)){
                     return response()->json(['message' => 'You are not authorized to access this resource'], 403);
                 }
                 break;
