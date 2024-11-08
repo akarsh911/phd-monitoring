@@ -32,6 +32,8 @@ class UserController extends Controller{
             case 'dordc':
             case 'director':
             case 'faculty':
+            case 'external':
+            case 'doctoral':
                 $data = $user->faculty->forms($roll_no);
                 break;
             default:

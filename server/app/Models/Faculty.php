@@ -155,8 +155,10 @@ class Faculty extends Model
         else if($this->user->current_role->role=='doctoral' || $this->user->current_role->role=='external'){
             if($roll_no){
                 $data= Forms::where('doctoral_available',true)->where('student_id',$roll_no)->get();
+                $data= Forms::where('external_available',true)->where('student_id',$roll_no)->get();
             }else{
                 $data= Forms::where('doctoral_available',true)->get();
+                $data= Forms::where('external_available',true)->get();
             }
             foreach($data as $d){
                 if($d->stage=='doctoral')
