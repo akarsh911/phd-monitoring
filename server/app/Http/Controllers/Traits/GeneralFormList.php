@@ -52,7 +52,7 @@ trait GeneralFormList
                 break;
             case 'doctoral':
             case 'external':
-                if($student->checkDoctoralCommittee($user->faculty->faculty_code)){
+                if(!$student->checkDoctoralCommittee($user->faculty->faculty_code)){
                     return response()->json(['message' => 'You are not authorized to access this resource'], 403);
                 }
                 break;
@@ -67,9 +67,7 @@ trait GeneralFormList
             $index = array_search($role, $form->steps);
             return $index !== false && $index <= $form->maximum_step;
         });
-    
         return  response()->json($filteredForms, 200); 
-
     }
 
 
