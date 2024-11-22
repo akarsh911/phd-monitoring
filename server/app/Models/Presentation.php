@@ -65,14 +65,15 @@ class Presentation extends Model
 
         $publicationsQuery = Publication::where('student_id', $this->student_id)->where('form_type', 'progress')->where('form_id', $this->id);
         $patents = Patent::where('student_id', $this->student_id)->where('form_id', $this->id)->get();
-
-
+        
         $formData = array_merge($commonJSON, [
             'doctoral_committee' => $this->student->doctoralCommittee->map(function ($committee) {
+                $faculty=Faculty::where('faculty_code',$committee->faculty_code)->first();
+                $user=User::where('id',$faculty->user_id)->first();
                 return [
-                    'name' => $committee->faculty->user->name(),
-                    'department' => $committee->faculty->department->name,
-                    'designation' => $committee->faculty->designation,
+                    'name' => $user?->name(),
+                    'department' => $faculty->department->name,
+                    'designation' => $faculty->designation,
                 ];
             }),
             'date' => $this->date,
