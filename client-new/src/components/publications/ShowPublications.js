@@ -3,6 +3,8 @@ import GridContainer from '../forms/fields/GridContainer';
 import TableComponent from '../forms/table/TableComponent';
 import { formatDate } from '../../utils/timeParse';
 import CustomButton from '../forms/fields/CustomButton';
+import AddPublication from './AddPublication';
+import CustomModal from '../forms/modal/CustomModal';
 
 const ShowPublications = ({
     formData,
@@ -16,7 +18,7 @@ const ShowPublications = ({
     onEdit
 }) => {
    const [selectedRows, setSelectedRows] = useState({});
-
+   const [totalPublications, setTotalPublications] = useState(0);
    const handleSelect = (publicationId, publicationType) => {
        setSelectedRows(prev => ({
            ...prev,
@@ -37,7 +39,23 @@ const ShowPublications = ({
        if (onSelect) onSelect(selectedRows);
    }, [selectedRows]);
 
-
+   const [open, setOpen] = useState(false);
+   const openModal = () => {
+       setOpen(true);
+   }
+   const closeModal = () => {
+       setOpen(false);
+   }
+   useEffect(() => {
+        let c=0;
+        c+=formData?.sci?.length;
+        c+=formData?.non_sci?.length;
+        c+=formData?.international?.length;
+        c+=formData?.national?.length;
+        c+=formData?.book?.length;
+        c+=formData?.patents?.length;
+        setTotalPublications(c);
+   });
    const renderActions = (publicationId, publicationType) => (
        <>
            {enableSelect && (
@@ -178,10 +196,15 @@ const ShowPublications = ({
                     )}
                      {enableSubmit && (
                         <GridContainer elements={[
-                           <CustomButton text="Submit" onClick={onSubmit} />
-                        ]} space={3}></GridContainer>
+                            <>{totalPublications>0 && (<CustomButton text="Submit" onClick={onSubmit} />)}</>,
+                           <></>,
+                           <CustomButton text="Add Publications" onClick={openModal} />
+                        ]}></GridContainer>
                      )}
-
+                <CustomModal isOpen={open} onClose={closeModal} title={'Add Publication'}
+                    minHeight='200px' maxHeight='600px' minWidth='650px' maxWidth='700px' closeOnOutsideClick={false}>
+                 <AddPublication close={closeModal}/>
+                 </CustomModal>
                 </>
             )}
         </>

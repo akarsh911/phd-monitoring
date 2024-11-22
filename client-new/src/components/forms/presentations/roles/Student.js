@@ -376,6 +376,7 @@ const Student = ({ formData }) => {
             maxWidth="700px"
             closeOnOutsideClick={false}
           >
+           
             <ShowPublications
               formData={formData.student_publications}
               enableSelect={true}
