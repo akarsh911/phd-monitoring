@@ -23,9 +23,6 @@ trait GeneralFormList
             case 'doctoral':
             case 'external':
                 return $this->listDoctoralForms($user, $model, $filters,$override);
-            // case 'external':
-            //     return $this->listExternalForms($user, $model, $filters);
-            //TODO: Add external forms
             default:
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }

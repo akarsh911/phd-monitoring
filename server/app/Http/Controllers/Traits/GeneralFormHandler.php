@@ -82,6 +82,7 @@ trait GeneralFormHandler
             $formInstance = $modelClass::find($form_id);
             if ($formInstance) {
                 $index=array_search($user->current_role->role,$formInstance->steps);
+
                 if($index!==false && $index<=$formInstance->maximum_step)
                 return response()->json($formInstance->fullForm($user));
                 else
@@ -124,6 +125,8 @@ trait GeneralFormHandler
                 $student = $formInstance->student;
                 if ($student->checkDoctoralCommittee($user->faculty->faculty_code)) {
                     $index=array_search('doctoral',$formInstance->steps);
+                    if(!$index)
+                    $index=array_search('external',$formInstance->steps);
                     if($index!==false && $index<=$formInstance->maximum_step)
                     return response()->json($formInstance->fullForm($user));
                     else
