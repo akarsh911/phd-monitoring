@@ -31,7 +31,7 @@ const NotificationBox = () => {
   }, []);
 
   const onNotificationClick = (notification) => {
-    const role = localStorage.getItem("roleName");
+    const role = localStorage.getItem("userRole");
     // Open notification.link in a new tab
    
     if (notification && notification.link) {
