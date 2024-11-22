@@ -45,6 +45,7 @@ const ShowPublications = ({
    }
    const closeModal = () => {
        setOpen(false);
+       window.location.reload();
    }
    useEffect(() => {
         let c=0;
