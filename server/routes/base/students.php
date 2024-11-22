@@ -25,10 +25,6 @@ Route::prefix('{id}')->group(function () {
             require base_path('routes/base/forms.php');
         });
     });
-    
-    
-    
-
-    
+      
     
 });

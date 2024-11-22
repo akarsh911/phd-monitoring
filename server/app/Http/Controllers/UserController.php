@@ -22,6 +22,8 @@ class UserController extends Controller{
         $user = Auth::user();
         $role = $user->current_role;
         $data = null;
+        echo $roll_no;
+        echo $role->role;
         switch ($role->role) {
             case 'student':
                 $data = $user->student->forms();
