@@ -321,6 +321,7 @@ trait GeneralFormSubmitter
     private function getFormType($model)
     {
         $model = (new \ReflectionClass($model))->getShortName();
+        
         return match ($model) {
             'SupervisorAllocation' => 'supervisor-allocation',
             'SupervisorChangeForm' => 'supervisor-change',
@@ -333,6 +334,7 @@ trait GeneralFormSubmitter
             'ThesisExtentionForm' => 'thesis-extension',
             'ListOfExaminers' => 'list-of-examiners',
             'SynopsisSubmission' => 'synopsis-submission',
+            'Presentation' => 'presentation',
         };
     }
 

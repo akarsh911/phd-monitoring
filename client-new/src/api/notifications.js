@@ -6,7 +6,9 @@ export const APIlistUnreadNotifications = async (setNotifications) => {
     customFetch(baseURL+"/notifications/unread",'GET',null,false,false)
     .then((result)=>{
         if(result.success){
-            setNotifications(result.response);
+            let notif=result.response;
+
+            setNotifications(notif.reverse());
         }
     })
     .catch((error)=>{})
