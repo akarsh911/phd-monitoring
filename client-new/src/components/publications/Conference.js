@@ -4,7 +4,7 @@ import InputField from '../forms/fields/InputField';
 import DropdownField from '../forms/fields/DropdownField';
 import FileUploadField from '../forms/fields/FileUploadField';
 import CustomButton from '../forms/fields/CustomButton';
-import InputSuggestions from '../forms/fields/InoutSuggestions';
+import InputSuggestions from '../forms/fields/InputSuggestions';
 import { baseURL } from '../../api/urls';
 
 const Conference = ({callback,updateValue}) => {

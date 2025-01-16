@@ -138,17 +138,16 @@ class Faculty extends Model
             if($super)
             foreach($super as $s){
                 $forms= $s->student->forms();
-                if($forms)
-                foreach($forms as $f){
-                    if($f->stage=='supervisor'){
-                        $f['action_required']=true;
+               
+                    if($s->stage=='supervisor'){
+                        $s['action_required']=true;
                     }
                     else
-                    $d['action_required']=false;
-                    if($f->supervisor_available==true){
-                        $data[]=$f;
+                    $s['action_required']=false;
+                    if($s->supervisor_available==true){
+                        $data[]=$s;
                     }
-                }
+                
             }
           
         }

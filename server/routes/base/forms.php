@@ -44,3 +44,7 @@ Route::prefix('semester-off')->group(function () {
     require base_path('routes/base/semester_off.php');
 });
 
+Route::prefix('list-of-examiners')->group(function () {
+    require base_path('routes/base/list-of-examiners.php');
+});
+

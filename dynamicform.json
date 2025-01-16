@@ -1,0 +1,58 @@
+{
+    "form_name": "Constitute of IRB",
+    "form_slug":"constitute-irb",
+    "form_id":"",
+    "roll_number":"",
+    "prev_forms":["supervisor_allocation"],
+    "flow": ["student","supervisor","hod"],
+    "current_level":0,
+    "maximum_level":2,
+    "fields": {
+        "student":[
+            {
+                "title":"Name",
+                "default_value":"Akarsh",
+                "current_value":"Akarsh",
+                "hint":"Fill Name",
+                "field_type":"Text",
+                "is_editable":false,
+                "autocomplete":false,
+                "dropdown":false,
+                "dropdown_options":[{},{}],
+                "grid_space":1
+            },
+            {
+                "title":"Roll Number",
+                "default_value":"102203459",
+                "current_value":"Akarsh",
+                "hint":"Fill Roll Number",
+                "field_type":"Date",
+                "is_editable":false,
+                "autocomplete":"False",
+                "dropdown":"False",
+                "dropdown_options":[{},{}],
+                "grid_space":1
+            },
+            {
+                "title":"Supervisor Prefrences",
+                "default_value":[],
+                "current_value":[],
+                "hint":"Fill Name",
+                "field_type":"Multiple Autocomplete",
+                "is_editable":"False",
+                "minimum_count":6,
+                "maximum_count":6,
+                "unique":true,
+                "autocomplete":"False",
+                "dropdown":"False",
+                "dropdown_options":[],
+                "individual_grid_space":1,
+                "grid_space":3
+            }
+        ],
+        "phd_coordinator":[
+            
+        ]
+    },
+    "history":[]
+ }

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { formatDate } from "../../../../utils/timeParse";
 import GridContainer from "../../fields/GridContainer";
 import InputField from "../../fields/InputField";
-import InputSuggestion from "../../fields/InoutSuggestions";
+import InputSuggestion from "../../fields/InputSuggestions";
 import DropdownField from "../../fields/DropdownField";
 import CustomButton from "../../fields/CustomButton";
 import { submitForm } from "../../../../api/form";

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import InputSuggestions from "../../fields/InoutSuggestions";
+import InputSuggestions from "../../fields/InputSuggestions";
 import { baseURL } from "../../../../api/urls";
 import GridContainer from "../../fields/GridContainer";
 import InputField from "../../fields/InputField";

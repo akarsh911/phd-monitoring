@@ -7,14 +7,20 @@ import { useLoading } from "../../../context/LoadingContext";
 import CustomButton from '../fields/CustomButton';
 import GridContainer from '../fields/GridContainer';
 
-const CreateNewBar = () => {
+const CreateNewBar = ({rollNumber=null}) => {
     const { setLoading } = useLoading();
     const location = useLocation();
    
     const handleClick = () => {
         setLoading(true);
         const url = baseURL + location.pathname ;
-        customFetch(url, 'POST')
+        let body = {};
+        if(rollNumber!==null){
+            body = {
+                roll_no: rollNumber
+            }
+        }
+        customFetch(url, 'POST',body)
             .then((data) => {
                 if (data && data.success) {
                     window.location.reload();

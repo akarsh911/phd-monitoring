@@ -15,6 +15,7 @@ import SemesterOff from "../../components/forms/semesterOff/SemesterOff";
 import StatusChange from "../../components/forms/statusChange/StatusChange";
 import IrbExtention from "../../components/forms/irbExtention/IrbExtention";
 import SupervisorChange from "../../components/forms/supervisorChange/SupervisorChange";
+import ListOfExaminers from "../../components/forms/listOfExaminers/ListOfExaminers";
 const MainFormPage = () => {
   const [formData, setFormData] = useState({});
   const { setLoading } = useLoading();
@@ -67,6 +68,8 @@ const MainFormPage = () => {
                     return <IrbExtention formData={formData}/>
                   case "supervisor-change":
                     return <SupervisorChange formData={formData}/>
+                  case "list-of-examiners":
+                    return <ListOfExaminers formData={formData}/>
                   default:
                     return <p>Are You Sure this is a FORM?</p>;
                 }
