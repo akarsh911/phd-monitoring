@@ -8,6 +8,7 @@ import { baseURL } from "../../api/urls";
 import { customFetch } from "../../api/base";
 import GridContainer from "../forms/fields/GridContainer";
 import TableComponent from "../forms/table/TableComponent";
+import CustomButton from "../forms/fields/CustomButton";
 
 function ProfileCard({ dataIP = null, link=false }) {
     const { state: locationState } = useLocation(); 
@@ -107,6 +108,7 @@ function ProfileCard({ dataIP = null, link=false }) {
                             trailColor: "#ddd"
                         })}
                     />
+                    Progress
                 </div>
             </div>
 
@@ -128,8 +130,26 @@ function ProfileCard({ dataIP = null, link=false }) {
                 elements={[
                     <TableComponent
                         data={state.doctoral}
-                        keys={['name','email','phone','designation']}
-                        titles={['Name','Email','Phone','Designation']}
+                        keys={['name','email','phone','designation','actions']}
+                        titles={['Name','Email','Phone','Designation','Actions']}
+                        components={
+                            [
+                                {
+                                    key: "actions",
+                                    component: ({ row }) => (
+                                     <GridContainer 
+                                     elements={[
+                                        <CustomButton text="Edit"/>,
+                                        <CustomButton text="Delete"/>
+                                     ]}
+                                     space={2}
+                                    //  ratio={[2,1]}
+                                     />
+
+                                    ),
+                                  },
+                            ]
+                        }
                     />,
                    
                 ]}

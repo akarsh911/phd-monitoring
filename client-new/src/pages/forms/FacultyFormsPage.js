@@ -55,13 +55,18 @@ const FacultyFormsPage = () => {
                 form_name: "List of Examiners",
             },
        
+            
+            {
+                form_type: 'thesis-extention',
+                form_name: 'Thesis Extension',
+            },
             {
                 form_type: 'thesis-submission',
                 form_name: 'Thesis Submission',
             },
             {
-                form_type: 'thesis-extention',
-                form_name: 'Thesis Extension',
+                form_type: 'revise-title',
+                form_name: 'Revised Title or Objectives',
             },
         ]);
         
