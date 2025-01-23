@@ -49,9 +49,10 @@ class Faculty extends Model
      * Get the user associated with the faculty.
      */
     public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+{
+    return $this->belongsTo(User::class, 'user_id');
+}
+
 
     /**
      * Get the department associated with the faculty.

@@ -6,6 +6,8 @@ import "./ProfileCard.css";
 import { formatDate } from "../../utils/timeParse";
 import { baseURL } from "../../api/urls";
 import { customFetch } from "../../api/base";
+import GridContainer from "../forms/fields/GridContainer";
+import TableComponent from "../forms/table/TableComponent";
 
 function ProfileCard({ dataIP = null, link=false }) {
     const { state: locationState } = useLocation(); 
@@ -69,7 +71,8 @@ function ProfileCard({ dataIP = null, link=false }) {
         date_of_registration,
         date_of_irb,
         date_of_synopsis,
-        cgpa
+        cgpa,
+        doctoral
     } = state;
 
     const data = [
@@ -120,6 +123,19 @@ function ProfileCard({ dataIP = null, link=false }) {
                 <button className="profile-button" onClick={handleForms}>View Forms</button>
                 <button className="profile-button" onClick={handleProgress}>View Presentations</button>
             </div>
+
+            <GridContainer
+                elements={[
+                    <TableComponent
+                        data={state.doctoral}
+                        keys={['name','email','phone','designation']}
+                        titles={['Name','Email','Phone','Designation']}
+                    />,
+                   
+                ]}
+                label="Doctoral Committe"
+                space={2}
+            />
         </div>
     );
 }

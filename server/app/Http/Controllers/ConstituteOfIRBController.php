@@ -45,6 +45,7 @@ class ConstituteOfIRBController extends Controller
             'student',
             'faculty',
             'hod',
+            'dra',
             'dordc',
             'complete'
         ];
@@ -69,6 +70,7 @@ class ConstituteOfIRBController extends Controller
             'student',
             'faculty',
             'hod',
+            'dra',
             'dordc'
         ];
         switch ($role->role) {
@@ -98,6 +100,8 @@ class ConstituteOfIRBController extends Controller
                 return $this->supervisorSubmit($user, $request, $form_id);
             case 'hod':
                 return $this->hodSubmit($user, $request, $form_id);
+            case 'dra':
+                return $this->draSubmit($user, $request, $form_id);
             case 'dordc':
                 return $this->dordcSubmit($user, $request, $form_id);
             default:
@@ -236,7 +240,7 @@ class ConstituteOfIRBController extends Controller
             ConstituteOfIRB::class, 
             'hod', 
             'faculty', 
-            'dordc', 
+            'dra', 
             function ($formInstance, $user) use ($request) {
                 $request->validate([
                     'chairman_experts' => 'array|required',
@@ -279,7 +283,18 @@ class ConstituteOfIRBController extends Controller
     }
     
     
-
+    private function draSubmit($user, Request $request, $form_id){
+        return $this->submitForm(
+            $user, 
+            $request, 
+            $form_id, 
+            ConstituteOfIRB::class, 
+            'dra', 
+            'hod', 
+            'dordc',   function ($formInstance, $user) use ($request) {}
+        );
+    }
+    
     private function dordcSubmit($user, Request $request, $form_id)
     {
         return $this->submitForm(

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\BroadAreaSpecialization;
 use App\Models\Department;
 use App\Models\ExaminersDetail;
+use App\Models\ExaminersRecommendation;
 use App\Models\Faculty;
 use App\Models\OutsideExpert;
 use Illuminate\Http\Request;    
@@ -54,10 +55,12 @@ class SuggestionController extends Controller {
                 'text' => 'required|string',
             ]
             );
-            if (!$request->has('text') || strlen($request->query('text')) < 3) {
+            if (!$request->has('text')) {
                 return response()->json([], 200);
             }
-            $examiners = ExaminersDetail::where('name', 'LIKE', '%' . $request->text . '%')
+            $examiners = ExaminersRecommendation::where('name', 'LIKE', '%' . $request->text . '%')
+            ->orWhere('email', 'LIKE', '%' . $request->text . '%')
+            ->orWhere('phone', 'LIKE', '%' . $request->text . '%')
             ->get()
             ->makeHidden('added_by');
         

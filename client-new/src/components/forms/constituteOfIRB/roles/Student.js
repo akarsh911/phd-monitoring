@@ -17,14 +17,32 @@ const Student = ({ formData }) => {
   const {setLoading}=useLoading();
 
   useEffect(() => {
+    let objectives =
+   [];
+
+  let title =
+    formData.form_type ="";
     setLock(formData.locks?.student);
     setBody({
         cgpa: formData.cgpa,
-        gender: formData.gender
+        gender: formData.gender,
+        title: title,
+        draft_objectives: [""],
+        objectives: objectives,
     })
     setIsLoaded(true);
   }, [formData]);
-
+  const addObjective = () => {
+    setBody((prevBody) => ({
+      ...prevBody,
+      objectives: [...prevBody.objectives, ""],
+    }));
+   
+      setBody((prevBody) => ({
+        ...prevBody,
+        draft_objectives: [...prevBody.draft_objectives, ""],
+      }));
+  };
   const onUpdateCGPA = (value) => {
     body.cgpa = value;
   };
@@ -67,7 +85,19 @@ const Student = ({ formData }) => {
              />
             ]}
           />
-
+            <GridContainer
+            elements={[
+              <InputField
+                initialValue={formData.phd_title}
+                label={"Title of Phd Thesis"}
+                isLocked={lock || formData.form_type === "revised"}
+                onChange={(value) => {
+                  body.title = value;
+                }}
+              />,
+            ]}
+            space={2}
+          />
           <GridContainer
             elements={[
               <InputField
@@ -109,7 +139,35 @@ const Student = ({ formData }) => {
                 />
               ))}
           />
+           <GridContainer
+            elements={[
+              <p>Objectives</p>,
+              <></>,
+              <>
+                {!lock && (
+                  <CustomButton text={"+ Add"} onClick={addObjective} />
+                )}
+              </>,
+            ]}
+            space={2}
+          />
 
+          <GridContainer
+            elements={body.draft_objectives.map((objective, index) => {
+              return (
+                <InputField
+                  initialValue={objective}
+                  isLocked={lock}
+                  onChange={(value) => {
+                    body.objectives[index] = value;
+                    body.draft_objectives[index] = value;
+                  }}
+                  showLabel={false}
+                />
+              );
+            })}
+            space={2}
+          />
           {
             formData.role === "student" && !lock && (
                 <>

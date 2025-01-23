@@ -60,8 +60,10 @@ const Student = ({ formData }) => {
                   keys={[ "name", "department", "designation"]}
                   titles={[ "Name", "Department", "Designation"]}
                   />,
-              ]} space={3} />
-        
+              ]} space={2}
+              label="Supervisors"
+              />
+          
         </>
       )}
     </div>

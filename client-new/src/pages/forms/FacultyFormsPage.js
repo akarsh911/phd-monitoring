@@ -22,37 +22,39 @@ const FacultyFormsPage = () => {
                 form_name: "Supervisor Allocation",
             },
             {
-                form_type: "irb-constitution",
-                form_name: "IRB Constitution",
-            },
-            {
                 form_type: "status-change",
                 form_name: "Status Change",
+            },
+            {
+                form_type: "irb-constitution",
+                form_name: "IRB Constitution",
             },
             {
                 form_type: "semester-off",
                 form_name: "Semester Off",
             },
             {
-                form_type: "list-of-examiners",
-                form_name: "List of Examiners",
-            },
-            {
                 form_type: "irb-submission",
-                form_name: "IRB Submission",
+                form_name: "Revised IRB Submission",
             },
             {
                 form_type: 'irb-extension',
-                form_name: 'Research Extension',
+                form_name: 'IRB Extension',
             },
             {
                 form_type: "synopsis-submission",
                 form_name: "Synopsis Submission",
             },
+               
             {
                 form_type: "supervisor-change",
                 form_name: "Supervisor Change",
             },
+            {
+                form_type: "list-of-examiners",
+                form_name: "List of Examiners",
+            },
+       
             {
                 form_type: 'thesis-submission',
                 form_name: 'Thesis Submission',

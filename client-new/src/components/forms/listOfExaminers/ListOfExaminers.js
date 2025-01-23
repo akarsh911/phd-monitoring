@@ -3,6 +3,7 @@ import Student from "./roles/Student";
 import FormTitleBar from "../formTitleBar/FormTitleBar";
 import Supervisor from "./roles/Supervisor";
 import Recommendation from "../layouts/Recommendation";
+import Dordc from "./roles/Dordc";
 
 const ListOfExaminers = ({formData}) => {
  
@@ -19,6 +20,7 @@ const ListOfExaminers = ({formData}) => {
           role="hod"
           allowRejection={false}
         ></Recommendation>
+        <Dordc formData={formData}></Dordc>
 
         <Recommendation
           formData={formData}

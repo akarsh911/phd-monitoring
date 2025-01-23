@@ -14,11 +14,27 @@
     position: relative;
     width: 100%;
 }
+.radio-group-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
+.radio-label {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    cursor: pointer;
+}
 
+.radio-input {
+    margin-right: 8px;
+    cursor: pointer;
+}
 
-
-
+.file-link{
+    font-size: 22px;
+}
 
 .suggestions-list {
     position: absolute;

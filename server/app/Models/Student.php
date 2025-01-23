@@ -97,9 +97,10 @@ class Student extends Model
 
     public function doctoralCommittee()
     {
-        return $this->belongsToMany(Faculty::class, 'doctoral_commitee', 'student_id', 'faculty_id', 'roll_no', 'faculty_code');
+        return $this->belongsToMany(Faculty::class, 'doctoral_commitee', 'student_id', 'faculty_id', 'roll_no', 'faculty_code')
+                    ->with('user'); // Include user details
     }
-
+    
     public function checkDoctoralCommittee($facultyId)
     {
         return $this->doctoralCommittee->contains('faculty_code', $facultyId);

@@ -20,17 +20,17 @@ const TableComponent = ({ data, keys, titles, components = [], rowStyle }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data?.map((item, index) => (
-                        <tr key={index} style={rowStyle ? rowStyle(item) : {}}>
+                    {data?.map((row, index) => (
+                        <tr key={index} style={rowStyle ? rowStyle(row) : {}}>
                             <td>{index + 1}</td> {/* S.No */}
                             {keys?.map((key, keyIndex) => {
-                                const value = item[key];
+                                const value = row[key];
                                 const CustomComponent = componentMap[key];
 
                                 return (
                                     <td key={keyIndex}>
                                         {CustomComponent ? (
-                                            <CustomComponent data={value} />
+                                            <CustomComponent row={row} data={value} /> // Pass the row and data
                                         ) : (
                                             typeof value === 'string' && value.startsWith('http') ? (
                                                 <a href={value} target="_blank" rel="noopener noreferrer">link</a>

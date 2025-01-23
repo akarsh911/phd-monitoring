@@ -147,6 +147,15 @@ class StudentController extends Controller {
                     'date_of_registration' => $student->date_of_registration,
                     'date_of_irb' => $student->date_of_irb,
                     'date_of_synopsis' => $student->date_of_synopsis,
+                    'doctoral'=>$student->doctoralCommittee->map(function ($faculty) {
+                        return [
+                            'faculty_code' => $faculty->faculty_code,
+                            'designation' => $faculty->designation,
+                            'name' => $faculty->user->name(),
+                            'email' => $faculty->user->email,
+                            'phone' => $faculty->user->phone,
+                        ];
+                    })
                 ];
         }
     

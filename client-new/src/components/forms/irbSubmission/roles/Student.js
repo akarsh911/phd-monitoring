@@ -128,7 +128,7 @@ const Student = ({ formData }) => {
             elements={[
               <InputField
                 initialValue={formData.phd_title}
-                label={"Title of Phd Thesis"}
+                label={"Revised Title of Phd Thesis"}
                 isLocked={lock || formData.form_type === "revised"}
                 onChange={(value) => {
                   body.title = value;
@@ -161,6 +161,7 @@ const Student = ({ formData }) => {
                 )}
               </>,
             ]}
+            space={2}
           />
 
           <GridContainer
@@ -177,6 +178,7 @@ const Student = ({ formData }) => {
                 />
               );
             })}
+            space={2}
           />
           <GridContainer
             elements={[

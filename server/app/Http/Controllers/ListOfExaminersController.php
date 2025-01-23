@@ -55,6 +55,7 @@ class ListOfExaminersController extends Controller
             'roll_no' => $request->roll_no,
             'steps' => $steps,
             'role' => 'supervisor',
+            'supervisor_lock'=>0,
             'name' => $user->first_name . ' ' . $user->last_name
         ];
         return $this->createForms(ListOfExaminers::class, $data);
@@ -114,9 +115,6 @@ class ListOfExaminersController extends Controller
                 'national' => 'array|required',
                 'international' => 'array|required',
             ]);
-
-            $national = $request->national;
-            $international = $request->international;
 
             $this->processExaminers($request->national, 'national', $formInstance, $user);
 
@@ -212,7 +210,18 @@ class ListOfExaminersController extends Controller
                 }
                 if($request->approval)
                 if ($examinersNationalCount < 4 || $examinersInternationalCount < 4) {
-                    throw new \Exception("Exactly 4 national and 4 international examiners are required");
+                    $formInstance->supervisor_lock = false;
+                    $index = array_search('faculty', $formInstance->steps);
+                    $formInstance->update([
+                        'stage' => 'supervisor',
+                        'supervisor' . '_approval' => false,
+                        'supervisor' . '_comments' => null,
+                        'status' => 'pending',
+                        'current_step' => $index,
+                        'supervisor_lock'=>false,
+                        'maximum_step' => $index > $formInstance->maximum_step ? $index : $formInstance->maximum_step,
+                    ]);
+                    throw new \Exception("Form Moved to Supervisor");
                 }
             }
         );
@@ -232,24 +241,24 @@ class ListOfExaminersController extends Controller
         }
     
         // Get the last form submitted by the faculty
-        $lastForm = ListOfExaminers::where('faculty_id', $user->faculty->faculty_code)
-            ->where('id', '<', $formInstance->id) // Assuming `id` represents the chronological order of forms
-            ->latest('id')
-            ->first();
+        // $lastForm = ListOfExaminers::where('faculty_id', $user->faculty->faculty_code)
+        //     ->where('id', '<', $formInstance->id) // Assuming `id` represents the chronological order of forms
+        //     ->latest('id')
+        //     ->first();
     
-        if ($lastForm) {
-            // Get the examiners of the last form
-            $lastFormExaminers = ExaminersRecommendation::where('form_id', $lastForm->id)
-                ->where('type', $type)
-                ->pluck('email')
-                ->toArray();
+        // if ($lastForm) {
+        //     // Get the examiners of the last form
+        //     $lastFormExaminers = ExaminersRecommendation::where('form_id', $lastForm->id)
+        //         ->where('type', $type)
+        //         ->pluck('email')
+        //         ->toArray();
     
-            // Check for common examiners
-            $commonExaminers = array_intersect($emails, $lastFormExaminers);
-            if (count($commonExaminers) > 2) {
-                throw new \Exception("The $type list cannot have more than 2 examiners in common with the last submitted form");
-            }
-        }
+        //     // Check for common examiners
+        //     $commonExaminers = array_intersect($emails, $lastFormExaminers);
+        //     if (count($commonExaminers) > 2) {
+        //         throw new \Exception("The $type list cannot have more than 2 examiners in common with the last submitted form");
+        //     }
+        // }
     
         $count = 0;
         foreach ($examiners as $examiner) {

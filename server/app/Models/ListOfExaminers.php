@@ -48,7 +48,7 @@ class ListOfExaminers extends Model
         return array_merge($commonJSON, [
             'status' => $this->status,
             'history' => $this->history,
-            'naional' => $this->nationalExaminersRecommendations->toArray(),
+            'national' => $this->nationalExaminersRecommendations->toArray(),
             'international' => $this->internationalExaminersRecommendations->toArray(),
         ]);
     }
