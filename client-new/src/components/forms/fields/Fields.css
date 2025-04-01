@@ -66,6 +66,14 @@
     padding: 10px;
 }
 
+.grid-label{
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 15px;
+    text-align: left;
+    display: flex; 
+    align-items: center; 
+}
 
 .grid-container {
     display: grid;

@@ -85,13 +85,10 @@ const PhDCoordinator = ({ formData }) => {
             </>
           ) : (
             <>
-                 <GridContainer
-                elements={[
-                  <p>Supervisors Allocated By PhDCoordinator</p>,
-                ]}
-                space={2}
-              />
-              <GridContainer elements={[
+               
+              <GridContainer 
+              label={<p>Supervisors Allocated By PhDCoordinator</p>}
+              elements={[
                 <TableComponent 
                   data={formData.supervisors}
                   keys={[ "name", "department", "supervised_campus"]}

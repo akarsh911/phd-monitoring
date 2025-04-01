@@ -20,7 +20,7 @@ const Supervisor = ({ formData }) => {
   const location = useLocation();
   const { setLoading } = useLoading();
   const apiURL = baseURL + "/suggestions/faculty";
-  const apiURL2 = baseURL + "/suggestions/outside-expert";
+  
   useEffect(() => {
     setLock(formData.locks?.supervisor);
     let cognates = formData.nominee_cognates.map((item) => {
@@ -30,20 +30,11 @@ const Supervisor = ({ formData }) => {
       cognates = [-1, -1, -1];
     }
 
-    let outside_experts = formData.outside_experts.map((item) => {
-      return item.id;
-    });
-    if (
-      !outside_experts ||
-      outside_experts.length !== 3 ||
-      outside_experts[0] === null
-    ) {
-      outside_experts = [-1, -1, -1];
-    }
+  
     setBody({
       approval: true,
       nominee_cognates: cognates,
-      outside_experts: outside_experts,
+     
     });
     setIsLoaded(true);
   }, [formData]);
@@ -105,60 +96,7 @@ const Supervisor = ({ formData }) => {
             </>
           )}
 
-          <p>List of 3 outside experts proposed by the Supervisor</p>
-          {greater && lock && formData.outside_experts.length === 3 ? (
-            <>
-              <GridContainer
-                elements={[
-                  <TableComponent
-                    data={formData.outside_experts}
-                    keys={["name", "institution", "department", "designation"]}
-                    titles={[
-                      "Name",
-                      "Institution",
-                      "Department",
-                      "Designation",
-                    ]}
-                  />,
-                ]}
-                space={3}
-              />
-            </>
-          ) : (
-            <>
-              <GridContainer
-                elements={[
-                  <InputSuggestion
-                    apiUrl={apiURL2}
-                    showLabel={false}
-                    initialValue={formData.outside_experts[0]?.name}
-                    onSelect={(value) => {
-                      body.outside_experts[0] = value.id;
-                    }}
-                    lock={lock}
-                  />,
-                  <InputSuggestion
-                    apiUrl={apiURL2}
-                    showLabel={false}
-                    initialValue={formData.outside_experts[1]?.name}
-                    onSelect={(value) => {
-                      body.outside_experts[1] = value.id;
-                    }}
-                    lock={lock}
-                  />,
-                  <InputSuggestion
-                    apiUrl={apiURL2}
-                    showLabel={false}
-                    initialValue={formData.outside_experts[2]?.name}
-                    onSelect={(value) => {
-                      body.outside_experts[2] = value.id;
-                    }}
-                    lock={lock}
-                  />,
-                ]}
-              />
-            </>
-          )}
+  
           {formData.role === "faculty" && !lock && (
             <>
               <GridContainer

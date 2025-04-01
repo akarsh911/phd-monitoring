@@ -86,9 +86,10 @@ const Student = ({ formData }) => {
             ]}
           />
 
-          <GridContainer elements={[<p>Select 3 Broad Areas of Research</p>]} />
+        
 
           <GridContainer
+           label={[<p>Select 3 Broad Areas of Research</p>]}
             elements={[
               <InputSuggestions
                 initialValue={formData.broad_area_of_research[0]}
@@ -128,12 +129,10 @@ const Student = ({ formData }) => {
       )}
       {(formData.stage === "student" && !lock) ? (
         <>
-          <GridContainer
-            elements={[<p>Select 6 Tentative Name of Supervisor (in order)</p>]}
-            space={2}
-          />
+         
 
           <GridContainer
+            label={[<p>Select 6 Tentative Name of Supervisor (in order)</p>]}
             elements={[
               <InputSuggestions
                 initialValue={formData.prefrences[0]?.name}
@@ -185,6 +184,7 @@ const Student = ({ formData }) => {
             ]}
           />
           <GridContainer
+
             elements={[
               <CustomButton
                 text="Submit"
@@ -197,13 +197,14 @@ const Student = ({ formData }) => {
         </>
       ) : (
         <>
-          <GridContainer elements={[<p>Student Prefrences</p>]} space={2} />
+      
           <GridContainer
+          label={[<p>Student Prefrences</p>]}
             elements={[
               <TableComponent
                 data={formData.prefrences}
-                keys={["name", "department"]}
-                titles={["Supervisor Name", "Department"]}
+                keys={["name","email", "department"]}
+                titles={["Supervisor Name","Email", "Department"]}
               />,
             ]}
             space={3}

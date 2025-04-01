@@ -155,8 +155,6 @@ class ConstituteOfIRBController extends Controller
             $request->validate([
                 'nominee_cognates' => 'array|required',
                 'nominee_cognates.*' => 'integer|required',
-                'outside_experts' => 'array|required',
-                'outside_experts.*' => 'integer|required',
             ]);
 
             $nomineeCognates = $request->nominee_cognates;
@@ -203,30 +201,7 @@ class ConstituteOfIRBController extends Controller
                 ]);
             }
 
-            $uniqueOutsideExperts = array_unique($request->outside_experts);
-            if (count($uniqueOutsideExperts) != 3) {
-                throw new \Exception('Outside experts must be unique and exactly 3');
-            }
-
-            $oldOutsideExperts=IrbOutsideExpert::where('irb_form_id',$formInstance->id)->get();
-            if(count($oldOutsideExperts) != 0){
-                foreach($oldOutsideExperts as $oldOutsideExpert){
-                    $oldOutsideExpert->delete();
-                }
-                $formInstance->addHistoryEntry("Supervisor changed outside experts", $user->name());
-            }
-
-            foreach ($request->outside_experts as $outsideExpert) {
-                $expert=OutsideExpert::find($outsideExpert);
-                if(!$expert){
-                    throw new \Exception('Invalid outside expert');
-                }
-                IrbOutsideExpert::create([
-                    'irb_form_id' => $formInstance->id,
-                    'expert_id' => $outsideExpert,
-                    'hod_id' => $user->id,
-                ]);
-            } 
+          
         });
     }
     
@@ -245,6 +220,8 @@ class ConstituteOfIRBController extends Controller
                 $request->validate([
                     'chairman_experts' => 'array|required',
                     'chairman_experts.*' => 'integer|required',
+                    'outside_experts' => 'array|required',
+                    'outside_experts.*' => 'integer|required',
                   ]);
 
                 if(!$request->chairman_experts){
@@ -277,7 +254,30 @@ class ConstituteOfIRBController extends Controller
                     }
                 }
                 $formInstance->addHistoryEntry("HOD added cognate experts", $user->name());
-             
+                $uniqueOutsideExperts = array_unique($request->outside_experts);
+                if (count($uniqueOutsideExperts) != 3) {
+                    throw new \Exception('Outside experts must be unique and exactly 3');
+                }
+    
+                $oldOutsideExperts=IrbOutsideExpert::where('irb_form_id',$formInstance->id)->get();
+                if(count($oldOutsideExperts) != 0){
+                    foreach($oldOutsideExperts as $oldOutsideExpert){
+                        $oldOutsideExpert->delete();
+                    }
+                    $formInstance->addHistoryEntry("Supervisor changed outside experts", $user->name());
+                }
+    
+                foreach ($request->outside_experts as $outsideExpert) {
+                    $expert=OutsideExpert::find($outsideExpert);
+                    if(!$expert){
+                        throw new \Exception('Invalid outside expert');
+                    }
+                    IrbOutsideExpert::create([
+                        'irb_form_id' => $formInstance->id,
+                        'expert_id' => $outsideExpert,
+                        'hod_id' => $user->id,
+                    ]);
+                } 
             }
         );
     }

@@ -49,6 +49,7 @@ class SupervisorAllocation extends Model
                         'designation' => $faculty->designation,
                         'department' => $faculty->department->name,
                         'faculty_code' => $faculty->faculty_code,
+                        'email' => $faculty->user->email,
                     ];
                 }),                
                 'supervisors' => collect($this->supervisors)->map(function ($supervisor) {

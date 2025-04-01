@@ -1,9 +1,18 @@
 <?php
 namespace App\Http\Controllers;
+
+use App\Models\Department;
+use App\Models\Faculty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use League\Csv\Reader;
+use Maatwebsite\Excel\Facades\Excel;
+
 class FacultyController extends Controller
 {
     public function add(Request $request)
@@ -80,4 +89,78 @@ class FacultyController extends Controller
         $faculties = \App\Models\Faculty::all();
         return response()->json($faculties, 200);
     }
+
+    public function showUploadForm()
+    {
+        return view('upload-faculty');
+    }
+
+    public function upload(Request $request)
+{
+    $request->validate([
+        'file' => 'required|mimes:csv,txt'
+    ]);
+
+    $file = $request->file('file');
+    $path = $file->getRealPath();
+
+    try {
+        $csv = Reader::createFromPath($path, 'r');
+        $csv->setHeaderOffset(0); // Assuming your CSV has headers
+
+        $records = $csv->getRecords();
+
+        foreach ($records as $record) {
+            Log::info('Processing record: ', $record);
+
+            $user = User::where('email', $record['email'])->first();
+            
+            if (!$user) {
+                $user = User::create([
+                    'first_name' => $record['name'],
+                    'last_name' => '',
+                    'email' => $record['email'],
+                    'password' => Hash::make("Hello@123"),
+                    'role_id' => 1,
+                ]);
+                Log::info('Created new user: ' . $user->email);
+            } else {
+                Log::info('User already exists: ' . $user->email);
+            }
+
+            $dep = Department::where('code', $record['department'])->first();
+            
+            if (!$dep) {
+                $dep = Department::create([
+                    'code' => $record['department'],
+                    'name' => $record['department'],
+                ]);
+                Log::info('Created new department: ' . $dep->code);
+            } else {
+                Log::info('Department already exists: ' . $dep->code);
+            }
+
+            $facultyExists = Faculty::where('faculty_code', $record['faculty_code'])->first();
+
+            if (!$facultyExists) {
+                Faculty::create([
+                    'faculty_code'=> $record['faculty_code'],
+                    'department_id' => $dep->id,
+                    'user_id' => $user->id,
+                    'designation' => $record['designation'],
+                ]);
+                Log::info('Created new faculty: ' . $record['faculty_code']);
+            } else {
+                Log::warning('Faculty already exists: ' . $record['faculty_code']);
+            }
+        }
+
+        Log::info('Faculty list uploaded successfully.');
+        return redirect()->back()->with('success', 'Faculty list uploaded successfully!');
+
+    } catch (\Exception $e) {
+        Log::error('Error uploading file: ' . $e->getMessage());
+        return redirect()->back()->with('error', 'An error occurred while uploading the file.');
+    }
+}
 }

@@ -18,10 +18,11 @@ const Hod = ({ formData }) => {
   const [body, setBody] = useState({});
   const [isLoaded, setIsLoaded] = useState(true);
   const location = useLocation();
+  const [greater, setGreater] = useState(true);
   const { setLoading } = useLoading();
 
   const apiURL = baseURL + "/suggestions/faculty";
-
+  const apiURL2 = baseURL + "/suggestions/outside-expert";
   useEffect(() => {
     setLock(formData.locks?.hod);
     let cognates = formData.chairman_experts?.map((item) => {
@@ -30,11 +31,21 @@ const Hod = ({ formData }) => {
     if (!cognates || cognates.length === 0 || cognates[0] === null) {
       cognates = [-1];
     }
-    
+    let outside_experts = formData.outside_experts.map((item) => {
+      return item.id;
+    });
+    if (
+      !outside_experts ||
+      outside_experts.length !== 3 ||
+      outside_experts[0] === null
+    ) {
+      outside_experts = [-1, -1, -1];
+    }
     setBody({
       approval: formData.approvals.hod,
       comments: formData.comments.hod,
       chairman_experts: cognates,
+      outside_experts: outside_experts,
     });
     setIsLoaded(true);
   }, [formData]);
@@ -69,7 +80,63 @@ const Hod = ({ formData }) => {
           ></Recommendation>
           {body.approval && (
             <>
-            
+            <p>List of 3 outside experts proposed by the HOD</p>
+
+          {greater && lock && formData.outside_experts.length === 3 ? (
+            <>
+              <GridContainer
+                elements={[
+                  <TableComponent
+                    data={formData.outside_experts}
+                    keys={["name", "institution", "department", "designation"]}
+                    titles={[
+                      "Name",
+                      "Institution",
+                      "Department",
+                      "Designation",
+                    ]}
+                  />,
+                ]}
+                space={3}
+              />
+            </>
+          ) : (
+            <>
+              <GridContainer
+                elements={[
+                  <InputSuggestion
+                    apiUrl={apiURL2}
+                    showLabel={false}
+                    initialValue={formData.outside_experts[0]?.name}
+                    onSelect={(value) => {
+                      body.outside_experts[0] = value.id;
+                    }}
+                    lock={lock}
+                  />,
+                  <InputSuggestion
+                    apiUrl={apiURL2}
+                    showLabel={false}
+                    initialValue={formData.outside_experts[1]?.name}
+                    onSelect={(value) => {
+                      body.outside_experts[1] = value.id;
+                    }}
+                    lock={lock}
+                  />,
+                  <InputSuggestion
+                    apiUrl={apiURL2}
+                    showLabel={false}
+                    initialValue={formData.outside_experts[2]?.name}
+                    onSelect={(value) => {
+                      body.outside_experts[2] = value.id;
+                    }}
+                    lock={lock}
+                  />,
+                ]}
+              />
+            </>
+          )}
+
+
             {lock && formData.chairman_experts ?(<>
                 <GridContainer
                 elements={[
