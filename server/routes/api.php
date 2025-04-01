@@ -177,7 +177,8 @@ Route::prefix('suggestions')->group(function () {
 
 
 
-
+Route::post('/send-welcome', [App\Http\Controllers\EmailNotificationController::class, 'sendWelcomeEmail']);
+Route::post('/schedule-reminder', [App\Http\Controllers\EmailNotificationController::class, 'scheduleReminder']);
 // Route::get('/init',function (){
     
 //     User::factory()->count(10)->create();
