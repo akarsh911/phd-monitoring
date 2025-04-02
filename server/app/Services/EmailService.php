@@ -53,6 +53,7 @@ class EmailService
             // If scheduled, use Laravel's built-in scheduling
             if ($scheduled && $scheduledTime) {
                 $sendAt = Carbon::parse($scheduledTime);
+                Log::error("Inside me: { $scheduledTime}");
                 
                 // Make sure the scheduled time is in the future
                 if ($sendAt->isPast()) {
@@ -60,9 +61,11 @@ class EmailService
                     return false;
                 }
                 
-                // Schedule the email
-                $delayInSeconds = $sendAt->diffInSeconds(Carbon::now());
-                Mail::to($to)->later($delayInSeconds, $email);
+                // Calculate the delay for the email
+                $delay = $sendAt->diffInSeconds(Carbon::now());
+                
+                Mail::to($to)->later(now()->addSeconds($delay), $email);
+                Log::info("Current Time: " . Carbon::now()->toDateTimeString());
                 
                 Log::info("Email scheduled for {$scheduledTime} to " . (is_array($to) ? implode(', ', $to) : $to));
                 return true;

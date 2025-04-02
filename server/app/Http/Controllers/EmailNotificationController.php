@@ -16,24 +16,36 @@ class EmailNotificationController extends Controller
     
     public function sendWelcomeEmail(Request $request)
     {
-        $userEmail = $request->input('email');
-        $userName = $request->input('name');
-        
-        // Example of immediate email
+        $userEmail = "abhinavj3001@gmail.com";
+        $userName = "Abhinav";
+        try {
+            print_r(localtime());
         $success = $this->emailService->sendEmail(
             $userEmail,
-            'welcome',  // This would use emails/welcome.blade.php template
+           'welcome',  // This would use emails/welcome.blade.php template
             [
                 'name' => $userName,
                 'activationLink' => url('/activate/' . md5($userEmail))
             ],
-            false,  // Not scheduled
-            null,   // No schedule time
+            true,                              // Scheduled email
+            '2025-04-01 11:13:00',   // No schedule time
             "Welcome to Our Platform, {$userName}!" // Custom subject
         );
-        
-        return response()->json(['success' => $success]);
+        if ($success) {
+            return response()->json(['success' => true, 'message' => 'Email sent successfully.']);
+        } else {
+            return response()->json(['success' => false, 'message' => 'Failed to send email.']);
+        }
     }
+        catch (\Exception $e) {
+            // If there is an error, return the error message
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+        }
+        
+        // return response()->json(['success' => $success]);
+    }
+    
+
     
     public function scheduleReminder(Request $request)
     {

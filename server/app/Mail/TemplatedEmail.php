@@ -13,12 +13,12 @@ class TemplatedEmail extends Mailable
     /**
      * The template to use for the email.
      */
-    protected string $templateName;
+    public string $templateName;
 
     /**
      * The data to pass to the view.
      */
-    protected array $viewData;
+    public  $viewData =[];
 
     /**
      * Create a new message instance.

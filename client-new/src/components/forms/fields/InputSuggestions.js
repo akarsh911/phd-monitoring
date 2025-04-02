@@ -7,11 +7,11 @@ const InputSuggestions = ({ apiUrl,hint, initialValue, onSelect,label ,lock=fals
     const [suggestions, setSuggestions] = useState([]);
     const [isLocked, setIsLocked] = useState(lock || false);
     const [hintText, setHintText] = useState(hint || 'Type to get suggestions...');
-
+    const [showHint, setShowHint] = useState(true);
     const handleInputChange = async (event) => {
         const value = event.target.value;
         setInputValue(value);
-        
+        setShowHint(true);
         if (value) {
             const finalBody = body ? {...body, text: value} : {text: value};
             const data = await customFetch(apiUrl, 'POST',finalBody,false);
@@ -24,6 +24,7 @@ const InputSuggestions = ({ apiUrl,hint, initialValue, onSelect,label ,lock=fals
     };
 
     const handleSuggestionClick = (suggestion) => {
+        setShowHint(false);
         setInputValue(suggestion.name); 
         setSuggestions([]);
         if (onSelect) {
@@ -57,6 +58,19 @@ const InputSuggestions = ({ apiUrl,hint, initialValue, onSelect,label ,lock=fals
                     ))}
                 </ul>
             ) 
+            }
+            {
+                suggestions.length === 0 && showHint &&inputValue && !isLocked && (
+                    <ul className="suggestions-list">
+                    <li
+                            key={null} // Assuming each suggestion has a unique 'id'
+                            className="suggestion-item"
+                        >
+                            <div className="no-suggestions-message">No suggestions available</div>
+                        </li>
+                        </ul>
+                   
+                )
             }
             
         </div>
