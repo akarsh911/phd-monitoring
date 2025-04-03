@@ -15,13 +15,10 @@ return new class extends Migration
     {
         Schema::create('irb_sub_forms', function (Blueprint $table) {
             $this->addCommonFields($table);   
-            $table->enum('form_type',['draft','revised'])->default('draft');
-            $table->text('phd_title')->nullable();
             $table->text('revised_phd_title')->nullable();
-            $table->text('irb_pdf')->nullable();
             $table->text('revised_irb_pdf')->nullable();
             $table->text('date_of_irb')->nullable();
-            $table->text('revised_date_of_irb')->nullable();
+           
             $table->timestamps();
         });
     }

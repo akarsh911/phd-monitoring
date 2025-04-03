@@ -9,7 +9,7 @@ const SupervisorAllocation = ({formData}) => {
 
   return (
     <>
-      <FormTitleBar formName="Supervisor Change" formData={formData} />
+      <FormTitleBar formName="Supervisor Allocation" formData={formData} />
       <div className="form-container">
         <Student formData={formData}></Student>
         <PhDCoordinator formData={formData}></PhDCoordinator>

@@ -110,7 +110,10 @@ class Student extends Model
     {
         return $this->department()->first()->hod();
     }
-
+    public function objectives()
+    {
+        return $this->hasMany(PHDObjective::class, 'student_id', 'roll_no');
+    }
     public function irbForm()
     {
         return $this->hasOne(ConstituteOfIRB::class, 'student_id', 'roll_no');

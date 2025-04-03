@@ -109,7 +109,14 @@ trait GeneralFormList
     {   
         $role = $user->current_role->role;
         $department = $user->faculty->department;
-
+        // Check if the user is a PhD Coordinator or HOD
+        if ($role == 'phd_coordinator') {
+            $department = $user->faculty->department;
+        } elseif ($role == 'hod') {
+            $department = $user->faculty->department;
+        } else {
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
         $formsQuery = $model::whereHas('student', function ($query) use ($department) {
             $query->where('department_id', $department->id);
         });        
@@ -117,13 +124,16 @@ trait GeneralFormList
         if ($filters) {
             $formsQuery->where($filters);
         }
-        
+     
         $filteredForms = $formsQuery->get()->filter(function ($form) use ($role) {
             $index = array_search($role, $form->steps);
             return $index !== false && $index <= $form->maximum_step;
         })->map(function ($form) use ($role) {
             // Dynamically access the lock field based on the role
             $lockField =  'hod_lock';
+            if ($role == 'phd_coordinator') {
+                $lockField = 'phd_coordinator_lock';
+            } 
             $form->action_req = !$form->$lockField;
             return $form;
         })->map(function ($form) {

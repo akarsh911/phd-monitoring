@@ -7,29 +7,28 @@ import CustomButton from "../../fields/CustomButton";
 import { submitForm } from "../../../../api/form";
 import { useLocation } from "react-router-dom";
 import { useLoading } from "../../../../context/LoadingContext";
+import FileUploadField from "../../fields/FileUploadField";
 
 const Student = ({ formData }) => {
-
   const [lock, setLock] = useState(formData.locks?.student);
   const [body, setBody] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
+   const [files, setFiles] = useState([]);
   const location = useLocation();
-  const {setLoading}=useLoading();
+  const { setLoading } = useLoading();
 
   useEffect(() => {
-    let objectives =
-   [];
+  
 
-  let title =
-    formData.form_type ="";
+    let title = (formData.form_type = "");
     setLock(formData.locks?.student);
     setBody({
-        cgpa: formData.cgpa,
-        gender: formData.gender,
-        title: title,
-        draft_objectives: [""],
-        objectives: objectives,
-    })
+      cgpa: formData.cgpa,
+      address: formData.address,
+      gender: formData.gender,
+      title: title,
+      objectives: formData.objectives?formData.objectives:[],
+    });
     setIsLoaded(true);
   }, [formData]);
   const addObjective = () => {
@@ -37,11 +36,8 @@ const Student = ({ formData }) => {
       ...prevBody,
       objectives: [...prevBody.objectives, ""],
     }));
+
    
-      setBody((prevBody) => ({
-        ...prevBody,
-        draft_objectives: [...prevBody.draft_objectives, ""],
-      }));
   };
   const onUpdateCGPA = (value) => {
     body.cgpa = value;
@@ -73,25 +69,42 @@ const Student = ({ formData }) => {
                 initialValue={formData.name}
                 isLocked={true}
               />,
-             <DropdownField
+              <DropdownField
                 label={"Gender"}
                 initialValue={formData.gender}
                 options={[
-                    {title: "Male", value: "Male"},
-                    {title: "Female", value: "Female"}
+                  { title: "Male", value: "Male" },
+                  { title: "Female", value: "Female" },
                 ]}
                 isLocked={lock}
-                onChange={(value) => {console.log("hi",body); body.gender = value}}
-             />
+                onChange={(value) => {
+                  console.log("hi", body);
+                  body.gender = value;
+                }}
+              />,
             ]}
           />
-            <GridContainer
+           <GridContainer
+            elements={[
+              <InputField
+                initialValue={formData.address}
+                label={"Address of Correspondence"}
+                isLocked={lock}
+                onChange={(value) => {
+                  body.address = value;
+                }}
+              />,
+            ]}
+            space={2}
+          />
+          <GridContainer
             elements={[
               <InputField
                 initialValue={formData.phd_title}
                 label={"Title of Phd Thesis"}
-                isLocked={lock || formData.form_type === "revised"}
+                isLocked={lock}
                 onChange={(value) => {
+                  console.log("hi", body);
                   body.title = value;
                 }}
               />,
@@ -130,18 +143,20 @@ const Student = ({ formData }) => {
             space={2}
           />
 
-          <GridContainer 
-              elements={formData.supervisors?.map((supervisor, index) => (
-                <InputField
-                  label={`Supervisor ${index + 1}`}
-                  initialValue={supervisor?.name}
-                  isLocked={true}
-                />
-              ))}
+          <GridContainer
+            elements={formData.supervisors?.map((supervisor, index) => (
+              <InputField
+                label={`Supervisor ${index + 1}`}
+                initialValue={supervisor?.name}
+                isLocked={true}
+              />
+            ))}
           />
-           <GridContainer
+
+          <GridContainer
+            label={[<p>Objectives of Research</p>]}
             elements={[
-              <p>Objectives</p>,
+              <></>,
               <></>,
               <>
                 {!lock && (
@@ -149,35 +164,62 @@ const Student = ({ formData }) => {
                 )}
               </>,
             ]}
-            space={2}
           />
 
           <GridContainer
-            elements={body.draft_objectives.map((objective, index) => {
-              return (
+            elements={body.objectives?.map((objective, index) => (
+          
                 <InputField
                   initialValue={objective}
                   isLocked={lock}
                   onChange={(value) => {
+       
                     body.objectives[index] = value;
-                    body.draft_objectives[index] = value;
                   }}
+                  hint={`Enter Objective ${index+1} Here`}
                   showLabel={false}
                 />
-              );
-            })}
-            space={2}
+            
+            ))}
+            space={1}
+            
           />
-          {
-            formData.role === "student" && !lock && (
-                <>
-                  <GridContainer elements={[
-                    <CustomButton text="Submit" onClick={() => {submitForm(body,location,setLoading)}}/>
-                  ]}/>
-                </>
-            )
-          }
+          <GridContainer
+          label="Upload IRB PDF File"
+            elements={[
+              <FileUploadField
+                initialValue={formData.irb_pdf}
+                showLabel={false}
+                isLocked={lock || formData.form_type === "revised"}
+                onChange={(file) => {
+                  setFiles([{ key: "irb_pdf", file }]);
+                }}
+              />,
+            ]}
+          />
 
+          {formData.role === "student" && !lock && (
+            <>
+             
+                   <GridContainer
+                elements={[
+                  <CustomButton
+                    text="Submit"
+                    onClick={() => {
+                      submitForm(
+                        body,
+                        location,
+                        setLoading,
+                        files.length > 0 ? files : null
+                      );
+                    }}
+                  />,
+                  
+                  
+                ]}
+              />
+            </>
+          )}
         </>
       )}
     </>

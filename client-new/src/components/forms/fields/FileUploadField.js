@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import "./Fields.css";
 import { toast } from 'react-toastify';
+import { baseURL } from '../../../api/urls';
 
 const FileUploadField = ({ label, initialValue = null, isLocked = false, onChange, showLabel = true }) => {
-    const [fileName, setFileName] = useState(initialValue ? "Open file" : "Upload PDF (Max 2MB)");
+    const [fileName, setFileName] = useState(initialValue ? "View Uploaded File" : "Upload PDF (Max 2MB)");
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -27,9 +28,11 @@ const FileUploadField = ({ label, initialValue = null, isLocked = false, onChang
             {showLabel && (<label className="input-label">{label}</label>)}
             
             {initialValue && isLocked ? (
-                <a href={initialValue} target="_blank" rel="noopener noreferrer" className="file-link">
-                    {fileName}
+
+                <a href={baseURL+initialValue} target="_blank" rel="noopener noreferrer" className="file-link">
+                   <div className='preview-file'> {fileName}</div>
                 </a>
+
             ) : (
                 <input
                     type="file"

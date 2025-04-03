@@ -19,7 +19,8 @@ return new class extends Migration
         Schema::create('constitute_of_irb', function (Blueprint $table) {
             $table->timestamps();
             $this->addCommonFields($table);  
-
+            $table->text('phd_title')->nullable();
+            $table->text('irb_pdf')->nullable();
             $table->integer('cognate_expert')->unsigned()->index()->nullable();;
             $table->foreign('cognate_expert')->references('faculty_code')->on('faculty')->onDelete('cascade');
             $table->integer('outside_expert')->unsigned()->index()->nullable();;

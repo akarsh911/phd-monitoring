@@ -51,8 +51,9 @@ const PhDCoordinator = ({ formData }) => {
           {formData.role === "phd_coordinator" && !lock ? (
             <>
               <GridContainer
+              label={<p>Allot Supervisors</p>}
                 elements={[
-                  <p>Allot Supervisors</p>,
+                  <></>,
                   <></>,
                   <CustomButton
                     text="Add Supervisor +"
@@ -70,6 +71,7 @@ const PhDCoordinator = ({ formData }) => {
                     initialValue={formData.supervisors[index]?.name}
                     onSelect={(value) => handleSupervisorSelect(value, index)}
                     lock={lock}
+                    fields={["name","department"]} 
                   />
                 ))}
               />

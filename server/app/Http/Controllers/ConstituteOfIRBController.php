@@ -18,6 +18,8 @@ use App\Models\IrbOutsideExpert;
 use App\Models\OutsideExpert;
 use App\Models\Role;
 use App\Models\User;
+use App\Http\Controllers\Traits\SaveFile;
+use App\Models\PHDObjective;
 
 //TODO: add outside expert not in the system
 
@@ -28,6 +30,7 @@ class ConstituteOfIRBController extends Controller
     use GeneralFormSubmitter;
     use GeneralFormList;
     use GeneralFormCreate;
+    use SaveFile;
 
     public function listForm(Request $request, $student_id=null)
     {
@@ -115,6 +118,10 @@ class ConstituteOfIRBController extends Controller
             'semester' => 'integer',
             'gender' => 'string|in:Male,Female',
             'cgpa' => 'numeric',
+            'objectives' => 'required|array',
+            'title' => 'required|string',
+            'irb_pdf' => 'required|file|mimes:pdf|max:2048',
+            'address' => 'required|string',
         ]);
         return $this->submitForm($user,$request, $form_id, ConstituteOfIRB::class, 'student','student','faculty',  function ($formInstance) use ($request, $user) {
             if(!$formInstance->student->gender) {
@@ -141,7 +148,42 @@ class ConstituteOfIRBController extends Controller
                     'cgpa' => $cgpa,
                 ]);
             } 
+            $request->validate([
+                'address' => 'required|string',
+            ]);
+            
+            //save objectives
+            $objectives = $request->objectives;
+            $formInstance->student->objectives()->delete();
+            foreach ($objectives as $objective) {
+               PHDObjective::create([
+                    'student_id' => $formInstance->student->roll_no,
+                    'objective' => $objective,
+                    'type' => 'draft',
+                ]);
+            }
+            //save pdf
+            $link=$this->saveUploadedFile($request->file('irb_pdf'), 'irb_const', $user->student->roll_no);
+           
+            $formInstance->student->address = $request->address;
             $formInstance->student->save();
+            $formInstance->phd_title = $request->title;
+
+            $formInstance->irb_pdf = $link;
+            $formInstance->student->save();
+
+            if($formInstance->supervisorApprovals())
+            $formInstance->supervisorApprovals()->delete();
+
+            //disable all previous approvals
+            $supervisors = $formInstance->student->supervisors;
+            foreach ($supervisors as $supervisor) {
+                $formInstance->supervisorApprovals()->create([
+                    'supervisor_id' => $supervisor->faculty_code,
+                    'status' => 'awaited',
+                ]);
+            }
+
             $formInstance->student->user->save();
         });
     }
@@ -198,6 +240,33 @@ class ConstituteOfIRBController extends Controller
                     'irb_form_id' => $formInstance->id,
                     'nominee_id' => $nomineeCognate,
                     'supervisor_id' => $user->faculty->faculty_code,
+                ]);
+            }
+
+
+            $faculty_code = $user->faculty->faculty_code;
+            //mark supervisor approval
+            if($request->approval){
+            
+                if($formInstance->supervisorApprovals()->where('supervisor_id', $faculty_code)->first()->status=='approved'){
+                    throw new \Exception('You have already approved the form, Can Only Submit once all the supervisors approve');
+                }
+    
+                $formInstance->supervisorApprovals()->where('supervisor_id', $faculty_code)->update([
+                  'status' => 'approved',
+                ]);
+                
+                $formInstance->addHistoryEntry("Supervisor Approved The Form", $user->name());
+        
+                $approvals=$formInstance->supervisorApprovals()->where('status','approved')->get();
+               
+                if($approvals->count()!=$formInstance->student->supervisors->count()){
+                    throw new \Exception('Your Prefrences Saved, Form Will be submitted once all Supervisors approve',201);
+                }
+            }
+            else{
+                $formInstance->supervisorApprovals()->where('supervisor_id', $faculty_code)->update([
+                  'status' => 'rejected',
                 ]);
             }
 

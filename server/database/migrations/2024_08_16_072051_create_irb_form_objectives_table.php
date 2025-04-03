@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('irb_sub_objectives', function (Blueprint $table) {
             $table->increments('id');
             $table->primary('id');
-            $table->integer('irb_form_id')->unsigned()->index();
-            $table->foreign('irb_form_id')->references('id')->on('irb_sub_forms')->onDelete('cascade');
+            $table->integer('student_id')->unsigned()->index();
+            $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
             $table->string('objective');
             $table->enum('type',['draft','revised']);
             $table->timestamps();

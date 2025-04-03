@@ -15,7 +15,7 @@ class ConstituteOfIRB extends Model
     protected $fillable;
 
     protected $casts = [
-        'history' => 'array', 
+        'history' => 'array',
         'steps' => 'array',
     ];
 
@@ -25,8 +25,10 @@ class ConstituteOfIRB extends Model
         $this->fillable = array_merge([
             'cognate_expert',
             'outside_expert',
+            'phd_title',
+            'irb_pdf',
         ], $commonFieldKeys);
-     
+
         parent::__construct($attributes);
     }
 
@@ -35,6 +37,11 @@ class ConstituteOfIRB extends Model
     {
         $commonJSON = $this->fullCommonForm($user);
         return array_merge($commonJSON, [
+            'address' => $this->student->address,
+            'objectives' => $this->student->objectives()?->where('type', 'draft')->get()->map(function ($objective) {
+                return $objective->objective;
+            })->values(),
+            'irb_pdf' => $this->irb_pdf,
             'chairman' => [
                 'name' => $this->student->department->hod->user->name(),
                 'designation' => $this->student->department->hod->designation,
@@ -74,7 +81,7 @@ class ConstituteOfIRB extends Model
             ] : null,
             'outside_expert' => $this->expertOutside ? [
                 'id' => $this->expertOutside->id,
-                'name'=> $this->expertOutside->first_name . ' ' . $this->expertOutside->last_name,
+                'name' => $this->expertOutside->first_name . ' ' . $this->expertOutside->last_name,
                 'designation' => $this->expertOutside->designation,
                 'department' => $this->expertOutside->department,
                 'institution' => $this->expertOutside->institution,
@@ -103,7 +110,7 @@ class ConstituteOfIRB extends Model
     public function supervisorApprovals()
     {
 
-        return $this->hasMany(IrbSupervisorApproval::class, 'irb_form_id', 'id');
+        return $this->hasMany(ConstituteIrbSupervisorApproval::class, 'irb_cons_form_id', 'id');
     }
 
     public function chairmanExperts()

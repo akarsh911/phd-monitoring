@@ -97,6 +97,7 @@ const Student = ({ formData }) => {
                 onSelect={(value) => handleBroadAreaSelect(value, 0)}
                 lock={lock}
                 showLabel={false}
+                suggestionManadatory={false}
               />,
             ]}
             space={2}
@@ -108,6 +109,7 @@ const Student = ({ formData }) => {
                 apiUrl={apiUrl_broad_suggestion}
                 onSelect={(value) => handleBroadAreaSelect(value, 1)}
                 lock={lock}
+                suggestionManadatory={false}
                 showLabel={false}
               />,
             ]}
@@ -121,6 +123,7 @@ const Student = ({ formData }) => {
                 onSelect={(value) => handleBroadAreaSelect(value, 2)}
                 lock={lock}
                 showLabel={false}
+                suggestionManadatory={false}
               />,
             ]}
             space={2}
@@ -139,6 +142,7 @@ const Student = ({ formData }) => {
                 apiUrl={apiUrl_suggestion}
                 onSelect={(value) => handlePrefrenceSelect(value, 0)}
                 lock={lock}
+                fields={["name","department"]}
                 label={"Preference 1"}
               />,
               <InputSuggestions

@@ -124,13 +124,24 @@ class SupervisorAllocationController extends Controller
                 $formInstance->student->broad_area_specialization()->delete(); // Remove existing associations
 
                 foreach ($areas as $area) {
+                    if(!is_numeric($area)) {
+                        $area=BroadAreaSpecialization::create([
+                            'broad_area' => $area,
+                            'department_id' => $formInstance->student->department_id,
+                        ]);
+                        $formInstance->student->broad_area_specialization()->create([
+                            'specialization_id' => $area->id,
+                            'student_id' => $formInstance->student_id,
+                        ]);
+                    }
+                    else{
                     if (!BroadAreaSpecialization::find($area)) {
                         throw new \Exception("Invalid broad area selected");
                     }
                     $formInstance->student->broad_area_specialization()->create([
                         'specialization_id' => $area,
                         'student_id' => $formInstance->student_id,
-                    ]);
+                    ]);}
                 }
             }
         );

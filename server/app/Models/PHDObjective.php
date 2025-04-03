@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class IrbFormObjective extends Model
+class PHDObjective extends Model
 {
     use HasFactory;
 
@@ -20,7 +20,7 @@ class IrbFormObjective extends Model
 
     // The attributes that are mass assignable
     protected $fillable = [
-        'irb_form_id',
+        'student_id',
         'objective',
         'type',
     ];
@@ -33,6 +33,6 @@ class IrbFormObjective extends Model
     // Relationships
     public function irbForm()
     {
-        return $this->belongsTo(IrbSubForm::class, 'irb_form_id', 'id');
+        return $this->belongsTo(Student::class, 'student_id', 'id');
     }
 }

@@ -37,10 +37,8 @@ class IrbSubForm extends Model
         // Merge common fields with specific fillable fields
         $commonFieldKeys = array_keys($this->getCommonFields() ?? []);
         $this->fillable = array_merge([
-            'form_type',
-            'phd_title',
+
             'revised_phd_title',
-            'irb_pdf',
             'revised_irb_pdf',
         ], $commonFieldKeys);
 
@@ -52,20 +50,9 @@ class IrbSubForm extends Model
         // Use the common form data and merge with specific form data
         $commonJSON = $this->fullCommonForm($user);
         $formData=array_merge($commonJSON, [
-            'form_type' => $this->form_type,
             'address' => $this->student->address,
-            'objectives' => [
-                'revised' => $this->objectives->where('type', 'revised')->map(function ($objective) {
-                    return $objective->objective;
-                })->values(),
-                'draft' => $this->objectives->where('type', 'draft')->map(function ($objective) {
-                    return $objective->objective;
-                })->values(),
-            ],
             'date_of_irb' => $this->student->date_of_irb,
-            'address' => $this->student->address,
             'revised_phd_title' => $this->revised_phd_title,
-            'irb_pdf' => $this->irb_pdf,
             'revised_irb_pdf' => $this->revised_irb_pdf,
             'supervisorApprovals' => $this->supervisorApprovals->map(function($approval){
                 return [
@@ -100,10 +87,6 @@ class IrbSubForm extends Model
         return $formData;
     }
 
-    public function objectives()
-    {
-        return $this->hasMany(IrbFormObjective::class, 'irb_form_id', 'id');
-    }
 
     public function supervisorApprovals()
     {
