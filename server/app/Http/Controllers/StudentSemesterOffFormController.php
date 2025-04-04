@@ -30,7 +30,17 @@ class StudentSemesterOffFormController extends Controller
        $user = Auth::user();
        if($student_id)
          return $this->listFormsStudent($user, StudentSemesterOffForm::class, $student_id);
-       return $this->listForms($user, StudentSemesterOffForm::class);
+       return $this->listForms($user, StudentSemesterOffForm::class,$request,null,false,[
+        'fields' => [
+            "name","roll_no","reason","semester_off_required"
+        ],
+        'extra_fields' => [
+            "semester_off_required" => function ($form) {
+                return $form->semester_off_required;
+            },
+        ],
+        'titles' => [ "Name", "Roll No","Reason","Semester Off Required"],
+    ]);
     }
 
     public function createForm(Request $request)
@@ -137,6 +147,24 @@ class StudentSemesterOffFormController extends Controller
              
             }
         );
+    }
+    public function bulkSubmit(Request $request)
+    {
+        $user = Auth::user();
+        $role = $user->current_role;
+        $form_ids = $request->input('form_ids', []);
+        $allowedRoles = ['hod', 'phd_coordinator', 'dra', 'dordc', 'director'];
+        if (!in_array($role->role, $allowedRoles)) {
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        if (empty($form_ids)) {
+            return response()->json(['message' => 'No form IDs provided'], 400);
+        }
+        foreach ($form_ids as $form_id) {
+            $this->submit($request, $form_id);
+        }
+        $request->merge(['approval' => true]);
+        return response()->json(['message' => 'Forms submitted successfully'], 200);
     }
     private function supervisorSubmit($user, $request, $form_id)
     {

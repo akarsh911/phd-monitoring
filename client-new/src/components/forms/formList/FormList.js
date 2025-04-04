@@ -20,7 +20,7 @@ const FormList = ({ showButton = true }) => {
     customFetch(url, "GET")
       .then((data) => {
         if (data && data.success) {
-          setForms(data.response);
+          setForms(data.response.forms);
         }
       })
       .catch((error) => {

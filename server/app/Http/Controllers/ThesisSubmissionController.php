@@ -26,7 +26,23 @@ class ThesisSubmissionController extends Controller
        $user = Auth::user();
        if($student_id)
          return $this->listFormsStudent($user, ThesisSubmission::class, $student_id);
-       return $this->listForms($user, ThesisSubmission::class);
+       return $this->listForms($user, ThesisSubmission::class,$request,null,false,[
+        'fields' => [
+            "name","roll_no","date_of_synopsis","supervisors"
+        ],
+        'extra_fields' => [
+            "supervisors" => function ($form) {
+            return $form->student->supervisors->map(function ($supervisor) {
+                return $supervisor->user->name();
+            })->join(', ');
+            },
+            "date_of_synopsis" => function ($form) {
+                return \Carbon\Carbon::parse($form->student->date_of_synopsis)->format('Y-m-d');
+        
+            },
+        ],
+        'titles' => [ "Name", "Roll No","Date of Synopsis","Supervisors"],
+    ]);
     }
 
     public function createForm(Request $request)
@@ -206,6 +222,24 @@ class ThesisSubmissionController extends Controller
                
         }
         );
+    }
+    public function bulkSubmit(Request $request)
+    {
+        $user = Auth::user();
+        $role = $user->current_role;
+       
+        $allowedRoles = ['hod', 'phd_coordinator', 'dra', 'dordc', 'director'];
+        if (!in_array($role->role, $allowedRoles)) {
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $request->validate([
+            'form_ids' => 'required|array',
+            'approval' => 'required|boolean',
+        ]);
+        $request->merge(['approval' => true]);
+        foreach ($request->form_ids as $form_id) {
+            $this->submit($request, $form_id);
+        }
     }
     private function supervisorSubmit($user, $request, $form_id)
     {

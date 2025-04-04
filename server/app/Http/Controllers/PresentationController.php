@@ -26,7 +26,28 @@ class PresentationController extends Controller{
     public function listForm(Request $request, $student_id = null)
     {
         $user = Auth::user();
-        return $this->listForms($user, Presentation::class,null,true);
+        return $this->listForms($user, Presentation::class,$request,null,true,[
+            'fields' => [
+                "name","roll_no","period","progress","overall_progress","supervisors"
+            ],
+            'extra_fields' => [
+                "overall_progress" => function ($form) {
+                    return $form->student->overall_progress;
+                },
+                "progress" => function ($form) {
+                    return $form->progress;
+                },
+                "supervisors" => function ($form) {
+                return $form->student->supervisors->map(function ($supervisor) {
+                    return $supervisor->user->name();
+                })->join(', ');
+                },
+                "period" => function ($form) {
+                    return $form->period_of_report;
+                },
+            ],
+            'titles' => [ "Name", "Roll No","Period","Presentation Progress","Progress Till Now","Supervisors"],
+        ]);
     }
 
     public function createForm(Request $request)
@@ -193,6 +214,25 @@ class PresentationController extends Controller{
             default:
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
+    }
+    public function bulkSubmit(Request $request)
+    {
+        $user = Auth::user();
+        $role = $user->current_role;
+        $allowedRoles = ['hod', 'dra', 'dordc', 'doctoral'];
+        if (!in_array($role->role, $allowedRoles)) {
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $request->validate([
+            'form_ids' => 'required|array',
+            'form_ids.*' => 'exists:presentations,id',
+        ]);
+        $request->merge(['approval' => true]);
+        foreach ($request->form_ids as $form_id) {
+          $this->submit($request, $form_id);
+        }
+        return response()->json(['message' => 'Forms submitted successfully'], 200);
+       
     }
     public function linkPublication(Request $request, $form_id)
     {

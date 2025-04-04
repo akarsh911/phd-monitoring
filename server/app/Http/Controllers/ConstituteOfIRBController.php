@@ -38,7 +38,26 @@ class ConstituteOfIRBController extends Controller
        $user = Auth::user();
        if($student_id)
          return $this->listFormsStudent($user, ConstituteOfIRB::class, $student_id);
-       return $this->listForms($user, ConstituteOfIRB::class);
+       return $this->listForms($user, ConstituteOfIRB::class,$request,null,false,[
+        'fields' => [
+            "name","roll_no", "email","supervisors"
+        ],
+        'extra_fields' => [
+          
+            "email" => function ($form) {
+            return $form->student->user->email;
+            },
+            "semester" => function ($form) {
+            return $form->id;
+            },
+            "supervisors" => function ($form) {
+            return $form->student->supervisors->map(function ($supervisor) {
+                return $supervisor->user->name();
+            })->join(', ');
+            },
+        ],
+        'titles' => [ "Name", "Roll No",  "Email","Supervisors",],
+    ]);
     }
 
     public function createForm(Request $request)
@@ -110,6 +129,31 @@ class ConstituteOfIRBController extends Controller
             default:
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
+    }
+
+    public function bulkSubmit(Request $request)
+    {
+        $user = Auth::user();
+        $role = $user->current_role;
+        $form_id = $request->form_id;
+        if($role->role != 'dra'){
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $request->validate([
+            'form_ids' => 'required|array',
+        ]);
+        $request->validate([
+            'form_ids.*' => 'integer|exists:constitute_of_irbs,id',
+        ]);
+        $request->merge(['approval' => true]);
+        foreach ($request->form_ids as $formId) {
+            $form = ConstituteOfIRB::find($formId);
+            if (!$form) {
+                return response()->json(['message' => 'Form not found'], 404);
+            }
+            $this->draSubmit($user, $request, $formId);
+        }
+        return response()->json(['message' => 'Forms submitted successfully'], 200);
     }
 
     private function studentSubmit($user, Request $request, $form_id)

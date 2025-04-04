@@ -3,6 +3,7 @@ import Layout from '../../components/dashboard/layout';
 import FormList from '../../components/forms/formList/FormList';
 import { useLocation } from 'react-router-dom';
 import CreateNewBar from '../../components/forms/formList/CreateNewBar';
+import FormTable from '../../components/forms/formTable/FormTable';
 
 const FormListPage = () => {
     const location = useLocation();
@@ -29,7 +30,8 @@ const FormListPage = () => {
             children={
                 <>
                     {role === "faculty" && showButton && <CreateNewBar rollNumber={rollNumber} />}
-                    <FormList />
+                    {role !== "student" ? <FormTable /> : <FormList />}
+                    
                 </>
             }
         />

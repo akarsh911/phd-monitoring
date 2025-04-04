@@ -17,6 +17,7 @@ use App\Models\Forms;
 use App\Models\PHDObjective;
 use App\Models\User;
 use App\Services\EmailService;
+use Illuminate\Support\Facades\Date;
 
 class IrbSubController extends Controller
 {
@@ -38,7 +39,22 @@ class IrbSubController extends Controller
        $user = Auth::user();
        if($student_id)
          return $this->listFormsStudent($user, IrbSubForm::class, $student_id);
-       return $this->listForms($user, IrbSubForm::class);
+       return $this->listForms($user, IrbSubForm::class,$request,null,false,[
+        'fields' => [
+            "name","roll_no","date_of_irb","supervisors"
+        ],
+        'extra_fields' => [
+            "supervisors" => function ($form) {
+            return $form->student->supervisors->map(function ($supervisor) {
+                return $supervisor->user->name();
+            })->join(', ');
+            },
+            "date_of_irb" => function ($form) {
+                return \Carbon\Carbon::parse($form->student->date_of_irb)->format('Y-m-d');
+            },
+        ],
+        'titles' => [ "Name", "Roll No","Date of IRB","Supervisors"],
+    ]);
     }
 
     public function createForm(Request $request)
@@ -97,6 +113,32 @@ class IrbSubController extends Controller
             default:
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
+    }
+    public function bulkSubmit(Request $request)
+    {
+        $user = Auth::user();
+        $role = $user->current_role;
+        $form_ids = $request->input('form_ids');
+        $allowed_roles = ['hod', 'dordc'];
+        if (!in_array($role->role, $allowed_roles)) {
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $request->validate([
+            'form_ids' => 'required|array',
+        ]);
+        $request->merge(['approval' => true]);
+        foreach ($form_ids as $id) {
+            $form = IrbSubForm::find($id);
+            if (!$form) {
+                return response()->json(['message' => 'Form not found'], 404);
+            }
+            if ($role->role == 'hod') {
+                $this->hodSubmit($user, $request, $id);
+            } elseif ($role->role == 'dordc') {
+                $this->dordcSubmit($user, $request, $id);
+            }
+        }
+        return response()->json(['message' => 'Forms submitted successfully'], 200);
     }
 
     private function studentSubmit($user, $request, $form_id)
@@ -168,18 +210,7 @@ class IrbSubController extends Controller
     {
         $model = IrbSubForm::class;
         return $this->submitForm($user, $request, $form_id, $model, 'dordc', 'dra', 'complete', function ($formInstance) use ($request, $user) {
-            if($formInstance->form_type=='draft'){
-                $formInstance->form_type = 'revised';
-                $formInstance->stage = 'student';
-                $formInstance->addHistoryEntry("Form Approved By DORDC and Sent For Revision", $user->name());
-                $formInstance->student_lock = false;
-                $formInstance->dordc_lock = true;
-                $steps=['student','faculty','external','hod','dra','dordc','complete'];
-                $formInstance->steps=$steps;
-                $formInstance->save();
-                throw new \Exception('Form Approved and sent For Revision ', 201);
-            }
-            else{
+ 
                $formInstance->completion='complete';
                $formInstance->status='approved';
                $forms = [
@@ -221,7 +252,7 @@ class IrbSubController extends Controller
                     ]);
                 }
                 
-            }
+            
             }
 
         });

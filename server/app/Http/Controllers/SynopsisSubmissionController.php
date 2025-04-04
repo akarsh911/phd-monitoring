@@ -29,7 +29,17 @@ class SynopsisSubmissionController extends Controller
        $user = Auth::user();
        if($student_id)
          return $this->listFormsStudent($user, SynopsisSubmission::class, $student_id);
-       return $this->listForms($user, SynopsisSubmission::class);
+       return $this->listForms($user, SynopsisSubmission::class,$request,null,false,[
+        'fields' => [
+            "name","roll_no","revised_title","synopsis_pdf"
+        ],
+        'extra_fields' => [
+            "synopsis_pdf" => function ($form) {
+                return $form->synopsis_pdf;
+            },
+        ],
+        'titles' => [ "Name", "Roll No","Revised Title","Synopsis PDF"],
+    ]);
     }
 
     public function createForm(Request $request)
@@ -95,6 +105,25 @@ class SynopsisSubmissionController extends Controller
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
     }
+    public function bulkSubmit(Request $request)
+    {
+        $user = Auth::user();
+        $role = $user->current_role;
+       
+        $allowedRoles = ['hod', 'phd_coordinator', 'dra', 'dordc', 'director'];
+        if (!in_array($role->role, $allowedRoles)) {
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $request->validate([
+            'form_ids' => 'required|array',
+            'approval' => 'required|boolean',
+        ]);
+        $request->merge(['approval' => true]);
+        foreach ($request->form_ids as $form_id) {
+            $this->submit($request, $form_id);
+        }
+    }
+
     public function linkPublication(Request $request, $form_id)
     {
         try{

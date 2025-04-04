@@ -1,0 +1,75 @@
+.form-list-container {
+    margin: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  }
+  
+  .form-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  .form-row{
+    cursor: pointer;
+  }
+  .form-table th {
+    background-color: #f1f1f1;
+    font-weight: bold;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .form-table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .form-table tr:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .selected-row {
+    background-color: #d7ecff;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .pagination button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .pagination button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .edit-icon {
+    cursor: pointer;
+    color: #6c757d;
+  }
+  
+  .table-bottom{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    ;
+  }
+  .rows-per-page{
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+  }

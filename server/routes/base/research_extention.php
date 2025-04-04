@@ -6,6 +6,7 @@ use App\Http\Controllers\ResearchExtentionController;
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('', [ResearchExtentionController::class, 'listForm']);
     Route::post('', [ResearchExtentionController::class, 'createForm']);
+    Route::post('/bulk', [ResearchExtentionController::class, 'bulkSubmit'])->name('form.bulk.create');
     Route::get('/{form_id}', [ResearchExtentionController::class, 'loadForm'])->name('form.load');
     Route::post('/{form_id}', [ResearchExtentionController::class, 'submit'])->name('form.submit');
 });

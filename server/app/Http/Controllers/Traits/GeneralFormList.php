@@ -6,27 +6,105 @@ use App\Models\Student;
 
 trait GeneralFormList
 {
-    private function listForms($user,$model,$filters=null,$override=false){
+    private function listForms($user,$model, $request,$filters=null,$override=false, $fields=[]){
         $role=$user->current_role->role;
+        $page = $request->input('page', 1);
+        $rows = $request->input('rows', 50);
         switch ($role) {
             case 'student':
-                return $this->listStudentForms($user, $model, $filters);
+                return $this->listStudentForms($user, $model, $filters, $page,$rows, $fields);
             case 'hod':
             case 'phd_coordinator':
-                return $this->listHodForms($user, $model, $filters);
+                return $this->listHodForms($user, $model, $filters, false,$page,$rows, $fields, );
             case 'dra':
             case 'dordc':
             case 'director':
-                return $this->listAdminForms($user, $model, $filters);
+                return $this->listAdminForms($user, $model, $filters, $page,$rows, $fields, );
             case 'faculty':
-                return $this->listFacultyForms($user, $model, $filters,$override);
+                return $this->listFacultyForms($user, $model, $filters, $override, $page,$rows, $fields );
             case 'doctoral':
             case 'external':
-                return $this->listDoctoralForms($user, $model, $filters,$override);
+                return $this->listDoctoralForms($user, $model, $filters, $override, $page,$rows, $fields, );
             default:
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
     }
+
+    private function applyPagination($query, $page, $perPage = 50)
+{
+    $offset = ($page - 1) * $perPage;
+
+    if (is_array($query)) {
+        // Handling array pagination manually
+        return array_slice($query, $offset, $perPage);
+    } 
+    
+    if ($query instanceof \Illuminate\Database\Eloquent\Builder || $query instanceof \Illuminate\Database\Query\Builder) {
+        // Handling pagination for query builders
+        return $query->skip($offset)->take($perPage);
+    } 
+
+    if ($query instanceof \Illuminate\Support\Collection) {
+        // Handling pagination for collections
+        return $query->slice($offset, $perPage);
+    }
+
+    throw new \Exception("Unsupported query type provided to applyPagination()");
+}
+
+
+private function paginateAndMap($formsQuery, $page, $fields, $perPage = 50)
+{
+    $total = $formsQuery instanceof \Illuminate\Database\Eloquent\Builder || $formsQuery instanceof \Illuminate\Database\Query\Builder
+                ? $formsQuery->count()
+                : count($formsQuery);
+    $totalPages = ceil($total / $perPage);
+    
+    $forms = $this->applyPagination($formsQuery, $page, $perPage);
+    
+    if ($forms instanceof \Illuminate\Database\Eloquent\Builder || $forms instanceof \Illuminate\Database\Query\Builder) {
+        $forms = $forms->get();
+    }
+    
+    return [
+        'forms' => collect($forms)->map(fn($form) => $this->mapForm($form, $fields['extra_fields'] ?? []))->values(),
+        'fieldsTitles' => $fields,
+        'page' => $page,
+        'total' => $total,
+        'totalPages' => $totalPages,
+        'fields' => $fields['fields'] ?? [],
+        'fieldsTitles' => $fields['titles'] ?? [],
+    ];
+}
+
+
+    private function mapForm($form, $fields = [])
+    {
+        $formData = [
+            'name' => $form->student->user->name(),
+            'stage' => $form->stage,
+            'roll_no' => $form->student->roll_no,
+            'status' => $form->status,
+            'completion' => $form->completion,
+            'created_at' => $form->created_at,
+            'updated_at' => $form->updated_at,
+            'action_req' => $form->student_lock,
+            'form_id' => $form->id,
+        ];
+
+        foreach ($fields as $key => $field) {
+            if (is_string($field) && isset($form->$field)) {
+                $formData[$field] = $form->$field;
+            } elseif (is_callable($field)) {
+                  $formData[$key] = $field($form);
+            } elseif (isset($form->student->$field)) {
+                $formData[$field] = $form->student->$field;
+            }
+        }
+
+        return $formData;
+    }
+
 
     private function listFormsStudent($user, $model, $student_id)
     {
@@ -68,205 +146,73 @@ trait GeneralFormList
     }
 
 
-    private function listStudentForms($user, $model, $filters = null)
+    private function listStudentForms($user, $model, $filters = null, $page = 1, $rows = 50, $fields = [])
     {
         $student = $user->student;
         $role = $user->current_role->role;
-    
         $formsQuery = $model::where('student_id', $student->roll_no);
-        
-        // Apply additional filters if provided
-        if ($filters) {
-            $formsQuery->where($filters);
-        }
-    
-        // Fetch forms and filter them based on role and step conditions
-        $filteredForms = $formsQuery->get()->filter(function ($form) use ($role) {
-            if(!$form){
-                return [];
-            }
-            $index = array_search($role, $form->steps);
-            return $index !== false && $index <= $form->maximum_step;
-        })->map(function ($form) {
-            return [
-                'name' => $form->student->user->name(), // Assumes there's a `name` field on the student model
-                'stage' => $form->stage,
-                'roll_no' => $form->student->roll_no, // Adjusted to retrieve roll_no from related student
-                'status' => $form->status,
-                'completion' => $form->completion,
-                'created_at' => $form->created_at,
-                'updated_at' => $form->updated_at,
-                'action_req' => $form->student_lock,
-                'form_id' => $form->id,
-            ];
-        });
-    
-        return $filteredForms->values();
-    }
-    
-    
-    private function listHodForms($user, $model, $filters = null)
-    {   
-        $role = $user->current_role->role;
-        $department = $user->faculty->department;
-        // Check if the user is a PhD Coordinator or HOD
-        if ($role == 'phd_coordinator') {
-            $department = $user->faculty->department;
-        } elseif ($role == 'hod') {
-            $department = $user->faculty->department;
-        } else {
-            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
-        }
-        $formsQuery = $model::whereHas('student', function ($query) use ($department) {
-            $query->where('department_id', $department->id);
-        });        
-        // Apply additional filters if provided
-        if ($filters) {
-            $formsQuery->where($filters);
-        }
-     
-        $filteredForms = $formsQuery->get()->filter(function ($form) use ($role) {
-            $index = array_search($role, $form->steps);
-            return $index !== false && $index <= $form->maximum_step;
-        })->map(function ($form) use ($role) {
-            // Dynamically access the lock field based on the role
-            $lockField =  'hod_lock';
-            if ($role == 'phd_coordinator') {
-                $lockField = 'phd_coordinator_lock';
-            } 
-            $form->action_req = !$form->$lockField;
-            return $form;
-        })->map(function ($form) {
-            return [
-                'name' => $form->student->user->name(), // Assumes there's a `name` field on the student model
-                'stage' => $form->stage,
-                'roll_no' => $form->student->roll_no, // Adjusted to retrieve roll_no from related student
-                'status' => $form->status,
-                'completion' => $form->completion,
-                'created_at' => $form->created_at,
-                'updated_at' => $form->updated_at,
-                'action_req' => $form->action_req,
-                'form_id' => $form->id,
-            ];
-        });
 
-        return $filteredForms->values();
+        if ($filters) {
+            $formsQuery->where($filters);
+        }
+
+        return $this->paginateAndMap($formsQuery, $page, $fields, $rows);
     }
-private function listDoctoralForms($user, $model, $filters = null,$override=false)
+
+    private function listAdminForms($user, $model, $filters = null, $page = 1, $rows = 50, $fields = [])
+    {
+        $formsQuery = $model::query();
+
+        if ($filters) {
+            $formsQuery->where($filters);
+        }
+
+        return $this->paginateAndMap($formsQuery, $page, $fields, $rows);
+    }
+
+private function listFacultyForms($user, $model, $filters = null, $override = false, $page = 1,$rows=50, $fields = [])
+{ 
+    $faculty = $user->faculty;
+    $supervisedStudents = $faculty->supervisedStudents();
+    $studentIds = $supervisedStudents->pluck('roll_no');
+
+    $formsQuery = $model::whereIn('student_id', $studentIds);
+
+    if ($filters) {
+        $formsQuery->where($filters);
+    }
+
+    return $this->paginateAndMap($formsQuery, $page, $fields,$rows);
+}
+
+private function listHodForms($user, $model, $filters = null, $override = false, $page = 1,$rows=50, $fields = [])
 {
-    $role = $user->current_role->role;
+    $department = $user->faculty->department;
+    $students = Student::where('department_id', $department->id)->pluck('roll_no');
+
+    $formsQuery = $model::whereIn('student_id', $students);
+
+    if ($filters) {
+        $formsQuery->where($filters);
+    }
+
+    return $this->paginateAndMap($formsQuery, $page, $fields,$rows);
+}
+
+private function listDoctoralForms($user, $model, $filters = null, $override = false, $page = 1,$rows=50, $fields = [])
+{
     $faculty = $user->faculty;
     $doctoralStudents = $faculty->doctoredStudents();
     $studentIds = $doctoralStudents->pluck('roll_no');
-    
+
     $formsQuery = $model::whereIn('student_id', $studentIds);
 
-    // Apply additional filters if provided
     if ($filters) {
         $formsQuery->where($filters);
     }
 
-    // Fetch forms and filter them based on role and step conditions
-    $filteredForms = $formsQuery->get()->filter(function ($form) use ($role) {
-        $index = array_search($role, $form->steps);
-        return $index !== false && $index <= $form->maximum_step;
-    })->map(function ($form) {
-        $form->action_req = !$form->doctoral_lock;
-        return $form;
-    })->map(function ($form) {
-        return [
-            'name' => $form->student->user->name(), // Assumes there's a `name` field on the student model
-            'stage' => $form->stage,
-            'roll_no' => $form->student->roll_no, // Adjusted to retrieve roll_no from related student
-            'status' => $form->status,
-            'completion' => $form->completion,
-            'created_at' => $form->created_at,
-            'updated_at' => $form->updated_at,
-            'action_req' => $form->action_req,
-            'form_id' => $form->id,
-        ];
-    });
-
-    return $filteredForms->values();
+    return $this->paginateAndMap($formsQuery, $page, $fields,$rows);
 }
 
-
-
-    private function listAdminForms($user, $model, $filters = null)
-{
-    $role = $user->current_role->role;
-    $formsQuery = $model::query();
-
-    // Apply additional filters if provided
-    if ($filters) {
-        $formsQuery->where($filters);
-    }
-
-    // Fetch forms and filter them based on role and step conditions
-    $filteredForms = $formsQuery->get()->filter(function ($form) use ($role) {
-        $index = array_search($role, $form->steps);
-        return $index !== false && $index <= $form->maximum_step;
-    })->map(function ($form) use ($role) {
-        // Dynamically access the lock field based on the role
-        $lockField = $role . '_lock';
-        $form->action_req = !$form->$lockField;
-        return $form;
-    })->map(function ($form) {
-        return [
-            'name' => $form->student->user->name(), // Assumes there's a `name` field on the student model
-            'stage' => $form->stage,
-            'roll_no' => $form->student->roll_no, // Adjusted to retrieve roll_no from related student
-            'status' => $form->status,
-            'completion' => $form->completion,
-            'created_at' => $form->created_at,
-            'updated_at' => $form->updated_at,
-            'action_req' => $form->action_req,
-            'form_id' => $form->id,
-        ];
-    });
-
-    return $filteredForms->values();
-}
-
-
-    private function listFacultyForms($user, $model, $filters = null,$override=false)
-    {
-        $role = $user->current_role->role;
-        $faculty = $user->faculty;
-        $supervisedStudents = $faculty->supervisedStudents();
-        $studentIds = $supervisedStudents->pluck('roll_no');
-        
-        $formsQuery = $model::whereIn('student_id', $studentIds);
-    
-        // Apply additional filters if provided
-        if ($filters) {
-            $formsQuery->where($filters);
-        }
-    
-        // Fetch forms and filter them based on role and step conditions
-        $filteredForms = $formsQuery->get()->filter(function ($form) use ($role,$override) {
-            $index = array_search($role, $form->steps);
-            if($override)
-            return $index !== false;
-            return $index !== false && $index <= $form->maximum_step;
-        })->map(function ($form) {
-            $form->action_req = !$form->supervisor_lock;
-            return $form;
-        })->map(function ($form) {
-            return [
-                'name' => $form->student->user->name(), // Assumes there's a `name` field on the student model
-                'stage' => $form->stage,
-                'roll_no' => $form->student->roll_no, // Adjusted to retrieve roll_no from related student
-                'status' => $form->status,
-                'completion' => $form->completion,
-                'created_at' => $form->created_at,
-                'updated_at' => $form->updated_at,
-                'action_req' => $form->action_req,
-                'form_id' => $form->id,
-            ];
-        });
-    
-        return $filteredForms->values();
-    }
     
 }

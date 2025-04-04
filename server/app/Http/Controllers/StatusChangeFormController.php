@@ -24,7 +24,17 @@ class StatusChangeFormController extends Controller
        $user = Auth::user();
        if($student_id)
          return $this->listFormsStudent($user, StudentStatusChangeForms::class, $student_id);
-       return $this->listForms($user, StudentStatusChangeForms::class);
+       return $this->listForms($user, StudentStatusChangeForms::class,$request,null,false,[
+        'fields' => [
+            "name","roll_no","type_of_change","reason"
+        ],
+        'extra_fields' => [
+            "type_of_change" => function ($form) {
+                return $form->student->current_status == "full-time" ? "full-time to part-time" : "part-time to full-time";
+            },
+        ],
+        'titles' => [ "Name", "Roll No","Type of Change","Reason"],
+    ]);
     }
 
     public function createForm(Request $request)
@@ -122,6 +132,26 @@ class StatusChangeFormController extends Controller
             }
         });
    
+    }
+    public function bulkSubmit(Request $request)
+    {
+        $user = Auth::user();
+        $role = $user->current_role;
+        $model = StudentStatusChangeForms::class;
+        $allowedRoles = ['hod', 'phd_coordinator', 'dra', 'dordc', 'director'];
+        if (!in_array($role->role, $allowedRoles)) {
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $request->validate([
+            'form_ids' => 'required|array',
+            'approval' => 'required|boolean',
+        ]);
+        $request->merge(['approval' => true]);
+        foreach ($request->form_ids as $form_id) {
+            $this->submit($request, $form_id);
+        }
+        return response()->json(['message' => 'Forms submitted successfully'], 200);
+
     }
 
     private function supervisorSubmit($user, $request, $form_id)

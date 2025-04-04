@@ -30,7 +30,19 @@ class ListOfExaminersController extends Controller
         $user = Auth::user();
         if ($student_id)
             return $this->listFormsStudent($user, ListOfExaminers::class, $student_id);
-        return $this->listForms($user, ListOfExaminers::class);
+        return $this->listForms($user, ListOfExaminers::class,$request,null,false,[
+            'fields' => [
+                "name","roll_no","supervisors"
+            ],
+            'extra_fields' => [
+                "supervisors" => function ($form) {
+                return $form->student->supervisors->map(function ($supervisor) {
+                    return $supervisor->user->name();
+                })->join(', ');
+                },
+            ],
+            'titles' => [ "Name", "Roll No","Supervisors"],
+        ]);
     }
 
     public function createForm(Request $request)
@@ -60,7 +72,24 @@ class ListOfExaminersController extends Controller
         ];
         return $this->createForms(ListOfExaminers::class, $data);
     }
-
+    public function bulkSubmit(Request $request)
+    {
+        $user = Auth::user();
+        $role = $user->current_role;
+       
+        $allowedRoles = ['director'];
+        if (!in_array($role->role, $allowedRoles)) {
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $request->validate([
+            'form_ids' => 'required|array',
+            'approval' => 'required|boolean',
+        ]);
+        $request->merge(['approval' => true]);
+        foreach ($request->form_ids as $form_id) {
+            $this->submit($request, $form_id);
+        }
+    }
     public function loadForm(Request $request, $form_id = null)
     {
         $user = Auth::user();

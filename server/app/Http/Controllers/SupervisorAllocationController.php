@@ -27,7 +27,23 @@ class SupervisorAllocationController extends Controller
         $user = Auth::user();
         if($student_id)
         return $this->listFormsStudent($user, SupervisorAllocation::class, $student_id);
-        return $this->listForms($user, SupervisorAllocation::class);
+        return $this->listForms($user, SupervisorAllocation::class,$request,null,false,[
+            'fields' => [
+                "name","roll_no", "progress","email","semester"
+            ],
+            'extra_fields' => [
+               "progress" => function ($form) {
+                    return $form->student->overall_progress;
+                },
+                "email" => function ($form) {
+                    return $form->student->user->email;
+                },
+                "semester" => function ($form) {
+                    return $form->id;
+                },
+            ],
+            'titles' => [ "Name", "Roll No", "Progress", "Email","Semester",],
+        ]);
     }
 
     public function createForm(Request $request)
@@ -91,6 +107,22 @@ class SupervisorAllocationController extends Controller
         }
     }
 
+    public function bulkSubmit(Request $request)
+    {
+        $user = Auth::user();
+        $role = $user->current_role;
+        $request->validate([
+            'form_ids' => 'array|required',
+        ]);
+        if ($role->role != 'hod') {
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+        $request->merge(['approval' => true]);
+        foreach ($request->form_ids as $form_id) {
+            $this->submit($request, $form_id);
+        }
+        return response()->json(['message' => 'Form submitted successfully'], 200);
+    }
 
     private function studentSubmit($user, $request, $form_id)
     {
@@ -188,6 +220,7 @@ class SupervisorAllocationController extends Controller
             'phd_coordinator',
             'complete',
             function ($formInstance) use ($request, $user) {
+             
                 if ($request->approval) {
                    
                     $formInstance->status='approved';
