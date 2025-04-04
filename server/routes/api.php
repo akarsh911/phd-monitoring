@@ -176,7 +176,9 @@ Route::prefix('suggestions')->group(function () {
     require base_path('routes/base/suggestions.php');
 });
 
-
+Route::prefix('approval')->group(function () {
+    require base_path('routes/base/approvals.php');
+});
 
 Route::get('/send-welcome', [EmailNotificationController::class, 'sendWelcomeEmail']);
 // Route::post('/schedule-reminder', [, 'scheduleReminder']);

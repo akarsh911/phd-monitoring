@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\ModelCommonFormFields;
-
+use Illuminate\Http\Request;
+use App\Http\Controllers\Traits\GeneralFormSubmitter;
 class IrbSubForm extends Model
 {
     use HasFactory;
     use ModelCommonFormFields;
+    use GeneralFormSubmitter;
 
     // The table associated with the model
     protected $table = 'irb_sub_forms';
@@ -50,10 +52,12 @@ class IrbSubForm extends Model
         // Use the common form data and merge with specific form data
         $commonJSON = $this->fullCommonForm($user);
         $formData=array_merge($commonJSON, [
-            'address' => $this->student->address,
             'date_of_irb' => $this->student->date_of_irb,
             'revised_phd_title' => $this->revised_phd_title,
             'revised_irb_pdf' => $this->revised_irb_pdf,
+            'revised_phd_objectives' => $this->student->objectives()?->where('type', 'revised')->get()->map(function ($objective) {
+                return $objective->objective;
+            })->values(),
             'supervisorApprovals' => $this->supervisorApprovals->map(function($approval){
                 return [
                     'supervisor_id' => $approval->supervisor_id,
@@ -91,5 +95,16 @@ class IrbSubForm extends Model
     public function supervisorApprovals()
     {
         return $this->hasMany(IrbSupervisorApproval::class, 'irb_sub_form_id', 'id');
+    }
+
+    public function handleApproval($email, $id, $val)
+    {
+        $user = User::where('email', $email)->firstOrFail();
+        $request = Request::create('/', 'POST', [
+            'approval' => $val,
+            'comment' => ' '
+        ]); 
+        $model = IrbSubForm::class;
+        return $this->submitForm($user, $request, $id, $model, 'external', 'faculty', 'hod');        
     }
 }

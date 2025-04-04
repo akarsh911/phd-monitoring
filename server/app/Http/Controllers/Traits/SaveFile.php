@@ -20,7 +20,7 @@ trait SaveFile
         $filePath = $file->storeAs($folderPath, $fileName, 'public');
 
         // Return the relative URL to access the file (starting with /storage/)
-        return '/storage/' . $filePath; // This ensures the path starts with /storage/
+        return '/app/public/' . $filePath; // This ensures the path starts with /storage/
     }
 }
 

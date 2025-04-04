@@ -15,9 +15,9 @@ const ConstituteOfIRB = ({formData}) => {
       <div className="form-container">
         
       <RoleBasedWrapper 
-      roleHierarchy={["Student", "Supervisor", "Hod", "Dordc"]}
+      roleHierarchy={formData.steps}
       currentRole={formData.role}>
-        <Student formData={formData}></Student>
+        <Student formData={formData} ></Student>
         <Supervisor formData={formData} />
         <Hod formData={formData} />
         <Dordc formData={formData} />

@@ -228,6 +228,8 @@ class SupervisorAllocationController extends Controller
                         [
                             'form_type' => 'list-of-examiners',
                             'form_name' => 'List of Examiners',
+                            'student_available' => false,
+                            'supervisor_available' => true,
                             'max_count' => 1,
                             'stage' => 'supervisor',
                         ],

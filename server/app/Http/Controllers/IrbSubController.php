@@ -10,9 +10,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\IrbSubForm;
 use App\Http\Controllers\Traits\SaveFile;
+use App\Models\Approval;
+use App\Models\DoctoralCommittee;
 use App\Models\Faculty;
 use App\Models\Forms;
-
+use App\Models\PHDObjective;
+use App\Models\User;
+use App\Services\EmailService;
 
 class IrbSubController extends Controller
 {
@@ -21,6 +25,13 @@ class IrbSubController extends Controller
     use GeneralFormList;
     use SaveFile;
     use GeneralFormCreate;
+    
+    protected $emailService;
+    
+    public function __construct(EmailService $emailService)
+    {
+        $this->emailService = $emailService;
+    }
 
     public function listForm(Request $request, $student_id=null)
     {
@@ -34,7 +45,7 @@ class IrbSubController extends Controller
     {
         $user = Auth::user();
         $role = $user->current_role;
-        $steps=['student','faculty','hod','dra','dordc','complete'];
+        $steps=['student','faculty','hod','dordc','complete'];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
@@ -59,7 +70,6 @@ class IrbSubController extends Controller
                 return $this->handleStudentForm($user, $form_id, $model,$steps);
             case 'hod':
                 return $this->handleHodForm($user, $form_id, $model);
-            case 'dra':
             case 'dordc':
             case 'external':
                 return $this->handleAdminForm($user, $form_id, $model);
@@ -82,12 +92,8 @@ class IrbSubController extends Controller
                 return $this->supervisorSubmit($user, $request, $form_id);
             case 'hod':
                 return $this->hodSubmit($user, $request, $form_id);
-            case 'dra':
-                return $this->draSubmit($user, $request, $form_id);
             case 'dordc':
                 return $this->dordcSubmit($user, $request, $form_id);
-            case 'external':
-                return $this->externalSubmit($user, $request, $form_id);
             default:
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
@@ -96,49 +102,36 @@ class IrbSubController extends Controller
     private function studentSubmit($user, $request, $form_id)
     {
         $request->validate([
-            'objectives' => 'required|array',
-            'title' => 'required|string',
+            'revised_phd_objectives' => 'required|array',
+            'revised_phd_title' => 'required|string',
             'irb_pdf' => 'required|file|mimes:pdf|max:2048',
+            'date_of_irb' => 'required|string',
         ]);
 
         $model = IrbSubForm::class;
 
         return $this->submitForm($user, $request, $form_id, $model,'student', 'student','faculty',
         function ($formInstance) use ($request, $user) {
-            $type=$formInstance->form_type;
-            $link=$this->saveUploadedFile($request->file('irb_pdf'), 'irb_sub', $user->student->roll_no);
-            if($type=='draft'){
-                $request->validate([
-                    'address' => 'required|string',
-                ]);
-                $formInstance->student->address = $request->address;
-                $formInstance->student->save();
-                $formInstance->phd_title = $request->title;
-                $formInstance->irb_pdf = $link;
-            }
-            else{
-                $formInstance->revised_phd_title = $request->title;
+        
+            $link=$this->saveUploadedFile($request->file('irb_pdf'), 'irb_sub_rev', $user->student->roll_no);
+          
+                $formInstance->revised_phd_title = $request->revised_phd_title;
                 $formInstance->revised_irb_pdf = $link;
-                $request->validate([
-                    'date_of_irb' => 'required|string',
-                ]);
                 $formInstance->date_of_irb = $request->date_of_irb;
                 $formInstance->student->date_of_irb = $request->date_of_irb;
                 $formInstance->student->save();
-            }
-            $objectives = $request->objectives;
-            if($type=='draft'){
-                $formInstance->objectives()->delete();
-            }
-            else{
-                $formInstance->objectives()->where('type', 'revised')->delete();
-            }
-            foreach ($objectives as $objective) {
-                $formInstance->objectives()->create([
-                    'objective' => $objective,
-                    'type' => $type,
-                ]);
-            }
+                $objectives = $request->revised_phd_objectives;
+          
+               
+                $formInstance->student->objectives()->where('type', 'revised')->delete();
+                foreach ($objectives as $objective) {
+                   PHDObjective::create([
+                        'student_id' => $formInstance->student->roll_no,
+                        'objective' => $objective,
+                        'type' => 'revised',
+                    ]);
+                }
+
             if($formInstance->supervisorApprovals())
             $formInstance->supervisorApprovals()->delete();
             
@@ -157,41 +150,19 @@ class IrbSubController extends Controller
     {
         $model = IrbSubForm::class;
         $form=IrbSubForm::find($form_id);
-      
-        if($form->form_type=='draft')
-        { 
-
-            return $this->submitForm($user, $request, $form_id, $model, 'faculty', 'student', 'hod',
-            function ($formInstance) use ($request, $user) {
-                $this->handleSupervisorSubmitForm($user, $request, $formInstance);
-            });
-        }
-        else
         return $this->submitForm($user, $request, $form_id, $model, 'faculty', 'student', 'external',
         function ($formInstance) use ($request, $user) {
             $this->handleSupervisorSubmitForm($user, $request, $formInstance);
         });
-    }
+    }   
 
-    private function externalSubmit($user, $request, $form_id)
-    {
-        $model = IrbSubForm::class;
-        return $this->submitForm($user, $request, $form_id, $model, 'external', 'faculty', 'hod');
-    }
+    
 
     private function hodSubmit($user, $request, $form_id)
     {
         $model = IrbSubForm::class;
-        return $this->submitForm($user, $request, $form_id, $model, 'hod', 'faculty', 'dra');
+        return $this->submitForm($user, $request, $form_id, $model, 'hod', 'faculty', 'dordc');
     }
-
-    private function draSubmit($user, $request, $form_id)
-    {
-        $model = IrbSubForm::class;
-        return $this->submitForm($user, $request, $form_id, $model, 'dra', 'hod', 'dordc');
-    }
-
-
 
     private function dordcSubmit($user, $request, $form_id)
     {
@@ -263,9 +234,7 @@ class IrbSubController extends Controller
             
             if($formInstance->supervisorApprovals()->where('supervisor_id', $faculty_code)->first()->status=='approved'){
                 throw new \Exception('You have already approved the form, Can Only Submit once all the supervisors approve');
-            }
-
-            if($formInstance->form_type=='draft'){
+            }            
                 $request->validate([
                     'supervised_outside' => 'required|integer',
                 ]);
@@ -281,7 +250,7 @@ class IrbSubController extends Controller
                 });            
                 $faculty->supervised_campus=$supervised_campus->count();
                 $faculty->save();
-            }
+            
            
 
             $formInstance->supervisorApprovals()->where('supervisor_id', $faculty_code)->update([
@@ -294,6 +263,44 @@ class IrbSubController extends Controller
            
             if($approvals->count()!=$formInstance->student->supervisors->count()){
                 throw new \Exception('Your Prefrences Saved, Form Will be submitted once all Supervisors approve',201);
+            }
+            else{
+                //send Email with accept reject link
+                $outside=DoctoralCommittee::where('student_id',$formInstance->student->roll_no)->first();
+                $faculty_code=$outside->faculty_id;
+                $facultyw=Faculty::where('faculty_code',$faculty_code)->first();
+                $userF = $facultyw->user;
+
+                $approval = Approval::create([
+                    'key' => Approval::generateKey(),
+                    'email' => $userF->email,
+                    'action' => 'review',
+                    'model_type' => get_class($formInstance),
+                    'model_id' => $formInstance->id,
+                ]);
+                $link= storage_path($formInstance->revised_irb_pdf);
+                $success = $this->emailService->sendEmail(
+                    $userF->email,
+                    'approval',  // Use the Blade template 'emails/approval.blade.php'
+                    [
+                        'name' => $userF->name(),
+                        'email' => $userF->email,
+                        'approverName' => $user->name(),
+                        'formId' => $formInstance->id,
+                        'approvalKey' => $approval->key,
+                    ],
+                    false,                               // Scheduled email
+                    '',             // Set desired schedule time
+                    "IRB Submission Approval Request" ,
+                    [$link]
+                );
+            
+                if ($success) {
+                    return response()->json(['success' => true, 'message' => 'Approval email sent successfully.']);
+                } else {
+                    return response()->json(['success' => false, 'message' => 'Failed to send approval email.']);
+                }
+
             }
         }
         else{
