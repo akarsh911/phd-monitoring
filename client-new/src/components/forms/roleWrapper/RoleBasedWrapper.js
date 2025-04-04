@@ -1,9 +1,22 @@
 import React from 'react';
-const RoleBasedWrapper = ({ roleHierarchy,currentRole, children }) => {
+
+const RoleBasedWrapper = ({ roleHierarchy, currentRole, children }) => {
     const currentRoleIndex = roleHierarchy.indexOf(currentRole);
-    return React.Children.toArray(children).filter(child => {
-      const childRoleIndex = roleHierarchy.indexOf(child.type.name);
-      return childRoleIndex >= currentRoleIndex;
-    });
-  };
-  export default RoleBasedWrapper;
+
+    return (
+        <>
+            {React.Children.toArray(children).map((child, index) => {
+                if (!React.isValidElement(child)) return null;
+
+                console.log(index,currentRoleIndex,currentRole)
+                if (index <= currentRoleIndex) {
+                    return child; // Render the component if allowed by role hierarchy
+                }
+
+                return null;
+            })}
+        </>
+    );
+};
+
+export default RoleBasedWrapper;

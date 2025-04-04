@@ -155,11 +155,10 @@ const Hod = ({ formData }) => {
                 ]} space={3}/>
             </>):(<> 
                 <GridContainer
+                label="Expert(s) recommended by chairman board of the studies of concerned department in cognate area of department: "
                 elements={[
-                  <p>
-                    Expert(s) recommended by chairman board of the studies of
-                    concerned department in cognate area of department:{" "}
-                  </p>,
+                  
+                   <></>,
                   <></>,
                   <>{!lock && ( <CustomButton text="Add Expert +" onClick={handleAddExpert}></CustomButton>)}</>
                  

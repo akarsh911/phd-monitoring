@@ -19,6 +19,7 @@ use App\Models\OutsideExpert;
 use App\Models\Role;
 use App\Models\User;
 use App\Http\Controllers\Traits\SaveFile;
+use App\Models\Department;
 use App\Models\PHDObjective;
 
 //TODO: add outside expert not in the system
@@ -48,7 +49,6 @@ class ConstituteOfIRBController extends Controller
             'student',
             'faculty',
             'hod',
-            'dra',
             'dordc',
             'complete'
         ];
@@ -154,7 +154,7 @@ class ConstituteOfIRBController extends Controller
             
             //save objectives
             $objectives = $request->objectives;
-            $formInstance->student->objectives()->delete();
+            $formInstance->student->objectives()->where('type', 'draft')->delete();
             foreach ($objectives as $objective) {
                PHDObjective::create([
                     'student_id' => $formInstance->student->roll_no,
@@ -284,7 +284,7 @@ class ConstituteOfIRBController extends Controller
             ConstituteOfIRB::class, 
             'hod', 
             'faculty', 
-            'dra', 
+            'dordc', 
             function ($formInstance, $user) use ($request) {
                 $request->validate([
                     'chairman_experts' => 'array|required',
@@ -400,15 +400,16 @@ class ConstituteOfIRBController extends Controller
                             'phone'=>$outsideExpert->phone,
                             'role_id'=>Role::where('role','external')->first()->id,
                         ]);
-                        $OutSideUser->faculty()->create([
+                        Faculty::create([
                             'faculty_code'=>$outsideExpert->id,
                             'designation'=>$outsideExpert->designation,
-                            'department_id'=>$user->faculty->department_id,
+                            'department_id'=>Department::all()->first()->id,
+                            'user_id'=>$OutSideUser->id,
                         ]);
                     }
                     DoctoralCommittee::create([
                         'student_id' => $formInstance->student->roll_no,
-                        'faculty_id' => $outsideExpertId,
+                        'faculty_id' => $OutSideUser->faculty->faculty_code,
                     ]);
 
                     DoctoralCommittee::create([

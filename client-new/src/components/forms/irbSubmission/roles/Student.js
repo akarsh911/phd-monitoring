@@ -24,29 +24,11 @@ const Student = ({ formData }) => {
   const { setLoading } = useLoading();
 
   useEffect(() => {
-    let objectives =
-      formData.form_type === "revised"
-        ? formData.objectives.revised
-        : formData.objectives.draft;
-
-    let title =
-      formData.form_type === "revised"
-        ? formData.revised_phd_title
-        : formData.phd_title;
-
-    if (!objectives || objectives.length === 0) {
-      objectives = [""];
-    }
+  
     setBody({
-      title: title,
+      revised_phd_title: formData.revised_phd_title,
       address: formData.address,
-      revised_objectives:
-        formData.objectives.revised.length > 0
-          ? formData.objectives.revised
-          : [""],
-      draft_objectives:
-        formData.objectives.draft.length > 0 ? formData.objectives.draft : [""],
-      objectives: objectives,
+      revised_phd_objectives:  formData.revised_phd_objectives? formData.revised_phd_objectives  : [""],
       date_of_irb: formData.date_of_irb,
     });
     setLock(formData.locks?.student);
@@ -56,20 +38,10 @@ const Student = ({ formData }) => {
   const addObjective = () => {
     setBody((prevBody) => ({
       ...prevBody,
-      objectives: [...prevBody.objectives, ""],
+      revised_phd_objectives: [...prevBody.revised_phd_objectives, ""],
     }));
-    if (formData.form_type === "revised") {
-      setBody((prevBody) => ({
-        ...prevBody,
-        revised_objectives: [...prevBody.revised_objectives, ""],
-      }));
-    } else {
-      setBody((prevBody) => ({
-        ...prevBody,
-        draft_objectives: [...prevBody.draft_objectives, ""],
-      }));
-    }
   };
+
   return (
     <div>
       {isLoaded && formData && (
@@ -123,29 +95,12 @@ const Student = ({ formData }) => {
               />,
             ]}
           />
-
-          <GridContainer
+           <GridContainer
             elements={[
               <InputField
                 initialValue={formData.phd_title}
-                label={"Revised Title of Phd Thesis"}
-                isLocked={lock || formData.form_type === "revised"}
-                onChange={(value) => {
-                  body.title = value;
-                }}
-              />,
-            ]}
-            space={2}
-          />
-          <GridContainer
-            elements={[
-              <InputField
-                initialValue={formData.address}
-                label={"Address of Correspondence"}
-                isLocked={lock}
-                onChange={(value) => {
-                  body.address = value;
-                }}
+                label={"Previous Proposed Title of Phd Thesis"}
+                isLocked={true}
               />,
             ]}
             space={2}
@@ -153,61 +108,62 @@ const Student = ({ formData }) => {
 
           <GridContainer
             elements={[
-              <p>Objectives</p>,
+              <InputField
+                initialValue={formData.revised_phd_title}
+                label={"Revised Title of Phd Thesis"}
+                isLocked={lock}
+                onChange={(value) => {
+                  body.revised_phd_title = value;
+                }}
+              />,
+            ]}
+            space={2}
+          />
+         
+          <GridContainer
+          label="Revised PhD Objectives"
+            elements={[
+              <p></p>,
               <></>,
               <>
-                {!lock && formData.form_type === "draft" && (
+                {!lock  && (
                   <CustomButton text={"+ Add"} onClick={addObjective} />
                 )}
               </>,
             ]}
-            space={2}
           />
 
           <GridContainer
-            elements={body.draft_objectives.map((objective, index) => {
+            elements={body.revised_phd_objectives?.map((objective, index) => {
               return (
                 <InputField
                   initialValue={objective}
-                  isLocked={lock || formData.form_type === "revised"}
+                  isLocked={lock }
                   onChange={(value) => {
-                    body.objectives[index] = value;
-                    body.draft_objectives[index] = value;
+                    body.revised_phd_objectives[index] = value;
+      
                   }}
                   showLabel={false}
                 />
               );
             })}
-            space={2}
+            space={1}
           />
           <GridContainer
+          label="Revised IRB PDF File"
             elements={[
               <FileUploadField
-                label={"IRB PDF File"}
-                initialValue={formData.irb_pdf}
-                isLocked={lock || formData.form_type === "revised"}
+                showLabel={false}
+                initialValue={formData.revised_irb_pdf}
+                isLocked={lock}
                 onChange={(file) => {
                   setFiles([{ key: "irb_pdf", file }]);
                 }}
               />,
             ]}
+       
           />
-          {formData.form_type === "revised" && (
-            <>
-              <GridContainer
-                elements={[
-                  <InputField
-                    initialValue={formData.revised_phd_title}
-                    label={"Revised Title of Phd Thesis"}
-                    isLocked={lock || formData.form_type === "draft"}
-                    onChange={(value) => {
-                      body.title = value;
-                    }}
-                  />,
-                ]}
-                space={2}
-              />
-              <GridContainer
+           <GridContainer
                 elements={[
                   <DateField
                     label={"Date of IRB"}
@@ -221,48 +177,7 @@ const Student = ({ formData }) => {
                 ]}
                 space={2}
               />
-
-              <GridContainer
-                elements={[
-                  <p>Revised Objectives</p>,
-                  <></>,
-                  <>
-                    {!lock && formData.form_type === "revised" && (
-                      <CustomButton text={"+ Add"} onClick={addObjective} />
-                    )}
-                  </>,
-                ]}
-              />
-
-              <GridContainer
-                elements={body.revised_objectives.map((objective, index) => {
-                  return (
-                    <InputField
-                      initialValue={objective}
-                      isLocked={lock || formData.form_type === "draft"}
-                      onChange={(value) => {
-                        body.objectives[index] = value;
-                        body.revised_objectives[index] = value;
-                      }}
-                      showLabel={false}
-                    />
-                  );
-                })}
-              />
-              <GridContainer
-                elements={[
-                  <FileUploadField
-                    label={"Revised IRB PDF File"}
-                    initialValue={formData.revised_irb_pdf}
-                    isLocked={lock}
-                    onChange={(file) => {
-                      setFiles([{ key: "irb_pdf", file }]);
-                    }}
-                  />,
-                ]}
-              />
-            </>
-          )}
+   
           {!lock && formData.role === "student" && (
             <>
               <GridContainer

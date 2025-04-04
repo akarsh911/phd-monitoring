@@ -16,21 +16,37 @@ class EmailNotificationController extends Controller
     
     public function sendWelcomeEmail(Request $request)
     {
-        $userEmail = "abhinavj3001@gmail.com";
+        $userEmail = "akarsh91140@gmail.com";
         $userName = "Abhinav";
         try {
-            print_r(localtime());
-        $success = $this->emailService->sendEmail(
-            $userEmail,
-           'welcome',  // This would use emails/welcome.blade.php template
-            [
-                'name' => $userName,
-                'activationLink' => url('/activate/' . md5($userEmail))
-            ],
-            true,                              // Scheduled email
-            '2025-04-01 11:13:00',   // No schedule time
-            "Welcome to Our Platform, {$userName}!" // Custom subject
-        );
+            $pdfPath = storage_path('/app/public/uploads/irb_sub_rev//irb_sub_rev_100003570_202504040238399491.pdf');
+
+            $success = $this->emailService->sendEmail(
+                $userEmail,
+                'approval',  // Use the Blade template 'emails/approval.blade.php'
+                [
+                    'user' => [
+                        'name' => $userName,
+                        'email' => $userEmail,
+                    ],
+                    'name' => $userName,
+                    'email' => $userEmail,
+                    'approverName' => "Dr. Tarunpreet Bhatia",
+                    'formId' => 2,
+                    'approvalKey' => 'fe6160cde4d63d587ca56e71f24ff5c4014531c1cea0d858ab71e9402e7dcca0',
+                ],
+                false,                               // Scheduled email
+                '2025-04-01 11:13:00',             // Set desired schedule time
+                "IRB Submission Approval Request" ,
+                [$pdfPath]
+            );
+        
+            if ($success) {
+                return response()->json(['success' => true, 'message' => 'Approval email sent successfully.']);
+            } else {
+                return response()->json(['success' => false, 'message' => 'Failed to send approval email.']);
+            }
+
         if ($success) {
             return response()->json(['success' => true, 'message' => 'Email sent successfully.']);
         } else {

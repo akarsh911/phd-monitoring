@@ -68,7 +68,70 @@ class PresentationController extends Controller{
         }
         return response()->json(['message' => 'You are not authorized to access this resource'], 403);
     }
-    
+    public function createMultipleForm(Request $request)
+{
+    $user = Auth::user();
+    $role = $user->current_role;
+    $cur = $role->role;
+
+    if ($cur != 'faculty') {
+        return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+    }
+
+    $request->validate([
+        'students' => 'required|array',
+        'students.*.student_id' => 'required|string',
+        'students.*.date' => 'required|date',
+        'students.*.time' => 'required|string',
+        'students.*.venue' => 'required|string',
+        'students.*.period_of_report' => 'required|string',
+    ]);
+
+    $createdForms = [];
+    $errors = [];
+
+    foreach ($request->students as $studentData) {
+        $student = Student::where('roll_no', $studentData['student_id'])->first();
+
+        if (!$student) {
+            $errors[] = ['student_id' => $studentData['student_id'], 'message' => 'Student not found'];
+            continue;
+        }
+
+        if (!$student->checkSupervises($user->faculty->faculty_code)) {
+            $errors[] = ['student_id' => $studentData['student_id'], 'message' => 'Not authorized to schedule for this student'];
+            continue;
+        }
+
+        $existingPresentation = Presentation::where('student_id', $studentData['student_id'])
+            ->where('period_of_report', $studentData['period_of_report'])
+            ->exists();
+
+        if ($existingPresentation) {
+            $errors[] = ['student_id' => $studentData['student_id'], 'message' => 'Presentation already scheduled for this period'];
+            continue;
+        }
+
+        $form = Presentation::create([
+            'student_id' => $studentData['student_id'],
+            'date' => $studentData['date'],
+            'time' => $studentData['time'],
+            'venue' => $studentData['venue'],
+            'period_of_report' => $studentData['period_of_report'],
+            'status' => 'pending',
+            'completion' => 'incomplete',
+            'steps' => ['student', 'faculty', 'doctoral', 'hod', 'dra', 'dordc', 'complete'],
+        ]);
+
+        $form->addHistoryEntry("Presentation Scheduled by Supervisor", $user->first_name);
+        $createdForms[] = $form;
+    }
+
+    return response()->json([
+        'created_forms' => $createdForms,
+        'errors' => $errors,
+    ]);
+}
     public function loadForm(Request $request, $form_id=null)
     {
         $user = Auth::user();
