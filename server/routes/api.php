@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Department;
 use App\Models\Faculty;
 use App\Models\Student;
+use App\Http\Controllers\GoogleCalendarController;
 
 
 Route::post('/login', function (Request $request) {
@@ -181,6 +182,14 @@ Route::prefix('approval')->group(function () {
 });
 
 Route::get('/send-welcome', [EmailNotificationController::class, 'sendWelcomeEmail']);
+
+
+
+
+Route::get('/auth/google', [GoogleCalendarController::class, 'getGoogleAuthUrl']);
+Route::get('/auth/google/callback', [GoogleCalendarController::class, 'handleGoogleCallback']);
+Route::post('/google/create-event', [GoogleCalendarController::class, 'createCalendarEvent']);
+
 // Route::post('/schedule-reminder', [, 'scheduleReminder']);
 // Route::get('/init',function (){
     
