@@ -8,6 +8,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('', [PresentationController::class, 'listForm']);
     Route::post('/bulk', [PresentationController::class, 'bulkSubmit'])->name('form.bulk.create');
     Route::post('', [PresentationController::class, 'createForm']);
+    Route::post('/bulk-schedule', [PresentationController::class, 'createMultipleForm'])->name('form.bulk.create');
     
     Route::get('/form', [PresentationController::class, 'listForm'])->name('form.load');
 

@@ -16,13 +16,15 @@ use App\Models\Presentation;
 use App\Models\PresentationReview;
 use App\Models\Publication;
 use App\Models\Student;
+use App\Services\PresentationService;
+use Carbon\Carbon;
 
 class PresentationController extends Controller{
     use GeneralFormHandler;
     use GeneralFormSubmitter;
     use GeneralFormList;
     use SaveFile;
-
+    
     public function listForm(Request $request, $student_id = null)
     {
         $user = Auth::user();
@@ -55,14 +57,16 @@ class PresentationController extends Controller{
        $user = Auth::user();
         $role = $user->current_role;
         $cur=$role->role;
-        if($cur=='faculty'){
+        if($cur=='faculty' || $cur=='phd_coordinator'){
                 $request->validate([
                     'student_id' => 'required|string',
                     'date'=> 'required|date',
                     'time'=> 'required|string',
-                    'venue'=> 'required|string',
                     'period_of_report'=> 'required|string',
+                    'guest_emails'=> 'nullable|array',
+                    'guest_emails.*'=> 'email',
                 ]);
+                
                 $student = Student::where('roll_no', $request->student_id)->first();
                 if (!$student) {
                     return response()->json(['message' => 'Student not found'], 404);
@@ -74,16 +78,26 @@ class PresentationController extends Controller{
                 if(count($old)!=0){
                     return response()->json(['message' => 'Presentation already scheduled for this period'], 403);
                 }
+               
+                $emails = $this->emailList($student,$request);
                 $form = Presentation::create([
                     'student_id' => $request->student_id,
                     'date'=> $request->date,
                     'time'=> $request->time,
-                    'venue'=> $request->venue,
                     'period_of_report'=> $request->period_of_report,
                     'status' => 'pending',
                     'completion' => 'incomplete',
                     'steps'=>['student','faculty','doctoral','hod','dra','dordc','complete'],
                 ]);
+                $calendarResult = PresentationService::scheduleCalendarEvent(
+                    "PhD Presentation - ".$student->user->name(),
+                    "Please Join for PhD Presentation of ".$student->user->name()." scheduled for term ".$request->period_of_report . " scheduled by ".$user->first_name." of Department ".$user->faculty->department->name,
+                    $request->date,
+                    $request->time,
+                    $emails ?? []
+                );
+                $form->venue = $calendarResult['event_link'];
+                $form->save();
                 $form->addHistoryEntry("Presentation Scheduled by Supervisor", $user->first_name);
                 return response()->json($form);
         }
@@ -95,32 +109,33 @@ class PresentationController extends Controller{
     $role = $user->current_role;
     $cur = $role->role;
 
-    if ($cur != 'faculty') {
+    if ($cur != 'faculty' && $cur != 'phd_coordinator') {
         return response()->json(['message' => 'You are not authorized to access this resource'], 403);
     }
 
     $request->validate([
         'students' => 'required|array',
-        'students.*.student_id' => 'required|string',
-        'students.*.date' => 'required|date',
+        'students.*.student_id' => 'required|integer',
+        'students.*.date' => 'required|string',
         'students.*.time' => 'required|string',
-        'students.*.venue' => 'required|string',
         'students.*.period_of_report' => 'required|string',
+        'students.*.guest_emails' => 'nullable|array',
     ]);
-
+    
     $createdForms = [];
     $errors = [];
-
+    
     foreach ($request->students as $studentData) {
         $student = Student::where('roll_no', $studentData['student_id'])->first();
-
+        
+        $formattedDate = Carbon::createFromFormat('d-m-Y', str_replace('/', '-', $studentData['date']))->format('Y-m-d');
         if (!$student) {
             $errors[] = ['student_id' => $studentData['student_id'], 'message' => 'Student not found'];
             continue;
         }
 
-        if (!$student->checkSupervises($user->faculty->faculty_code)) {
-            $errors[] = ['student_id' => $studentData['student_id'], 'message' => 'Not authorized to schedule for this student'];
+        if (!$student->checkSupervises($user->faculty->faculty_code) && !$student->department->checkCoordinates($user->faculty->faculty_code)) {
+            $errors[] = ['student_id' => $studentData['student_id'], 'message' => 'Not authorized to schedule for student '];
             continue;
         }
 
@@ -135,19 +150,31 @@ class PresentationController extends Controller{
 
         $form = Presentation::create([
             'student_id' => $studentData['student_id'],
-            'date' => $studentData['date'],
+            'date' => $formattedDate,
             'time' => $studentData['time'],
-            'venue' => $studentData['venue'],
             'period_of_report' => $studentData['period_of_report'],
             'status' => 'pending',
             'completion' => 'incomplete',
             'steps' => ['student', 'faculty', 'doctoral', 'hod', 'dra', 'dordc', 'complete'],
         ]);
-
+        $emails = $this->emailList($student, $request);
+        $calendarResult = PresentationService::scheduleCalendarEvent(
+            "PhD Presentation - ".$student->user->name(),
+            "Please Join for PhD Presentation of ".$student->user->name()." scheduled for term ".$request->period_of_report . " scheduled by ".$user->first_name." of Department ".$user->faculty->department->name,
+            $formattedDate,
+            $studentData['time'],
+           $emails ?? []
+        );
+        $form->venue = $calendarResult['event_link'];
         $form->addHistoryEntry("Presentation Scheduled by Supervisor", $user->first_name);
         $createdForms[] = $form;
     }
-
+    if($errors){
+        return response()->json([
+            'created_forms' => $createdForms,
+            'errors' => $errors,
+        ], 422);
+    }
     return response()->json([
         'created_forms' => $createdForms,
         'errors' => $errors,
@@ -517,5 +544,40 @@ class PresentationController extends Controller{
             }
         );
     }
+    private function emailList($student,$request){
+        $emails = [];
 
+        $supervisorEmails = $student->supervisors?->map(function ($supervisor) {
+            return $supervisor->user?->email;
+        })->filter()->values()->all() ?? [];
+        $emails = array_merge($emails, $supervisorEmails);
+   
+        $guestEmails = is_array($request->guest_emails) ? array_filter($request->guest_emails) : [];
+        $emails = array_merge($emails, $guestEmails);
+   
+        $committeeEmails = $student->doctoralCommittee?->map(function ($supervisor) {
+            return $supervisor->user?->email;
+        })->filter()->values()->all() ?? [];
+
+        $emails = array_merge($emails, $committeeEmails);
+        
+  
+        $coordinatorEmails = $student->department?->phdCoordinators?->pluck('email')->filter()->values()->all() ?? [];
+        $emails = array_merge($emails, $coordinatorEmails);
+        
+  
+        $hodEmail = optional($student->department?->hod?->user)->email;
+        if ($hodEmail) {
+            $emails[] = $hodEmail;
+        }
+    
+        // Student's own email
+        $studentEmail = optional($student->user)->email;
+        if ($studentEmail) {
+            $emails[] = $studentEmail;
+        }
+        
+        $emails = array_values(array_filter(array_unique($emails)));
+        return $emails;        
+    }
 }

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useLoading } from "../../../context/LoadingContext";
-import { baseURL } from "../../../api/urls";
+import { baseURL, rootURL } from "../../../api/urls";
 import { customFetch } from "../../../api/base";
 import CustomButton from "../fields/CustomButton";
 import { toast } from "react-toastify";
 import { read, utils } from "xlsx";
+import GridContainer from "../fields/GridContainer";
 
 const BulkSchedulePresentation = () => {
   const { setLoading } = useLoading();
@@ -20,7 +21,7 @@ const BulkSchedulePresentation = () => {
       const workbook = read(data, { type: "array" });
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
 
-      const headers = ["Student's Roll Number", "Period of Report", "Date", "Time", "Venue"];
+      const headers = ["Student's Roll Number", "Period of Report", "Date", "Time", "Additional Guest Email"];
       const expectedColumns = headers.length;
       const rawData = utils.sheet_to_json(sheet, { header: 1 });
 
@@ -49,6 +50,22 @@ const BulkSchedulePresentation = () => {
           const parsed = new Date(rawDate);
           rowObj["Date"] = !isNaN(parsed) ? formatDate(parsed) : "Invalid Date";
         }
+        
+           const raw =  rowObj["Additional Guest Email"] || "";
+                if(rowObj["Additional Guest Email"]){
+                const emails = raw.split(",").map(email => email.trim());
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const invalidEmails = emails.filter(email => !emailRegex.test(email));
+        
+                if (invalidEmails.length > 0) {
+                  invalidRows++;
+                   console.warn(`Invalid column count in row ${index + 1}`, rowArr);
+                   rowObj["Additional Guest Email"]=[];
+                  return;
+                } else {
+                  rowObj["Additional Guest Email"] = emails;
+                }
+               }
 
         parsedData.push(rowObj);
       });
@@ -72,7 +89,17 @@ const BulkSchedulePresentation = () => {
 
   const confirmBulkSchedule = () => {
     setLoading(true);
-    customFetch(baseURL + "/bulk-schedule/", "POST", { schedules: csvData })
+  
+    const students = csvData.map((entry) => ({
+      student_id: entry["Student's Roll Number"],
+      date: entry["Date"],
+      time: entry["Time"],
+      period_of_report: entry["Period of Report"],
+      guest_emails: entry["Additional Guest Email"] || [],
+    }));
+  
+    const currentPath = window.location.pathname;
+    customFetch(baseURL + currentPath + "/bulk-schedule/", "POST", { students })
       .then((data) => {
         if (data && data.success) {
           toast.success("Bulk Presentations Scheduled");
@@ -84,10 +111,21 @@ const BulkSchedulePresentation = () => {
         setLoading(false);
       });
   };
-
+  
+  const downloadSampleCSV = () => {
+    const link = document.createElement("a");
+    link.href = rootURL+"/storage/data_formats/bulk_presentation.csv";
+    link.download = "sample_bulk_schedule.csv";
+    link.click();
+  }
   return (
     <>
-      <input type="file" accept=".csv" onChange={handleFileUpload} style={{ marginTop: "10px" }} />
+      <GridContainer elements={[
+      <input type="file" accept=".csv" onChange={handleFileUpload} style={{ marginTop: "10px" }} />,
+      <CustomButton text="Sample CSV" onClick={() => {
+        downloadSampleCSV();
+      }}  />,
+      ]} space={2} />
       {csvData.length > 0 && (
         <>
           <div style={{ overflowX: "auto", marginTop: "16px" }}>

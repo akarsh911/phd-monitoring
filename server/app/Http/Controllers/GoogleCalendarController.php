@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Services\GoogleClientService; // ✅ Add this
+use App\Services\GoogleClientService; 
 use Google_Service_Calendar;
 
 class GoogleCalendarController extends Controller
@@ -42,7 +42,6 @@ class GoogleCalendarController extends Controller
         return response()->json(['message' => 'Token saved']);
     }
 
-    // ✅ Refactor this to use the reusable service
     public function createCalendarEvent(Request $request, GoogleClientService $googleService)
     {
         $client = $googleService->getClient(); // use service

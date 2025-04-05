@@ -51,6 +51,22 @@ const SchedulePresentation = ({close}) => {
     }, []);
     
     const schedule = () => {
+        const raw = body.guest_emails_raw || "";
+        if(body.guest_emails_raw){
+        const emails = raw.split(",").map(email => email.trim());
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const invalidEmails = emails.filter(email => !emailRegex.test(email));
+
+        if (invalidEmails.length > 0) {
+            toast.error("Invalid email(s): " + invalidEmails.join(", "));
+            return;
+        } else {
+            setBody(prevBody => ({
+                ...prevBody,
+                guest_emails: emails
+            }));
+        }
+       }
         setLoading(true);
         customFetch(baseURL + "/presentation/", "POST", body).then((data) => {
             if (data && data.success) {
@@ -74,12 +90,25 @@ const SchedulePresentation = ({close}) => {
                 ]}  space={2}/>
                 <GridContainer  elements={[
                     <DropdownField label={"Period of Report"} options={reportPeriods} onChange={(value)=>{body.period_of_report=value}}/>,
-                ]}/>
+                ]}
+                    space={2}
+                />
                 <GridContainer elements={[
                     <DateField label={"Date"} onChange={(value)=>{body.date=value}}/>,
                     <TimeField label={"Time"} onChange={(value)=>{body.time=value}}/>,
-                    <InputField label={"Venue"} onChange={(value)=>{body.venue=value}}/>
+                     
                 ]} />
+                <GridContainer elements={[
+                    <InputField 
+                    label={"Additional Guest Emails (Email separated by comma)"} 
+                    onChange={(value) => {
+                        setBody(prevBody => ({
+                            ...prevBody,
+                            guest_emails_raw: value  // store raw string input
+                        }));
+                    }}
+                />
+                    ]}  space={3}/>
                 <GridContainer elements={[
                     <></>,
                     <></>,
