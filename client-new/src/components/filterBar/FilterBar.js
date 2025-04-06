@@ -34,6 +34,15 @@ const FilterBar = ({ onSearch }) => {
         api_url: "/suggestions/department",
       },
       {
+        key_name: "student.supervisors.user.first_name",
+        label: "Supervisor Name",
+        data_type: "string",
+        function_name: "text",
+        applicable_pages: ["form_list"],
+        options: null,
+        api_url: "/suggestions/faculty",
+      },
+      {
         key_name: "rcpg_count",
         label: "RCPG Count",
         data_type: "number",
@@ -56,7 +65,7 @@ const FilterBar = ({ onSearch }) => {
         api_url: null,
       },
       {
-        key_name: "submitted_at",
+        key_name: "updated_at",
         label: "Submission Date",
         data_type: "date",
         function_name: "date",
@@ -142,7 +151,6 @@ const FilterBar = ({ onSearch }) => {
             <InputSuggestions
               label=""
               apiUrl={baseURL + selectedFilter.api_url}
-              initialValue={value}
               onSelect={(val) => setValue(val.name || "")}
               showLabel={false}
               suggestionManadatory={false}

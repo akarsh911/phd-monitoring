@@ -95,7 +95,10 @@ public function applyDynamicFilters($query, $filters)
             $relation = implode('.', $relationPath);
             $op = $filter['op'] ?? '=';
             $value = $filter['value'] ?? null;
-    
+            if ($op === 'LIKE') {
+                $value = "%$value%"; 
+            }
+            
             $logic = $combine === 'or' ? 'orWhereHas' : 'whereHas';
     
             if ($relation) {
