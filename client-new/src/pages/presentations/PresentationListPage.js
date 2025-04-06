@@ -8,11 +8,17 @@ import GridContainer from "../../components/forms/fields/GridContainer";
 import BulkSchedulePresentation from "../../components/forms/presentations/BulkSchedulePresentation";
 import SchedulePresentation from "../../components/forms/presentations/SchedulePresentation";
 import FormTable from "../../components/forms/formTable/FormTable";
+import FilterBar from "../../components/filterBar/FilterBar";
 
 const PresentationListPage = () => {
   const [role, setRole] = useState("");
   const [open, setOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(0); 
+  const [filters, setFilters] = useState(null);
+
+  const handleSearch = (query) => {
+    setFilters(query);
+  };
 
   useEffect(() => {
     setRole(localStorage.getItem("userRole"));
@@ -73,7 +79,8 @@ const PresentationListPage = () => {
               </>,
             ]}
           />
-          <FormTable/>
+          <FilterBar onSearch={handleSearch}/>
+          <FormTable filters={filters}/>
         </>
       }
     />

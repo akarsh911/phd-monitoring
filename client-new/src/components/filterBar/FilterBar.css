@@ -1,0 +1,83 @@
+.filter-bar {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin: 1rem 0;
+    background-color: #f9f9f9;
+  }
+  
+  .filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .filter-select,
+  .filter-operator,
+  .filter-combinator,
+  .filter-input {
+    padding: 0.5rem;
+    min-width: 150px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+  
+  .filter-input {
+    min-width: 200px;
+  }
+  
+  .filter-add {
+    padding: 0.5rem 1rem;
+    background-color: #ddd;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .filter-add:hover {
+    background-color: #ccc;
+  }
+  
+  .filter-search {
+    padding: 0.5rem 1rem;
+    background-color: #2b1fd1;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  
+  .filter-search:hover {
+    background-color: #1d14a3;
+  }
+  
+  .active-filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+  }
+  
+  .filter-chip {
+    background-color: #e0e3e7;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+  }
+  
+  .remove-filter {
+    cursor: pointer;
+    font-weight: bold;
+    color: #555;
+  }
+  
+  .remove-filter:hover {
+    color: red;
+  }
+  

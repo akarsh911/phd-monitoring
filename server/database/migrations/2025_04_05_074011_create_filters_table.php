@@ -9,11 +9,14 @@ class CreateFiltersTable extends Migration
     {
         Schema::create('filters', function (Blueprint $table) {
             $table->id();
-            $table->string('key_name')->unique();       // e.g., "student_roll"
-            $table->string('label');                    // e.g., "Student Roll Number"
-            $table->string('data_type');                // string, number, date, etc.
-            $table->string('function_name');            // function in FilterLogicTrait
-            $table->text('applicable_pages')->nullable(); // Comma-separated: admin,hod,guide
+            $table->string('key_name')->unique();       
+            $table->string('label');                   
+            $table->string('data_type');               
+            $table->string('api_url')->nullable();  
+            $table->json('options')->nullable();
+            $table->string('operator')->default('=');
+            $table->string('function_name');            
+            $table->text('applicable_pages')->nullable(); 
             $table->timestamps();
         });
     }

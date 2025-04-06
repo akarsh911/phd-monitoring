@@ -2,14 +2,25 @@
 
 namespace App\Http\Controllers\Traits;
 
+// use App\Http\Traits\FilterLogicTrait;
+
 use App\Models\Student;
+use App\Http\Controllers\Traits\FilterLogicTrait;
 
 trait GeneralFormList
 {
+    use FilterLogicTrait;
     private function listForms($user,$model, $request,$filters=null,$override=false, $fields=[]){
         $role=$user->current_role->role;
         $page = $request->input('page', 1);
         $rows = $request->input('rows', 50);
+        $filters= $request->input('filters', null);
+        $filtersJson = $request->query('filters');
+
+        if ($filtersJson) {
+              $filters = json_decode(urldecode($filtersJson), true);
+        }
+
         switch ($role) {
             case 'student':
                 return $this->listStudentForms($user, $model, $filters, $page,$rows, $fields);
@@ -153,8 +164,9 @@ private function paginateAndMap($formsQuery, $page, $fields, $perPage = 50)
         $formsQuery = $model::where('student_id', $student->roll_no);
 
         if ($filters) {
-            $formsQuery->where($filters);
+            $formsQuery = $this->applyDynamicFilters($formsQuery, $filters);
         }
+        
 
         return $this->paginateAndMap($formsQuery, $page, $fields, $rows);
     }
@@ -164,8 +176,9 @@ private function paginateAndMap($formsQuery, $page, $fields, $perPage = 50)
         $formsQuery = $model::query();
 
         if ($filters) {
-            $formsQuery->where($filters);
+            $formsQuery = $this->applyDynamicFilters($formsQuery, $filters);
         }
+        
 
         return $this->paginateAndMap($formsQuery, $page, $fields, $rows);
     }
@@ -179,8 +192,9 @@ private function listFacultyForms($user, $model, $filters = null, $override = fa
     $formsQuery = $model::whereIn('student_id', $studentIds);
 
     if ($filters) {
-        $formsQuery->where($filters);
+        $formsQuery = $this->applyDynamicFilters($formsQuery, $filters);
     }
+    
 
     return $this->paginateAndMap($formsQuery, $page, $fields,$rows);
 }
@@ -193,9 +207,9 @@ private function listHodForms($user, $model, $filters = null, $override = false,
     $formsQuery = $model::whereIn('student_id', $students);
 
     if ($filters) {
-        $formsQuery->where($filters);
+        $formsQuery = $this->applyDynamicFilters($formsQuery, $filters);
     }
-
+    
     return $this->paginateAndMap($formsQuery, $page, $fields,$rows);
 }
 
@@ -208,8 +222,9 @@ private function listDoctoralForms($user, $model, $filters = null, $override = f
     $formsQuery = $model::whereIn('student_id', $studentIds);
 
     if ($filters) {
-        $formsQuery->where($filters);
+        $formsQuery = $this->applyDynamicFilters($formsQuery, $filters);
     }
+    
 
     return $this->paginateAndMap($formsQuery, $page, $fields,$rows);
 }
