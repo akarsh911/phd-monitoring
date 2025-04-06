@@ -186,10 +186,6 @@ Route::get('/send-welcome', [EmailNotificationController::class, 'sendWelcomeEma
 
 
 
-Route::get('/auth/google', [GoogleCalendarController::class, 'getGoogleAuthUrl']);
-Route::get('/auth/google/callback', [GoogleCalendarController::class, 'handleGoogleCallback']);
-Route::post('/google/create-event', [GoogleCalendarController::class, 'createCalendarEvent']);
-
 // Route::post('/schedule-reminder', [, 'scheduleReminder']);
 // Route::get('/init',function (){
     

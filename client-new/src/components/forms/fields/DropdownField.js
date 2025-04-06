@@ -16,7 +16,7 @@ const DropdownField = ({ label, options, initialValue, isLocked, onChange }) => 
 
     return (
         <div className="input-field-container">
-            <label className="input-label">{label}</label>
+            {label && (  <label className="input-label">{label}</label>)}
             <select
                 className="input-field"
                 value={value}
