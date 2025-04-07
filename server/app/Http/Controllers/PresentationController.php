@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Http\Controllers\Traits\FilterLogicTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Traits\GeneralFormHandler;
 use App\Http\Controllers\Traits\GeneralFormList;
@@ -23,14 +23,19 @@ class PresentationController extends Controller{
     use GeneralFormHandler;
     use GeneralFormSubmitter;
     use GeneralFormList;
+    use FilterLogicTrait;
     use SaveFile;
-    
+
+    public function listFilters(Request $request){
+        return response()->json($this->getAvailableFilters("presentation"));
+    }
     public function listForm(Request $request, $student_id = null)
     {
         $user = Auth::user();
+
         return $this->listForms($user, Presentation::class,$request,null,true,[
             'fields' => [
-                "name","roll_no","period","progress","overall_progress","supervisors"
+                "name","roll_no","period","date","time","progress","supervisors"
             ],
             'extra_fields' => [
                 "overall_progress" => function ($form) {
@@ -44,11 +49,17 @@ class PresentationController extends Controller{
                     return $supervisor->user->name();
                 })->join(', ');
                 },
+                "date" => function ($form) {
+                    return $form->date;
+                },
+                "time" => function ($form) {
+                    return $form->time;
+                },
                 "period" => function ($form) {
                     return $form->period_of_report;
                 },
             ],
-            'titles' => [ "Name", "Roll No","Period","Presentation Progress","Progress Till Now","Supervisors"],
+            'titles' => [ "Name", "Roll No","Period","Date","Time","Progress %","Supervisors"],
         ]);
     }
 

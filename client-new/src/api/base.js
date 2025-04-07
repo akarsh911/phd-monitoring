@@ -37,12 +37,13 @@ export const customFetch = async (
     }
 
   } catch (error) {
-    console.error("Error fetching data:", error);
     if (error instanceof Response) {
       error
-        .json()
-        .then((data) => {
-          if (error.status === 422) {
+      .json()
+      .then((data) => {
+        if (error.status === 422) {
+            console.log("Response error:", error.status, error.statusText);
+            
             if (showToast) toast.error(data.message);
             return { success: false, response: data };
           } else if (error.status === 401) {
@@ -50,7 +51,12 @@ export const customFetch = async (
             window.location.href = "/login";
             return { success: false, response: data };
           } else if (error.status === 500) {
-            if (showToast) toast.error("Internal server error");
+
+            if (showToast) {
+              if(data.message) toast.error(data.message);
+              else if(data.error) toast.error(data.error);
+              else
+              toast.error("Internal server error");}
             return { success: false, response: data };
           } 
           else if (error.status === 400) {

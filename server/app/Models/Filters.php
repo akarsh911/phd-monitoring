@@ -20,6 +20,9 @@ class Filters extends Model
     ];
     protected $casts = [
         'options' => 'array',
+        'applicable_pages' => 'array',
     ];
+   
+    
  
 }

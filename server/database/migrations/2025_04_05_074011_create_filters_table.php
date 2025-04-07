@@ -16,7 +16,8 @@ class CreateFiltersTable extends Migration
             $table->json('options')->nullable();
             $table->string('operator')->default('=');
             $table->string('function_name');            
-            $table->text('applicable_pages')->nullable(); 
+            $table->json('applicable_pages')->nullable();
+
             $table->timestamps();
         });
     }

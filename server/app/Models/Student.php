@@ -200,6 +200,11 @@ class Student extends Model
         return $this->hasMany(StudentSemesterOff::class, 'student_id', 'roll_no');
     }
     
+    public function form() {
+        return $this->hasMany(Forms::class, 'student_id', 'roll_no')
+                    ->where('student_available', true);
+    }
+    
     public function forms()
     {
         $forms = $this->hasMany(Forms::class, 'student_id', 'roll_no')->where('student_available', true)->get();

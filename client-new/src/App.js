@@ -19,6 +19,8 @@ import Dashboard from './pages/dashboard/Dashboard';
 import Publications from './pages/publications/Publications';
 import PresentationListPage from './pages/presentations/PresentationListPage';
 import Presentation from './pages/presentations/PresentationForm';
+import ForgotPasswordPage from './pages/forgot-password/ForgotPasswordPage';
+import ResetPasswordPage from './pages/reset-password/ResetPasswordPage';
 
 
 const App = () => {
@@ -48,7 +50,8 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
-         
+          <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
+          <Route path="/reset-password" element={<ResetPasswordPage/>} />
           <Route path="/home" element={<Dashboard/>} />
           {role==='student' && (
             <>

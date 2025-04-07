@@ -46,39 +46,57 @@ trait FilterLogicTrait
     return $query;
 }
 
+//working
+
 // public function applyDynamicFilters($query, $filters)
 // {
-
 //     $combine = $filters['combine'] ?? 'and';
-
 //     $combine = strtolower($combine);
 //     $filterList = $filters['conditions'] ?? [];
 
 //     $method = $combine === 'or' ? 'orWhereHas' : 'whereHas';
 
-//     foreach ($filterList as $filter) {
-//         $relationPath = explode('.', $filter['key']);
-//         $column = array_pop($relationPath);
-//         $relation = implode('.', $relationPath);
-//         $op = $filter['op'] ?? '=';
-//         $value = $filter['value'] ?? null;
-
-//         if ($relation) {
-//             $query->{$method}($relation, function ($q) use ($column, $op, $value) {
-//                 $q->where($column, $op, $value);
-//             });
-//         } else {
-//             $query->{$combine === 'or' ? 'orWhere' : 'where'}($column, $op, $value);
+//     Log::info('Applying dynamic filters', [
+//         'combine' => $combine,
+//         'filters' => $filterList,
+//     ]);
+    
+//     $query->where(function ($q) use ($combine, $filterList) {
+//         foreach ($filterList as $filter) {
+//             $relationPath = explode('.', $filter['key']);
+//             $column = array_pop($relationPath);
+//             $relation = implode('.', $relationPath);
+//             $op = $filter['op'] ?? '=';
+//             $value = $filter['value'] ?? null;
+//             if ($op === 'LIKE') {
+//                 $value = "%$value%"; 
+//             }
+            
+//             $logic = $combine === 'or' ? 'orWhereHas' : 'whereHas';
+    
+//             if ($relation) {
+//                 $q->{$logic}($relation, function ($subQ) use ($column, $op, $value) {
+//                     $subQ->where($column, $op, $value);
+//                 });
+//             } else {
+//                 $q->{$combine === 'or' ? 'orWhere' : 'where'}($column, $op, $value);
+//             }
 //         }
-//     }
+//     });
+    
+
+//     Log::info('Final SQL', [
+//         'sql' => $query->toSql(),
+//         'bindings' => $query->getBindings()
+//     ]);
 
 //     return $query;
 // }
 
+//new 
 public function applyDynamicFilters($query, $filters)
 {
-    $combine = $filters['combine'] ?? 'and';
-    $combine = strtolower($combine);
+    $combine = strtolower($filters['combine'] ?? 'and');
     $filterList = $filters['conditions'] ?? [];
 
     $method = $combine === 'or' ? 'orWhereHas' : 'whereHas';
@@ -90,17 +108,37 @@ public function applyDynamicFilters($query, $filters)
 
     $query->where(function ($q) use ($combine, $filterList) {
         foreach ($filterList as $filter) {
-            $relationPath = explode('.', $filter['key']);
-            $column = array_pop($relationPath);
-            $relation = implode('.', $relationPath);
+            $key = $filter['key'] ?? '';
             $op = $filter['op'] ?? '=';
             $value = $filter['value'] ?? null;
-            if ($op === 'LIKE') {
-                $value = "%$value%"; 
+
+             if ($key === 'forms.complete_form_stage' && is_array($value)) {
+                $formType = $value['form_type'] ?? null;
+                $stage = $value['stage'] ?? null;
+
+                $q->{$combine === 'or' ? 'orWhereHas' : 'whereHas'}('forms', function ($formQ) use ($formType, $stage) {
+                    if ($formType) {
+                        $formQ->where('form_type', $formType);
+                    }
+                    if ($stage) {
+                        $formQ->where('stage', $stage);
+                    }
+                    $formQ->where('student_available', true); // Include if this is part of the relationship
+                });
+
+                continue; // skip to next filter
             }
-            
+
+            $relationPath = explode('.', $key);
+            $column = array_pop($relationPath);
+            $relation = implode('.', $relationPath);
+
+            if ($op === 'LIKE') {
+                $value = "%$value%";
+            }
+
             $logic = $combine === 'or' ? 'orWhereHas' : 'whereHas';
-    
+
             if ($relation) {
                 $q->{$logic}($relation, function ($subQ) use ($column, $op, $value) {
                     $subQ->where($column, $op, $value);
@@ -110,7 +148,6 @@ public function applyDynamicFilters($query, $filters)
             }
         }
     });
-    
 
     Log::info('Final SQL', [
         'sql' => $query->toSql(),
@@ -120,17 +157,25 @@ public function applyDynamicFilters($query, $filters)
     return $query;
 }
 
+public function getAvailableFilters($pageSlug = null)
+{
+    return DB::table('filters')
+        ->when(
+            $pageSlug,
+            fn($q) =>
+            $q->whereJsonContains('applicable_pages', $pageSlug)
+        )
+        ->get()
+        ->map(function ($filter) {
+            $filter->options = json_decode($filter->options, true);
+            $filter->applicable_pages = json_decode($filter->applicable_pages, true);
+            return $filter;
+        })
+        ;
+}
 
-//     public function getAvailableFilters($pageSlug = null)
-//     {
-//         return DB::table('filters')
-//             ->when(
-//                 $pageSlug,
-//                 fn($q) =>
-//                 $q->whereRaw("FIND_IN_SET(?, applicable_pages)", [$pageSlug])
-//             )
-//             ->get();
-//     }
+
+
 
 
 //     public function evaluateFilter($form, $filterKey, $input)

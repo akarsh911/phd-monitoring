@@ -4,6 +4,8 @@ import "./FilterBar.css"; // Import external CSS
 import DropdownField from "../forms/fields/DropdownField";
 import InputSuggestions from "../forms/fields/InputSuggestions";
 import { baseURL } from "../../api/urls";
+import { customFetch } from "../../api/base";
+import { useLoading } from "../../context/LoadingContext";
 const FilterBar = ({ onSearch }) => {
   const [filtersMeta, setFiltersMeta] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null);
@@ -14,66 +16,12 @@ const FilterBar = ({ onSearch }) => {
   const [activeFilters, setActiveFilters] = useState([]);
 
   useEffect(() => {
-    setFiltersMeta([
-      {
-        key_name: "student.roll_no",
-        label: "Student Roll",
-        data_type: "string",
-        function_name: "text",
-        applicable_pages: ["form_list"],
-        options: null,
-        api_url: null,
-      },
-      {
-        key_name: "student.department.name",
-        label: "Department",
-        data_type: "string",
-        function_name: "text",
-        applicable_pages: ["form_list"],
-        options: null,
-        api_url: "/suggestions/department",
-      },
-      {
-        key_name: "student.supervisors.user.first_name",
-        label: "Supervisor Name",
-        data_type: "string",
-        function_name: "text",
-        applicable_pages: ["form_list"],
-        options: null,
-        api_url: "/suggestions/faculty",
-      },
-      {
-        key_name: "student.overall_progress",
-        label: "Overall Progress",
-        data_type: "number",
-        function_name: "number",
-        applicable_pages: ["form_list"],
-        options: null,
-        api_url: null,
-      },
-      {
-        key_name: "status",
-        label: "Form Status",
-        data_type: "select",
-        function_name: "select",
-        applicable_pages: ["form_list"],
-        options: [
-          { title: "sample 1", value: "pending" },
-          { title: "sample 2", value: "s2" },
-          { title: "sample 3", value: "s3" },
-        ],
-        api_url: null,
-      },
-      {
-        key_name: "updated_at",
-        label: "Submission Date",
-        data_type: "date",
-        function_name: "date",
-        applicable_pages: ["form_list"],
-        options: null,
-        api_url: null,
-      },
-    ]);
+    const fetchFilters = async () => {
+      let location = window.location;
+      let data = await customFetch(baseURL + location.pathname + "/filters", "GET", null, true);
+      setFiltersMeta(data.response);
+    };
+    fetchFilters();
   }, []);
 
   const addFilter = () => {
@@ -140,7 +88,7 @@ const FilterBar = ({ onSearch }) => {
           <DropdownField
             label=""
             style={{ width: "100px" }}
-            options={selectedFilter.options.map((opt) =>
+            options={selectedFilter?.options?.map((opt) =>
               typeof opt === "string" ? { value: opt, title: opt } : opt
             )}
             isLocked={false}
