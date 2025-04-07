@@ -11,8 +11,10 @@ use App\Models\Department;
 use App\Models\Faculty;
 use App\Models\Student;
 use App\Http\Controllers\GoogleCalendarController;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 Route::post('/login', function (Request $request) {
     $request->validate([
