@@ -19,6 +19,7 @@ const Supervisor = ({ formData }) => {
 
   useEffect(() => {
     setLock(formData.locks?.supervisor);
+    if(formData.role === "faculty"){
     setBody({
       approval: formData.current_review?.progress === "satisfactory",
       attendance: formData.attendance,
@@ -27,8 +28,18 @@ const Supervisor = ({ formData }) => {
       progress: formData.progress,
       total_progress: formData.current_progress + formData.progress,
     });
-  
-    setTotalProgress(parseFloat(formData.current_progress)+parseFloat(formData.progress))
+    }
+    else{
+      setBody({
+        approval: formData.approvals.supervisor,
+        attendance: formData.attendance,
+        contact_hours: formData.contact_hours,
+        current_progress: formData.current_progress,
+        progress: formData.progress,
+        total_progress: formData.total_progress,
+      });
+    }
+    setTotalProgress(formData.current_progress + formData.progress);
     setIsLoaded(true);
   }, [formData]);
 
@@ -89,10 +100,11 @@ const Supervisor = ({ formData }) => {
             allowRejection={false}
             moreFields={true}
             handleRecommendationChange={handleApprovalChange}
+            isLocked={lock}
           />
           {body.approval && (
             <>
-              {formData.role === "faculty" && (
+              
                 <>
                   <GridContainer
                     elements={[
@@ -153,7 +165,7 @@ const Supervisor = ({ formData }) => {
                     ]}
                   />
                 </>
-              )}
+           
             </>
           )}
           {formData.role === "faculty" && !lock && (
