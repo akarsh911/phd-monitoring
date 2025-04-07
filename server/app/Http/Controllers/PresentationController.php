@@ -439,7 +439,7 @@ class PresentationController extends Controller{
                 if($request->approval){
                     PresentationReview::where('presentation_id',$formInstance->id)->where('is_supervisor',1)->where('faculty_id',$user->faculty->faculty_code)
                     ->update(['progress'=>'satisfactory','review_status'=>'completed','comments'=>$request->comments]);
-                    $approvals=$formInstance->supervisorReviews->where('is_supervisor',1)->where('review_status','pending');
+                    $approvals=PresentationReview::where('presentation_id',$formInstance->id)->where('is_supervisor',1)->where('review_status','pending')->get();
                    if(count($approvals)!=0){
                       throw new \Exception("Your Prefrences have been saved. Please wait for other supervisors to approve",201);
                    }
@@ -482,23 +482,15 @@ class PresentationController extends Controller{
                 if($request->approval){
                     PresentationReview::where('presentation_id',$formInstance->id)->where('faculty_id',$user->faculty->faculty_code)
                     ->update(['progress'=>'satisfactory','review_status'=>'completed','comments'=>$request->comments]);
-                    $approvals=$formInstance->supervisorReviews->where('is_supervisor',0)->where('review_status','pending');
-                   if(count($approvals)!=0){
-                      throw new \Exception("Your Prefrences have been saved. Please wait for other supervisors to approve",201);
-                   }
-                   else{
-                     $doctoral=$formInstance->student->doctoralCommittee;
-                     foreach($doctoral as $doc){
-                        PresentationReview::create([
-                            'presentation_id'=>$formInstance->id,
-                            'faculty_id'=>$doc->faculty_code,
-                            'comments'=>'',
-                            'review_status'=>'pending',
-                            'is_supervisor'=>0,
-                        ]);
-                     }
-                   }
+                 
                 }
+                $approvals=PresentationReview::where('presentation_id',$formInstance->id)->where('is_supervisor',0)->where('review_status','pending')->get();
+                if(count($approvals)!=0){
+                   throw new \Exception("Your Prefrences have been saved. Please wait for other supervisors to approve",201);
+                }
+                throw new \Exception("You have already reviewed this form");
+     
+                
             }
         );
     }
