@@ -11,6 +11,7 @@ use App\Models\Department;
 use App\Models\Faculty;
 use App\Models\Student;
 use App\Http\Controllers\GoogleCalendarController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
@@ -189,6 +190,7 @@ Route::post('create-role', function (Request $request) {
 Route::prefix('roles')->group(function () {
     require base_path('routes/base/roles.php');
 });
+Route::get('/home', [HomeController::class, 'getHomeData'])->middleware('auth:sanctum');
 
 Route::prefix('notifications')->group(function () {
     require base_path('routes/base/notifications.php');

@@ -1,13 +1,16 @@
 const predefinedColors = [
-    "#FF5733", // Bright Red
-    "#33FF57", // Bright Green
-    "#3357FF", // Bright Blue
-    "#FF33A1", // Pink
-    "#FF8C33", // Orange
-    "#33FFF1", // Aqua
-    "#FF33FF", // Magenta
-    "#A1FF33"  // Lime Green
-  ];
+  "#F94144", // Soft Red
+  "#F3722C", // Warm Orange
+  "#F9C74F", // Golden Yellow
+  "#90BE6D", // Mellow Green
+  "#43AA8B", // Teal
+  "#577590", // Muted Blue
+  "#277DA1", // Deep Blue
+  "#9D4EDD", // Violet
+  "#FF6F91", // Coral Pink
+  "#6A4C93"  // Dark Purple
+]
+
   
   const generateColorFromInitials = (initials) => {
     let hash = 0;
@@ -24,6 +27,10 @@ const predefinedColors = [
   
   // Function to create an image with initials and background color
   export const generateAvatar = (firstName, lastName) => {
+    if( !lastName) {
+      lastName = firstName[4] || ""; // Handle cases where last name is not provided
+
+    }
     const initials = `${firstName[0]}${lastName[0]}`.toUpperCase();
     const bgColor = generateColorFromInitials(initials);
     const canvas = document.createElement("canvas");

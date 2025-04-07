@@ -10,7 +10,7 @@
 }
 
 .custom-table thead th {
-    background-color: var(--secondary-color);
+    background-color: #f3f4f6;
     padding: 8px;
     text-align: left;
     color: black;
