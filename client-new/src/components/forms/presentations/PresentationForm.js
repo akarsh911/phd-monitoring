@@ -21,6 +21,11 @@ const PresentationForm = ({formData, refetchData = null,}) => {
         <Supervisor formData={formData}/>
         <Recommendation
           formData={formData}
+          role="doctoral"
+          allowRejection={false}
+        ></Recommendation>
+        <Recommendation
+          formData={formData}
           role="hod"
           allowRejection={false}
         ></Recommendation>
