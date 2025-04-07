@@ -3,11 +3,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './NavBar.css';
 
 const buttonConfig = [
-    { path: '/home', icon: '🏠', text: 'Home', roles: ['student', 'hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external'] },
-    { path: '/forms', icon: '📃', text: 'Forms', roles: ['student','hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external'] },
-    { path: '/presentation', icon: 'ℹ️', text: 'Presentations', roles: ['student','hod','phd_coordinator','faculty','dordc','dra','director','doctoral'] },
-    { path: '/publications', icon: '📰', text: 'Publications', roles: ['student', 'faculty','hod'] },
-    { path: '/students', icon: '🧑‍🎓', text: 'Students', roles: ['hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external'] },
+    { path: '/home', icon: <i class="fa fa-home" aria-hidden="true"></i>, text: 'Home', roles: ['student', 'hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external'] },
+    { path: '/forms', icon: <i class="fa fa-file-text" aria-hidden="true"></i>, text: 'Forms', roles: ['student','hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external'] },
+    { path: '/presentation/form', icon: <i class="fa fa-tasks" aria-hidden="true"></i>, text: 'Presentations', roles: ['student','hod','phd_coordinator','faculty','dordc','dra','director','doctoral'] },
+    { path: '/publications', icon: <i class="fa fa-book" aria-hidden="true"></i>, text: 'Publications', roles: ['student', 'faculty','hod'] },
+    { path: '/students', icon: <i class="fa fa-users" aria-hidden="true"></i>, text: 'Students', roles: ['hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external'] },
 ];
 
 const CustomNavBar = () => {

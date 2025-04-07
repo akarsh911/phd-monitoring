@@ -5,6 +5,7 @@ import { formatDate } from '../../utils/timeParse';
 import CustomButton from '../forms/fields/CustomButton';
 import AddPublication from './AddPublication';
 import CustomModal from '../forms/modal/CustomModal';
+import './AddPublication.css';
 
 const ShowPublications = ({
     formData,
@@ -15,7 +16,8 @@ const ShowPublications = ({
     onSubmit,
     onSelect,
     onDelete,
-    onEdit
+    onEdit,
+    refetchData = null,
 }) => {
    const [selectedRows, setSelectedRows] = useState({});
    const [totalPublications, setTotalPublications] = useState(0);
@@ -45,7 +47,8 @@ const ShowPublications = ({
    }
    const closeModal = () => {
        setOpen(false);
-       window.location.reload();
+       if(refetchData)
+       refetchData();
    }
    useEffect(() => {
         let c=0;
@@ -83,6 +86,16 @@ const ShowPublications = ({
         <>
             {formData && (
                 <>
+                    <GridContainer elements={[]} space={3} />
+                    {enableSubmit && (
+                        <GridContainer elements={[
+                            <h1 className='title-modal'>{enableSubmit && ("Link ")}Publications</h1>,
+                            <CustomButton text="Add New" onClick={openModal} />
+                        ]}
+                         space={2}
+                       
+                        ></GridContainer>
+                     )}
                    {formData.sci && formData.sci.length > 0 && (
                         <>
                             <GridContainer elements={[<h2>SCI/SCIE/SSCI/ABCD/AHCI Journal</h2>]} space={1} />
@@ -93,8 +106,7 @@ const ShowPublications = ({
                                     titles={['Author(s)', 'Year of Publication', 'Title of Paper', 'Name of the Journal', 'Impact Factor', 'DOI', '']}
                                     components={[
                                         { key: 'doi_link', component: ({ data }) => <a href={data} target="_blank" rel="noopener noreferrer">link</a> },
-                                        { key: 'year', component: ({ data }) => <span>{formatDate(data)}</span> },
-                                        { key: 'id', component: ({ data }) => renderActions(data, 'sci') }
+                                          { key: 'id', component: ({ data }) => renderActions(data, 'sci') }
                                     ]}
                                     rowStyle={(data) => getRowStyle(data.id, 'sci')}
                                 />
@@ -112,8 +124,7 @@ const ShowPublications = ({
                                     titles={['Author(s)', 'Year of Publication', 'Title of Paper', 'Name of the Journal', 'Impact Factor', 'DOI','']}
                                     components={[
                                         { key: 'doi_link', component: ({ data }) => <a href={data} target="_blank" rel="noopener noreferrer">link</a> },
-                                        { key: 'year', component: ({ data }) => <span>{formatDate(data)}</span> },
-                                        { key: 'id', component: ({ data }) => renderActions(data, 'non_sci') }
+                                         { key: 'id', component: ({ data }) => renderActions(data, 'non_sci') }
                                     ]}
                                     rowStyle={(data) => getRowStyle(data.id, 'non_sci')}
                                 />
@@ -131,8 +142,7 @@ const ShowPublications = ({
                                     titles={['Author(s)', 'Year of Publication', 'Title of Paper', 'Name of Conference', 'Place of Conference', 'DOI',' ']}
                                     components={[
                                         { key: 'doi_link', component: ({ data }) => <a href={data} target="_blank" rel="noopener noreferrer">link</a> },
-                                        { key: 'year', component: ({ data }) => <span>{formatDate(data)}</span> },
-                                        { key: 'country', component: ({ data }) => <span>{data}</span> },
+                                         { key: 'country', component: ({ data }) => <span>{data}</span> },
                                         { key: 'id', component: ({ data }) => renderActions(data, 'international') }
                                     ]}
                                     rowStyle={(data) => getRowStyle(data.id, 'international')}
@@ -151,8 +161,7 @@ const ShowPublications = ({
                                     titles={['Author(s)', 'Year of Publication', 'Title of Paper', 'Name of Conference', 'Place of Conference', 'DOI',' ']}
                                     components={[
                                         { key: 'doi_link', component: ({ data }) => <a href={data} target="_blank" rel="noopener noreferrer">link</a> },
-                                        { key: 'year', component: ({ data }) => <span>{formatDate(data)}</span> },
-                                        {key: 'id', component: ({ data }) => renderActions(data, 'national') }
+                                         {key: 'id', component: ({ data }) => renderActions(data, 'national') }
                                     ]}
                                     rowStyle={(data) => getRowStyle(data.id, 'national')}
                                 />
@@ -166,11 +175,10 @@ const ShowPublications = ({
                             <GridContainer elements={[
                                 <TableComponent
                                     data={formData.book}
-                                    keys={['name', 'title', 'year', 'publisher_name','id']}
+                                    keys={['name', 'title', 'year', 'publisher','id']}
                                     titles={['Name of Book', 'Title of Paper', 'Year of Publication', 'Name of Publisher',' ']}
                                     components={[
-                                        { key: 'year', component: ({ data }) => <span>{formatDate(data)}</span> },
-                                          {key: 'id', component: ({ data }) => renderActions(data, 'book') }
+                                         {key: 'id', component: ({ data }) => renderActions(data, 'book') }
                                     ]}
                                     getRowStyle={(data) => getRowStyle(data.id, 'book')}
                                 />
@@ -195,12 +203,23 @@ const ShowPublications = ({
                             ]} space={3} />
                         </>
                     )}
+                    {
+                       formData.patents && formData.patents.length === 0 &&
+                          formData.book && formData.book.length === 0 &&
+                            formData.national && formData.national.length === 0 &&
+                            formData.international && formData.international.length === 0 &&
+                            formData.sci && formData.sci.length === 0 &&
+                            formData.non_sci && formData.non_sci.length === 0 && (
+                                <p style={{textAlign:'center'}}>No Publications Found, Add One to Continue</p>
+                            )
+                    }
                      {enableSubmit && (
                         <GridContainer elements={[
-                            <>{totalPublications>0 && (<CustomButton text="Submit" onClick={onSubmit} />)}</>,
-                           <></>,
-                           <CustomButton text="Add Publications" onClick={openModal} />
-                        ]}></GridContainer>
+                            <>{totalPublications>0 && (<CustomButton text="Link Selected Publications with Form" onClick={onSubmit} />)}</>,
+                         
+                        ]}
+                            space={3}
+                        ></GridContainer>
                      )}
                 <CustomModal isOpen={open} onClose={closeModal} title={'Add Publication'}
                     minHeight='200px' maxHeight='600px' minWidth='650px' maxWidth='700px' closeOnOutsideClick={false}>

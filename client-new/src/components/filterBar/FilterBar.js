@@ -43,8 +43,8 @@ const FilterBar = ({ onSearch }) => {
         api_url: "/suggestions/faculty",
       },
       {
-        key_name: "rcpg_count",
-        label: "RCPG Count",
+        key_name: "student.overall_progress",
+        label: "Overall Progress",
         data_type: "number",
         function_name: "number",
         applicable_pages: ["form_list"],

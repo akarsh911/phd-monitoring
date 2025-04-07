@@ -4,14 +4,20 @@ import Student from "./roles/Student";
 import FormTitleBar from "../formTitleBar/FormTitleBar";
 import Recommendation from "../layouts/Recommendation";
 import Supervisor from "./roles/Supervisor";
+import RoleBasedWrapper from "../roleWrapper/RoleBasedWrapper";
 
-const PresentationForm = ({formData}) => {
-  console.log(formData);
+const PresentationForm = ({formData, refetchData = null,}) => {
   return (
     <>
       <FormTitleBar formName={"Presentation " + formData.period_of_report} formData={formData} />
       <div className="form-container">
-        <Student formData={formData}/>
+          
+    <RoleBasedWrapper
+       roleHierarchy={formData.steps}
+       currentRole={formData.role}>
+    
+
+        <Student formData={formData} refetchData={refetchData}/>
         <Supervisor formData={formData}/>
         <Recommendation
           formData={formData}
@@ -28,6 +34,8 @@ const PresentationForm = ({formData}) => {
           role="dordc"
           allowRejection={false}
         ></Recommendation>
+
+       </RoleBasedWrapper>
       </div>
     </>
   );

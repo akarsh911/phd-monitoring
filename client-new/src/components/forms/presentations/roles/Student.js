@@ -16,7 +16,7 @@ import CustomModal from "../../modal/CustomModal";
 import { customFetch } from "../../../../api/base";
 import { toast } from "react-toastify";
 
-const Student = ({ formData }) => {
+const Student = ({ formData, refetchData = null, }) => {
   const [body, setBody] = useState({});
   const [lock, setLock] = useState(formData?.locks?.student);
   const [isLoaded, setIsLoaded] = useState(true);
@@ -220,7 +220,7 @@ const Student = ({ formData }) => {
                   { title: "UG", value: "UG" },
                   { title: "PG", value: "PG" },
                   { title: "UG & PG (Both)", value: "Both" },
-                  { title: "Not Applicable", value: "None" },
+                  { title: "Other Assignments", value: "None" },
                 ]}
                 initialValue={formData.teaching_work}
                 isLocked={lock}
@@ -333,7 +333,7 @@ const Student = ({ formData }) => {
                       </>,
                       <></>,
                       <CustomButton
-                        text="Add Publications"
+                        text="Link Publications"
                         onClick={() => {
                           openModal();
                         }}
@@ -348,6 +348,7 @@ const Student = ({ formData }) => {
                       enableEdit={!lock}
                       enableDelete={!lock}
                       onDelete={removePublication}
+                      refetchData={refetchData}
                     />,
                   ]}
                   space={3}

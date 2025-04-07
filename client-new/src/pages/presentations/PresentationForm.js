@@ -27,7 +27,22 @@ const Presentation = () => {
         setLoading(false);
       });
   }, []);
-
+  const refetchData = () => {
+    setLoading(true);
+    const url = baseURL + location.pathname;
+    customFetch(url, "GET")
+      .then((data) => {
+        if (data && data.success) {
+          setFormData(data.response);
+          setIsLoaded(true);
+        }
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
+  }
   return (
     <>
       <Layout
@@ -35,7 +50,7 @@ const Presentation = () => {
           <>
             {isLoaded && formData && (
               <>
-                <PresentationForm formData={formData} />
+                <PresentationForm formData={formData} refetchData={refetchData} />
               </>
             )}
           </>

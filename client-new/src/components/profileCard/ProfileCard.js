@@ -142,7 +142,7 @@ function ProfileCard({ dataIP = null, link=false }) {
                                         <CustomButton text="Edit"/>,
                                         <CustomButton text="Delete"/>
                                      ]}
-                                     space={2}
+                                     space={1}
                                     //  ratio={[2,1]}
                                      />
 
@@ -154,7 +154,7 @@ function ProfileCard({ dataIP = null, link=false }) {
                    
                 ]}
                 label="Doctoral Committe"
-                space={2}
+                space={3}
             />
         </div>
     );

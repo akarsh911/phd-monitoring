@@ -43,7 +43,6 @@ class Publication extends Model
      * @var array
      */
     protected $casts = [
-        'year' => 'date',
         'impact_factor' => 'float',
     ];
 

@@ -74,7 +74,8 @@ class PublicationController extends Controller
         $publication->title = $request->title;
         $publication->authors = $request->authors;
         $publication->doi_link=$request->doi_link;
-        $publication->year=$request->year;
+
+        $publication->year = (int) $request->year;
         $publication->name=$request->name;
         
         $link=$this->saveUploadedFile($request->first_page,'publication',$user->student->roll_no);
@@ -109,6 +110,7 @@ class PublicationController extends Controller
     
                 $publication->country=$request->country;
                 $publication->state=$request->state;
+                $publication->publication_type='conference';
                 $publication->city=$request->city;
                 $publication->type=$request->type;
                 break;
@@ -126,6 +128,7 @@ class PublicationController extends Controller
                 $publication->volume=$request->volume;
                 $publication->page_no=$request->page_no;
                 $publication->publisher=$request->publisher;
+                $publication->publication_type='book';
                 break;
         }
         $publication->save();

@@ -58,7 +58,10 @@ const Book = ({ callback, updateValue }) => {
               setBodyValue("year", value);
             }}
           />,
+          <DropdownField label={"Status of Book:"} options={[{title:"Accepted",value:"accepted"},{title:"Published",value:"published"}]} onChange={(value)=>{setBodyValue("status",value)}} />,
+          
         ]}
+        space={2}
       />
 
       <GridContainer
@@ -110,6 +113,7 @@ const Book = ({ callback, updateValue }) => {
             }}
           />,
         ]}
+        space={2}
       />
 
       <GridContainer
