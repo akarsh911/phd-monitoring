@@ -414,7 +414,7 @@ class PresentationController extends Controller{
             $form_id,
             $model,
             'faculty',
-            'doctoral',
+            'student',
             'doctoral',
             function ($formInstance) use ($request, $user) {
                 if(!$formInstance->progress||!$formInstance->attendance||!$formInstance->contact_hours){

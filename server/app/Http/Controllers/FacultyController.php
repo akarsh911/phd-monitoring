@@ -87,14 +87,12 @@ class FacultyController extends Controller
     
         $facultyQuery = Faculty::with(['user', 'department']);
     
-        if ($loggedInUser->role->can_read_all_faculties) {
-            // No restriction
-        } elseif ($loggedInUser->role->can_read_department_faculties) {
+        if ($role === 'hod'||$role === 'phd_coordinator') {
             $facultyQuery->where('department_id', $loggedInUser->faculty->department_id);
+        }  elseif ($role === 'admin'||$role === 'director' || $role === 'dra' || $role === 'dordc') {
+          
         } else {
-            return response()->json([
-                'message' => 'You do not have permission to view faculties'
-            ], 403);
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
     
         if ($filters) {
