@@ -43,7 +43,7 @@ const PresentationListPage = () => {
               <></>,
               <></>,
               <>
-                {role === "faculty" && (
+                {(role === "faculty" || role==='phd_coordinator')  && (
                   <div className="form-list-bar">
                     <CustomButton
                       onClick={openModal}
