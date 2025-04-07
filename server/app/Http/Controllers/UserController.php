@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\FilterLogicTrait;
 use App\Http\Controllers\Traits\GeneralFormHandler;
 use App\Http\Controllers\Traits\GeneralFormList;
 use App\Http\Controllers\Traits\GeneralFormSubmitter;
@@ -16,6 +17,10 @@ class UserController extends Controller{
     public function list(Request $request){
         $user = Auth::user();
         return response()->json($user);
+    }
+    use FilterLogicTrait;
+    public function listFilters(Request $request){
+        return response()->json($this->getAvailableFilters("forms"));
     }
 
     public function listForms(Request $request, $roll_no = null){

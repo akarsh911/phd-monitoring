@@ -1,6 +1,7 @@
 <?php 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\FilterLogicTrait;
 use App\Models\Faculty;
 use App\Models\PhdCoordinator;
 use Illuminate\Http\Request;
@@ -8,7 +9,10 @@ use Illuminate\Support\Facades\Auth;
 
 class DepartmentController extends Controller
 {
-
+    use FilterLogicTrait;
+    public function listFilters(Request $request){
+        return response()->json($this->getAvailableFilters("departments"));
+    }
     public function add(Request $request)
     {
         $loggenInUser = Auth::user();

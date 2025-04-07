@@ -10,6 +10,7 @@ use App\Http\Controllers\Traits\FilterLogicTrait;
 trait GeneralFormList
 {
     use FilterLogicTrait;
+    use PagenationTrait;
     private function listForms($user,$model, $request,$filters=null,$override=false, $fields=[]){
         $role=$user->current_role->role;
         $page = $request->input('page', 1);
@@ -30,6 +31,7 @@ trait GeneralFormList
             case 'dra':
             case 'dordc':
             case 'director':
+            case 'admin':
                 return $this->listAdminForms($user, $model, $filters, $page,$rows, $fields, );
             case 'faculty':
                 return $this->listFacultyForms($user, $model, $filters, $override, $page,$rows, $fields );
@@ -41,30 +43,10 @@ trait GeneralFormList
         }
     }
 
-    private function applyPagination($query, $page, $perPage = 50)
-{
-    $offset = ($page - 1) * $perPage;
-
-    if (is_array($query)) {
-        // Handling array pagination manually
-        return array_slice($query, $offset, $perPage);
-    } 
-    
-    if ($query instanceof \Illuminate\Database\Eloquent\Builder || $query instanceof \Illuminate\Database\Query\Builder) {
-        // Handling pagination for query builders
-        return $query->skip($offset)->take($perPage);
-    } 
-
-    if ($query instanceof \Illuminate\Support\Collection) {
-        // Handling pagination for collections
-        return $query->slice($offset, $perPage);
-    }
-
-    throw new \Exception("Unsupported query type provided to applyPagination()");
-}
+   
 
 
-private function paginateAndMap($formsQuery, $page, $fields, $perPage = 50)
+private function paginateAndMap($formsQuery, $page, $fields, $perPage = 50,$user)
 {
     $total = $formsQuery instanceof \Illuminate\Database\Eloquent\Builder || $formsQuery instanceof \Illuminate\Database\Query\Builder
                 ? $formsQuery->count()
@@ -78,13 +60,13 @@ private function paginateAndMap($formsQuery, $page, $fields, $perPage = 50)
     }
     
     return [
-        'forms' => collect($forms)->map(fn($form) => $this->mapForm($form, $fields['extra_fields'] ?? []))->values(),
-        'fieldsTitles' => $fields,
+        'data' => collect($forms)->map(fn($form) => $this->mapForm($form, $fields['extra_fields'] ?? []))->values(),
         'page' => $page,
         'total' => $total,
         'totalPages' => $totalPages,
         'fields' => $fields['fields'] ?? [],
         'fieldsTitles' => $fields['titles'] ?? [],
+        'roles' => $user->current_role->role,
     ];
 }
 
@@ -100,7 +82,7 @@ private function paginateAndMap($formsQuery, $page, $fields, $perPage = 50)
             'created_at' => $form->created_at,
             'updated_at' => $form->updated_at,
             'action_req' => $form->student_lock,
-            'form_id' => $form->id,
+            'id' => $form->id,
         ];
 
         foreach ($fields as $key => $field) {
@@ -168,7 +150,7 @@ private function paginateAndMap($formsQuery, $page, $fields, $perPage = 50)
         }
         
 
-        return $this->paginateAndMap($formsQuery, $page, $fields, $rows);
+        return $this->paginateAndMap($formsQuery, $page, $fields, $rows, $user);
     }
 
     private function listAdminForms($user, $model, $filters = null, $page = 1, $rows = 50, $fields = [])
@@ -180,7 +162,7 @@ private function paginateAndMap($formsQuery, $page, $fields, $perPage = 50)
         }
         
 
-        return $this->paginateAndMap($formsQuery, $page, $fields, $rows);
+        return $this->paginateAndMap($formsQuery, $page, $fields, $rows, $user);
     }
 
 private function listFacultyForms($user, $model, $filters = null, $override = false, $page = 1,$rows=50, $fields = [])
@@ -196,7 +178,7 @@ private function listFacultyForms($user, $model, $filters = null, $override = fa
     }
     
 
-    return $this->paginateAndMap($formsQuery, $page, $fields,$rows);
+    return $this->paginateAndMap($formsQuery, $page, $fields,$rows, $user);
 }
 
 private function listHodForms($user, $model, $filters = null, $override = false, $page = 1,$rows=50, $fields = [])
@@ -210,7 +192,7 @@ private function listHodForms($user, $model, $filters = null, $override = false,
         $formsQuery = $this->applyDynamicFilters($formsQuery, $filters);
     }
     
-    return $this->paginateAndMap($formsQuery, $page, $fields,$rows);
+    return $this->paginateAndMap($formsQuery, $page, $fields,$rows, $user);
 }
 
 private function listDoctoralForms($user, $model, $filters = null, $override = false, $page = 1,$rows=50, $fields = [])
@@ -226,7 +208,7 @@ private function listDoctoralForms($user, $model, $filters = null, $override = f
     }
     
 
-    return $this->paginateAndMap($formsQuery, $page, $fields,$rows);
+    return $this->paginateAndMap($formsQuery, $page, $fields,$rows, $user);
 }
 
     

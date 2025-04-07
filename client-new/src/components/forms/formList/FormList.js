@@ -27,9 +27,9 @@ const FormList = ({ showButton = true }) => {
         console.log(error);
       })
       .finally(() => {
-        setLoading(false); // Ensure loading is set to false in both success and error cases
+        setLoading(false); 
       });
-  }, [location.pathname, setLoading]); // Added location.pathname as a dependency
+  }, [location.pathname, setLoading]); 
 
   const handleClick = (form) => {
     let path = location.pathname;

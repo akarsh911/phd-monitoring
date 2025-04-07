@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\FilterLogicTrait;
 use App\Http\Controllers\Traits\SaveFile;
 use App\Models\Patent;
 use App\Models\Publication;
@@ -17,7 +18,11 @@ class PublicationController extends Controller
      * @return \Illuminate\Http\Response
      */
     use SaveFile;
-  
+    use FilterLogicTrait;
+
+    public function listFilters(Request $request){
+        return response()->json($this->getAvailableFilters("publications"));
+    }
 
     public function get(Request $request)
     {

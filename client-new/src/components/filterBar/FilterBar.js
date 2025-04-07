@@ -19,7 +19,7 @@ const FilterBar = ({ onSearch }) => {
     const fetchFilters = async () => {
       let location = window.location;
       let data = await customFetch(baseURL + location.pathname + "/filters", "GET", null, true);
-      setFiltersMeta(data.response);
+      setFiltersMeta(data?.response);
     };
     fetchFilters();
   }, []);
@@ -57,13 +57,13 @@ const FilterBar = ({ onSearch }) => {
           className="filter-select"
           alue={selectedFilter?.key_name || ""}
           onChange={(e) => {
-            const meta = filtersMeta.find((f) => f.key_name === e.target.value);
+            const meta = filtersMeta?.find((f) => f.key_name === e.target.value);
             setSelectedFilter(meta || null);
             setValue("");
           }}
         >
           <option value="">Select Filter</option>
-          {filtersMeta.map((f) => (
+          {filtersMeta?.map((f) => (
             <option key={f.key_name} value={f.key_name}>
               {f.label}
             </option>

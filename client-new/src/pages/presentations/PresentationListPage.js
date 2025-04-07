@@ -9,13 +9,14 @@ import BulkSchedulePresentation from "../../components/forms/presentations/BulkS
 import SchedulePresentation from "../../components/forms/presentations/SchedulePresentation";
 import FormTable from "../../components/forms/formTable/FormTable";
 import FilterBar from "../../components/filterBar/FilterBar";
+import PagenationTable from "../../components/pagenationTable/PagenationTable";
 
 const PresentationListPage = () => {
   const [role, setRole] = useState("");
   const [open, setOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(0); 
   const [filters, setFilters] = useState(null);
-
+const [location, setLocation] = useState(window.location.pathname);
   const handleSearch = (query) => {
     setFilters(query);
   };
@@ -80,7 +81,11 @@ const PresentationListPage = () => {
             ]}
           />
           <FilterBar onSearch={handleSearch}/>
-          <FormTable filters={filters}/>
+          <PagenationTable 
+           endpoint={location}
+           filters={filters}
+           enableApproval={true}
+          />
         </>
       }
     />

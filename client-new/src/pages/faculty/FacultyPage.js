@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import FilterBar from '../../components/filterBar/FilterBar';
 import PagenationTable from '../../components/pagenationTable/PagenationTable';
 
-const StudentsPage = () => {
+const FacultyPage = () => {
     const[filter, setFilter] = useState([]);
     const { setLoading } = useLoading();
     const location = useLocation();
@@ -31,4 +31,4 @@ const StudentsPage = () => {
     );
 }
 
-export default StudentsPage;
+export default FacultyPage;

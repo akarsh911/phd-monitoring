@@ -21,6 +21,7 @@ import PresentationListPage from './pages/presentations/PresentationListPage';
 import Presentation from './pages/presentations/PresentationForm';
 import ForgotPasswordPage from './pages/forgot-password/ForgotPasswordPage';
 import ResetPasswordPage from './pages/reset-password/ResetPasswordPage';
+import FacultyPage from './pages/faculty/FacultyPage';
 
 
 const App = () => {
@@ -66,7 +67,7 @@ const AppContent = () => {
 
           <Route path="/forms/:form_type" element={<FormListPage/>} />
           <Route path="/forms/:form_type/:id" element={<MainFormPage/>} />
-          {(role === 'faculty' || role === 'phd_coordinator' || role==='hod' || role==='doctoral'|| role==='external'|| role==='dordc'  || role==='dra' || role==='director') && (
+          {(role === 'faculty' || role === 'phd_coordinator' || role==='hod' || role==='doctoral'|| role==='external'|| role==='dordc'  || role==='dra' || role==='director' || role==='admin') && (
             <>
                  <Route path="/forms" element={<FacultyFormsPage/>} />
                 <Route path="/students" element={<StudentsPage />} />
@@ -76,6 +77,16 @@ const AppContent = () => {
                 <Route path="/students/:roll_no/forms/:form_type/:id" element={<MainFormPage />} />
             </>
           ) }
+          {(
+            role === 'hod' || role === 'phd_coordinator' || role==='doctoral'|| role==='external'|| role==='dordc'  || role==='dra' || role==='director' || role==='admin') && (
+            <>
+              <Route path="/faculty" element={<FacultyPage />} />
+              {/* <Route path="/faculty/:roll_no" element={<StudentProfile />} />
+              <Route path="/faculty/:roll_no/forms" element={<FormsPage />} />
+              <Route path="/faculty/:roll_no/forms/:form_type" element={<FormListPage />} />
+              <Route path="/faculty/:roll_no/forms/:form_type/:id" element={<MainFormPage />} /> */}
+            </>
+          )}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

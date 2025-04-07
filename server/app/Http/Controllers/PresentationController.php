@@ -23,8 +23,8 @@ class PresentationController extends Controller{
     use GeneralFormHandler;
     use GeneralFormSubmitter;
     use GeneralFormList;
-    use FilterLogicTrait;
     use SaveFile;
+    use FilterLogicTrait;
 
     public function listFilters(Request $request){
         return response()->json($this->getAvailableFilters("presentation"));
@@ -219,6 +219,9 @@ class PresentationController extends Controller{
                 return $this->handleAdminForm($user, $form_id, $model);
             case 'faculty':
                 return $this->handleFacultyForm($user, $form_id, $model);
+            case 'admin':
+                 return $this->handleAdminForm($user, $form_id, $model,true);
+           
             default:
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }

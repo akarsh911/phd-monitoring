@@ -19,6 +19,7 @@ const FormTable = ({ filters }) => {
 
   const { setLoading } = useLoading();
   const location = useLocation();
+  const [role, setRole] = useState("student");
 
   const fetchData = async (page = 1, rows = rowsPerPage, filters = null) => {
     setLoading(true);
@@ -37,6 +38,8 @@ const FormTable = ({ filters }) => {
         setFieldsTitle(data.response.fieldsTitles || []);
         setForms(data.response.forms || []);
         setTotalPages(data.response.totalPages || 1);
+        setRole(data.response.role || "student");
+      
       }
     } catch (error) {
       console.error(error);
@@ -103,6 +106,7 @@ const FormTable = ({ filters }) => {
 
   return (
     <div className="form-list-container">
+      {role !== "student" && (
       <div className="form-topbar">
         <div className="top-actions">
           <button className="select-btn" onClick={handleSelectToggle}>
@@ -115,6 +119,7 @@ const FormTable = ({ filters }) => {
           )}
         </div>
       </div>
+      )}
 
       <table className="form-table">
         <thead>
@@ -127,7 +132,7 @@ const FormTable = ({ filters }) => {
                     selectedForms.size === forms.length && forms.length > 0
                   }
                   onChange={(e) => {
-                    e.stopPropagation(); // Prevent triggering row click event
+                    e.stopPropagation(); 
 
                     if (e.target.checked) {
                       const allFormIds = new Set(
@@ -141,14 +146,20 @@ const FormTable = ({ filters }) => {
                 />
               </th>
             )}
+            <th>S.No</th>
             {fieldsTitle.map((title, index) => (
               <th key={index}>{title}</th>
             ))}
+            {role==='admin' && (
+                 <th>Actions</th>
+            )}
+         
           </tr>
         </thead>
 
         <tbody>
-          {forms.map((form) => (
+          {forms.map((form,index) => (
+         
             <tr
               key={form.id || form.form_id}
               className={`form-row ${
@@ -160,6 +171,7 @@ const FormTable = ({ filters }) => {
                   : openForm(form.id || form.form_id)
               }
             >
+              <td>{index + 1}</td>
               {selectMode && (
                 <td>
                   <input
@@ -176,6 +188,19 @@ const FormTable = ({ filters }) => {
               {fields.map((field, index) => (
                 <td key={index}>{form[field] == null ? "N/A" : form[field]}</td>
               ))}
+              {role==='admin' && (
+                <td>
+                  <button
+                    className="edit-btn"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent row click event
+                      openForm(form.id || form.form_id);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  </td>
+              )}
             </tr>
           ))}
         </tbody>
