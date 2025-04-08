@@ -7,6 +7,7 @@ import TableComponent from "../../table/TableComponent";
 import Recommendation from "../../layouts/Recommendation";
 import CustomButton from "../../fields/CustomButton";
 import { submitForm } from "../../../../api/form";
+import { set } from "react-hook-form";
 
 const Supervisor = ({ formData }) => {
   const [lock, setLock] = useState(formData.locks?.supervisor);
@@ -18,15 +19,27 @@ const Supervisor = ({ formData }) => {
 
   useEffect(() => {
     setLock(formData.locks?.supervisor);
+    if(formData.role === "faculty"){
     setBody({
       approval: formData.current_review?.progress === "satisfactory",
       attendance: formData.attendance,
       contact_hours: formData.contact_hours,
       current_progress: formData.current_progress,
       progress: formData.progress,
-      total_progress: formData.total_progress,
+      total_progress: formData.current_progress + formData.progress,
     });
-    setTotalProgress(parseFloat(formData.current_progress)+parseFloat(formData.progress))
+    }
+    else{
+      setBody({
+        approval: formData.approvals.supervisor,
+        attendance: formData.attendance,
+        contact_hours: formData.contact_hours,
+        current_progress: formData.current_progress,
+        progress: formData.progress,
+        total_progress: formData.total_progress,
+      });
+    }
+    setTotalProgress(formData.current_progress + formData.progress);
     setIsLoaded(true);
   }, [formData]);
 
@@ -48,6 +61,19 @@ const Supervisor = ({ formData }) => {
       comments: value.comments,
     }));
   };
+  const updateTotal = (updated) => {
+    setBody((prev) => {
+      const newTotal = parseFloat(prev.current_progress || 0) + parseFloat(updated || 0);
+      setTotalProgress(newTotal);
+  
+      return {
+        ...prev,
+        progress: updated,
+        total_progress: newTotal,
+      };
+    });
+  };
+  
 
   return (
     <>
@@ -74,10 +100,11 @@ const Supervisor = ({ formData }) => {
             allowRejection={false}
             moreFields={true}
             handleRecommendationChange={handleApprovalChange}
+            isLocked={lock}
           />
           {body.approval && (
             <>
-              {formData.role === "faculty" && (
+              
                 <>
                   <GridContainer
                     elements={[
@@ -95,12 +122,7 @@ const Supervisor = ({ formData }) => {
                         label={"Increase in Quantum Progress Percentage"}
                         initialValue={body.progress}
                         isLocked={lock}
-                        onChange={(updated) => {
-                          setBody((prev) => ({
-                            ...prev,
-                            progress: updated,
-                          }));
-                        }}
+                        onChange={updateTotal            }
                       />,
                     ]}
                     space={2}
@@ -109,7 +131,7 @@ const Supervisor = ({ formData }) => {
                     elements={[
                       <InputField
                         label={"Total Quantum Progress Percentage"}
-                        initialValue={formData.total_progress}
+                        initialValue={totalProgress}
                         isLocked={true}
                         
                       />,
@@ -143,7 +165,7 @@ const Supervisor = ({ formData }) => {
                     ]}
                   />
                 </>
-              )}
+           
             </>
           )}
           {formData.role === "faculty" && !lock && (

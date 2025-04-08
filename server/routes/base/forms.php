@@ -9,6 +9,10 @@ Route::prefix('irb-constitution')->group(function () {
     require base_path('routes/base/irb/irbc_form.php');
 });
 
+Route::prefix(('presentation'))->group(function () {
+    require base_path('routes/base/presentation.php');
+});
+
 Route::prefix('irb-submission')->group(function () {
     require base_path('routes/base/irb/irbs_form.php');
 });

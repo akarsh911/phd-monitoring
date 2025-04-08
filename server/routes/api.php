@@ -11,7 +11,11 @@ use App\Models\Department;
 use App\Models\Faculty;
 use App\Models\Student;
 use App\Http\Controllers\GoogleCalendarController;
-
+use App\Http\Controllers\HomeController;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 Route::post('/login', function (Request $request) {
     $request->validate([
@@ -50,6 +54,62 @@ Route::post('/login', function (Request $request) {
     ], 401);
 });
 
+
+Route::post('/forgot-password', function (Request $request) {
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email|exists:users,email',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'errors' => $validator->errors(),
+        ], 422);
+    }
+
+    $status = Password::sendResetLink(
+        $request->only('email')
+    );
+
+    if ($status === Password::RESET_LINK_SENT) {
+        return response()->json([
+            'message' => __($status),
+        ], 200);
+    }
+
+    return response()->json([
+        'error' => __($status),
+    ], 500);
+});
+
+Route::post('/reset-password', function (Request $request) {
+    $validator = Validator::make($request->all(), [
+        'token' => 'required|string',
+        'email' => 'required|email|exists:users,email',
+        'password' => 'required|min:8|confirmed',
+    ]);
+
+    if ($validator->fails()) {
+        return response()->json([
+            'errors' => $validator->errors(),
+        ], 422);
+    }
+
+    $status = Password::reset(
+        $request->only('email', 'password', 'password_confirmation', 'token'),
+        function (User $user, string $password) {
+            $user->forceFill([
+                'password' => Hash::make($password),
+                'remember_token' => Str::random(60),
+            ])->save();
+        }
+    );
+
+    if ($status === Password::PASSWORD_RESET) {
+        return response()->json(['message' => __($status)], 200);
+    }
+
+    return response()->json(['error' => __($status)], 500);
+});
 
 Route::post('/switch-role', function (Request $request) {
     try {
@@ -130,6 +190,7 @@ Route::post('create-role', function (Request $request) {
 Route::prefix('roles')->group(function () {
     require base_path('routes/base/roles.php');
 });
+Route::get('/home', [HomeController::class, 'getHomeData'])->middleware('auth:sanctum');
 
 Route::prefix('notifications')->group(function () {
     require base_path('routes/base/notifications.php');
@@ -148,7 +209,7 @@ Route::prefix('patents')->group(function () {
     require base_path('routes/base/patents.php');
 });
 
-Route::prefix('faculties')->group(function () {
+Route::prefix('faculty')->group(function () {
     require base_path('routes/base/faculties.php');
 });
 
@@ -158,10 +219,6 @@ Route::prefix('students')->group(function () {
 
 Route::prefix('supervisors')->group(function () {
     require base_path('routes/base/supervisors.php');
-});
-
-Route::prefix('external')->group(function () {
-    require base_path('routes/base/external.php');
 });
 
 Route::prefix('forms')->group(function () {
@@ -185,10 +242,6 @@ Route::get('/send-welcome', [EmailNotificationController::class, 'sendWelcomeEma
 
 
 
-
-Route::get('/auth/google', [GoogleCalendarController::class, 'getGoogleAuthUrl']);
-Route::get('/auth/google/callback', [GoogleCalendarController::class, 'handleGoogleCallback']);
-Route::post('/google/create-event', [GoogleCalendarController::class, 'createCalendarEvent']);
 
 // Route::post('/schedule-reminder', [, 'scheduleReminder']);
 // Route::get('/init',function (){

@@ -33,7 +33,7 @@ class Patent extends Model
      * @var array
      */
     protected $casts = [
-        'year' => 'date',
+        
     ];
 
     /**

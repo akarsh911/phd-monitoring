@@ -21,9 +21,9 @@ return new class extends Migration
             $table->date('date_of_registration');
             $table->date('date_of_irb')->nullable();
             $table->date('date_of_synopsis')->nullable();
-            $table->text('phd_title');
-            $table->text('fathers_name');
-            $table->text('address');
+            $table->text('phd_title')->nullable();
+            $table->text('fathers_name')->nullable();
+            $table->text('address')->nullable();
             $table->enum('current_status',['part-time','full-time']);
             $table->float('overall_progress');
             $table->float('cgpa');

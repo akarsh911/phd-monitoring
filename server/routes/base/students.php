@@ -13,7 +13,7 @@ Route::get('/', [StudentController::class, 'list'])->middleware('auth:sanctum');
   
 
 Route::post('/add', [StudentController::class, 'add'])->middleware('auth:sanctum');
-
+Route::get('/filters', [StudentController::class, 'listFilters'])->middleware('auth:sanctum');
 
 Route::prefix('{id}')->group(function () {
     Route::get('', [StudentController::class, 'get'])->middleware('auth:sanctum');

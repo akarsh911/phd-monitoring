@@ -106,7 +106,28 @@ class SuggestionController extends Controller {
     
         return response()->json($faculty);
     }
+    public function suggestDepartment(Request $request)
+    {
+        $request->validate([
+            'text' => 'required|string',
+        ]);
     
+        if (!$request->has('text')) {
+            return response()->json([], 200);
+        }
+    
+        $departments = Department::where('name', 'LIKE', '%' . $request->text . '%')
+            ->get()
+            ->map(function ($department) {
+                return [
+                    'id' => $department->id,
+                    'name' => $department->name,
+                ];
+            });
+    
+        return response()->json($departments);
+    }
+
     public function suggestOutsideExpert(Request $request)
     {
         $request->validate([

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->text('authors')->nullable();
             $table->text('doi_link')->nullable();
             $table->string('first_page')->nullable();
-            $table->date('year')->nullable();
+            $table->year('year')->nullable();
             $table->text('name')->nullable();
             $table->enum('status', ['published', 'accepted'])->nullable();
 

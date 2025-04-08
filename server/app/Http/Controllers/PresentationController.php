@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Http\Controllers\Traits\FilterLogicTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Traits\GeneralFormHandler;
 use App\Http\Controllers\Traits\GeneralFormList;
@@ -24,13 +24,18 @@ class PresentationController extends Controller{
     use GeneralFormSubmitter;
     use GeneralFormList;
     use SaveFile;
-    
+    use FilterLogicTrait;
+
+    public function listFilters(Request $request){
+        return response()->json($this->getAvailableFilters("presentation"));
+    }
     public function listForm(Request $request, $student_id = null)
     {
         $user = Auth::user();
+
         return $this->listForms($user, Presentation::class,$request,null,true,[
             'fields' => [
-                "name","roll_no","period","progress","overall_progress","supervisors"
+                "name","roll_no","period","date","time","progress","supervisors"
             ],
             'extra_fields' => [
                 "overall_progress" => function ($form) {
@@ -44,11 +49,17 @@ class PresentationController extends Controller{
                     return $supervisor->user->name();
                 })->join(', ');
                 },
+                "date" => function ($form) {
+                    return $form->date;
+                },
+                "time" => function ($form) {
+                    return $form->time;
+                },
                 "period" => function ($form) {
                     return $form->period_of_report;
                 },
             ],
-            'titles' => [ "Name", "Roll No","Period","Presentation Progress","Progress Till Now","Supervisors"],
+            'titles' => [ "Name", "Roll No","Period","Date","Time","Progress %","Supervisors"],
         ]);
     }
 
@@ -208,6 +219,9 @@ class PresentationController extends Controller{
                 return $this->handleAdminForm($user, $form_id, $model);
             case 'faculty':
                 return $this->handleFacultyForm($user, $form_id, $model);
+            case 'admin':
+                 return $this->handleAdminForm($user, $form_id, $model,true);
+           
             default:
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
@@ -400,7 +414,7 @@ class PresentationController extends Controller{
             $form_id,
             $model,
             'faculty',
-            'doctoral',
+            'student',
             'doctoral',
             function ($formInstance) use ($request, $user) {
                 if(!$formInstance->progress||!$formInstance->attendance||!$formInstance->contact_hours){
@@ -425,7 +439,7 @@ class PresentationController extends Controller{
                 if($request->approval){
                     PresentationReview::where('presentation_id',$formInstance->id)->where('is_supervisor',1)->where('faculty_id',$user->faculty->faculty_code)
                     ->update(['progress'=>'satisfactory','review_status'=>'completed','comments'=>$request->comments]);
-                    $approvals=$formInstance->supervisorReviews->where('is_supervisor',1)->where('review_status','pending');
+                    $approvals=PresentationReview::where('presentation_id',$formInstance->id)->where('is_supervisor',1)->where('review_status','pending')->get();
                    if(count($approvals)!=0){
                       throw new \Exception("Your Prefrences have been saved. Please wait for other supervisors to approve",201);
                    }
@@ -468,23 +482,15 @@ class PresentationController extends Controller{
                 if($request->approval){
                     PresentationReview::where('presentation_id',$formInstance->id)->where('faculty_id',$user->faculty->faculty_code)
                     ->update(['progress'=>'satisfactory','review_status'=>'completed','comments'=>$request->comments]);
-                    $approvals=$formInstance->supervisorReviews->where('is_supervisor',0)->where('review_status','pending');
-                   if(count($approvals)!=0){
-                      throw new \Exception("Your Prefrences have been saved. Please wait for other supervisors to approve",201);
-                   }
-                   else{
-                     $doctoral=$formInstance->student->doctoralCommittee;
-                     foreach($doctoral as $doc){
-                        PresentationReview::create([
-                            'presentation_id'=>$formInstance->id,
-                            'faculty_id'=>$doc->faculty_code,
-                            'comments'=>'',
-                            'review_status'=>'pending',
-                            'is_supervisor'=>0,
-                        ]);
-                     }
-                   }
+                 
                 }
+                $approvals=PresentationReview::where('presentation_id',$formInstance->id)->where('is_supervisor',0)->where('review_status','pending')->get();
+                if(count($approvals)!=0){
+                   throw new \Exception("Your Prefrences have been saved. Please wait for other supervisors to approve",201);
+                }
+                throw new \Exception("You have already reviewed this form");
+     
+                
             }
         );
     }

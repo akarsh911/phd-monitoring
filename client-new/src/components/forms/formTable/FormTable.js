@@ -7,7 +7,7 @@ import { useLoading } from "../../../context/LoadingContext";
 import GridContainer from "../fields/GridContainer";
 import { toast } from "react-toastify";
 
-const FormTable = () => {
+const FormTable = ({ filters }) => {
   const [forms, setForms] = useState([]);
   const [fields, setFields] = useState(["name", "roll_no"]);
   const [fieldsTitle, setFieldsTitle] = useState(["name", "roll_no"]);
@@ -19,10 +19,18 @@ const FormTable = () => {
 
   const { setLoading } = useLoading();
   const location = useLocation();
+  const [role, setRole] = useState("student");
 
-  const fetchData = async (page = 1, rows = rowsPerPage) => {
+  const fetchData = async (page = 1, rows = rowsPerPage, filters = null) => {
     setLoading(true);
-    const url = `${baseURL}${location.pathname}?page=${page}&rows=${rows}`;
+
+    let url = `${baseURL}${location.pathname}?page=${page}&rows=${rows}`;
+
+    if (filters) {
+      const filterStr = encodeURIComponent(JSON.stringify(filters));
+      url += `&filters=${filterStr}`;
+    }
+
     try {
       const data = await customFetch(url, "GET");
       if (data && data.success) {
@@ -30,6 +38,8 @@ const FormTable = () => {
         setFieldsTitle(data.response.fieldsTitles || []);
         setForms(data.response.forms || []);
         setTotalPages(data.response.totalPages || 1);
+        setRole(data.response.role || "student");
+      
       }
     } catch (error) {
       console.error(error);
@@ -39,8 +49,8 @@ const FormTable = () => {
   };
 
   useEffect(() => {
-    fetchData(currentPage, rowsPerPage);
-  }, [location.pathname, currentPage, rowsPerPage]);
+    fetchData(currentPage, rowsPerPage, filters);
+  }, [location.pathname, currentPage, rowsPerPage, filters]);
 
   const toggleSelectOne = (id) => {
     setSelectedForms((prev) => {
@@ -81,7 +91,7 @@ const FormTable = () => {
       .then((data) => {
         if (data && data.success) {
           toast.success("Selected forms approved successfully.");
-          fetchData(currentPage, rowsPerPage); 
+          fetchData(currentPage, rowsPerPage);
           setLoading(false);
         } else {
           toast.error("Failed to approve selected forms.");
@@ -92,7 +102,7 @@ const FormTable = () => {
         console.error(error);
         alert("An error occurred while approving forms.");
       });
-  }
+  };
 
   return (
     <div className="form-list-container">
@@ -125,42 +135,52 @@ const FormTable = () => {
           <tr>
             {selectMode && (
               <th>
-              <input
-                type="checkbox"
-                checked={selectedForms.size === forms.length && forms.length > 0}
-                onChange={(e) => {
-                  e.stopPropagation(); // Prevent triggering row click event
-            
-                  if (e.target.checked) {
-                    const allFormIds = new Set(forms.map((form) => form.id || form.form_id));
-                    setSelectedForms(allFormIds);
-                  } else {
-                    setSelectedForms(new Set());
+                <input
+                  type="checkbox"
+                  checked={
+                    selectedForms.size === forms.length && forms.length > 0
                   }
-                }}
-              />
-            </th>
-            
+                  onChange={(e) => {
+                    e.stopPropagation(); 
+
+                    if (e.target.checked) {
+                      const allFormIds = new Set(
+                        forms.map((form) => form.id || form.form_id)
+                      );
+                      setSelectedForms(allFormIds);
+                    } else {
+                      setSelectedForms(new Set());
+                    }
+                  }}
+                />
+              </th>
             )}
+            <th>S.No</th>
             {fieldsTitle.map((title, index) => (
               <th key={index}>{title}</th>
             ))}
+            {role==='admin' && (
+                 <th>Actions</th>
+            )}
+         
           </tr>
         </thead>
 
         <tbody>
-          {forms.map((form) => (
+          {forms.map((form,index) => (
+         
             <tr
-            key={form.id || form.form_id}
-            className={`form-row ${
-              selectedForms.has(form.id || form.form_id) ? "selected-row" : ""
-            }`}
+              key={form.id || form.form_id}
+              className={`form-row ${
+                selectedForms.has(form.id || form.form_id) ? "selected-row" : ""
+              }`}
               onClick={() =>
                 selectMode
                   ? toggleSelectOne(form.id || form.form_id)
                   : openForm(form.id || form.form_id)
               }
             >
+              <td>{index + 1}</td>
               {selectMode && (
                 <td>
                   <input
@@ -177,6 +197,19 @@ const FormTable = () => {
               {fields.map((field, index) => (
                 <td key={index}>{form[field] == null ? "N/A" : form[field]}</td>
               ))}
+              {role==='admin' && (
+                <td>
+                  <button
+                    className="edit-btn"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent row click event
+                      openForm(form.id || form.form_id);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  </td>
+              )}
             </tr>
           ))}
         </tbody>
@@ -186,7 +219,7 @@ const FormTable = () => {
         <label className="rows-per-page">
           Rows per page:
           <select value={rowsPerPage} onChange={handleRowsChange}>
-            {[1,5, 10, 20, 50, 100].map((count) => (
+            {[1, 5, 10, 20, 50, 100].map((count) => (
               <option key={count} value={count}>
                 {count}
               </option>

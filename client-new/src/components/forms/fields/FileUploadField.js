@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import "./Fields.css";
 import { toast } from 'react-toastify';
-import { baseURL } from '../../../api/urls';
+import { baseURL, rootURL } from '../../../api/urls';
 
 const FileUploadField = ({ label, initialValue = null, isLocked = false, onChange, showLabel = true }) => {
     const [fileName, setFileName] = useState(initialValue ? "View Uploaded File" : "Upload PDF (Max 2MB)");
@@ -29,7 +29,7 @@ const FileUploadField = ({ label, initialValue = null, isLocked = false, onChang
             
             {initialValue && isLocked ? (
 
-                <a href={baseURL+initialValue} target="_blank" rel="noopener noreferrer" className="file-link">
+                <a href={rootURL + initialValue.replace("app/public", "storage")} target="_blank" rel="noopener noreferrer" className="file-link">
                    <div className='preview-file'> {fileName}</div>
                 </a>
 

@@ -1,4 +1,4 @@
-.profile-card {
+/* .profile-card {
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 20px;
@@ -68,5 +68,79 @@
   
   .profile-button:hover {
     background-color: #0056b3;
+  }
+   */
+
+   .profile-card {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-width: 100%;
+    margin: 2rem auto;
+    font-family: "Inter", sans-serif;
+  }
+  
+  .profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .profile-name {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #1f2937;
+  }
+  
+  .profile-subtitle {
+    font-size: 1rem;
+    font-weight: 400;
+    color: #6b7280;
+  }
+  
+  .progress-container {
+    width: 80px;
+    text-align: center;
+  }
+  
+  .progress-label {
+    display: block;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    color: #4b5563;
+  }
+  
+  .profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .profile-grid-item {
+    background: #f9fafb;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: left;
+  }
+  
+  .profile-grid-item strong {
+    display: block;
+    font-size: 0.9rem;
+    color: #374151;
+    margin-bottom: 0.25rem;
+  }
+  
+  .profile-grid-item span {
+    font-size: 0.85rem;
+    color: #6b7280;
+  }
+  
+  .profile-actions {
+    display: flex;
+    gap: 1rem;
+    margin: 1.5rem 0;
   }
   

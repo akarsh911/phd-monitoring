@@ -76,13 +76,15 @@ trait GeneralFormHandler
         }
     }
 
-    private function handleAdminForm($user, $form_id, $modelClass)
+    private function handleAdminForm($user, $form_id, $modelClass,$isAdmin=false)
     {
         try {
             $formInstance = $modelClass::find($form_id);
             if ($formInstance) {
                 $index=array_search($user->current_role->role,$formInstance->steps);
-
+                if($isAdmin){
+                    return response()->json($formInstance->fullForm($user));
+                }
                 if($index!==false && $index<=$formInstance->maximum_step)
                 return response()->json($formInstance->fullForm($user));
                 else

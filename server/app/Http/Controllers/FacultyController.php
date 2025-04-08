@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\FilterLogicTrait;
 use App\Models\Department;
 use App\Models\Faculty;
 use Illuminate\Http\Request;
@@ -15,6 +16,10 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class FacultyController extends Controller
 {
+    use FilterLogicTrait;
+    public function listFilters(Request $request){
+        return response()->json($this->getAvailableFilters("faculty"));
+    }
     public function add(Request $request)
     {
 
@@ -69,26 +74,66 @@ class FacultyController extends Controller
 
     public function list(Request $request)
     {
-        $user = Auth::user();
-         if($user->role->can_read_all_faculties==true)
-         {
-            $faculties = \App\Models\Faculty::all();
-            return response()->json($faculties, 200);
-         }
-         else if($user->role->can_read_department_faculties==true)
-         {
-            $faculties = \App\Models\Faculty::where('department_id', $user->faculty->department_id)->get();
-            return response()->json($faculties, 200);         
-         }
-            else
-            {
-                return response()->json([
-                    'message' => 'You do not have permission to view faculties'
-                ], 403);
-            }
-        $faculties = \App\Models\Faculty::all();
-        return response()->json($faculties, 200);
+        $loggedInUser = Auth::user();
+        $role = $loggedInUser->current_role->role;
+        $filters = $request->input('filters', []);
+        $filtersJson = $request->query('filters');
+
+        if ($filtersJson) {
+              $filters = json_decode(urldecode($filtersJson), true);
+        }
+        $perPage = $request->input('rows', 15);
+        $page = $request->input('page', 1);
+    
+        $facultyQuery = Faculty::with(['user', 'department']);
+    
+        if ($role === 'hod'||$role === 'phd_coordinator') {
+            $facultyQuery->where('department_id', $loggedInUser->faculty->department_id);
+        }  elseif ($role === 'admin'||$role === 'director' || $role === 'dra' || $role === 'dordc') {
+          
+        } else {
+            return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+        }
+    
+        if ($filters) {
+            $facultyQuery = $this->applyDynamicFilters($facultyQuery, $filters);
+        }
+    
+        $faculties = $facultyQuery->paginate($perPage, ['*'], 'page', $page);
+    
+        $result = $faculties->getCollection()->map(function ($faculty) {
+            return [
+                'id' => $faculty->faculty_code,
+                'name' => $faculty->user->name(),
+                'designation' => $faculty->designation,
+                'email' => $faculty->user->email,
+                'phone' => $faculty->user->phone,
+                'department' => $faculty->department->name,
+                'supervised_students' => $faculty->supervisedStudents?->map(fn ($s) => [
+                    'name' => $s->user->name(),
+                    'roll_number' => $s->roll_number,
+                ]),
+                'doctored_students' => $faculty->doctoralCommittee?->map(fn ($s) => [
+                    'name' => $s->user->name(),
+                    'roll_number' => $s->roll_number,
+                ]),
+                'supervised_outside'=> $faculty->supervised_outside,
+                'supervised_campus'=> $faculty->supervised_campus,
+            ];
+        });
+    
+        return response()->json([
+            'data' => $result,
+            'total' => $faculties->total(),
+            'per_page' => $faculties->perPage(),
+            'current_page' => $faculties->currentPage(),
+            'totalPages' => $faculties->lastPage(),
+            'role' => $role,
+            'fields' => ['name', 'designation', 'email', 'phone', 'department'],
+            'fieldsTitles' => ['Name', 'Designation', 'Email', 'Phone', 'Department'],
+        ]);
     }
+    
 
     public function showUploadForm()
     {

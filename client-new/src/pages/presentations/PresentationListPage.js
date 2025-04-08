@@ -8,11 +8,18 @@ import GridContainer from "../../components/forms/fields/GridContainer";
 import BulkSchedulePresentation from "../../components/forms/presentations/BulkSchedulePresentation";
 import SchedulePresentation from "../../components/forms/presentations/SchedulePresentation";
 import FormTable from "../../components/forms/formTable/FormTable";
+import FilterBar from "../../components/filterBar/FilterBar";
+import PagenationTable from "../../components/pagenationTable/PagenationTable";
 
 const PresentationListPage = () => {
   const [role, setRole] = useState("");
   const [open, setOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(0); 
+  const [filters, setFilters] = useState(null);
+const [location, setLocation] = useState(window.location.pathname);
+  const handleSearch = (query) => {
+    setFilters(query);
+  };
 
   useEffect(() => {
     setRole(localStorage.getItem("userRole"));
@@ -37,7 +44,7 @@ const PresentationListPage = () => {
               <></>,
               <></>,
               <>
-                {role === "faculty" && (
+                {(role === "faculty" || role==='phd_coordinator')  && (
                   <div className="form-list-bar">
                     <CustomButton
                       onClick={openModal}
@@ -73,7 +80,12 @@ const PresentationListPage = () => {
               </>,
             ]}
           />
-          <FormTable/>
+          <FilterBar onSearch={handleSearch}/>
+          <PagenationTable 
+           endpoint={location}
+           filters={filters}
+           enableApproval={true}
+          />
         </>
       }
     />

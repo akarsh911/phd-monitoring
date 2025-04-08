@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('patent_number')->nullable();
             $table->string('first_page')->nullable();
             $table->text('authors')->nullable();
-            $table->date('year')->nullable();
+            $table->year('year')->nullable();
             $table->text('doi_link')->nullable();
             $table->enum('status', ['filed', 'published', 'granted']);
             $table->enum('country',['National','International'])->default('National')->nullable();

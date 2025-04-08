@@ -12,7 +12,7 @@ const TableComponent = ({ data, keys, titles, components = [], rowStyle }) => {
         <div className="table-container">
             <table className="custom-table">
                 <thead>
-                    <tr>
+                    <tr className="table-header">
                         <th>S.No</th>
                         {titles?.map((title, index) => (
                             <th key={index}>{title}</th>

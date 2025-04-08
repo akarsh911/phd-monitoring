@@ -108,7 +108,10 @@ trait GeneralFormSubmitter
                     $formInstance->external_approval = true;
 
                     break;
+                case 'doctoral':
+                    $formInstance->doctoral_approval = true;
 
+                    break;
                 case 'director':
                     $formInstance->director_approval = true;
 
@@ -155,7 +158,10 @@ trait GeneralFormSubmitter
                 $formInstance->director_comments = $request->comments;
                 $formInstance->director_lock = true;
                 break;
-
+            case 'doctoral':
+                $formInstance->doctoral_comments = $request->comments;
+                $formInstance->doctoral_lock = true;
+                break;
             default:
                 break;
         }
@@ -226,6 +232,7 @@ trait GeneralFormSubmitter
             'dra' => 'dra_lock',
             'external' => 'external_lock',
             'director' => 'director_lock',
+            'doctoral' => 'doctoral_lock',
             default => null,
         };
     }
@@ -265,7 +272,11 @@ trait GeneralFormSubmitter
                     throw new \Exception('You are not authorized to access this resource');
                 }
                 break;
-
+            case 'doctoral':
+                if (!$formInstance->student->checkDoctoralCommittee($user->faculty->faculty_code)) {
+                    throw new \Exception('You are not authorized to access this resource');
+                }
+                break;
             case 'dordc':
                 if ($user->current_role->role != 'dordc') {
                     throw new \Exception('You are not authorized to access this resource');
@@ -299,6 +310,8 @@ trait GeneralFormSubmitter
             'dordc' => "$name (DORDC) submitted the form",
             'dra' => "$name (DRA) submitted the form",
             'director' => "$name (Director) submitted the form",
+            'external' => "$name (External) submitted the form",
+            'doctoral' => "$name (Doctoral Committee) submitted the form",
             default => "$name submitted the form",
         };
     }
@@ -314,6 +327,8 @@ trait GeneralFormSubmitter
             'dordc' => "$name (DORDC) Rejected the form",
             'dra' => "$name (DRA) Rejected the form",
             'director' => "$name (Director) Rejected the form",
+            'doctoral' => "$name (Doctoral Committee) Rejected the form",
+        
             default => "$name Rejected the form",
         };
     }

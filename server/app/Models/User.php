@@ -46,9 +46,13 @@ class User extends Authenticatable
         'created_at',
         'updated_at',
     ];
-     
-    public function name(){
-        return $this->first_name.' '.$this->last_name;
+
+    protected $appends = ['name'];
+
+
+    public function name()
+    {
+        return $this->first_name . ' ' . $this->last_name;
     }
 
     /**
@@ -80,14 +84,14 @@ class User extends Authenticatable
 
     public function student()
     {
-        return $this->hasOne(Student::class,'user_id');
+        return $this->hasOne(Student::class, 'user_id');
     }
 
     public function faculty()
     {
-        return $this->hasOne(Faculty::class,'user_id');
+        return $this->hasOne(Faculty::class, 'user_id');
     }
-   
+
     public function notifications()
     {
         return $this->hasMany(Notifications::class);
@@ -95,42 +99,47 @@ class User extends Authenticatable
 
     public function availableRoles()
     {
-        $roles=[];
-        if($this->role->role == 'student'){
-            array_push($roles,'student');
+        $roles = [];
+        if ($this->role->role == 'student') {
+            array_push($roles, 'student');
         }
-        if($this->role->role == 'faculty'){
-            array_push($roles,'doctoral');
-            array_push($roles,'faculty');
+        if ($this->role->role == 'faculty') {
+            array_push($roles, 'doctoral');
+            array_push($roles, 'faculty');
         }
-        if($this->role->role == 'phd_coordinator'){
-            array_push($roles,'doctoral');
-            array_push($roles,'faculty');
-            array_push($roles,'phd_coordinator');
+        if ($this->role->role == 'phd_coordinator') {
+            array_push($roles, 'doctoral');
+            array_push($roles, 'faculty');
+            array_push($roles, 'phd_coordinator');
         }
-        if($this->role->role == 'hod'){
-            array_push($roles,'doctoral');
-            array_push($roles,'faculty');
-            array_push($roles,'hod');
+        if ($this->role->role == 'hod') {
+            array_push($roles, 'doctoral');
+            array_push($roles, 'faculty');
+            array_push($roles, 'hod');
         }
-        if($this->role->role == 'external'){
-            array_push($roles,'doctoral');
-            array_push($roles,'external');  
+        if ($this->role->role == 'external') {
+            array_push($roles, 'doctoral');
+            array_push($roles, 'external');
         }
-        if($this->role->role == 'dra'){
-            array_push($roles,'dra');
+        if ($this->role->role == 'dra') {
+            array_push($roles, 'dra');
         }
-        if($this->role->role == 'dordc'){
-            array_push($roles,'dordc');
+        if ($this->role->role == 'dordc') {
+            array_push($roles, 'dordc');
         }
-        if($this->role->role == 'director'){
-            array_push($roles,'director');
+        if ($this->role->role == 'director') {
+            array_push($roles, 'director');
         }
         return $roles;
     }
 
-    public function isAuthorized($role){
+    public function isAuthorized($role)
+    {
         $roles = $this->availableRoles();
-        return in_array($role,$roles);
+        return in_array($role, $roles);
+    }
+    public function getNameAttribute()
+    {
+        return "{$this->first_name} {$this->last_name}";
     }
 }

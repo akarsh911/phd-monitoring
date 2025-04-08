@@ -5,15 +5,19 @@ use App\Http\Controllers\PresentationController;
 
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/filters', [PresentationController::class, 'listFilters']);
+    Route::get('/form/filters', [PresentationController::class, 'listFilters']);
     Route::get('', [PresentationController::class, 'listForm']);
-    Route::post('/bulk', [PresentationController::class, 'bulkSubmit'])->name('form.bulk.create');
+    Route::post('/bulk', [PresentationController::class, 'bulkSubmit']);
     Route::post('', [PresentationController::class, 'createForm']);
-    Route::post('/bulk-schedule', [PresentationController::class, 'createMultipleForm'])->name('form.bulk.create');
-    
-    Route::get('/form', [PresentationController::class, 'listForm'])->name('form.load');
-
-    Route::post('/form/{form_id}/link', [PresentationController::class, 'linkPublication'])->name('form.load');
-    Route::post('/form/{form_id}/unlink', [PresentationController::class, 'unlinkPublication'])->name('form.load');
-    Route::get('/form/{form_id}', [PresentationController::class, 'loadForm'])->name('form.load');
-    Route::post('/form/{form_id}', [PresentationController::class, 'submit'])->name('form.submit');
+    Route::post('/bulk-schedule', [PresentationController::class, 'createMultipleForm']);
+    Route::get('/form', [PresentationController::class, 'listForm']);
+    Route::post('/{form_id}/link', [PresentationController::class, 'linkPublication']);
+    Route::post('/{form_id}/unlink', [PresentationController::class, 'unlinkPublication']);
+    Route::get('/{form_id}', [PresentationController::class, 'loadForm']);
+    Route::post('/{form_id}', [PresentationController::class, 'submit']);
+    Route::post('/form/{form_id}/link', [PresentationController::class, 'linkPublication']);
+    Route::post('/form/{form_id}/unlink', [PresentationController::class, 'unlinkPublication']);
+    Route::get('/form/{form_id}', [PresentationController::class, 'loadForm']);
+    Route::post('/form/{form_id}', [PresentationController::class, 'submit']);
 });

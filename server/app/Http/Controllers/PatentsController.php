@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\FilterLogicTrait;
 use App\Http\Controllers\Traits\SaveFile;
 use App\Models\Patent;
 use Illuminate\Http\Request;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 class PatentsController extends Controller
 {
     use SaveFile;
+    use FilterLogicTrait;
     /**
      * Display a listing of the patents.
      *
@@ -22,6 +24,9 @@ class PatentsController extends Controller
         return response()->json($patents);
     }
 
+    public function listFilters(Request $request){
+        return response()->json($this->getAvailableFilters("patents"));
+    }
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

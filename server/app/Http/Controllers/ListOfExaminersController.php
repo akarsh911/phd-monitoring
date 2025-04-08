@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\FilterLogicTrait;
 use App\Http\Controllers\Traits\GeneralFormCreate;
 use App\Http\Controllers\Traits\GeneralFormHandler;
 use App\Http\Controllers\Traits\GeneralFormList;
@@ -24,7 +25,10 @@ class ListOfExaminersController extends Controller
     use GeneralFormSubmitter;
     use GeneralFormList;
     use GeneralFormCreate;
-
+    use FilterLogicTrait;
+    public function listFilters(Request $request){
+        return response()->json($this->getAvailableFilters("forms"));
+    }
     public function listForm(Request $request, $student_id = null)
     {
         $user = Auth::user();
@@ -109,6 +113,9 @@ class ListOfExaminersController extends Controller
                 return $this->handleAdminForm($user, $form_id, $model);
             case 'faculty':
                 return $this->handleFacultyForm($user, $form_id, $model);
+            case 'admin':
+                return $this->handleAdminForm($user, $form_id, $model,true);
+           
             default:
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }

@@ -12,7 +12,6 @@ const Recommendation = ({formData,allowRejection,role,moreFields,handleRecommend
     const [roleName, setRoleName] = useState('');
     const [body, setBody] = useState({});
     const [lock, setLock] = useState(false);
-    const [isLoaded, setIsLoaded] = useState(false);
     const location = useLocation();
     const { setLoading } = useLoading();
    

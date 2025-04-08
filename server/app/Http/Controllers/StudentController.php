@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\FilterLogicTrait;
+use App\Http\Controllers\Traits\PagenationTrait;
 use App\Models\Forms;
 use Illuminate\Http\Request;    
 use Illuminate\Support\Facades\Auth;
@@ -10,7 +12,12 @@ use App\Models\Student;
 use Illuminate\Support\Str;
 
 class StudentController extends Controller {
+    use FilterLogicTrait;
+    use PagenationTrait;
 
+    public function listFilters(Request $request){
+        return response()->json($this->getAvailableFilters("student"));
+    }
     public function add(Request $request)
     {
         $loggenInUser = Auth::user();
@@ -29,15 +36,14 @@ class StudentController extends Controller {
                 'roll_no' => 'required|string',
                 'department_id' => 'required|integer',
                 'date_of_registration' => 'required|date',
-                'date_of_irb' => 'required|date',
-                'phd_title' => 'required|string',
-                'fathers_name' => 'required|string',
-                'address' => 'required|string',
+                'date_of_irb' => 'nullable|date',
+                'phd_title' => 'nullable|string',
+                'fathers_name' => 'nullable|string',
+                'address' => 'nullable|string',
                 'current_status' => 'required|string',
-                'overall_progress' => 'required|decimal:0,3',
+                'overall_progress' => 'nullable|decimal:0,3',
                 'cgpa' => 'required|decimal:0,3'
                
-
             ]
         );
         $password = Str::password(8, true, true, true, false);
@@ -91,76 +97,93 @@ class StudentController extends Controller {
         //return the password to the user
         //TODO: Send email to the user with the password        
     }
-    public function list(Request $request)
-    {
-        $loggedInUser = Auth::user();
-        $role = $loggedInUser->current_role->role;
-    
-        // Use eager loading to optimize performance
-        switch ($role) {
-            case 'admin':
-            case 'director':
-            case 'dra':
-            case 'dordc':
-                $students = Student::with(['user', 'department', 'supervisors.user'])->get();
-                break;
-            case 'hod':
-            case 'phd_coordinator':
-                $students = Student::with(['user', 'department', 'supervisors.user'])
-                    ->where('department_id', $loggedInUser->faculty->department_id)
-                    ->get();
-                break;
-            case 'faculty':
-                $students = $loggedInUser->faculty->supervisedStudents;
-                break;
-            case 'doctoral':
-            case 'external':
-                $students = $loggedInUser->faculty->doctoredStudents;
-                break;
-            case 'student':
-                $students = Student::with(['user', 'department', 'supervisors.user'])
-                    ->where('user_id', $loggedInUser->id)
-                    ->get();
-                break;
-            default:
-                return response()->json([
-                    'message' => 'You do not have permission to view students'
-                ], 403);
-        }
-        $result=[];
-        foreach($students as $student){
-                $result[]=[
-                    'name' => $student->user->name(),
-                    'phd_title' => $student->phd_title,
-                    'overall_progress' => $student->overall_progress,
-                    'roll_no' => $student->roll_no,
-                    'department' => $student->department->name,
-                    'supervisors' => $student->supervisors->map(function ($supervisor) {
-                        return $supervisor->user->name();
-                    }),
-                    'cgpa' => $student->cgpa,
-                    'email' => $student->user->email,
-                    'phone' => $student->user->phone,
-                    'current_status' => $student->current_status,
-                    'fathers_name' => $student->fathers_name,
-                    'address' => $student->address,
-                    'date_of_registration' => $student->date_of_registration,
-                    'date_of_irb' => $student->date_of_irb,
-                    'date_of_synopsis' => $student->date_of_synopsis,
-                    'doctoral'=>$student->doctoralCommittee->map(function ($faculty) {
-                        return [
-                            'faculty_code' => $faculty->faculty_code,
-                            'designation' => $faculty->designation,
-                            'name' => $faculty->user->name(),
-                            'email' => $faculty->user->email,
-                            'phone' => $faculty->user->phone,
-                        ];
-                    })
-                ];
-        }
-    
-        return response()->json($result, 200);
+ public function list(Request $request)
+{
+    $loggedInUser = Auth::user();
+    $role = $loggedInUser->current_role->role;
+    $filters = $request->input('filters', []);
+    $perPage = $request->input('rows', 15);
+    $page = $request->input('page', 1);
+    $filtersJson = $request->query('filters');
+
+    if ($filtersJson) {
+          $filters = json_decode(urldecode($filtersJson), true);
     }
+
+    $studentsQuery = Student::with(['user', 'department', 'supervisors.user', 'doctoralCommittee.user']);
+
+    switch ($role) {
+        case 'hod':
+        case 'phd_coordinator':
+            $studentsQuery->where('department_id', $loggedInUser->faculty->department_id);
+            break;
+        case 'faculty':
+            $studentsQuery = $loggedInUser->faculty->supervisedStudents()->with(['user', 'department', 'supervisors.user', 'doctoralCommittee.user']);
+            break;
+        case 'doctoral':
+        case 'external':
+            $studentsQuery = $loggedInUser->faculty->doctoredStudents()->with(['user', 'department', 'supervisors.user', 'doctoralCommittee.user']);
+            break;
+        case 'student':
+            $studentsQuery->where('user_id', $loggedInUser->id);
+            break;
+        case 'admin':
+        case 'director':
+        case 'dra':
+        case 'dordc':
+            break;
+        default:
+            return response()->json(['message' => 'You do not have permission to view students'], 403);
+    }
+
+    if ($filters) {
+        $studentsQuery = $this->applyDynamicFilters($studentsQuery, $filters);
+    }
+    
+    $students = $studentsQuery->paginate($perPage, ['*'], 'page', $page);
+    $result = $students->getCollection()->map(function ($student) {
+        return [
+            'id' => $student->roll_no,
+            'name' => $student->user->name(),
+            'phd_title' => $student->phd_title,
+            'overall_progress' => $student->overall_progress,
+            'roll_no' => $student->roll_no,
+            'department' => $student->department->name,
+            'supervisors' => $student->supervisors->map(fn ($s) => $s->user->name()),
+            'cgpa' => $student->cgpa,
+            'email' => $student->user->email,
+            'phone' => $student->user->phone,
+            'current_status' => $student->current_status,
+            'fathers_name' => $student->fathers_name,
+            'address' => $student->address,
+            'date_of_registration' => $student->date_of_registration,
+            'date_of_irb' => $student->date_of_irb,
+            'date_of_synopsis' => $student->date_of_synopsis,
+            'doctoral' => $student->doctoralCommittee->map(function ($faculty) {
+                return [
+                    'faculty_code' => $faculty->faculty_code,
+                    'designation' => $faculty->designation,
+                    'name' => $faculty->user->name(),
+                    'email' => $faculty->user->email,
+                    'phone' => $faculty->user->phone,
+                ];
+            }),
+        ];
+    });
+
+    return response()->json([
+        'data' => $result,
+        'total' => $students->total(),
+        'per_page' => $students->perPage(),
+        'current_page' => $students->currentPage(),
+        'totalPages' => $students->lastPage(),
+        'role' => $role,
+         'fields'=>['name','phd_title','roll_no','overall_progress','department','email','phone','current_status'],
+         'fieldsTitles'=>['Name','PhD Title','Roll No','Overall Progress','Department','Email','Phone','Current Status'],
+    ]);
+}
+
+    
     
 
     public function get(Request $request, $roll_no)
