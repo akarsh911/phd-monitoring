@@ -114,7 +114,7 @@ const BulkSchedulePresentation = () => {
   
   const downloadSampleCSV = () => {
     const link = document.createElement("a");
-    link.href = rootURL+"/storage/data_formats/bulk_presentation.csv";
+   // link.href = rootURL+"/storage/data_formats/bulk_presentation.csv";
     link.download = "sample_bulk_schedule.csv";
     link.click();
   }

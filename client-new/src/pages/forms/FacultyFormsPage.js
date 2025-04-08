@@ -46,10 +46,10 @@ const FacultyFormsPage = () => {
                 form_name: "Synopsis Submission",
             },
                
-            {
-                form_type: "supervisor-change",
-                form_name: "Supervisor Change",
-            },
+            // {
+            //     form_type: "supervisor-change",
+            //     form_name: "Supervisor Change",
+            // },
             {
                 form_type: "list-of-examiners",
                 form_name: "List of Examiners",

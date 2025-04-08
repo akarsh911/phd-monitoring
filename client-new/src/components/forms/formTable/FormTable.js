@@ -97,19 +97,28 @@ const FormTable = () => {
   return (
     <div className="form-list-container">
       <GridContainer
-        elements={[
-          <div>
-            <button onClick={handleSelectToggle}>
-              {selectMode ? "Deselect" : "Select"}
-            </button>,
-            <button onClick={handleApproval}>
-              {selectMode && <span>Approve Selected Rows: {selectedForms.size}</span>}
-            </button>,
-         
-          </div>,
-          <></>,
-        ]}
-      />
+  elements={[
+    <div className="form-actions-wrapper">
+      <div className="form-actions-left">
+        <button onClick={handleSelectToggle}>
+          {selectMode ? " Deselect" : " Select"}
+        </button>
+      </div>
+
+      <div className="form-actions-right">
+        {selectMode && (
+          <button onClick={handleApproval}>
+            Approve Selected rows ({selectedForms.size})
+          </button>
+        )}
+      </div>
+    </div>,
+    <></>,
+  ]}
+/>
+
+
+      
 
       <table className="form-table">
         <thead>
