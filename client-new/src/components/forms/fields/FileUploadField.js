@@ -1,49 +1,60 @@
 import React, { useState } from 'react';
-import "./Fields.css";
+import './Fields.css';
 import { toast } from 'react-toastify';
-import { baseURL, rootURL } from '../../../api/urls';
+import { rootURL } from '../../../api/urls';
 
-const FileUploadField = ({ label, initialValue = null, isLocked = false, onChange, showLabel = true }) => {
-    const [fileName, setFileName] = useState(initialValue ? "View Uploaded File" : "Upload PDF (Max 2MB)");
+const FileUploadField = ({
+  label,
+  initialValue = null,
+  isLocked = false,
+  onChange,
+  showLabel = true,
+}) => {
+  const [fileName, setFileName] = useState(
+    initialValue ? 'View Uploaded File' : 'Upload PDF (Max 2MB)'
+  );
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        
-        if (file) {
-            if (file.type !== "application/pdf") {
-                toast.error("Only PDF files are allowed.");
-                return;
-            }
-            if (file.size > 2 * 1024 * 1024) {
-                toast.error("File size should be less than 2 MB.");
-                return;
-            }
-            setFileName(file.name);
-            onChange(file); // Pass the file to the parent component
-        }
-    };
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
 
-    return (
-        <div className="file-upload-container">
-            {showLabel && (<label className="input-label">{label}</label>)}
-            
-            {initialValue && isLocked ? (
+    if (file) {
+      if (file.type !== 'application/pdf') {
+        toast.error('Only PDF files are allowed.');
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        toast.error('File size should be less than 2 MB.');
+        return;
+      }
+      setFileName(file.name);
+      onChange(file); // Pass the file to the parent component
+    }
+  };
 
-                <a href={rootURL + initialValue.replace("app/public", "storage")} target="_blank" rel="noopener noreferrer" className="file-link">
-                   <div className='preview-file'> {fileName}</div>
-                </a>
+  return (
+    <div className='file-upload-container'>
+      {showLabel && <label className='input-label'>{label}</label>}
 
-            ) : (
-                <input
-                    type="file"
-                    accept=".pdf"
-                    className="file-input"
-                    onChange={handleFileChange}
-                    disabled={isLocked}
-                />
-            )}
-        </div>
-    );
+      {initialValue && isLocked ? (
+        <a
+          href={rootURL + initialValue.replace('app/public', 'storage')}
+          target='_blank'
+          rel='noopener noreferrer'
+          className='file-link'
+        >
+          <div className='preview-file'> {fileName}</div>
+        </a>
+      ) : (
+        <input
+          type='file'
+          accept='.pdf'
+          className='file-input'
+          onChange={handleFileChange}
+          disabled={isLocked}
+        />
+      )}
+    </div>
+  );
 };
 
 export default FileUploadField;
