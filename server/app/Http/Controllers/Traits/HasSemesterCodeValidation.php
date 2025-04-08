@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Traits;
+namespace App\Http\Controllers\Traits;
 
 use App\Models\Semester;
 use Carbon\Carbon;

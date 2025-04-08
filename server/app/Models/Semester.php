@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 
-use App\Traits\HasSemesterCodeValidation;
+use App\Http\Controllers\Traits\HasSemesterCodeValidation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -71,14 +71,13 @@ class Semester extends Model
     
     public function scheduledPresentations()
     {
-        return Presentation::where('semester_id', $this->id)->whereNotNull('scheduled_at');
+        return Presentation::where('semester_id', $this->id);
     }
 
     public function unscheduledStudents()
     {
         return Student::whereDoesntHave('presentations', function ($query) {
-            $query->where('semester_id', $this->id)
-                  ->whereNotNull('scheduled_at');
+            $query->where('semester_id', $this->id);
         });
     }
     public function presentations()

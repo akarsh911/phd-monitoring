@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Traits\GeneralFormHandler;
 use App\Http\Controllers\Traits\GeneralFormList;
 use App\Http\Controllers\Traits\GeneralFormSubmitter;
-
+use App\Http\Controllers\Traits\HasSemesterCodeValidation;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Traits\SaveFile;
 
@@ -17,7 +17,7 @@ use App\Models\PresentationReview;
 use App\Models\Publication;
 use App\Models\Student;
 use App\Services\PresentationService;
-use App\Traits\HasSemesterCodeValidation;
+
 use Carbon\Carbon;
 
 class PresentationController extends Controller{

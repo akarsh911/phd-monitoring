@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Traits\GeneralFormHandler;
 use App\Http\Controllers\Traits\GeneralFormList;
 use App\Http\Controllers\Traits\GeneralFormSubmitter;
+use App\Http\Controllers\Traits\HasSemesterCodeValidation;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Traits\SaveFile;
 use App\Models\Patent;
@@ -17,7 +18,7 @@ use App\Models\Semester;
 use App\Models\StudentSemesterOff;
 use App\Models\StudentSemesterOffForm;
 use App\Models\ThesisSubmission;
-use App\Traits\HasSemesterCodeValidation;
+
 
 class StudentSemesterOffFormController extends Controller
 {
