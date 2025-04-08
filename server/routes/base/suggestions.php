@@ -12,4 +12,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('country', [SuggestionController::class, 'suggestCountry']);
     Route::post('state', [SuggestionController::class, 'suggestState']);
     Route::post('city', [SuggestionController::class, 'suggestCity']);
+    Route::post('designation', [SuggestionController::class, 'suggestDesignation']);
 });
