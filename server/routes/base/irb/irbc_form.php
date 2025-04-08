@@ -13,6 +13,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('', [ConstituteOfIRBController::class, 'listForm']);
     Route::post('', [ConstituteOfIRBController::class, 'createForm']);
     Route::get('/filters', [ConstituteOfIRBController::class, 'listFilters']);
-    Route::get('/{form_id}', [ConstituteOfIRBController::class, 'loadForm'])->name('form.load');
-    Route::post('/{form_id}', [ConstituteOfIRBController::class, 'submit'])->name('form.submit');
+    Route::get('/{form_id}', [ConstituteOfIRBController::class, 'loadForm']);
+    Route::post('/{form_id}', [ConstituteOfIRBController::class, 'submit']);
 });
