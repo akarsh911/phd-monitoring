@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./StudentTable.css";
+import StudentDetailsModal from "./StudentDetailsModal";
+
 
 function StudentTable({ students }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -8,8 +10,11 @@ function StudentTable({ students }) {
   const [sortedColumn, setSortedColumn] = useState(null);
   const [sortDirection, setSortDirection] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
-  const studentsPerPage = 3; // Number of students per page
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const studentsPerPage = 3;
+  const navigate = useNavigate();
 
   const handleSearch = (e) => {
     setSearchTerm(e.target.value.toLowerCase());
@@ -41,7 +46,6 @@ function StudentTable({ students }) {
 
   const yearGroups = [...new Set(students.map((student) => student.yearGroup))];
 
-  // Pagination calculation
   const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
   const currentStudents = filteredStudents.slice(
     (currentPage - 1) * studentsPerPage,
@@ -52,9 +56,9 @@ function StudentTable({ students }) {
     setCurrentPage(newPage);
   };
 
-  // Handle row click
   const handleRowClick = (studentData) => {
-    navigate(`/students/${studentData.roll_no}`, { state: studentData }); // Pass student data in state
+    setSelectedStudent(studentData);
+    setIsModalOpen(true);
   };
 
   return (
@@ -80,6 +84,7 @@ function StudentTable({ students }) {
           ))}
         </select>
       </div>
+
       <table className="student-table">
         <thead>
           <tr>
@@ -93,12 +98,12 @@ function StudentTable({ students }) {
         </thead>
         <tbody>
           {currentStudents.map((student) => (
-            <tr key={student.roll_no} onClick={() => handleRowClick(student)}>
+            <tr key={student.roll_no} onClick={() => handleRowClick(student)} className="form-row">
               <td>{student.roll_no}</td>
               <td>{student.name}</td>
               <td>{student.email}</td>
               <td>{student.department}</td>
-              <td>{student.supervisors.join(", ")}</td>
+              <td>{student.supervisors?.join(", ")}</td>
               <td>{student.current_status}</td>
             </tr>
           ))}
@@ -106,20 +111,23 @@ function StudentTable({ students }) {
       </table>
 
       <div className="pagination">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
+        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
           Previous
         </button>
         <span>Page {currentPage} of {totalPages}</span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
+        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
           Next
         </button>
       </div>
+
+      {/* Modal with student details */}
+      {isModalOpen && selectedStudent && (
+        <StudentDetailsModal
+          formData={selectedStudent}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   );
 }
