@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLoading } from '../../../context/LoadingContext';
 import { baseURL } from '../../../api/urls';
 import { customFetch } from '../../../api/base';
@@ -6,10 +6,31 @@ import CustomButton from '../fields/CustomButton';
 import { toast } from 'react-toastify';
 import { read, utils } from 'xlsx';
 import GridContainer from '../fields/GridContainer';
+import DropdownField from '../fields/DropdownField';
+
+import { generateReportPeriods } from "../../../utils/semester";
 
 const BulkSchedulePresentation = () => {
   const { setLoading } = useLoading();
   const [csvData, setCsvData] = useState([]);
+  const [reportPeriods, setReportPeriods] = useState([]);
+  const [body, setBody] = useState({});
+
+  useEffect(() => {
+    const periods = generateReportPeriods(1, 1, true);
+    const formattedPeriods = periods.map((period) => ({
+      value: period,
+      title: period,
+    }));
+    setReportPeriods(formattedPeriods);
+  }, []);
+
+  const formatDate = (date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
@@ -23,7 +44,6 @@ const BulkSchedulePresentation = () => {
 
       const headers = [
         "Student's Roll Number",
-        'Period of Report',
         'Date',
         'Time',
         'Additional Guest Email',
@@ -62,7 +82,7 @@ const BulkSchedulePresentation = () => {
         }
 
         const raw = rowObj['Additional Guest Email'] || '';
-        if (rowObj['Additional Guest Email']) {
+        if (raw) {
           const emails = raw.split(',').map((email) => email.trim());
           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
           const invalidEmails = emails.filter(
@@ -71,7 +91,7 @@ const BulkSchedulePresentation = () => {
 
           if (invalidEmails.length > 0) {
             invalidRows++;
-            console.warn(`Invalid column count in row ${index + 1}`, rowArr);
+            console.warn(`Invalid emails in row ${index + 1}`, rowArr);
             rowObj['Additional Guest Email'] = [];
             return;
           } else {
@@ -83,9 +103,7 @@ const BulkSchedulePresentation = () => {
       });
 
       if (invalidRows > 0) {
-        toast.warn(
-          `${invalidRows} row(s) ignored due to invalid number of columns`
-        );
+        toast.warn(`${invalidRows} row(s) ignored due to errors`);
       }
 
       setCsvData(parsedData);
@@ -94,21 +112,19 @@ const BulkSchedulePresentation = () => {
     reader.readAsArrayBuffer(file);
   };
 
-  const formatDate = (date) => {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-  };
-
   const confirmBulkSchedule = () => {
+    if (!body.period_of_report) {
+      toast.warn("Please select a period of report before confirming.");
+      return;
+    }
+
     setLoading(true);
 
     const students = csvData.map((entry) => ({
       student_id: entry["Student's Roll Number"],
       date: entry['Date'],
       time: entry['Time'],
-      period_of_report: entry['Period of Report'],
+      period_of_report: body.period_of_report,
       guest_emails: entry['Additional Guest Email'] || [],
     }));
 
@@ -128,10 +144,11 @@ const BulkSchedulePresentation = () => {
 
   const downloadSampleCSV = () => {
     const link = document.createElement('a');
-    //link.href = rootURL+"/storage/data_formats/bulk_presentation.csv";
+    // Add link.href to actual sample file if available
     link.download = 'sample_bulk_schedule.csv';
     link.click();
   };
+
   return (
     <>
       <GridContainer
@@ -144,15 +161,30 @@ const BulkSchedulePresentation = () => {
           />,
           <CustomButton
             text='Sample CSV'
-            onClick={() => {
-              downloadSampleCSV();
-            }}
+            onClick={downloadSampleCSV}
           />,
         ]}
         space={2}
       />
+
+      <GridContainer
+        elements={[
+          <DropdownField
+            label="Period of Report"
+            options={reportPeriods}
+            onChange={(value) =>
+              setBody((prev) => ({ ...prev, period_of_report: value }))
+            }
+          />,
+        ]}
+        space={2}
+      />
+
       {csvData.length > 0 && (
         <>
+          <div style={{ marginTop: '10px', fontWeight: 'bold' }}>
+            Selected Period: {body.period_of_report}
+          </div>
           <div style={{ overflowX: 'auto', marginTop: '16px' }}>
             <table
               style={{
@@ -215,7 +247,7 @@ const BulkSchedulePresentation = () => {
                           color: '#444',
                         }}
                       >
-                        {value}
+                        {Array.isArray(value) ? value.join(', ') : value}
                       </td>
                     ))}
                   </tr>
@@ -223,6 +255,7 @@ const BulkSchedulePresentation = () => {
               </tbody>
             </table>
           </div>
+
           <div style={{ marginTop: '16px', textAlign: 'right' }}>
             <CustomButton
               text='Confirm Bulk Schedule'
