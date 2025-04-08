@@ -18,7 +18,7 @@ const FilterBar = ({ onSearch }) => {
   useEffect(() => {
     const fetchFilters = async () => {
       let location = window.location;
-      let data = await customFetch(baseURL + location.pathname + "/filters", "GET", null, true);
+      let data = await customFetch(baseURL + location.pathname + "/filters", "GET", null, false);
       setFiltersMeta(data?.response);
     };
     fetchFilters();

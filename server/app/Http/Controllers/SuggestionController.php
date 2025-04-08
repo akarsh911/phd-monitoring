@@ -286,5 +286,26 @@ class SuggestionController extends Controller {
 
         return response()->json($cities);
     }
+    public function suggestDesignation(Request $request)
+    {
+        $request->validate([
+            'text' => 'required|string',
+        ]);
+    
+        if (!$request->has('text') || strlen($request->text) < 3) {
+            return response()->json([], 200);
+        }
+    $designations = Faculty::where('designation', 'LIKE', '%' . $request->text . '%')
+        ->distinct()
+        ->pluck('designation')
+        ->map(function ($designation) {
+        return [
+            'name' => $designation,
+            'id' => $designation,
+        ];
+        });
+    
+        return response()->json($designations);
+    }
 }
 
