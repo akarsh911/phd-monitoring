@@ -1,7 +1,10 @@
 import React from "react";
 import "./FacultyProfile.css";
+import { useNavigate } from "react-router-dom";
 
 const FacultyProfile = ({ faculty }) => {
+
+  const navigate = useNavigate();
   return (
     <div className="faculty-container">
       <h2>{faculty.faculty_name}</h2>
@@ -34,17 +37,21 @@ const FacultyProfile = ({ faculty }) => {
                 </tr>
               </thead>
               <tbody>
-                {faculty.supervised_students.map((student, idx) => (
-                  <tr key={idx}>
-                    <td>{idx + 1}</td>
-                    <td>{student.name}</td>
-                    <td>{student.roll_no}</td>
-                    <td>{student.email}</td>
-                    <td>{student.phone}</td>
-                    <td>{student.overall_progress}%</td>
-                  </tr>
-                ))}
-              </tbody>
+      {faculty.supervised_students.map((student, idx) => (
+        <tr
+          key={idx}
+          onClick={() => navigate(`/students/${student.roll_no}`)}
+          style={{ cursor: 'pointer' }} 
+        >
+          <td>{idx + 1}</td>
+          <td>{student.name}</td>
+          <td>{student.roll_no}</td>
+          <td>{student.email}</td>
+          <td>{student.phone}</td>
+          <td>{student.overall_progress}%</td>
+        </tr>
+      ))}
+    </tbody>
             </table>
           </div>
         )}

@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { APIlistUnreadNotifications } from "../../api/notifications";
 import "./AllNotificationsPage.css";
-
-//import { getFormattedDateTime } from "../../utils/timeParse"; // Optional if you're formatting time
 import Layout from "../dashboard/layout";
 
 const AllNotificationsPage = () => {
   const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
-    APIlistUnreadNotifications(setNotifications);
+    APIlistUnreadNotifications((data) => {
+      setNotifications(data);
+      setLoading(false);
+    });
   }, []);
+
+  if (loading) {
+    return (
+      <Layout>
+        <p>Loading...</p>
+       
+      </Layout>
+    );
+  }
 
   return (
     <Layout>

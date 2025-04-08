@@ -47,23 +47,24 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
 
   if (loading) return <p>Loading...</p>;
 
-  const {
-    name,
-    phd_title,
-    overall_progress,
-    department,
-    supervisors,
-    email,
-    phone,
-    current_status,
-    fathers_name,
-    address,
-    date_of_registration,
-    date_of_irb,
-    date_of_synopsis,
-    cgpa,
-    doctoral,
-  } = profile;
+  if (profile) {
+    const {
+      name,
+      phd_title,
+      overall_progress,
+      department,
+      supervisors,
+      email,
+      phone,
+      current_status,
+      fathers_name,
+      address,
+      date_of_registration,
+      date_of_irb,
+      date_of_synopsis,
+      cgpa,
+      doctoral,
+    } = profile;
 
   const personalInfo = [
     { label: "Roll Number", value: profile.roll_no },
@@ -115,7 +116,7 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
         <CustomButton text="View Presentations" onClick={navigateToProgress} />
       </div>
 
-      {/* <GridContainer
+      <GridContainer
         label="Doctoral Committee"
         elements={[
           <TableComponent
@@ -139,9 +140,13 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
           />,
         ]}
         space={3}
-      /> */}
+      />
     </div>
-  );
+  )}
+  else {
+    // Render a fallback UI, e.g., a message indicating that profile data is not available
+    return <p>Profile data not available.</p>;
+  }
 };
 
 export default ProfileCard;

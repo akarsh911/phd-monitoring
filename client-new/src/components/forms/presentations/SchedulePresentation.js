@@ -11,115 +11,139 @@ import { generateReportPeriods } from "../../../utils/semester";
 import CustomButton from "../fields/CustomButton";
 import { toast } from "react-toastify";
 
-const SchedulePresentation = ({close}) => {
-    
-    const { setLoading } = useLoading();
-    const [isLoaded, setIsLoaded] = useState(true);
-    const [students, setStudents] = useState([]);
-    const [body, setBody] = useState({});
-    const [reportPeriods, setReportPeriods] = useState([]);
+const SchedulePresentation = ({ close }) => {
+  const { setLoading } = useLoading();
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [students, setStudents] = useState([]);
+  const [body, setBody] = useState({});
+  const [reportPeriods, setReportPeriods] = useState([]);
 
-    useEffect(() => {
-        const url = baseURL + "/students";
-        customFetch(url, "GET")
-          .then((data) => {
-            if (data && data.success) {
-                for (let i = 0; i < data.response.length; i++) {
-                    data.response[i].value = data.response[i].roll_no;
-                    data.response[i].title = data.response[i].name;
-                }
-                setStudents(data.response);
-              setIsLoaded(true);
-              setLoading(false);
-            }
-            setLoading(false);
-          })
-          .catch((error) => {
-            console.log(error);
-            // setLoading(false);
-          });
-          const periods = generateReportPeriods(1,1,true);
-          const pp=[];
-          periods.forEach((period) => {
-                const period1 = {};
-                period1.value = period;
-                period1.title = period;
-                pp.push(period1);
-          });
-         setReportPeriods(pp);
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const url = `${baseURL}/students`;
+        const data = await customFetch(url, "GET");
 
-    }, []);
-    
-    const schedule = () => {
-        const raw = body.guest_emails_raw || "";
-        if(body.guest_emails_raw){
-        const emails = raw.split(",").map(email => email.trim());
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const invalidEmails = emails.filter(email => !emailRegex.test(email));
-
-        if (invalidEmails.length > 0) {
-            toast.error("Invalid email(s): " + invalidEmails.join(", "));
-            return;
-        } else {
-            setBody(prevBody => ({
-                ...prevBody,
-                guest_emails: emails
-            }));
+        if (data && data.success && Array.isArray(data.response)) {
+          const formattedStudents = data.response.map((student) => ({
+            ...student,
+            value: student.roll_no,
+            title: student.name,
+          }));
+          setStudents(formattedStudents);
         }
-       }
-        setLoading(true);
-        customFetch(baseURL + "/presentation/", "POST", body).then((data) => {
-            if (data && data.success) {
-                toast.success("Presentation Scheduled");
-            }
-            setLoading(false);
+      } catch (error) {
+        console.error("Error fetching students:", error);
+      } finally {
+        setIsLoaded(true);
+        setLoading(false);
+      }
+    };
 
-        }).catch((error) => {
-            toast.error("Error in scheduling presentation " + error);
-            setLoading(false);
-        });
+    const periods = generateReportPeriods(1, 1, true);
+    const formattedPeriods = periods.map((period) => ({
+      value: period,
+      title: period,
+    }));
+    setReportPeriods(formattedPeriods);
+
+    fetchStudents();
+  }, [setLoading]);
+
+  const schedule = () => {
+    const raw = body.guest_emails_raw || "";
+
+    if (raw) {
+      const emails = raw.split(",").map((email) => email.trim());
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const invalidEmails = emails.filter((email) => !emailRegex.test(email));
+
+      if (invalidEmails.length > 0) {
+        toast.error("Invalid email(s): " + invalidEmails.join(", "));
+        return;
+      } else {
+        body.guest_emails = emails;
+      }
     }
 
-    return (
-      <>
-      {
-        isLoaded && (
-            <>
-                <GridContainer elements={[
-                    <DropdownField label={"Student"} options={students} onChange={(value)=>{body.student_id=value}}/>
-                ]}  space={2}/>
-                <GridContainer  elements={[
-                    <DropdownField label={"Period of Report"} options={reportPeriods} onChange={(value)=>{body.period_of_report=value}}/>,
-                ]}
-                    space={2}
-                />
-                <GridContainer elements={[
-                    <DateField label={"Date"} onChange={(value)=>{body.date=value}}/>,
-                    <TimeField label={"Time"} onChange={(value)=>{body.time=value}}/>,
-                     
-                ]} />
-                <GridContainer elements={[
-                    <InputField 
-                    label={"Additional Guest Emails (Email separated by comma)"} 
-                    onChange={(value) => {
-                        setBody(prevBody => ({
-                            ...prevBody,
-                            guest_emails_raw: value  // store raw string input
-                        }));
-                    }}
-                />
-                    ]}  space={3}/>
-                <GridContainer elements={[
-                    <></>,
-                    <></>,
-                    <CustomButton text={"Schedule"} onClick={schedule}/>
-                ]}/>
+    setLoading(true);
+    customFetch(`${baseURL}/presentation/`, "POST", body)
+      .then((data) => {
+        if (data?.success) {
+          toast.success("Presentation Scheduled");
+          if (close) close();
+        }
+      })
+      .catch((error) => {
+        toast.error("Error in scheduling presentation: " + error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
-            </>
-        )
-      }
-      </>
-    );
+  return (
+    <>
+      {isLoaded && (
+        <>
+          <GridContainer
+            elements={[
+              <DropdownField
+                label="Student"
+                options={students}
+                onChange={(value) =>
+                  setBody((prev) => ({ ...prev, student_id: value }))
+                }
+              />,
+            ]}
+            space={2}
+          />
+          <GridContainer
+            elements={[
+              <DropdownField
+                label="Period of Report"
+                options={reportPeriods}
+                onChange={(value) =>
+                  setBody((prev) => ({ ...prev, period_of_report: value }))
+                }
+              />,
+            ]}
+            space={2}
+          />
+          <GridContainer
+            elements={[
+              <DateField
+                label="Date"
+                onChange={(value) =>
+                  setBody((prev) => ({ ...prev, date: value }))
+                }
+              />,
+              <TimeField
+                label="Time"
+                onChange={(value) =>
+                  setBody((prev) => ({ ...prev, time: value }))
+                }
+              />,
+            ]}
+          />
+          <GridContainer
+            elements={[
+              <InputField
+                label="Additional Guest Emails (comma separated)"
+                onChange={(value) =>
+                  setBody((prev) => ({ ...prev, guest_emails_raw: value }))
+                }
+              />,
+            ]}
+            space={3}
+          />
+          <GridContainer
+            elements={[<></>, <></>, <CustomButton text="Schedule" onClick={schedule} />]}
+          />
+        </>
+      )}
+    </>
+  );
 };
 
 export default SchedulePresentation;
