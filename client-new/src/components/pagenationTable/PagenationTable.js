@@ -11,6 +11,8 @@ const PagenationTable = ({
   enableApproval = false,
   customOpenForm, // function(id)
   customBulkAction, // function(formIds)
+  extraTopbarComponents = null,
+  actions = []
 }) => {
   const [forms, setForms] = useState([]);
   const [fields, setFields] = useState(["name", "roll_no"]);
@@ -98,6 +100,8 @@ const PagenationTable = ({
       {role !== "student" && (
         <div className="form-topbar">
           <div className="top-actions">
+          {extraTopbarComponents && (
+               <div className="extra-components">{extraTopbarComponents}</div> )}
             <button className="select-btn" onClick={() => {
               setSelectMode(!selectMode);
               if (!selectMode) setSelectedForms(new Set());
@@ -154,17 +158,26 @@ const PagenationTable = ({
                   <td key={idx}>{form[field] ?? "N/A"}</td>
                 ))}
                 {role === "admin" && (
-                  <td>
-                    <button
-                      className="edit-btn"
+                  <>
+                 {actions.length > 0 && (
+                  <div className="action-icons">
+                    {actions.map((action, index) => (
+                      <button
+                      key={index}
+                      className="action-icon-btn"
                       onClick={(e) => {
                         e.stopPropagation();
-                        openForm(formId);
+                        action.onClick(form);
                       }}
+                      title={action.tooltip || ""}
+                      style={{ marginLeft: "8px" }}
                     >
-                      Edit
+                      {action.icon}
                     </button>
-                  </td>
+                    ))}
+                  </div>
+                )}
+                </>
                 )}
               </tr>
             );

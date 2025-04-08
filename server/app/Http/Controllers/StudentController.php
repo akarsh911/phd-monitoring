@@ -36,15 +36,14 @@ class StudentController extends Controller {
                 'roll_no' => 'required|string',
                 'department_id' => 'required|integer',
                 'date_of_registration' => 'required|date',
-                'date_of_irb' => 'required|date',
-                'phd_title' => 'required|string',
-                'fathers_name' => 'required|string',
-                'address' => 'required|string',
+                'date_of_irb' => 'nullable|date',
+                'phd_title' => 'nullable|string',
+                'fathers_name' => 'nullable|string',
+                'address' => 'nullable|string',
                 'current_status' => 'required|string',
-                'overall_progress' => 'required|decimal:0,3',
+                'overall_progress' => 'nullable|decimal:0,3',
                 'cgpa' => 'required|decimal:0,3'
                
-
             ]
         );
         $password = Str::password(8, true, true, true, false);

@@ -63,7 +63,7 @@ const FilterBar = ({ onSearch }) => {
           }}
         >
           <option value="">Select Filter</option>
-          {filtersMeta?.map((f) => (
+          {filtersMeta && filtersMeta?.map((f) => (
             <option key={f.key_name} value={f.key_name}>
               {f.label}
             </option>
