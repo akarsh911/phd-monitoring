@@ -20,7 +20,7 @@ const FormList = ({ showButton = true }) => {
     customFetch(url, "GET")
       .then((data) => {
         if (data && data.success) {
-          setForms(data.response.forms);
+          setForms(data.response.data);
         }
       })
       .catch((error) => {
@@ -44,7 +44,7 @@ const FormList = ({ showButton = true }) => {
   return (
     <>
       {role === "student" && showButton && <CreateNewBar />}
-      {forms.length > 0 ? (
+      {forms?.length > 0 ? (
         <div className="form-list-container">
           {forms.map((form) => (
             <div
