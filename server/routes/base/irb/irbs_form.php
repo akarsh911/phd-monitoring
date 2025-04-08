@@ -10,6 +10,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('', [IrbSubController::class, 'createForm']);
     Route::get('/filters', [IrbSubForm::class, 'listFilters']);
 
-    Route::get('/{form_id}', [IrbSubController::class, 'loadForm'])->name('form.load');
-    Route::post('/{form_id}', [IrbSubController::class, 'submit'])->name('form.submit');
+    Route::get('/{form_id}', [IrbSubController::class, 'loadForm']);
+    Route::post('/{form_id}', [IrbSubController::class, 'submit']);
 });

@@ -22,6 +22,7 @@ import Presentation from './pages/presentations/PresentationForm';
 import ForgotPasswordPage from './pages/forgot-password/ForgotPasswordPage';
 import ResetPasswordPage from './pages/reset-password/ResetPasswordPage';
 import FacultyPage from './pages/faculty/FacultyPage';
+import DepartmentPage from './pages/department/Department';
 import AllNotificationsPage from './components/notificationBox/AllNotificationsPage';
 
 
@@ -84,6 +85,7 @@ const AppContent = () => {
             role === 'hod' || role === 'phd_coordinator' || role==='doctoral'|| role==='external'|| role==='dordc'  || role==='dra' || role==='director' || role==='admin') && (
             <>
               <Route path="/faculty" element={<FacultyPage />} />
+              <Route path="/departments" element={<DepartmentPage/>}/>
               {/* <Route path="/faculty/:roll_no" element={<StudentProfile />} />
               <Route path="/faculty/:roll_no/forms" element={<FormsPage />} />
               <Route path="/faculty/:roll_no/forms/:form_type" element={<FormListPage />} />

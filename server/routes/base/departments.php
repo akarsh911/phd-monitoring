@@ -4,10 +4,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\DepartmentController;
 use Illuminate\Support\Facades\Auth;
 
-Route::get('',function (Request $request){
-    $departments = \App\Models\Department::all();
-    return response()->json($departments,200);
-});
+Route::get('',[DepartmentController::class,'list'])->middleware('auth:sanctum');    
 Route::post('/add', [DepartmentController::class, 'add'])->middleware('auth:sanctum');
 Route::post('/specialization/add', [DepartmentController::class, 'addBroadAreaSpecialization'])->middleware('auth:sanctum');
 Route::post('/phd_coordinator', [DepartmentController::class, 'addCoordinator'])->middleware('auth:sanctum');
