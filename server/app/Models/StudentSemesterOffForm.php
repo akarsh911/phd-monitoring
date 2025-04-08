@@ -26,6 +26,7 @@ class StudentSemesterOffForm extends Model
             'semester_off_required',
             'proof_pdf',
             'reason',
+            'semester_id',
         ], $commonFieldKeys);
 
         parent::__construct($attributes);

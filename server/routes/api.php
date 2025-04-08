@@ -234,6 +234,10 @@ Route::prefix('suggestions')->group(function () {
     require base_path('routes/base/suggestions.php');
 });
 
+Route::prefix('semester')->group(function () {
+    require base_path('routes/base/semester.php');
+});
+
 Route::prefix('approval')->group(function () {
     require base_path('routes/base/approvals.php');
 });

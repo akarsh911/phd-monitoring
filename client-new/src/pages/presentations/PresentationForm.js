@@ -50,7 +50,9 @@ const Presentation = () => {
           <>
             {isLoaded && formData && (
               <>
-                <PresentationForm formData={formData} refetchData={refetchData} />
+                <PresentationForm formData={formData} refetchData={refetchData}
+                
+                />
               </>
             )}
           </>

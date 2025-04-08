@@ -9,13 +9,16 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Traits\GeneralFormHandler;
 use App\Http\Controllers\Traits\GeneralFormList;
 use App\Http\Controllers\Traits\GeneralFormSubmitter;
+use App\Http\Controllers\Traits\HasSemesterCodeValidation;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Traits\SaveFile;
 use App\Models\Patent;
 use App\Models\Publication;
+use App\Models\Semester;
 use App\Models\StudentSemesterOff;
 use App\Models\StudentSemesterOffForm;
 use App\Models\ThesisSubmission;
+
 
 class StudentSemesterOffFormController extends Controller
 {
@@ -26,6 +29,7 @@ class StudentSemesterOffFormController extends Controller
     use SaveFile;
     use GeneralFormCreate;
     use FilterLogicTrait;
+    use HasSemesterCodeValidation;
     public function listFilters(Request $request){
         return response()->json($this->getAvailableFilters("forms"));
     }
@@ -145,8 +149,20 @@ class StudentSemesterOffFormController extends Controller
                         $formInstance->previous_approval_pdf = $link;
                     }
                 }
+                $validator=$this->validateSemesterCode($request->semester_code);
+                if(!$validator['valid']){
+                    return response()->json(['message' => 'Invalid semester code'], 422);
+                }
+                if($validator['in_db']){
+                    $formInstance->semester_id=$validator['semester_id'];
+                }
+                else{
+                    $semester = Semester::createOrUpdateFromCode($request->semester_off_required);
+                    $formInstance->semester_id=$semester->id;
+                }
                 $formInstance->reason = $request->reason;
                 $formInstance->semester_off_required = $request->semester_off_required;
+
                 if($request->hasFile('proof_pdf')){
                     $link=$this->saveUploadedFile($request->file('proof_pdf'), 'semester_off', $user->student->roll_no);
                     $formInstance->proof_pdf = $link;
@@ -261,6 +277,7 @@ class StudentSemesterOffFormController extends Controller
                     $formInstance->status = 'approved';
                     $studentSemesterOff = new StudentSemesterOff();
                     $studentSemesterOff->student_id = $formInstance->student_id;
+                    $studentSemesterOff->semester_id = $formInstance->semester_id;
                     $studentSemesterOff->reason = $formInstance->reason;
                     $studentSemesterOff->semester_off_required = $formInstance->semester_off_required;
                     $studentSemesterOff->proof_pdf = $formInstance->proof_pdf;

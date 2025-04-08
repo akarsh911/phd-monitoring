@@ -28,11 +28,12 @@ const DropdownField = ({ label, options, initialValue, isLocked, onChange }) => 
                 {showInitialValue ? (
                     <option value={value}>{initialValue}</option>
                 ) : (
-                    options.map((option, index) => (
+                    <>{options && options?.map((option, index) => (
                         <option key={index} value={option.value}>
                             {option.title}
                         </option>
-                    ))
+                    ))}</>
+                    
                 )}
             </select>
         </div>
