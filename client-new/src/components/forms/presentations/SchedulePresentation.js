@@ -28,7 +28,14 @@ const SchedulePresentation = ({close}) => {
                     data.response[i].value = data.response[i].roll_no;
                     data.response[i].title = data.response[i].name;
                 }
-                setStudents(data.response);
+                console.log(data.response);
+                let stu=data.response.data.map((student) => {
+                    return {
+                        value: student.roll_no,
+                        title: student.name,
+                    };
+                });
+              setStudents(stu);
               setIsLoaded(true);
               setLoading(false);
             }
@@ -38,7 +45,7 @@ const SchedulePresentation = ({close}) => {
             console.log(error);
             // setLoading(false);
           });
-          const periods = generateReportPeriods(1,1,true);
+          const periods = generateReportPeriods(2,1,true);
           const pp=[];
           periods.forEach((period) => {
                 const period1 = {};

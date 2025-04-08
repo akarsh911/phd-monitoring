@@ -66,7 +66,7 @@ private function paginateAndMap($formsQuery, $page, $fields, $perPage = 50,$user
         'totalPages' => $totalPages,
         'fields' => $fields['fields'] ?? [],
         'fieldsTitles' => $fields['titles'] ?? [],
-        'roles' => $user->current_role->role,
+        'role' => $user->current_role->role,
     ];
 }
 
