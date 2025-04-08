@@ -22,6 +22,7 @@ import Presentation from './pages/presentations/PresentationForm';
 import ForgotPasswordPage from './pages/forgot-password/ForgotPasswordPage';
 import ResetPasswordPage from './pages/reset-password/ResetPasswordPage';
 import FacultyPage from './pages/faculty/FacultyPage';
+import AllNotificationsPage from './components/notificationBox/AllNotificationsPage';
 
 
 const App = () => {
@@ -59,8 +60,10 @@ const AppContent = () => {
             <Route path="/forms" element={<FormsPage/>} />
             
             <Route path="/publications" element={<Publications/>} />  
+            
             </>
           )}
+          <Route path="/notifications" element={<AllNotificationsPage />} />
           <Route path="/presentation" element={<PresentationListPage/>} />  
           <Route path="/presentation/form" element={<PresentationListPage/>} />  
           <Route path="/presentation/form/:id" element={<Presentation/>} />  

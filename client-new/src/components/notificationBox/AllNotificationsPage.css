@@ -1,0 +1,61 @@
+.all-notifications-page {
+    padding: 3rem 2rem;
+    max-width: 900px;
+    margin: auto;
+    background-color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .notification-heading {
+  
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #0f0e0e; /* Deep red */
+    margin-bottom: 1.5rem;
+
+    padding-bottom: 0.5rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .notification-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .notification-card {
+    background-color: #fff1f2; /* Light red background */
+    border-left: 6px solid #eeecec; /* Red stripe */
+    border-radius: 0.75rem;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+    padding: 1.5rem 2rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+  }
+  
+  .notification-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+    background-color: #ffe4e6;
+  }
+  
+  .notification-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #991b1b;
+    margin-bottom: 0.5rem;
+  }
+  
+  .notification-body {
+    font-size: 1rem;
+    color: #7f1d1d;
+    line-height: 1.5;
+  }
+  
+  .notif-date {
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #6b7280;
+    text-align: right;
+  }
+  

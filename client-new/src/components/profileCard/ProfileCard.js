@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import "react-circular-progressbar/dist/styles.css";
 import "./ProfileCard.css";
 
@@ -14,6 +14,7 @@ import CustomButton from "../forms/fields/CustomButton";
 const ProfileCard = ({ dataIP = null, link = false }) => {
   const { state: locationState } = useLocation();
   const { roll_no } = useParams();
+  const navigate = useNavigate();
 
   const [profile, setProfile] = useState(locationState || dataIP);
   const [loading, setLoading] = useState(!profile);
@@ -37,11 +38,11 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
   }, [roll_no, profile]);
 
   const navigateToForms = () => {
-    window.location.href = link ? "/forms" : `${window.location.pathname}/forms`;
+    navigate("/forms");
   };
 
   const navigateToProgress = () => {
-    window.location.href = link ? "/progress" : `${window.location.pathname}/progress`;
+    navigate("/presentation");
   };
 
   if (loading) return <p>Loading...</p>;
@@ -61,11 +62,11 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
     date_of_irb,
     date_of_synopsis,
     cgpa,
-    doctoral
+    doctoral,
   } = profile;
 
   const personalInfo = [
-    { label: "Roll Number", value: roll_no },
+    { label: "Roll Number", value: profile.roll_no },
     { label: "Email", value: email },
     { label: "Phone", value: phone },
     { label: "Department", value: department },

@@ -17,10 +17,10 @@ const FacultyFormsPage = () => {
 
     useEffect(() => {
         setForms([
-            {
-                form_type: "supervisor-allocation",
-                form_name: "Supervisor Allocation",
-            },
+            // {
+            //     form_type: "supervisor-allocation",
+            //     form_name: "Supervisor Allocation",
+            // },
             {
                 form_type: "status-change",
                 form_name: "Status Change",
