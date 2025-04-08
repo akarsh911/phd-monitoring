@@ -17,6 +17,7 @@ use App\Models\PresentationReview;
 use App\Models\Publication;
 use App\Models\Student;
 use App\Services\PresentationService;
+use App\Traits\HasSemesterCodeValidation;
 use Carbon\Carbon;
 
 class PresentationController extends Controller{
@@ -25,6 +26,7 @@ class PresentationController extends Controller{
     use GeneralFormList;
     use SaveFile;
     use FilterLogicTrait;
+    use HasSemesterCodeValidation;
 
     public function listFilters(Request $request){
         return response()->json($this->getAvailableFilters("presentation"));
@@ -77,7 +79,14 @@ class PresentationController extends Controller{
                     'guest_emails'=> 'nullable|array',
                     'guest_emails.*'=> 'email',
                 ]);
-                
+                $validator=$this->validateSemesterCode($request->period_of_report);
+                if(!$validator['valid']){
+                    return response()->json(['message' => 'Invalid Semester Code'], 422);
+                }
+                if(!$validator['current']&&!$validator['upcoming']&&!$validator['in_db']){
+                    return response()->json(['message' => 'Presentation cannot be scheduled for Past Semester'], 422);
+                }
+
                 $student = Student::where('roll_no', $request->student_id)->first();
                 if (!$student) {
                     return response()->json(['message' => 'Student not found'], 404);
@@ -85,7 +94,7 @@ class PresentationController extends Controller{
                 if(!$student->checkSupervises($user->faculty->faculty_code)){
                     return response()->json(['message' => 'You are not authorized to access this resource'], 403);
                 }
-                $old=Presentation::where('student_id',$request->student_id)->where('period_of_report',$request->period_of_report)->get();
+                $old=Presentation::where('student_id',$request->student_id)->where('semester_id',$validator['semester_id'])->get();
                 if(count($old)!=0){
                     return response()->json(['message' => 'Presentation already scheduled for this period'], 403);
                 }
@@ -98,6 +107,7 @@ class PresentationController extends Controller{
                     'period_of_report'=> $request->period_of_report,
                     'status' => 'pending',
                     'completion' => 'incomplete',
+                    'semester_id'=>$validator['semester_id'],
                     'steps'=>['student','faculty','doctoral','hod','dra','dordc','complete'],
                 ]);
                 $calendarResult = PresentationService::scheduleCalendarEvent(
@@ -125,13 +135,20 @@ class PresentationController extends Controller{
     }
 
     $request->validate([
+        'semester'=> 'required|string',
         'students' => 'required|array',
         'students.*.student_id' => 'required|integer',
         'students.*.date' => 'required|string',
         'students.*.time' => 'required|string',
-        'students.*.period_of_report' => 'required|string',
         'students.*.guest_emails' => 'nullable|array',
     ]);
+    $validator=$this->validateSemesterCode($request->semester);
+    if(!$validator['valid']){
+        return response()->json(['message' => 'Invalid Semester Code'], 422);
+    }
+    if(!$validator['current']&&!$validator['upcoming']&&!$validator['in_db']){
+        return response()->json(['message' => 'Presentation cannot be scheduled for Past Semester'], 422);
+    }
     
     $createdForms = [];
     $errors = [];
@@ -151,7 +168,7 @@ class PresentationController extends Controller{
         }
 
         $existingPresentation = Presentation::where('student_id', $studentData['student_id'])
-            ->where('period_of_report', $studentData['period_of_report'])
+            ->where('semester_id', $validator['semester_id'])
             ->exists();
 
         if ($existingPresentation) {
@@ -162,6 +179,7 @@ class PresentationController extends Controller{
         $form = Presentation::create([
             'student_id' => $studentData['student_id'],
             'date' => $formattedDate,
+            'semester_id' => $validator['semester_id'],
             'time' => $studentData['time'],
             'period_of_report' => $studentData['period_of_report'],
             'status' => 'pending',
@@ -306,7 +324,6 @@ class PresentationController extends Controller{
                 $newPublication->form_type = 'progress';
                 
                 $newPublication->save();
-      
                
             }
         }

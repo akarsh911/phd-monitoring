@@ -17,6 +17,7 @@ class StudentSemesterOff extends Model
         'semester_off_required',
         'proof_pdf',
         'reason',
+        'semester_id'
     ];
 
     /**

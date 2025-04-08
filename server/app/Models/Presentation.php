@@ -34,6 +34,8 @@ class Presentation extends Model
         'attendance' => 'float',
         'history' => 'array',
         'steps' => 'array',
+        'leave' => 'boolean',
+        'missed' => 'boolean',
     ];
 
     public function __construct(array $attributes = [])
@@ -53,6 +55,9 @@ class Presentation extends Model
             'contact_hours',
             'attendance',
             'overall_progress',
+            'semester_id',
+            'leave',
+            'missed',
         ], $commonFieldKeys);
 
         parent::__construct($attributes);
@@ -165,4 +170,15 @@ class Presentation extends Model
     {
         return $this->hasMany(PresentationReview::class, 'presentation_id', 'id')->where('is_supervisor', 0);
     }
+    public function semester()
+{
+    return $this->belongsTo(Semester::class);
+}
+
+public function student()
+{
+    return $this->belongsTo(Student::class, 'student_id', 'roll_no');
+}
+
+    
 }

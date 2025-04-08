@@ -219,4 +219,10 @@ class Student extends Model
         }
         return $ret;
     }
+
+public function presentations()
+{
+    return $this->hasMany(Presentation::class, 'student_id', 'roll_no');
+}
+
 }
