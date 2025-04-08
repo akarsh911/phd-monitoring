@@ -115,7 +115,7 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
         <CustomButton text="View Presentations" onClick={navigateToProgress} />
       </div>
 
-      <GridContainer
+      {/* <GridContainer
         label="Doctoral Committee"
         elements={[
           <TableComponent
@@ -139,7 +139,7 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
           />,
         ]}
         space={3}
-      />
+      /> */}
     </div>
   );
 };
