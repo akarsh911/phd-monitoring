@@ -21,14 +21,15 @@ const FacultyPage = () => {
     setFilter(newFilter);
   };
 
-  const openForm = async (id) => {
-    if (id) {
+  const openForm = async (data) => {
+    if (data) {
       setLoading(true);
-      const res = await customFetch(baseURL + `/faculty/${id}`, 'GET');
-      if (res.success) {
-        setEditData(res.response);
+      // const res = await customFetch(baseURL + `/faculty/${id}`, 'GET');
+     
+        setEditData(data);
+        console.log(data);
         setIsOpen(true);
-      }
+    
       setLoading(false);
     } else {
       setEditData(null);
