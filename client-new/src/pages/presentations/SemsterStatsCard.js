@@ -1,9 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { customFetch } from "../../api/base";
 import { baseURL } from "../../api/urls";
+import "./SemesterStatsCard.css";
+import CustomButton from "../../components/forms/fields/CustomButton";
+import CustomModal from "../../components/forms/modal/CustomModal";
+import ToggleSwitch from "../../components/forms/fields/ToggleSwitch";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const SemesterStatsCard = () => {
   const [semesterStats, setSemesterStats] = useState(null);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [openCreateModal, setOpenCreateModal] = useState(false);
+
+  const [editForm, setEditForm] = useState({
+    semester_name: "",
+    start_date: null,
+    end_date: null,
+    notification: false,
+  });
+
+  const [createForm, setCreateForm] = useState({
+    semester_name: "",
+    start_date: new Date(),
+    end_date: new Date(),
+    notification: false,
+  });
 
   useEffect(() => {
     fetchSemesterStats();
@@ -12,14 +34,59 @@ const SemesterStatsCard = () => {
   const fetchSemesterStats = async () => {
     try {
       const res = await customFetch(baseURL + "/semester/recent", "GET");
-   
-        console.log(res.response.data);
-        setSemesterStats(res.response.data);
-      
+      const data = res.response?.data || res.data;
+      setSemesterStats(data);
+      setEditForm({
+        semester_name: data.semester_name,
+        start_date: new Date(data.start_date),
+        end_date: new Date(data.end_date),
+        notification: data.notification,
+      });
     } catch (error) {
       console.error("Error fetching semester stats:", error);
     }
   };
+
+  const currentDate = new Date();
+  const isInSemester =
+    semesterStats &&
+    currentDate >= new Date(semesterStats.start_date) &&
+    currentDate <= new Date(semesterStats.end_date);
+
+  const isBeforeSemester =
+    semesterStats && currentDate < new Date(semesterStats.start_date);
+
+    const handleEditSubmit = async () => {
+        try {
+          const payload = {
+            semester_name: editForm.semester_name,
+            start_date: editForm.start_date,
+            end_date: editForm.end_date,
+            notification: editForm.notification,
+          };
+          await customFetch(baseURL + "/semester", "PUT", payload);
+          setOpenEditModal(false);
+          fetchSemesterStats();
+        } catch (err) {
+          console.error("PUT error:", err);
+        }
+      };
+    
+      const handleCreateSubmit = async () => {
+        try {
+          const payload = {
+            semester_name: createForm.semester_name,
+            start_date: createForm.start_date,
+            end_date: createForm.end_date,
+            notification: createForm.notification,
+          };
+          await customFetch(baseURL + "/semester", "POST", payload);
+          setOpenCreateModal(false);
+          fetchSemesterStats();
+        } catch (err) {
+          console.error("POST error:", err);
+        }
+      };
 
   if (!semesterStats) return null;
 
@@ -33,50 +100,117 @@ const SemesterStatsCard = () => {
   } = semesterStats;
 
   return (
-    <div
-      className="semester-stats"
-      style={{
-        marginBottom: "20px",
-        background: "#ffffff",
-        padding: "16px",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        boxShadow: "0 2px 8px rgba(0, 0, 0, 0.05)",
-      }}
-    >
-      <h3 style={{ marginBottom: "12px", fontSize: "1.5rem", color: "#333" }}>
-      {semester_name} Semester Stats
-      </h3>
-      <div
-        style={{
-          display: "flex",
-          gap: "20px",
-          flexWrap: "wrap",
-          fontSize: "14px",
-          color: "#555",
-        }}
-      >
-        <div>
-          <strong>Semester:</strong> {semester_name}
-        </div>
-        <div>
-          <strong>Start Date:</strong>{" "}
-          {new Date(start_date).toLocaleDateString()}
-        </div>
-        <div>
-          <strong>End Date:</strong>{" "}
-          {new Date(end_date).toLocaleDateString()}
-        </div>
-        <div>
-          <strong>Leave Scheduled:</strong> {leave}
-        </div>
-        <div>
-          <strong>Scheduled:</strong> {scheduled}
-        </div>
-        <div>
-          <strong>Unscheduled:</strong> {unscheduled}
-        </div>
+    <div>
+      <div className="semester-card">
+      <div className="semester-header">
+        <h3>{semester_name} Semester Stats</h3>
+        {(isInSemester || isBeforeSemester) && (
+          <span className="semester-status-indicator">● Active</span>
+        )}
       </div>
+        <div className="semester-stats-line">
+          <div className="stat-item"><strong>Semester:</strong> {semester_name}</div>
+          <div className="stat-item"><strong>Start Date:</strong> {new Date(start_date).toLocaleDateString()}</div>
+          <div className="stat-item"><strong>End Date:</strong> {new Date(end_date).toLocaleDateString()}</div>
+          <div className="stat-item"><strong>Leave Scheduled:</strong> {leave === 1 ? "Yes" : "No"}</div>
+          <div className="stat-item"><strong>Scheduled:</strong> {scheduled}</div>
+          <div className="stat-item"><strong>Unscheduled:</strong> {unscheduled}</div>
+        </div>
+        </div>
+        <div >
+          {(isInSemester || isBeforeSemester) ? (
+            // <button className="button" onClick={() => setOpenEditModal(true)}>Edit Deadline</button>
+            <button className="button" onClick={() => setOpenCreateModal(true)}>Create New Evaluation Semester</button>
+          ) : (
+            <button className="button" onClick={() => setOpenCreateModal(true)}>Create New Evaluation Semester</button>
+          )}
+        </div>
+      
+
+      {/* Edit Modal */}
+      <CustomModal
+        isOpen={openEditModal}
+        onClose={() => setOpenEditModal(false)}
+        title="Edit Semester Deadline"
+      >
+        <label>Semester Name:</label>
+        <input
+          value={editForm.semester_name}
+          disabled
+          className="field-readonly"
+        />
+
+        <label>Start Date:</label>
+        <DatePicker
+          selected={editForm.start_date}
+          readOnly
+          disabled
+          className="field-readonly"
+        />
+
+        <label>End Date:</label>
+        <DatePicker
+          selected={editForm.end_date}
+          onChange={(date) => setEditForm({ ...editForm, end_date: date })}
+          className="field-editable"
+        />
+
+        <label>Notification:</label>
+        <ToggleSwitch
+          isOn={editForm.notification}
+          onToggle={() => setEditForm((prev) => ({
+            ...prev,
+            notification: !prev.notification,
+          }))}
+        />
+
+        <div style={{ textAlign: "right", marginTop: "10px" }}>
+          <CustomButton onClick={handleEditSubmit} text="Save Changes" />
+        </div>
+      </CustomModal>
+
+      {/* Create Modal */}
+      <CustomModal
+        isOpen={openCreateModal}
+        onClose={() => setOpenCreateModal(false)}
+        title="Create New Semester Presentation"
+      >
+        <label>Semester Name:</label>
+        <input
+          value={createForm.semester_name}
+          onChange={(e) => setCreateForm({ ...createForm, semester_name: e.target.value })}
+          className="field-editable"
+        />
+
+        <label>Start Date:</label>
+        <DatePicker
+          selected={createForm.start_date}
+          onChange={(date) => setCreateForm({ ...createForm, start_date: date })}
+          className="field-editable"
+        />
+
+        <label>End Date:</label>
+        <DatePicker
+          selected={createForm.end_date}
+          onChange={(date) => setCreateForm({ ...createForm, end_date: date })}
+          className="field-editable"
+        />
+
+        <label>Notification:</label>
+        <ToggleSwitch
+          isOn={createForm.notification}
+          onToggle={() =>
+            setCreateForm((prev) => ({
+              ...prev,
+              notification: !prev.notification,
+            }))
+          }
+        />
+
+        <div style={{ textAlign: "right", marginTop: "10px" }}>
+          <CustomButton onClick={handleCreateSubmit} text="Create" />
+        </div>
+      </CustomModal>
     </div>
   );
 };

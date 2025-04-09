@@ -21,7 +21,7 @@ const [location, setLocation] = useState(window.location.pathname);
   const handleSearch = (query) => {
     setFilters(query);
   };
-
+  const [presentationTab, setPresentationTab] = useState(0);
   useEffect(() => {
     setRole(localStorage.getItem("userRole"));
   }, []);
@@ -40,6 +40,8 @@ const [location, setLocation] = useState(window.location.pathname);
       children={
         <>
           <h1>Presentation List</h1>
+
+
           <SemesterStatsCard />
     
           <GridContainer
@@ -90,8 +92,25 @@ const [location, setLocation] = useState(window.location.pathname);
 
 
         
-          <FilterBar onSearch={handleSearch}/>
+          {/* <FilterBar onSearch={handleSearch}/> */}
+
+
           {/* add tabs here */}
+          <Tabs
+  value={presentationTab}
+  onChange={(e, newVal) => setPresentationTab(newVal)}
+  sx={{ marginBottom: "16px" }}
+>
+  <Tab label="Upcoming Presentations" />
+  <Tab label="Not Scheduled" />
+  <Tab label="On Leave" />
+  <Tab label="Semester Off" />
+  <Tab label="Not Submitted" />
+</Tabs>
+
+
+
+
           <PagenationTable 
            endpoint={location}
            filters={filters}
