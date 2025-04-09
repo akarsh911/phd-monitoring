@@ -18,45 +18,50 @@ const SchedulePresentation = ({ close }) => {
   const [body, setBody] = useState({});
   const [reportPeriods, setReportPeriods] = useState([]);
 
-  useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const url = `${baseURL}/students`;
-        const data = await customFetch(url, "GET");
+    useEffect(() => {
+        const url = baseURL + "/students";
+        customFetch(url, "GET")
+          .then((data) => {
+            if (data && data.success) {
+                for (let i = 0; i < data.response.length; i++) {
+                    data.response[i].value = data.response[i].roll_no;
+                    data.response[i].title = data.response[i].name;
+                }
+                console.log(data.response);
+                let stu=data.response.data.map((student) => {
+                    return {
+                        value: student.roll_no,
+                        title: student.name,
+                    };
+                });
+              setStudents(stu);
+              setIsLoaded(true);
+              setLoading(false);
+            }
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.log(error);
+            // setLoading(false);
+          });
+          const periods = generateReportPeriods(2,1,true);
+          const pp=[];
+          periods.forEach((period) => {
+                const period1 = {};
+                period1.value = period;
+                period1.title = period;
+                pp.push(period1);
+          });
+         setReportPeriods(pp);
 
-        if (data && data.success && Array.isArray(data.response)) {
-          const formattedStudents = data.response.map((student) => ({
-            ...student,
-            value: student.roll_no,
-            title: student.name,
-          }));
-          setStudents(formattedStudents);
-        }
-      } catch (error) {
-        console.error("Error fetching students:", error);
-      } finally {
-        setIsLoaded(true);
-        setLoading(false);
-      }
-    };
-
-    const periods = generateReportPeriods(1, 1, true);
-    const formattedPeriods = periods.map((period) => ({
-      value: period,
-      title: period,
-    }));
-    setReportPeriods(formattedPeriods);
-
-    fetchStudents();
-  }, [setLoading]);
-
-  const schedule = () => {
-    const raw = body.guest_emails_raw || "";
-
-    if (raw) {
-      const emails = raw.split(",").map((email) => email.trim());
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      const invalidEmails = emails.filter((email) => !emailRegex.test(email));
+    }, []);
+    
+    const schedule = () => {
+        const raw = body.guest_emails_raw || "";
+        if(body.guest_emails_raw){
+        const emails = raw.split(",").map(email => email.trim());
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const invalidEmails = emails.filter(email => !emailRegex.test(email));
 
       if (invalidEmails.length > 0) {
         toast.error("Invalid email(s): " + invalidEmails.join(", "));
