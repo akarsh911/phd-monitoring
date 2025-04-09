@@ -10,9 +10,9 @@ class Student extends Model
     use HasFactory;
 
     protected $table = 'students';
-    protected $primaryKey = 'roll_no'; 
+    protected $primaryKey = 'roll_no';
     public $incrementing = false;
-    
+
     protected $fillable = [
         'user_id',
         'roll_no',
@@ -47,18 +47,18 @@ class Student extends Model
     public function getStudent()
     {
         return [
-            'name'=>$this->user->name,
-            'roll_no'=>$this->roll_no,
-            'department'=>$this->department->name,
-            'date_of_registration'=>$this->date_of_registration,
-            'date_of_irb'=>$this->date_of_irb,
-            'date_of_synopsis'=>$this->date_of_synopsis,
-            'phd_title'=>$this->phd_title,
-            'fathers_name'=>$this->fathers_name,
-            'address'=>$this->address,
-            'current_status'=>$this->current_status,
-            'cgpa'=>$this->cgpa,
-            'address'=>$this->address
+            'name' => $this->user->name,
+            'roll_no' => $this->roll_no,
+            'department' => $this->department->name,
+            'date_of_registration' => $this->date_of_registration,
+            'date_of_irb' => $this->date_of_irb,
+            'date_of_synopsis' => $this->date_of_synopsis,
+            'phd_title' => $this->phd_title,
+            'fathers_name' => $this->fathers_name,
+            'address' => $this->address,
+            'current_status' => $this->current_status,
+            'cgpa' => $this->cgpa,
+            'address' => $this->address
         ];
     }
     public function department()
@@ -76,14 +76,14 @@ class Student extends Model
 
         $irbSubForm = IrbSubForm::where('student_id', $this->roll_no)->first();
 
-        if ( $irbSubForm && $irbSubForm->status == 'approved' && $irbSubForm->status == 'complete') {
+        if ($irbSubForm && $irbSubForm->status == 'approved' && $irbSubForm->status == 'complete') {
             return true;
         } else {
             return false;
         }
     }
 
-    
+
     public function statusChanges()
     {
         return $this->hasMany(StudentStatusChange::class, 'student_id', 'roll_no');
@@ -91,16 +91,16 @@ class Student extends Model
 
     public function supervisor_update_date()
     {
-        $last_update= Supervisor::where('student_id', $this->roll_no)->orderBy('updated_at', 'desc')->first();
+        $last_update = Supervisor::where('student_id', $this->roll_no)->orderBy('updated_at', 'desc')->first();
         return $last_update->updated_at;
     }
 
     public function doctoralCommittee()
     {
         return $this->belongsToMany(Faculty::class, 'doctoral_commitee', 'student_id', 'faculty_id', 'roll_no', 'faculty_code')
-                    ->with('user'); // Include user details
+            ->with('user'); // Include user details
     }
-    
+
     public function checkDoctoralCommittee($facultyId)
     {
         return $this->doctoralCommittee->contains('faculty_code', $facultyId);
@@ -123,7 +123,7 @@ class Student extends Model
     {
         return $this->hasOne(IrbSubForm::class, 'student_id', 'roll_no');
     }
-    
+
     public function statusChangeForms()
     {
         return $this->hasOne(StudentStatusChangeForms::class, 'student_id', 'roll_no');
@@ -136,7 +136,7 @@ class Student extends Model
 
     public function checkSupervises($facultyId)
     {
-        return $this->supervisors->contains('faculty_code',$facultyId);
+        return $this->supervisors->contains('faculty_code', $facultyId);
     }
 
     public function checkHOD($facultyId)
@@ -181,11 +181,11 @@ class Student extends Model
 
     public function initialStatus()
     {
-        $changes= $this->statusChanges()->orderBy('created_at', 'asc')?->first();
-        if(!$changes){
+        $changes = $this->statusChanges()->orderBy('created_at', 'asc')?->first();
+        if (!$changes) {
             return $this->current_status;
         }
-        $init=$changes->type_of_change=='full-time to part-time'?'full-time':'part-time';
+        $init = $changes->type_of_change == 'full-time to part-time' ? 'full-time' : 'part-time';
         return $init;
     }
 
@@ -199,12 +199,13 @@ class Student extends Model
     {
         return $this->hasMany(StudentSemesterOff::class, 'student_id', 'roll_no');
     }
-    
-    public function form() {
+
+    public function form()
+    {
         return $this->hasMany(Forms::class, 'student_id', 'roll_no')
-                    ->where('student_available', true);
+            ->where('student_available', true);
     }
-    
+
     public function forms()
     {
         $forms = $this->hasMany(Forms::class, 'student_id', 'roll_no')->where('student_available', true)->get();
@@ -220,9 +221,24 @@ class Student extends Model
         return $ret;
     }
 
-public function presentations()
-{
-    return $this->hasMany(Presentation::class, 'student_id', 'roll_no');
-}
+    public function presentations()
+    {
+        return $this->hasMany(Presentation::class, 'student_id', 'roll_no');
+    }
+    public function irbCommittees()
+    {
+        return $this->hasMany(IRBCommittee::class, 'student_id', 'roll_no');
+    }
 
+    /**
+     * Get the outside expert associated with this student, if any.
+     */
+    public function outsideExpert()
+    {
+        return $this->irbCommittees()
+            ->where('type', 'outside')
+            ->where('member_type', OutsideExpert::class)
+            ->with('member')
+            ->first()?->member;
+    }
 }

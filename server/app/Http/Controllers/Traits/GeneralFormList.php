@@ -211,5 +211,41 @@ private function listDoctoralForms($user, $model, $filters = null, $override = f
     return $this->paginateAndMap($formsQuery, $page, $fields,$rows, $user);
 }
 
-    
+public function ListStudentProfile($student){
+    return [
+        'id' => $student->roll_no,
+        'name' => $student->user->name(),
+        'phd_title' => $student->phd_title,
+        'overall_progress' => $student->overall_progress,
+        'roll_no' => $student->roll_no,
+        'department' => $student->department->name,
+        'supervisors' => $student->supervisors->map(function ($s) {
+            return [
+                'faculty_code' => $s->faculty_code,
+                'name' => $s->user->name(),
+                'email' => $s->user->email,
+                'phone' => $s->user->phone,
+                'designation' => $s->designation,
+            ];
+        }),
+        'cgpa' => $student->cgpa,
+        'email' => $student->user->email,
+        'phone' => $student->user->phone,
+        'current_status' => $student->current_status,
+        'fathers_name' => $student->fathers_name,
+        'address' => $student->address,
+        'date_of_registration' => $student->date_of_registration,
+        'date_of_irb' => $student->date_of_irb,
+        'date_of_synopsis' => $student->date_of_synopsis,
+        'doctoral' => $student->doctoralCommittee->map(function ($faculty) {
+            return [
+                'faculty_code' => $faculty->faculty_code,
+                'designation' => $faculty->designation,
+                'name' => $faculty->user->name(),
+                'email' => $faculty->user->email,
+                'phone' => $faculty->user->phone,
+            ];
+        }),
+    ];
+}
 }

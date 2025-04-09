@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\FilterLogicTrait;
+use App\Http\Controllers\Traits\GeneralFormList;
 use App\Http\Controllers\Traits\PagenationTrait;
 use App\Models\Forms;
 use Illuminate\Http\Request;    
@@ -14,7 +15,7 @@ use Illuminate\Support\Str;
 class StudentController extends Controller {
     use FilterLogicTrait;
     use PagenationTrait;
-
+    use GeneralFormList;
     public function listFilters(Request $request){
         return response()->json($this->getAvailableFilters("student"));
     }
@@ -142,33 +143,7 @@ class StudentController extends Controller {
     
     $students = $studentsQuery->paginate($perPage, ['*'], 'page', $page);
     $result = $students->getCollection()->map(function ($student) {
-        return [
-            'id' => $student->roll_no,
-            'name' => $student->user->name(),
-            'phd_title' => $student->phd_title,
-            'overall_progress' => $student->overall_progress,
-            'roll_no' => $student->roll_no,
-            'department' => $student->department->name,
-            'supervisors' => $student->supervisors->map(fn ($s) => $s->user->name()),
-            'cgpa' => $student->cgpa,
-            'email' => $student->user->email,
-            'phone' => $student->user->phone,
-            'current_status' => $student->current_status,
-            'fathers_name' => $student->fathers_name,
-            'address' => $student->address,
-            'date_of_registration' => $student->date_of_registration,
-            'date_of_irb' => $student->date_of_irb,
-            'date_of_synopsis' => $student->date_of_synopsis,
-            'doctoral' => $student->doctoralCommittee->map(function ($faculty) {
-                return [
-                    'faculty_code' => $faculty->faculty_code,
-                    'designation' => $faculty->designation,
-                    'name' => $faculty->user->name(),
-                    'email' => $faculty->user->email,
-                    'phone' => $faculty->user->phone,
-                ];
-            }),
-        ];
+        return $this->ListStudentProfile($student);
     });
 
     return response()->json([
@@ -202,8 +177,12 @@ class StudentController extends Controller {
                 $student = Student::where('department_id',$loggenInUser->faculty->department_id)->where('roll_no',$roll_no)->first();
                 break;
             case 'faculty':
-                $student = $loggenInUser->faculty->students()->where('roll_no',$roll_no)->first();
-                break;
+                $student =  Student::find($roll_no);
+                if(!$student->checkSupervises($loggenInUser->faculty->faculty_code))
+                    return response()->json([
+                        'message' => 'You do not have permission to view student'
+                    ], 403);
+               break;
             case 'student':
                 $student = Student::where('user_id',$loggenInUser->id)->where('roll_no',$roll_no)->first();
                 break;
@@ -212,11 +191,14 @@ class StudentController extends Controller {
                     'message' => 'You do not have permission to view student'
                 ], 403);
         }
-        if($student == null){
+        if(!$student){
             return response()->json([
                 'message' => 'Student not found'
             ], 404);
         }
-        return response()->json($student,200);
+        $stu= $this->ListStudentProfile($student);
+        return response()->json([
+            'data'=>[$stu]
+        ],200);
     }
 }

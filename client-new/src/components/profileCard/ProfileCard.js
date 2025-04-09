@@ -238,7 +238,6 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
     </div>
   )}
   else {
-    // Render a fallback UI, e.g., a message indicating that profile data is not available
     return <p>Profile data not available.</p>;
   }
 };

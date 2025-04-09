@@ -21,6 +21,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Http\Controllers\Traits\SaveFile;
 use App\Models\Department;
+use App\Models\IRBCommittee;
 use App\Models\PHDObjective;
 
 //TODO: add outside expert not in the system
@@ -441,37 +442,40 @@ class ConstituteOfIRBController extends Controller
                         throw new \Exception('Invalid expert selection');
                     }
                     $outsideExpert=OutsideExpert::find($outsideExpertId);
-                    $OutSideUser=User::where('email',$outsideExpert->email)->first();
-                    if(!$OutSideUser){
-                        $OutSideUser=User::create([
-                            'email'=>$outsideExpert->email,
-                            'password'=>bcrypt('password'),
-                            'first_name'=>$outsideExpert->first_name,
-                            'last_name'=>$outsideExpert->last_name,
-                            'phone'=>$outsideExpert->phone,
-                            'role_id'=>Role::where('role','external')->first()->id,
-                        ]);
-                        Faculty::create([
-                            'faculty_code'=>$outsideExpert->id,
-                            'designation'=>$outsideExpert->designation,
-                            'department_id'=>Department::all()->first()->id,
-                            'user_id'=>$OutSideUser->id,
-                        ]);
-                    }
-                    DoctoralCommittee::create([
-                        'student_id' => $formInstance->student->roll_no,
-                        'faculty_id' => $OutSideUser->faculty->faculty_code,
-                    ]);
+                     
+                        IRBCommittee::create([
+                            'student_id'  => $formInstance->student->roll_no,
+                            'type'        => 'outside',
+                            'member_type' => OutsideExpert::class,
+                            'member_id'   => $outsideExpert->id,
+                        ]);                       
+                       
+                    
+                
 
                     DoctoralCommittee::create([
                         'student_id' => $formInstance->student->roll_no,
                         'faculty_id' => $cognateExpertId,
                     ]);
+                    
+                    IRBCommittee::create([
+                        'student_id'  => $formInstance->student->roll_no,
+                        'type'        => 'inside',
+                        'member_type' => Faculty::class,
+                        'member_id'   => $cognateExpertId,
+                    ]);
+                    
                     $irbExperts=IrbExpertChairman::where('irb_form_id',$formInstance->id)->get();
                     foreach($irbExperts as $irbExpert){
                         DoctoralCommittee::create([
                             'student_id' => $formInstance->student->roll_no,
                             'faculty_id' => $irbExpert->expert_id,
+                        ]);
+                        IRBCommittee::create([
+                            'student_id'  => $formInstance->student->roll_no,
+                            'type'        => 'inside',
+                            'member_type' => Faculty::class,
+                            'member_id'   => $irbExpert->expert_id,
                         ]);
                     }
                     $formInstance->update([

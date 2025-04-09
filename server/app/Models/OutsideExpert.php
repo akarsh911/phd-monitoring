@@ -25,4 +25,10 @@ class OutsideExpert extends Model
     {
         return $this->hasMany(IrbOutsideExpert::class, 'expert_id');
     }
+
+    public function irbCommittees()
+{
+    return $this->morphMany(IRBCommittee::class, 'member');
+}
+
 }

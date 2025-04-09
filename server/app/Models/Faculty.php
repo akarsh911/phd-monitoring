@@ -239,5 +239,10 @@ class Faculty extends Model
         return $data;
       
     }
+    public function irbCommittees()
+{
+    return $this->morphMany(IRBCommittee::class, 'member');
+}
+
 
 }
