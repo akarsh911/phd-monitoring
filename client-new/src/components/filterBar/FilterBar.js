@@ -6,7 +6,7 @@ import InputSuggestions from "../forms/fields/InputSuggestions";
 import { baseURL } from "../../api/urls";
 import { customFetch } from "../../api/base";
 import { useLoading } from "../../context/LoadingContext";
-const FilterBar = ({ onSearch,default_filter }) => {
+const FilterBar = ({ onSearch, default_filter,mandatory_filter }) => {
   const [filtersMeta, setFiltersMeta] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null);
 
@@ -18,22 +18,29 @@ const FilterBar = ({ onSearch,default_filter }) => {
   useEffect(() => {
     const fetchFilters = async () => {
       let location = window.location;
-      let data = await customFetch(baseURL + location.pathname + "/filters", "GET", null, false);
+      let data = await customFetch(
+        baseURL + location.pathname + "/filters",
+        "GET",
+        null,
+        false
+      );
       setFiltersMeta(data?.response);
     };
     fetchFilters();
   }, []);
+
   useEffect(() => {
-    setActiveFilters([
-      ...activeFilters,
-      {
-        label: default_filter?.label,
-        key: default_filter?.key_name,
-        op: default_filter?.op || "=",
-        value: default_filter?.value || "",
-      }
-    ])
-  } ,[default_filter]);
+    if (!default_filter || default_filter.length === 0) return;
+    // Always clear old filters and apply new ones
+    const newDefaults = default_filter.map((filter) => ({
+      label: filter.label,
+      key: filter.key_name,
+      op: filter.op || "=",
+      value: filter.value || "",
+    }));
+
+    setActiveFilters(newDefaults);
+  }, [default_filter]);
 
   const addFilter = () => {
     if (!selectedFilter || !value) return;
@@ -57,6 +64,7 @@ const FilterBar = ({ onSearch,default_filter }) => {
     const query = {
       combine: combinator,
       conditions: activeFilters,
+      mandatory_filter: mandatory_filter || [],
     };
     onSearch(query);
   };
@@ -68,17 +76,20 @@ const FilterBar = ({ onSearch,default_filter }) => {
           className="filter-select"
           alue={selectedFilter?.key_name || ""}
           onChange={(e) => {
-            const meta = filtersMeta?.find((f) => f.key_name === e.target.value);
+            const meta = filtersMeta?.find(
+              (f) => f.key_name === e.target.value
+            );
             setSelectedFilter(meta || null);
             setValue("");
           }}
         >
           <option value="">Select Filter</option>
-          {filtersMeta && filtersMeta?.map((f) => (
-            <option key={f.key_name} value={f.key_name}>
-              {f.label}
-            </option>
-          ))}
+          {filtersMeta &&
+            filtersMeta?.map((f) => (
+              <option key={f.key_name} value={f.key_name}>
+                {f.label}
+              </option>
+            ))}
         </select>
 
         <select

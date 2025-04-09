@@ -16,11 +16,14 @@ trait GeneralFormList
         $page = $request->input('page', 1);
         $rows = $request->input('rows', 50);
         $filters= $request->input('filters', null);
-        $filtersJson = $request->query('filters');
+        if(!$filters){
+            $filtersJson = $request->query('filters');
 
-        if ($filtersJson) {
-              $filters = json_decode(urldecode($filtersJson), true);
+            if ($filtersJson) {
+                  $filters = json_decode(urldecode($filtersJson), true);
+            }
         }
+      
 
         switch ($role) {
             case 'student':
@@ -247,5 +250,52 @@ public function ListStudentProfile($student){
             ];
         }),
     ];
+}
+public function ListSemesterDepartment($semesters,$dep_id){
+    return [
+        'semester_name' => $semesters->semester_name,
+                'start_date' => $semesters->start_date,
+                'end_date' => $semesters->end_date,
+                'year' => $semesters->year,
+                'semester_off' => $semesters->studentsOnSemesterOff()
+                    ->where('students.department_id', $dep_id)
+                    ->count(),
+
+                'leave' => $semesters->presentationsLeave()
+                    ->whereHas('student', function ($q) use ($dep_id) {
+                        $q->where('students.department_id', $dep_id);
+                    })
+                    ->count(),
+
+                'missed' => $semesters->presentationsMissed()
+                    ->whereHas('student', function ($q) use ($dep_id) {
+                        $q->where('students.department_id', $dep_id);
+                    })
+                    ->count(),
+
+                'scheduled' => $semesters->scheduledPresentations()
+                    ->whereHas('student', function ($q) use ($dep_id) {
+                        $q->where('students.department_id', $dep_id);
+                    })
+                    ->count(),
+
+                'unscheduled' => $semesters->unscheduledStudents()
+                    ->where('students.department_id', $dep_id)
+                    ->count(),
+    ];
+}
+public function ListSemester($semesters){
+    return [
+        'semester_name' => $semesters->semester_name,
+        'start_date' => $semesters->start_date,
+        'end_date' => $semesters->end_date,
+        'year' => $semesters->year,
+        'semester_off' => $semesters->studentsOnSemesterOff()->count(),
+        'leave' => $semesters->presentationsLeave()->count(),
+        'missed' => $semesters->presentationsMissed()->count(),
+        'scheduled' => $semesters->scheduledPresentations()->count(),
+        'unscheduled' => $semesters->unscheduledStudents()->count(),
+    ];
+
 }
 }

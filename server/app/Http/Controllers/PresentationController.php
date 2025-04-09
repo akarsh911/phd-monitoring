@@ -15,6 +15,7 @@ use App\Models\Patent;
 use App\Models\Presentation;
 use App\Models\PresentationReview;
 use App\Models\Publication;
+use App\Models\Semester;
 use App\Models\Student;
 use App\Services\PresentationService;
 
@@ -28,7 +29,7 @@ class PresentationController extends Controller
     use SaveFile;
     use FilterLogicTrait;
     use HasSemesterCodeValidation;
-
+    use GeneralFormList;
     public function listFilters(Request $request)
     {
         return response()->json($this->getAvailableFilters("presentation"));
@@ -36,33 +37,93 @@ class PresentationController extends Controller
     public function listForm(Request $request, $semester_id = null)
     {
         $user = Auth::user();
-
-        $validator=$this->validateSemesterCode($semester_id);
+        $filters = $request->input('filters', null);
+        $filtersJson = $request->query('filters');
+    
+        if ($filtersJson) {
+            $filters = json_decode(urldecode($filtersJson), true);
+        }
+    
+        $validator = $this->validateSemesterCode($semester_id);
         if (!$validator['valid']) {
             return response()->json(['message' => 'Invalid Semester Code'], 422);
         }
-        if ($semester_id) {
-            $request->merge([
-                'filters' => [
-                    'mandatory_filter' => [
-                        'key' => 'period_of_report',
-                        'op' => '=',
-                        'value' => $semester_id
-                    ]
-                ]
-            ]);
+    
+        $mandatoryFilter = $filters['mandatory_filter'] ?? null;
+        $parsedFilters = [];
+        if (is_array($mandatoryFilter)) {
+            $parsedFilters = $this->is_assoc($mandatoryFilter) ? [$mandatoryFilter] : $mandatoryFilter;
         }
+    
+        $isMissing = collect($parsedFilters)->contains(function ($filter) {
+            return isset($filter['key'], $filter['value']) &&
+                $filter['key'] === 'missed' &&
+                (string)$filter['value'] === '1';
+        });
         
+    
+        $isUpcoming = collect($parsedFilters)->contains(function ($filter) {
+            return isset($filter['key'], $filter['value']) &&
+                $filter['key'] === 'upcoming' &&
+                (string)$filter['value'] === '1';
+        });
+         $titles = ["Name", "Roll No", "Date", "Time", "Progress %", "Supervisors"];
+        $fields = ["name", "roll_no", "date", "time", "progress", "supervisors"];
+        $mandatoryFilters = [];
+    
+        if ($isMissing) {
+            $mandatoryFilters[] = [
+                'key' => 'date',
+                'op' => '<',
+                'value' => Carbon::now()->toDateString()
+            ];
+            $mandatoryFilters[] = [
+                'key' => 'leave',
+                'op' => '=',
+                'value' => 0
+            ];
+            $titles = ["Name", "Roll No", "Date", "Time", "Supervisors"];
+            $fields = ["name", "roll_no", "date", "time", "supervisors"];
+        }
+       
+    
+        if ($isUpcoming) {
+           
+            $parsedFilters = array_values(array_filter($parsedFilters, function ($filter) {
+                return !(isset($filter['key'], $filter['value']) &&
+                    $filter['key'] === 'upcoming' &&
+                    in_array($filter['value'], ['1', 1], true));
+            }));            
+    
+            $mandatoryFilters[] = [
+                'key' => 'date',
+                'op' => '>=',
+                'value' => Carbon::now()->format('d/m/Y')
+            ];
+            $titles = ["Name", "Roll No", "Date", "Time", "Meet Link", "Supervisors"];
+            $fields = ["name", "roll_no", "date", "time", "venue", "supervisors"];
+        }
+    
+        if ($semester_id) {
+            $mandatoryFilters[] = [
+                'key' => 'period_of_report',
+                'op' => '=',
+                'value' => $semester_id
+            ];
+        }
+    
+        // Final filter merge
+        $filters['mandatory_filter'] = $mandatoryFilters;
+        $request->merge(['filters' => $filters]);
+    
+        if (!$semester_id) {
+            $titles[] = "Semester";
+            $fields[] = "period";
+        }
+    
         return $this->listForms($user, Presentation::class, $request, null, true, [
-            'fields' => [
-                "name",
-                "roll_no",
-                "period",
-                "date",
-                "time",
-                "progress",
-                "supervisors"
-            ],
+            'fields' => $fields,
+            'titles' => $titles,
             'extra_fields' => [
                 "overall_progress" => function ($form) {
                     return $form->student->overall_progress;
@@ -75,6 +136,9 @@ class PresentationController extends Controller
                         return $supervisor->user->name();
                     })->join(', ');
                 },
+                "phone" => function ($form) {
+                    return $form->student->user->phone;
+                },
                 "date" => function ($form) {
                     return $form->date;
                 },
@@ -84,10 +148,22 @@ class PresentationController extends Controller
                 "period" => function ($form) {
                     return $form->period_of_report;
                 },
+                "venue" => function ($form) {
+                    return $form->venue;
+                },
             ],
-            'titles' => ["Name", "Roll No", "Period", "Date", "Time", "Progress %", "Supervisors"],
-        ]    );
+        ]);
     }
+    
+
+    
+
+    // Helper to check if array is associative
+    private function is_assoc(array $arr): bool
+    {
+        return array_keys($arr) !== range(0, count($arr) - 1);
+    }
+
 
     public function createForm(Request $request)
     {
@@ -126,7 +202,7 @@ class PresentationController extends Controller
             $emails = $this->emailList($student, $request);
             $form = Presentation::create([
                 'student_id' => $request->student_id,
-                'date' => $request->date,
+                'date' => Carbon::createFromFormat('Y-m-d', $request->date)->format('d/m/Y'),
                 'time' => $request->time,
                 'period_of_report' => $request->period_of_report,
                 'status' => 'pending',
@@ -149,14 +225,63 @@ class PresentationController extends Controller
         return response()->json(['message' => 'You are not authorized to access this resource'], 403);
     }
 
+    public function listSemesterPresentation(Request $request)
+    {
+        $user = Auth::user();
+        $role = $user->current_role;
+        $cur = $role->role;
+
+        if ($cur != 'student') {
+            $page = $request->input('page', 1);
+            $perPage = $request->input('per_page', 10);
+
+            $query = Semester::orderBy('year', 'desc')->orderBy('semester', 'desc');
+
+            $total = $query->count();
+            $totalPages = ceil($total / $perPage);
+
+            $semesters = $query->paginate($perPage, ['*'], 'page', $page)->getCollection();
+
+            $data = collect($semesters)->map(function ($semester) {
+                return [
+                    'semester_name' => $semester->semester_name,
+                    'start_date' => Carbon::parse($semester->start_date)->format('d/m/Y'),
+                    'end_date' => Carbon::parse($semester->end_date)->format('d/m/Y'),
+                    'semester' => $semester->semester,
+                    'year' => $semester->year,
+                ];
+            });
+
+            return response()->json([
+                'data' => $data->values(),
+                'page' => (int) $page,
+                'total' => $total,
+                'totalPages' => $totalPages,
+                'fields' => ["semester_name", "start_date", "end_date", "semester", "year"],
+                'fieldsTitles' => ["Semester Name", "Start Date", "End Date", "Semester", "Year"],
+                'role' => $role->role,
+            ]);
+        }
+
+        return response()->json([
+            'data' => [],
+            'page' => 1,
+            'total' => 0,
+            'totalPages' => 0,
+            'fields' => [],
+            'fieldsTitles' => [],
+            'role' => $role->role,
+        ]);
+    }
+
+
     public function markLeave(Request $request)
     {
         $user = Auth::user();
         $role = $user->current_role;
         $cur = $role->role;
-        if ($cur == 'faculty' || $cur == 'phd_coordinator') {
+        if ($cur == 'student') {
             $request->validate([
-                'student_id' => 'required|string',
                 'period_of_report' => 'required|string',
                 'leave' => 'required|boolean',
             ]);
@@ -171,9 +296,6 @@ class PresentationController extends Controller
             $student = Student::where('roll_no', $request->student_id)->first();
             if (!$student) {
                 return response()->json(['message' => 'Student not found'], 404);
-            }
-            if (!$student->checkSupervises($user->faculty->faculty_code)) {
-                return response()->json(['message' => 'You are not authorized to access this resource'], 403);
             }
             $old = Presentation::where('student_id', $request->student_id)->where('semester_id', $validator['semester_id'])->get()->first();
             if (count($old) != 0) {
@@ -230,8 +352,8 @@ class PresentationController extends Controller
 
         foreach ($request->students as $studentData) {
             $student = Student::where('roll_no', $studentData['student_id'])->first();
-
-            $formattedDate = Carbon::createFromFormat('d-m-Y', str_replace('/', '-', $studentData['date']))->format('Y-m-d');
+        
+            $formattedDate =  Carbon::createFromFormat('Y-m-d',$studentData['date'])->format('d/m/Y');
             if (!$student) {
                 $errors[] = ['student_id' => $studentData['student_id'], 'message' => 'Student not found'];
                 continue;

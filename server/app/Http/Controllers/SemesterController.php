@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Traits\GeneralFormList;
 use App\Models\Semester;
 
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class SemesterController extends Controller
 {
+    use GeneralFormList;
     public function getRecent(Request $request)
     {
         $user = Auth::user();
@@ -35,54 +37,13 @@ class SemesterController extends Controller
         if ($curr_role != 'hod')
             return response()->json([
                 'status' => 'success',
-                'data' => [
-                    'semester_name' => $semesters->semester_name,
-                    'start_date' => $semesters->start_date,
-                    'end_date' => $semesters->end_date,
-                    'year' => $semesters->year,
-                    'semester_off' => $semesters->studentsOnSemesterOff()->count(),
-                    'leave' => $semesters->presentationsLeave()->count(),
-                    'missed' => $semesters->presentationsMissed()->count(),
-                    'scheduled' => $semesters->scheduledPresentations()->count(),
-                    'unscheduled' => $semesters->unscheduledStudents()->count(),
-                ],
+                'data' => $this->ListSemester($semesters),
             ]);
         $dep_id = $user->faculty->department->id;
 
         return response()->json([
             'status' => 'success',
-            'data' => [
-                'semester_name' => $semesters->semester_name,
-                'start_date' => $semesters->start_date,
-                'end_date' => $semesters->end_date,
-                'year' => $semesters->year,
-                'semester_off' => $semesters->studentsOnSemesterOff()
-                    ->where('students.department_id', $dep_id)
-                    ->count(),
-
-                'leave' => $semesters->presentationsLeave()
-                    ->whereHas('student', function ($q) use ($dep_id) {
-                        $q->where('students.department_id', $dep_id);
-                    })
-                    ->count(),
-
-                'missed' => $semesters->presentationsMissed()
-                    ->whereHas('student', function ($q) use ($dep_id) {
-                        $q->where('students.department_id', $dep_id);
-                    })
-                    ->count(),
-
-                'scheduled' => $semesters->scheduledPresentations()
-                    ->whereHas('student', function ($q) use ($dep_id) {
-                        $q->where('students.department_id', $dep_id);
-                    })
-                    ->count(),
-
-                'unscheduled' => $semesters->unscheduledStudents()
-                    ->where('students.department_id', $dep_id)
-                    ->count(),
-                
-            ],
+            'data' => $this->ListSemesterDepartment($semesters, $dep_id),
         ]);
     }
 

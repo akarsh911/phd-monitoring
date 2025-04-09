@@ -61,23 +61,27 @@ public function applyDynamicFilters($query, $filters)
     ]);
 
     // Apply mandatory filter first (if any)
-    if ($mandatoryFilter && isset($mandatoryFilter['key'], $mandatoryFilter['value'])) {
-        $relationPath = explode('.', $mandatoryFilter['key']);
-        $column = array_pop($relationPath);
-        $relation = implode('.', $relationPath);
-        $op = $mandatoryFilter['op'] ?? '=';
-        $value = $mandatoryFilter['value'];
+    if ($mandatoryFilter && is_array($mandatoryFilter)) {
+        foreach ($mandatoryFilter as $filter) {
+            if (isset($filter['key'], $filter['value'])) {
+                $relationPath = explode('.', $filter['key']);
+                $column = array_pop($relationPath);
+                $relation = implode('.', $relationPath);
+                $op = $filter['op'] ?? '=';
+                $value = $filter['value'];
 
-        if ($op === 'LIKE') {
-            $value = "%$value%";
-        }
+                if ($op === 'LIKE') {
+                    $value = "%$value%";
+                }
 
-        if ($relation) {
-            $query->whereHas($relation, function ($q) use ($column, $op, $value) {
-                $q->where($column, $op, $value);
-            });
-        } else {
-            $query->where($column, $op, $value);
+                if ($relation) {
+                    $query->whereHas($relation, function ($q) use ($column, $op, $value) {
+                        $q->where($column, $op, $value);
+                    });
+                } else {
+                    $query->where($column, $op, $value);
+                }
+            }
         }
     }
 

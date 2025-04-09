@@ -15,13 +15,14 @@ import SemesterStatsCard from "./SemsterStatsCard";
 const PresentationListPage = () => {
   const [role, setRole] = useState("");
   const [open, setOpen] = useState(false);
-  const [tabIndex, setTabIndex] = useState(0); 
+  const [tabIndex, setTabIndex] = useState(0);
   const [filters, setFilters] = useState(null);
-const [location, setLocation] = useState(window.location.pathname);
+  const [location, setLocation] = useState(window.location.pathname);
   const handleSearch = (query) => {
     setFilters(query);
   };
   const [presentationTab, setPresentationTab] = useState(0);
+
   useEffect(() => {
     setRole(localStorage.getItem("userRole"));
   }, []);
@@ -32,8 +33,31 @@ const [location, setLocation] = useState(window.location.pathname);
 
   const closeModal = () => {
     setOpen(false);
-    setTabIndex(0); 
+    setTabIndex(0);
   };
+
+  useEffect(() => {
+      if(presentationTab === 0) {
+        setFilters(
+         {
+          mandatory_filter: [
+            {
+              key: "upcoming",
+              value: 1,
+            },
+          ]
+         }
+        )
+        setLocation(window.location.pathname);
+      }
+      else if(presentationTab === 1) {
+
+      }
+      else{
+        setFilters([]);
+      }
+
+  },[presentationTab]);
 
   return (
     <Layout
@@ -41,15 +65,14 @@ const [location, setLocation] = useState(window.location.pathname);
         <>
           <h1>Presentation List</h1>
 
-
           <SemesterStatsCard />
-    
+
           <GridContainer
             elements={[
               <></>,
               <></>,
               <>
-                {(role === "faculty" || role==='phd_coordinator')  && (
+                {(role === "faculty" || role === "phd_coordinator") && (
                   <div className="form-list-bar">
                     <CustomButton
                       onClick={openModal}
@@ -84,39 +107,27 @@ const [location, setLocation] = useState(window.location.pathname);
                 )}
               </>,
             ]}
-            
           />
-            {/* {role === 'admin' && (
-   
-  )} */}
 
-
-        
           {/* <FilterBar onSearch={handleSearch}/> */}
 
-
-          {/* add tabs here */}
           <Tabs
-  value={presentationTab}
-  onChange={(e, newVal) => setPresentationTab(newVal)}
-  sx={{ marginBottom: "16px" }}
->
-  <Tab label="Upcoming Presentations" />
-  <Tab label="Not Scheduled" />
-  <Tab label="On Leave" />
-  <Tab label="Semester Off" />
-  <Tab label="Not Submitted" />
-</Tabs>
-
-
-
-
-          <PagenationTable 
-           endpoint={location}
-           filters={filters}
-           enableApproval={true}
-          />
+            value={presentationTab}
+            onChange={(e, newVal) => setPresentationTab(newVal)}
+            sx={{ marginBottom: "16px" }}
+          >
+            <Tab label="Upcoming Presentations" />
+            <Tab label="Not Scheduled" />
+            <Tab label="On Leave" />
+            <Tab label="Semester Off" />
+            <Tab label="Not Submitted" />
+          </Tabs>
           
+          <PagenationTable
+            endpoint={location}
+            filters={filters}
+            enableApproval={true}
+          />
         </>
       }
     />
