@@ -304,25 +304,21 @@ class IrbSubController extends Controller
             }
             else{
                 //send Email with accept reject link
-                $outside=DoctoralCommittee::where('student_id',$formInstance->student->roll_no)->first();
-                $faculty_code=$outside->faculty_id;
-                $facultyw=Faculty::where('faculty_code',$faculty_code)->first();
-                $userF = $facultyw->user;
-
+                $outsideExpert = $formInstance->student->outsideExpert();
                 $approval = Approval::create([
                     'key' => Approval::generateKey(),
-                    'email' => $userF->email,
+                    'email' => $outsideExpert->email,
                     'action' => 'review',
                     'model_type' => get_class($formInstance),
                     'model_id' => $formInstance->id,
                 ]);
                 $link= storage_path($formInstance->revised_irb_pdf);
                 $success = $this->emailService->sendEmail(
-                    $userF->email,
+                    $outsideExpert->email,
                     'approval',  // Use the Blade template 'emails/approval.blade.php'
                     [
-                        'name' => $userF->name(),
-                        'email' => $userF->email,
+                        'name' => $outsideExpert->first_name. ' ' . $outsideExpert->last_name,
+                        'email' => $outsideExpert->email,
                         'approverName' => $user->name(),
                         'formId' => $formInstance->id,
                         'approvalKey' => $approval->key,

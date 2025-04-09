@@ -13,29 +13,22 @@ return new class extends Migration
     {
         Schema::create('irb_committees', function (Blueprint $table) {
             $table->increments('id');
-    
+            $table->primary('id');
+            $table->integer('faculty_id')->unsigned()->index();
+            $table->foreign('faculty_id')->references('faculty_code')->on('faculty')->onDelete('cascade');
             $table->integer('student_id')->unsigned()->index();
             $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
-    
-            $table->enum('type', ['inside', 'outside'])->default('outside');
-    
-            // Polymorphic columns
-            $table->unsignedInteger('member_id');
-            $table->string('member_type'); // Either "faculty" or "outside_experts"
-    
+            $table->unique(['faculty_id', 'student_id']);
+            $table->enum('type',['outside','inside'])->default('outside');
             $table->timestamps();
-    
-            // Enforce one unique combination per student
-            $table->unique(['student_id', 'member_id', 'member_type']);
         });
     }
-    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('outside_experts');
+        Schema::dropIfExists('irb_committees');
     }
 };

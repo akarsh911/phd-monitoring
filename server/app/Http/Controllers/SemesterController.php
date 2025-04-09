@@ -92,7 +92,9 @@ class SemesterController extends Controller
             'semester_name' => 'required|string|max:255',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after:start_date',
+            'notification' => 'nullable|boolean',
         ]);
+       
         $user = Auth::user();
         if (
             $user->role->role != 'dordc' &&
