@@ -50,17 +50,38 @@ trait FilterLogicTrait
 
 public function applyDynamicFilters($query, $filters)
 {
-    $combine = $filters['combine'] ?? 'and';
-    $combine = strtolower($combine);
+    $combine = strtolower($filters['combine'] ?? 'and');
     $filterList = $filters['conditions'] ?? [];
-
-    $method = $combine === 'or' ? 'orWhereHas' : 'whereHas';
+    $mandatoryFilter = $filters['mandatory_filter'] ?? null;
 
     Log::info('Applying dynamic filters', [
         'combine' => $combine,
         'filters' => $filterList,
+        'mandatory_filter' => $mandatoryFilter
     ]);
-    
+
+    // Apply mandatory filter first (if any)
+    if ($mandatoryFilter && isset($mandatoryFilter['key'], $mandatoryFilter['value'])) {
+        $relationPath = explode('.', $mandatoryFilter['key']);
+        $column = array_pop($relationPath);
+        $relation = implode('.', $relationPath);
+        $op = $mandatoryFilter['op'] ?? '=';
+        $value = $mandatoryFilter['value'];
+
+        if ($op === 'LIKE') {
+            $value = "%$value%";
+        }
+
+        if ($relation) {
+            $query->whereHas($relation, function ($q) use ($column, $op, $value) {
+                $q->where($column, $op, $value);
+            });
+        } else {
+            $query->where($column, $op, $value);
+        }
+    }
+
+    // Apply other dynamic filters
     $query->where(function ($q) use ($combine, $filterList) {
         foreach ($filterList as $filter) {
             $relationPath = explode('.', $filter['key']);
@@ -68,14 +89,13 @@ public function applyDynamicFilters($query, $filters)
             $relation = implode('.', $relationPath);
             $op = $filter['op'] ?? '=';
             $value = $filter['value'] ?? null;
+
             if ($op === 'LIKE') {
                 $value = "%$value%"; 
             }
-            
-            $logic = $combine === 'or' ? 'orWhereHas' : 'whereHas';
-    
+
             if ($relation) {
-                $q->{$logic}($relation, function ($subQ) use ($column, $op, $value) {
+                $q->{$combine === 'or' ? 'orWhereHas' : 'whereHas'}($relation, function ($subQ) use ($column, $op, $value) {
                     $subQ->where($column, $op, $value);
                 });
             } else {
@@ -83,7 +103,6 @@ public function applyDynamicFilters($query, $filters)
             }
         }
     });
-    
 
     Log::info('Final SQL', [
         'sql' => $query->toSql(),
@@ -92,6 +111,7 @@ public function applyDynamicFilters($query, $filters)
 
     return $query;
 }
+
 
 //new 
 

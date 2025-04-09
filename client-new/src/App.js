@@ -65,8 +65,11 @@ const AppContent = () => {
             </>
           )}
           <Route path="/notifications" element={<AllNotificationsPage />} />
-          <Route path="/presentation" element={<PresentationListPage/>} />  
+          <Route path="/presentation" element={<PresentationListPage/>} /> 
+          {/*ye vale path change krne h   */}
           <Route path="/presentation/form" element={<PresentationListPage/>} />  
+          
+          <Route path="/presentation/semester/:semester_id" element={<PresentationListPage/>} />  
           <Route path="/presentation/form/:id" element={<Presentation/>} />  
 
           <Route path="/forms/:form_type" element={<FormListPage/>} />

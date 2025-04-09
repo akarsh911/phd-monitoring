@@ -6,7 +6,7 @@ import InputSuggestions from "../forms/fields/InputSuggestions";
 import { baseURL } from "../../api/urls";
 import { customFetch } from "../../api/base";
 import { useLoading } from "../../context/LoadingContext";
-const FilterBar = ({ onSearch }) => {
+const FilterBar = ({ onSearch,default_filter }) => {
   const [filtersMeta, setFiltersMeta] = useState([]);
   const [selectedFilter, setSelectedFilter] = useState(null);
 
@@ -23,6 +23,17 @@ const FilterBar = ({ onSearch }) => {
     };
     fetchFilters();
   }, []);
+  useEffect(() => {
+    setActiveFilters([
+      ...activeFilters,
+      {
+        label: default_filter?.label,
+        key: default_filter?.key_name,
+        op: default_filter?.op || "=",
+        value: default_filter?.value || "",
+      }
+    ])
+  } ,[default_filter]);
 
   const addFilter = () => {
     if (!selectedFilter || !value) return;

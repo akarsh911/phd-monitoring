@@ -12,9 +12,10 @@ const SemesterStatsCard = () => {
   const fetchSemesterStats = async () => {
     try {
       const res = await customFetch(baseURL + "/semester/recent", "GET");
-      if (res?.status === "success") {
-        setSemesterStats(res.data);
-      }
+   
+        console.log(res.response.data);
+        setSemesterStats(res.response.data);
+      
     } catch (error) {
       console.error("Error fetching semester stats:", error);
     }
@@ -44,7 +45,7 @@ const SemesterStatsCard = () => {
       }}
     >
       <h3 style={{ marginBottom: "12px", fontSize: "1.5rem", color: "#333" }}>
-        Semester Stats
+      {semester_name} Semester Stats
       </h3>
       <div
         style={{
@@ -67,7 +68,7 @@ const SemesterStatsCard = () => {
           {new Date(end_date).toLocaleDateString()}
         </div>
         <div>
-          <strong>Leave Scheduled:</strong> {leave === 1 ? "Yes" : "No"}
+          <strong>Leave Scheduled:</strong> {leave}
         </div>
         <div>
           <strong>Scheduled:</strong> {scheduled}

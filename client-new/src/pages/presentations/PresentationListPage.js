@@ -40,6 +40,8 @@ const [location, setLocation] = useState(window.location.pathname);
       children={
         <>
           <h1>Presentation List</h1>
+          <SemesterStatsCard />
+    
           <GridContainer
             elements={[
               <></>,
@@ -85,9 +87,11 @@ const [location, setLocation] = useState(window.location.pathname);
             {/* {role === 'admin' && (
    
   )} */}
-   <SemesterStatsCard />
 
+
+        
           <FilterBar onSearch={handleSearch}/>
+          {/* add tabs here */}
           <PagenationTable 
            endpoint={location}
            filters={filters}

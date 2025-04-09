@@ -33,10 +33,26 @@ class PresentationController extends Controller
     {
         return response()->json($this->getAvailableFilters("presentation"));
     }
-    public function listForm(Request $request, $student_id = null)
+    public function listForm(Request $request, $semester_id = null)
     {
         $user = Auth::user();
 
+        $validator=$this->validateSemesterCode($semester_id);
+        if (!$validator['valid']) {
+            return response()->json(['message' => 'Invalid Semester Code'], 422);
+        }
+        if ($semester_id) {
+            $request->merge([
+                'filters' => [
+                    'mandatory_filter' => [
+                        'key' => 'period_of_report',
+                        'op' => '=',
+                        'value' => $semester_id
+                    ]
+                ]
+            ]);
+        }
+        
         return $this->listForms($user, Presentation::class, $request, null, true, [
             'fields' => [
                 "name",
@@ -70,7 +86,7 @@ class PresentationController extends Controller
                 },
             ],
             'titles' => ["Name", "Roll No", "Period", "Date", "Time", "Progress %", "Supervisors"],
-        ]);
+        ]    );
     }
 
     public function createForm(Request $request)
