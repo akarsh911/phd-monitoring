@@ -10,6 +10,7 @@ import SchedulePresentation from "../../components/forms/presentations/ScheduleP
 import FormTable from "../../components/forms/formTable/FormTable";
 import FilterBar from "../../components/filterBar/FilterBar";
 import PagenationTable from "../../components/pagenationTable/PagenationTable";
+import SemesterStatsCard from "./SemsterStatsCard";
 
 const PresentationListPage = () => {
   const [role, setRole] = useState("");
@@ -79,7 +80,13 @@ const [location, setLocation] = useState(window.location.pathname);
                 )}
               </>,
             ]}
+            
           />
+            {/* {role === 'admin' && (
+   
+  )} */}
+   <SemesterStatsCard />
+
           <FilterBar onSearch={handleSearch}/>
           <PagenationTable 
            endpoint={location}
