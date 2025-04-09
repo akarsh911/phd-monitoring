@@ -67,6 +67,13 @@ class PresentationController extends Controller
                 $filter['key'] === 'upcoming' &&
                 (string)$filter['value'] === '1';
         });
+
+        $isAction=collect($parsedFilters)->contains(function ($filter) {
+            return isset($filter['key'], $filter['value']) &&
+                $filter['key'] === 'action' &&
+                (string)$filter['value'] === '1';
+        });
+
          $titles = ["Name", "Roll No", "Date", "Time", "Progress %", "Supervisors"];
         $fields = ["name", "roll_no", "date", "time", "progress", "supervisors"];
         $mandatoryFilters = [];
@@ -75,7 +82,7 @@ class PresentationController extends Controller
             $mandatoryFilters[] = [
                 'key' => 'date',
                 'op' => '<',
-                'value' => Carbon::now()->toDateString()
+                'value' => Carbon::now()->format('Y-m-d')
             ];
             $mandatoryFilters[] = [
                 'key' => 'leave',
@@ -98,13 +105,30 @@ class PresentationController extends Controller
             $mandatoryFilters[] = [
                 'key' => 'date',
                 'op' => '>=',
-                'value' => Carbon::now()->format('d/m/Y')
+                'value' => Carbon::now()->format('Y-m-d')
             ];
             $titles = ["Name", "Roll No", "Date", "Time", "Meet Link", "Supervisors"];
             $fields = ["name", "roll_no", "date", "time", "venue", "supervisors"];
         }
-    
-        if ($semester_id) {
+        
+        if($isAction){
+            $parsedFilters = array_values(array_filter($parsedFilters, function ($filter) {
+                return !(isset($filter['key'], $filter['value']) &&
+                    $filter['key'] === 'action' &&
+                    in_array($filter['value'], ['1', 1], true));
+            }));            
+            $role= $user->current_role->role;
+            if($role=='faculty')$role='supervisor';
+            $mandatoryFilters[] = [
+                'key' => $role.'_lock',
+                'op' => '=',
+                'value' => 0
+            ];
+          }
+
+       
+       
+          if ($semester_id) {
             $mandatoryFilters[] = [
                 'key' => 'period_of_report',
                 'op' => '=',
@@ -202,7 +226,7 @@ class PresentationController extends Controller
             $emails = $this->emailList($student, $request);
             $form = Presentation::create([
                 'student_id' => $request->student_id,
-                'date' => Carbon::createFromFormat('Y-m-d', $request->date)->format('d/m/Y'),
+                'date' => Carbon::createFromFormat('Y-m-d', $request->date)->format('Y-m-d'),
                 'time' => $request->time,
                 'period_of_report' => $request->period_of_report,
                 'status' => 'pending',
@@ -353,7 +377,7 @@ class PresentationController extends Controller
         foreach ($request->students as $studentData) {
             $student = Student::where('roll_no', $studentData['student_id'])->first();
         
-            $formattedDate =  Carbon::createFromFormat('Y-m-d',$studentData['date'])->format('d/m/Y');
+            $formattedDate =  Carbon::createFromFormat('Y-m-d',$studentData['date'])->format('Y-m-d');
             if (!$student) {
                 $errors[] = ['student_id' => $studentData['student_id'], 'message' => 'Student not found'];
                 continue;

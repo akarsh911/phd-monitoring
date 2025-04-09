@@ -48,7 +48,7 @@ const SemesterStatsCard = () => {
 
   const fetchSemesterStats = async () => {
     try {
-      const res = await customFetch(baseURL + "/semester/recent", "GET");
+      const res = await customFetch(baseURL + "/semester/recent", "GET",{},false);
       const data = res.response?.data || res.data;
       setSemesterStats(data);
       setEditForm({

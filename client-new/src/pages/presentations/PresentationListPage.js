@@ -22,7 +22,7 @@ const PresentationListPage = () => {
     setFilters(query);
   };
   const [presentationTab, setPresentationTab] = useState(0);
-
+  const [enableApproval, setEnableApproval] = useState(false);
   useEffect(() => {
     setRole(localStorage.getItem("userRole"));
   }, []);
@@ -38,23 +38,56 @@ const PresentationListPage = () => {
 
   useEffect(() => {
       if(presentationTab === 0) {
-        setFilters(
-         {
+        setFilters({
           mandatory_filter: [
             {
               key: "upcoming",
               value: 1,
             },
-          ]
-         }
-        )
+          ]})
         setLocation(window.location.pathname);
       }
       else if(presentationTab === 1) {
+        setFilters({
+          mandatory_filter: [
+            {
+              key: "upcoming",
+              value: 1,
+            },
+          ]});
+          setEnableApproval(false);
+          setLocation(window.location.pathname);                                                          
+      }
+      else if(presentationTab === 2) {
+       //new route
+       setEnableApproval(false);
 
       }
-      else{
-        setFilters([]);
+      else if(presentationTab === 3) {
+        //new route
+        setEnableApproval(false);
+
+      }
+      else if(presentationTab === 4) {
+        setFilters({
+          mandatory_filter: [
+            {
+              key: "missed",
+              value: 1,
+            },
+          ]})
+          setEnableApproval(false);
+
+      }
+      else if(presentationTab === 5) {
+        setFilters({
+          mandatory_filter: [
+            {
+              key: "action",
+              value: 1,
+            },
+          ]})
+          setEnableApproval(true);
       }
 
   },[presentationTab]);
@@ -121,12 +154,14 @@ const PresentationListPage = () => {
             <Tab label="On Leave" />
             <Tab label="Semester Off" />
             <Tab label="Not Submitted" />
+            <Tab label="Action Required" />
           </Tabs>
           
           <PagenationTable
             endpoint={location}
             filters={filters}
-            enableApproval={true}
+            enableApproval={enableApproval}
+            enableSelect={enableApproval}
           />
         </>
       }

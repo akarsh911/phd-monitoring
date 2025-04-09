@@ -12,6 +12,7 @@ const PagenationTable = ({
   customOpenForm, // function(id)
   customBulkAction, // function(formIds)
   extraTopbarComponents = null,
+  enableSelect=true,
   actions = []
 }) => {
   const [forms, setForms] = useState([]);
@@ -102,12 +103,15 @@ const PagenationTable = ({
           <div className="top-actions">
           {extraTopbarComponents && (
                <div className="extra-components">{extraTopbarComponents}</div> )}
+               {enableSelect && (
             <button className="select-btn" onClick={() => {
               setSelectMode(!selectMode);
               if (!selectMode) setSelectedForms(new Set());
             }}>
-              {selectMode ? "Deselect All" : "Select Forms"}
+              
+              {selectMode ? "Deselect All" : "Select"}
             </button>
+            )}
             {selectMode && enableApproval && (
               <button className="approve-btn" onClick={handleApproval}>
                 Approve Selected Rows: {selectedForms.size}
