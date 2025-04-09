@@ -7,11 +7,17 @@ import CustomModal from "../../components/forms/modal/CustomModal";
 import ToggleSwitch from "../../components/forms/fields/ToggleSwitch";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import DropdownField from "../../components/forms/fields/DropdownField";
+import GridContainer from "../../components/forms/fields/GridContainer";
+import { generateReportPeriods } from "../../utils/semester";
+
 
 const SemesterStatsCard = () => {
   const [semesterStats, setSemesterStats] = useState(null);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
+    const [body, setBody] = useState({});
+     const [reportPeriods, setReportPeriods] = useState([]);
 
   const [editForm, setEditForm] = useState({
     semester_name: "",
@@ -29,6 +35,15 @@ const SemesterStatsCard = () => {
 
   useEffect(() => {
     fetchSemesterStats();
+    const periods = generateReportPeriods(2,1,true);
+              const pp=[];
+              periods.forEach((period) => {
+                    const period1 = {};
+                    period1.value = period;
+                    period1.title = period;
+                    pp.push(period1);
+              });
+             setReportPeriods(pp);
   }, []);
 
   const fetchSemesterStats = async () => {
@@ -133,12 +148,18 @@ const SemesterStatsCard = () => {
         onClose={() => setOpenEditModal(false)}
         title="Edit Semester Deadline"
       >
-        <label>Semester Name:</label>
-        <input
-          value={editForm.semester_name}
-          disabled
-          className="field-readonly"
-        />
+        <GridContainer
+                elements={[
+                  <DropdownField
+                    label="Period of Report"
+                    options={reportPeriods}
+                    onChange={(value) =>
+                      setBody((prev) => ({ ...prev, period_of_report: value }))
+                    }
+                  />,
+                ]}
+                space={2}
+              />
 
         <label>Start Date:</label>
         <DatePicker
@@ -175,12 +196,19 @@ const SemesterStatsCard = () => {
         onClose={() => setOpenCreateModal(false)}
         title="Create New Semester Presentation"
       >
-        <label>Semester Name:</label>
-        <input
-          value={createForm.semester_name}
-          onChange={(e) => setCreateForm({ ...createForm, semester_name: e.target.value })}
-          className="field-editable"
-        />
+         <GridContainer
+                elements={[
+                  <DropdownField
+                    label="Period of Report"
+                    options={reportPeriods}
+                    onChange={(value) =>
+                      setBody((prev) => ({ ...prev, period_of_report: value }))
+                    }
+                  />,
+                ]}
+                space={2}
+              />
+
 
         <label>Start Date:</label>
         <DatePicker
