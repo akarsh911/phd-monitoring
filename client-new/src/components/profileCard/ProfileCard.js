@@ -234,7 +234,7 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
           />,
         ]}
         space={3}
-      /> */}
+      /> 
     </div>
   )}
   else {
