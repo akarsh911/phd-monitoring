@@ -15,12 +15,15 @@ import { toast } from "react-toastify";
 import { Tabs, Tab } from "@mui/material";
 import BulkSchedulePresentation from "../../components/forms/presentations/BulkSchedulePresentation";
 import SchedulePresentation from "../../components/forms/presentations/SchedulePresentation";
+import FilterBar from "../../components/filterBar/FilterBar";
 
 const SemesterStatsCard = ({ semesterName = null }) => {
   const [semesterStats, setSemesterStats] = useState(null);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [body, setBody] = useState({});
+  const [filtersEnabled, setFiltersEnabled] = useState(false);
+
   const [reportPeriods, setReportPeriods] = useState([]);
   const [editForm, setEditForm] = useState({
     semester_name: "",
@@ -195,43 +198,60 @@ const SemesterStatsCard = ({ semesterName = null }) => {
             </div>
           )}
 
-          {(isInSemester || isBeforeSemester) &&(role === "faculty" || role === "phd_coordinator") && (
-            <div className="form-list-bar">
-              <CustomButton
-                onClick={openModal}
-                text="Schedule Presentation +"
-              />
+{(isInSemester || isBeforeSemester) && (role === "faculty" || role === "phd_coordinator") && (
+  <div className="form-list-bar">
 
-              <CustomModal
-                isOpen={open}
-                onClose={closeModal}
-                title={"Schedule Presentation"}
-                minHeight="300px"
-                maxHeight="600px"
-                minWidth="650px"
-                maxWidth="700px"
-                closeOnOutsideClick={false}
-              >
-                <>
-                  <Tabs
-                    value={tabIndex}
-                    onChange={(e, index) => setTabIndex(index)}
-                    style={{ marginBottom: "12px" }}
-                  >
-                    <Tab label="Individual Schedule" />
-                    <Tab label="Bulk Schedule" />
-                  </Tabs>
+<CustomButton
+      onClick={() => setFiltersEnabled(prev => !prev)}
+      text={filtersEnabled ? "Disable Advanced Filters" : "Enable Advanced Filters"}
+      style={{ marginLeft: "10px" }}
+    />
 
-                  {tabIndex === 0 && (
-                    <SchedulePresentation semester={semester_name} />
-                  )}
-                  {tabIndex === 1 && (
-                    <BulkSchedulePresentation semester_name={semester_name} />
-                  )}
-                </>
-              </CustomModal>
-            </div>
-          )}
+    <CustomButton
+      onClick={openModal}
+      text="Schedule Presentation +"
+    />
+
+    
+    
+
+    <CustomModal
+      isOpen={open}
+      onClose={closeModal}
+      title={"Schedule Presentation"}
+      minHeight="300px"
+      maxHeight="600px"
+      minWidth="650px"
+      maxWidth="700px"
+      closeOnOutsideClick={false}
+    >
+      <>
+        <Tabs
+          value={tabIndex}
+          onChange={(e, index) => setTabIndex(index)}
+          style={{ marginBottom: "12px" }}
+        >
+          <Tab label="Individual Schedule" />
+          <Tab label="Bulk Schedule" />
+        </Tabs>
+
+        {tabIndex === 0 && (
+          <SchedulePresentation semester={semester_name} />
+        )}
+        {tabIndex === 1 && (
+          <BulkSchedulePresentation semester_name={semester_name} />
+        )}
+      </>
+    </CustomModal>
+  </div>
+)}
+{filtersEnabled && (
+      <div style={{ marginTop: "10px" }}>
+   
+        <FilterBar />
+      </div>
+    )}
+
         </div>
       </div>
 

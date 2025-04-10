@@ -6,7 +6,7 @@ const buttonConfig = [
     { path: '/home', icon: '🏠', text: 'Home', roles: ['student', 'hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external','admin'] },
     { path: '/forms', icon: '📃', text: 'Forms', roles: ['student','hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external','admin'] },
     { path: '/presentation', icon: 'ℹ️', text: 'Presentations', roles: ['student','hod','phd_coordinator','faculty','dordc','dra','director','doctoral','admin'] },
-    { path: '/publications', icon: '📰', text: 'Publications', roles: ['student', 'faculty','hod','admin','admin'] },
+    { path: '/publications', icon: '📰', text: 'Publications', roles: ['student','hod','admin','admin'] },
     { path: '/students', icon: '🧑‍🎓', text: 'Students', roles: ['hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external','admin'] },
 ];
 

@@ -136,10 +136,7 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
     //     ))}
     //   </div>
 
-    //   <div className='profile-actions'>
-    //     <CustomButton text='View Forms' onClick={navigateToForms} />
-    //     <CustomButton text='View Presentations' onClick={navigateToProgress} />
-    //   </div>
+      
 
     //   {/* <GridContainer
     //     label="Doctoral Committee"
@@ -235,6 +232,11 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
         ]}
         space={3}
       /> 
+
+<div className='profile-actions'>
+        <CustomButton text='View Forms' onClick={navigateToForms} />
+        <CustomButton text='View Presentations' onClick={navigateToProgress} />
+      </div>
     </div>
   )}
   else {

@@ -28,6 +28,7 @@ const PresentationListPage = () => {
   const [location, setLocation] = useState(window.location.pathname);
    const [num, setNum] = useState(0);
    const [presentationTab, setPresentationTab] = useState(0);
+   const role = localStorage.getItem("userRole") || "student";
 
   const handleSearch = (query) => {
     setFilters(query);
@@ -114,19 +115,23 @@ const PresentationListPage = () => {
 
       
 
-          <Tabs
-            value={presentationTab}
-            onChange={(e, newVal) => setPresentationTab(newVal)}
-            sx={{ marginBottom: "16px" }}
-          >
-            <Tab label="Upcoming Presentations" />
-            <Tab label="Not Scheduled" />
-            <Tab label="On Leave" />
-            <Tab label="Semester Off" />
-            <Tab label="Not Submitted" />
-            <Tab label="Action Required" />
-            <Tab label="All Presentaion" />
-          </Tabs>
+          {role !== "student" && (
+  <Tabs
+    value={presentationTab}
+    onChange={(e, newVal) => setPresentationTab(newVal)}
+    sx={{ marginBottom: "16px" }}
+  >
+    <Tab label="Action Required" />
+    <Tab label="Upcoming Presentations" />
+    <Tab label="Submitted" />
+    <Tab label="Not Scheduled" />
+    
+    <Tab label="Semester Off" />
+    <Tab label="Not Submitted" />
+    
+    <Tab label="All Presentations" />
+  </Tabs>
+)}
           {extraFilter && (<FilterBar onSearch={handleSearch}/>)}
           <PagenationTable
             num={num}
