@@ -15,6 +15,7 @@ const PagenationTable = ({
   enableSelect=true,
   actions = [],
   num = null,
+  tableTitle=""
 }) => {
   const [forms, setForms] = useState([]);
   const [fields, setFields] = useState(["name", "roll_no"]);
@@ -102,6 +103,7 @@ const PagenationTable = ({
     <div className="form-list-container">
       {role !== "student" && (
         <div className="form-topbar">
+            <h3>{tableTitle}</h3>
           <div className="top-actions">
           {extraTopbarComponents && (
                <div className="extra-components">{extraTopbarComponents}</div> )}

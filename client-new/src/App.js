@@ -24,6 +24,7 @@ import ResetPasswordPage from './pages/reset-password/ResetPasswordPage';
 import FacultyPage from './pages/faculty/FacultyPage';
 import DepartmentPage from './pages/department/Department';
 import AllNotificationsPage from './components/notificationBox/AllNotificationsPage';
+import PresentationSemester from './pages/presentations/PresentationSemester';
 
 
 const App = () => {
@@ -65,8 +66,8 @@ const AppContent = () => {
             </>
           )}
           <Route path="/notifications" element={<AllNotificationsPage />} />
-          <Route path="/presentation" element={<PresentationListPage/>} /> 
-          {/*ye vale path change krne h   */}
+          <Route path="/presentation" element={<PresentationSemester/>} /> 
+
           <Route path="/presentation/form" element={<PresentationListPage/>} />  
           
           <Route path="/presentation/semester/:semester_id" element={<PresentationListPage/>} />  
