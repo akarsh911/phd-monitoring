@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f2f5;
+            background-color: #f5eaea;
             padding: 40px 20px;
             color: #333;
             margin: 0;
@@ -24,7 +24,7 @@
             margin-bottom: 25px;
         }
         .logo img {
-            max-height: 70px;
+            max-height: 120px;
         }
         h2 {
             font-size: 24px;
@@ -37,12 +37,12 @@
             margin-bottom: 15px;
         }
         a {
-            color: #004085;
+            color: #792c2c;
             text-decoration: none;
         }
         .button {
             display: inline-block;
-            background-color: #004085;
+            background-color: #792c2c;
             color: #ffffff;
             padding: 14px 28px;
             text-decoration: none;
@@ -52,7 +52,7 @@
             transition: background-color 0.3s ease;
         }
         .button:hover {
-            background-color: #002752;
+            background-color: #792c2c;
         }
         @media (max-width: 600px) {
             .email-container {
@@ -78,11 +78,15 @@
         <a href="https://phdportal.thapar.edu" target="_blank">phdportal.thapar.edu</a>.
     </p>
 
+    <p>We’re excited to have you on board during our <strong>pilot testing phase</strong>. The portal is currently in beta, and your participation will help us refine and improve the experience for all users — faculty, students, and administrators alike.</p>
+
     <p>To get started, please set your password by clicking the button below. This link will remain valid for 24 hours.</p>
 
     <a href="{{ $resetUrl }}" class="button">Set Password</a>
 
     <p>If you didn’t expect this email, you can safely ignore it.</p>
+
+    <p>Thank you for being part of this important phase.</p>
 
     <p>Best regards,<br>
     PhD Coordination Team<br>

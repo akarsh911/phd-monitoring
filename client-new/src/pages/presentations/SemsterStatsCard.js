@@ -15,9 +15,10 @@ import { toast } from "react-toastify";
 import { Tabs, Tab } from "@mui/material";
 import BulkSchedulePresentation from "../../components/forms/presentations/BulkSchedulePresentation";
 import SchedulePresentation from "../../components/forms/presentations/SchedulePresentation";
-import FilterBar from "../../components/filterBar/FilterBar";
+// import FilterBar from "../../components/filterBar/FilterBar";
+import { set } from "react-hook-form";
 
-const SemesterStatsCard = ({ semesterName = null }) => {
+const SemesterStatsCard = ({ semesterName = null,setFilters}) => {
   const [semesterStats, setSemesterStats] = useState(null);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -31,7 +32,9 @@ const SemesterStatsCard = ({ semesterName = null }) => {
     end_date: null,
     notification: false,
   });
-
+  useEffect(() => {
+    setFilters(filtersEnabled);
+  },[filtersEnabled]);
   const [open, setOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
 
@@ -253,21 +256,14 @@ const SemesterStatsCard = ({ semesterName = null }) => {
       </>
     </CustomModal>
   </div>
-)}
-{filtersEnabled && (
-      <div style={{ marginTop: "10px" }}>
-   
-        <FilterBar />
-      </div>
-    )}
-
-        </div>
+)}        </div>
       </div>
 
       {(role === "admin" || role == "dordc") && (
         <CustomModal
           isOpen={openEditModal}
-          onClose={() => {setOpenEditModal(false);window.Location.reload();}}
+          onClose={() => {setOpenEditModal(false); 
+            window.location.reload();}}
           title="Edit Semester Deadline"
           minWidth="300px"
           minHeight="300px"

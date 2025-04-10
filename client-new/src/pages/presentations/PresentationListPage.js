@@ -109,7 +109,7 @@ const PresentationListPage = () => {
         <>
           <h1>Presentation List</h1>
 
-          <SemesterStatsCard />
+          <SemesterStatsCard setFilters={setExtraFilter}/>
 
        
 
