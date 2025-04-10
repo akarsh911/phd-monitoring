@@ -6,7 +6,7 @@ const buttonConfig = [
     { path: '/home', icon: <i class="fa fa-home" aria-hidden="true"></i>, text: 'Home', roles: ['student', 'hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external','admin'] },
     { path: '/forms', icon: <i class="fa fa-file-text" aria-hidden="true"></i>, text: 'Forms', roles: ['student','hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external','admin'] },
     { path: '/presentation', icon: <i class="fa fa-tasks" aria-hidden="true"></i>, text: 'Presentations', roles: ['student','hod','phd_coordinator','faculty','dordc','dra','director','doctoral','admin'] },
-    { path: '/publications', icon: <i class="fa fa-book" aria-hidden="true"></i>, text: 'Publications', roles: ['student', 'faculty','hod','admin'] },
+    { path: '/publications', icon: <i class="fa fa-book" aria-hidden="true"></i>, text: 'Publications', roles: ['student'] },
     { path: '/students', icon: <i class="fa fa-users" aria-hidden="true"></i>, text: 'Students', roles: ['hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external','admin'] },
     { path: '/faculty', icon: <i class="fa-solid fa-person-chalkboard"></i>, text: 'Faculty', roles: ['hod','phd_coordinator','dordc','dra','director','admin'] },
     { path: '/departments', icon: <i class="fa-solid fa-building"></i>, text: 'Departments', roles: ['dordc','dra','director','admin'] },

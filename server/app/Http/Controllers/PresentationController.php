@@ -737,8 +737,8 @@ class PresentationController extends Controller
             $form_id,
             $model,
             'hod',
-            'dra',
-            'dra',
+            'faculty',
+            'dordc',
         );
     }
 
@@ -751,7 +751,7 @@ class PresentationController extends Controller
             $form_id,
             $model,
             'dordc',
-            'dra',
+            'hod',
             'dra',
             function ($formInstance) use ($request, $user) {
                 if ($request->approval) {
@@ -781,6 +781,7 @@ class PresentationController extends Controller
             }
         );
     }
+
     private function emailList($student, $request)
     {
         $emails = [];
