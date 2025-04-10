@@ -18,7 +18,7 @@ import SchedulePresentation from "../../components/forms/presentations/ScheduleP
 // import FilterBar from "../../components/filterBar/FilterBar";
 import { set } from "react-hook-form";
 
-const SemesterStatsCard = ({ semesterName = null,setFilters}) => {
+const SemesterStatsCard = ({ semesterName = null,setFilters=null}) => {
   const [semesterStats, setSemesterStats] = useState(null);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -33,6 +33,7 @@ const SemesterStatsCard = ({ semesterName = null,setFilters}) => {
     notification: false,
   });
   useEffect(() => {
+    if(setFilters) 
     setFilters(filtersEnabled);
   },[filtersEnabled]);
   const [open, setOpen] = useState(false);
@@ -113,6 +114,7 @@ const SemesterStatsCard = ({ semesterName = null,setFilters}) => {
       if (hello.status === 200) {
         toast.success("Semester updated successfully!");
       }
+
       setOpenEditModal(false);
       fetchSemesterStats();
     } catch (err) {

@@ -144,7 +144,14 @@ const PagenationTable = ({
         </thead>
 
         <tbody>
-          {forms.map((form, index) => {
+        {forms.length === 0 && (
+  <tr className="no-data-row">
+    <td colSpan={fields.length + 2} className="no-data-cell">
+      No Data to Display
+    </td>
+  </tr>
+)}
+   {forms.map((form, index) => {
             const formId = form.id || form.id;
             return (
               <tr

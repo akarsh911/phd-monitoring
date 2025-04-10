@@ -114,3 +114,16 @@
     background-color: #1e7e34;
   }
   
+  .no-data-row {
+    background-color: #f9f9f9;
+    text-align: center;
+  }
+  
+  .no-data-cell {
+    padding: 20px;
+    font-style: italic;
+    font-weight: 500;
+    color: #666;
+    text-align: center;
+  }
+  

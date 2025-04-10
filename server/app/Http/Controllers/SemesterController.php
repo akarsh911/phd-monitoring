@@ -111,9 +111,9 @@ class SemesterController extends Controller
             case 'hod':
             case 'phd_coordinator':
                 return $this->ListNotScheduled($request, $semesters, true);
-                // case 'faculty':
-                //     $dep_id = $user->faculty->department->id;
-                //     return response()->json($this->ListNotScheduledDepartment($request,$semesters, $dep_id));
+                
+            case 'faculty':
+                    return $this->ListSupervisedOrDoctored($request);
             case 'dordc':
             case 'admin':
                 return $this->ListNotScheduled($request, $semesters);
@@ -165,4 +165,50 @@ class SemesterController extends Controller
             'fieldsTitles' => ['Name', 'Designation', 'Email', 'Phone', 'Department'],
         ]);
     }
+
+    private function ListSupervisedOrDoctored($request, $type = 'supervised')
+    {
+        $user = Auth::user();
+        $role = $user->role->role;
+        $faculty = $user->faculty;
+    
+        // Apply pagination
+        $perPage = $request->query('rows', 50);
+        $page = $request->query('page', 1);
+    
+        // Determine which relation to use
+        if ($type === 'supervised') {
+            $query = $faculty->supervisedStudents();
+        } elseif ($type === 'doctored') {
+            $query = $faculty->doctoredStudents();
+        } else {
+            return response()->json(['error' => 'Invalid type specified.'], 400);
+        }
+    
+        // Paginate the results
+        $students = $query->paginate($perPage, ['*'], 'page', $page);
+    
+        $result = $students->map(function ($student) {
+            return [
+                'name' => $student->user->name(),
+                'designation' => $student->designation ?? '-',
+                'email' => $student->user->email,
+                'phone' => $student->user->phone,
+                'department' => $student->department->short_name ?? '-',
+            ];
+        });
+    
+        return response()->json([
+            'data' => $result,
+            'total' => $students->total(),
+            'per_page' => $students->perPage(),
+            'current_page' => $students->currentPage(),
+            'totalPages' => $students->lastPage(),
+            'role' => $role,
+            'type' => $type,
+            'fields' => ['name', 'designation', 'email', 'phone', 'department'],
+            'fieldsTitles' => ['Name', 'Designation', 'Email', 'Phone', 'Department'],
+        ]);
+    }
+    
 }

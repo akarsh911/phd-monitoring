@@ -20,7 +20,7 @@ const PresentationListPage = () => {
   const [filters, setFilters] = useState({
     mandatory_filter: [
       {
-        key: "upcoming",
+        key: "action",
         value: 1,
       },
     ]});
@@ -44,26 +44,30 @@ const PresentationListPage = () => {
         setFilters({
           mandatory_filter: [
             {
-              key: "upcoming",
+              key: "action",
               value: 1,
             },
           ]})
-     
+          setEnableApproval(true);     
       }
       else if(presentationTab === 1) {
-        //new
-          setEnableApproval(false);
-          setLocation(window.location.pathname+"/not-scheduled");
-                                                     
+        //new      
+        setFilters({
+          mandatory_filter: [
+            {
+              key: "upcoming",
+              value: 1,
+            },
+          ]})                                                 
       }
       else if(presentationTab === 2) {
        //new route
        setFilters({
         mandatory_filter: [
           {
-            key: "leave",
+            key: "missed",
             op:"=",
-            value: 1,
+            value: 0,
           },
         ]});
        setEnableApproval(false);
@@ -72,9 +76,12 @@ const PresentationListPage = () => {
       else if(presentationTab === 3) {
         //new route
         setEnableApproval(false);
-
+        setLocation(window.location.pathname+"/not-scheduled");
       }
       else if(presentationTab === 4) {
+        //semester off
+      }
+      else if(presentationTab === 5) {
         setFilters({
           mandatory_filter: [
             {
@@ -83,17 +90,6 @@ const PresentationListPage = () => {
             },
           ]})
           setEnableApproval(false);
-
-      }
-      else if(presentationTab === 5) {
-        setFilters({
-          mandatory_filter: [
-            {
-              key: "action",
-              value: 1,
-            },
-          ]})
-          setEnableApproval(true);
       }
       else if(presentationTab === 6) {
         setFilters({})
