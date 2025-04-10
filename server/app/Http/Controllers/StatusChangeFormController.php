@@ -203,7 +203,6 @@ class StatusChangeFormController extends Controller
                     $formInstance->addHistoryEntry('Status Change Approved', $user->name());
                     $student=$formInstance->student;
                     $student->current_status = $formInstance->type_of_change == "full-time to part-time" ? "part-time" : "full-time";
-                    echo  $formInstance->type_of_change == "full-time to part-time" ? "part-time" : "full-time";;
                     $student->statusChanges()->create([
                         'type_of_change' => $formInstance->type_of_change,
                         'reason' => $formInstance->reason,

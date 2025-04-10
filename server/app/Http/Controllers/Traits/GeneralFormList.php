@@ -23,7 +23,7 @@ trait GeneralFormList
                   $filters = json_decode(urldecode($filtersJson), true);
             }
         }
-       else echo json_encode($filters);
+    
 
         switch ($role) {
             case 'student':

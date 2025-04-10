@@ -12,11 +12,14 @@ import FilterBar from "../../components/filterBar/FilterBar";
 import PagenationTable from "../../components/pagenationTable/PagenationTable";
 import SemesterStatsCard from "./SemsterStatsCard";
 import { set } from "react-hook-form";
+import { useParams } from "react-router-dom";
 
 const PresentationListPage = () => {
   const [role, setRole] = useState("");
   const [open, setOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
+  // const [semester_name, setSemesterName] = useState("");
+   const { semester_name } = useParams();
   const [filters, setFilters] = useState({
     mandatory_filter: [
       {

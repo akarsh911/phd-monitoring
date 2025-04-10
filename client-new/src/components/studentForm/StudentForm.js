@@ -171,8 +171,8 @@ const StudentForm = ({ edit = false, studentData = {} }) => {
             initialValue={formData.current_status}
             onChange={(val) => handleChange("current_status", val)}
             options={[
-              { title: "Full Time", value: "full_time" },
-              { title: "Part Time", value: "part_time" },
+              { title: "Full Time", value: "full-time" },
+              { title: "Part Time", value: "part-time" },
             ]}
           />,
           <InputField

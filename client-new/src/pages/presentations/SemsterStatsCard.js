@@ -12,7 +12,7 @@ import GridContainer from "../../components/forms/fields/GridContainer";
 import { generateReportPeriods } from "../../utils/semester";
 
 
-const SemesterStatsCard = () => {
+const SemesterStatsCard = ({semesterName=null}) => {
   const [semesterStats, setSemesterStats] = useState(null);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [openCreateModal, setOpenCreateModal] = useState(false);
@@ -34,6 +34,7 @@ const SemesterStatsCard = () => {
   });
 
   useEffect(() => {
+    
     fetchSemesterStats();
     const periods = generateReportPeriods(2,1,true);
               const pp=[];
@@ -48,7 +49,11 @@ const SemesterStatsCard = () => {
 
   const fetchSemesterStats = async () => {
     try {
-      const res = await customFetch(baseURL + "/semester/recent", "GET",{},false);
+      let url=baseURL + "/semester/recent";
+      if(semesterName){
+        url=baseURL + "/semester/"+semesterName;
+      }
+      const res = await customFetch(url, "GET",{},false);
       const data = res.response?.data || res.data;
       setSemesterStats(data);
       setEditForm({

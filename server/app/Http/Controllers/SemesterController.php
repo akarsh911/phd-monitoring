@@ -11,18 +11,22 @@ use Illuminate\Support\Facades\Auth;
 class SemesterController extends Controller
 {
     use GeneralFormList;
-    public function getRecent(Request $request)
+    public function getRecent(Request $request, $semester_id=null)
     {
         $user = Auth::user();
         $curr_role = $user->role->role;
-      
+
 
         if (
             $curr_role != 'dordc' &&
             $curr_role != 'hod' &&
             $curr_role != 'admin'
         ) {
-            $semesters = Semester::latest('start_date')->first();
+            if ($semester_id) {
+                $semesters = Semester::where('semester_name', $semester_id)->first();
+            } else
+                $semesters = Semester::latest('start_date')->first();
+
             if (!$semesters) {
                 return response()->json([
                     'status' => 'error',
@@ -39,7 +43,10 @@ class SemesterController extends Controller
             ]);
         }
 
-        $semesters = Semester::latest('start_date')->first();
+        if ($semester_id) {
+            $semesters = Semester::where('semester_name', $semester_id)->first();
+        } else
+            $semesters = Semester::latest('start_date')->first();
         if (!$semesters) {
             return response()->json([
                 'status' => 'error',
@@ -67,7 +74,7 @@ class SemesterController extends Controller
             'end_date' => 'nullable|date|after:start_date',
             'notification' => 'nullable|boolean',
         ]);
-       
+
         $user = Auth::user();
         if (
             $user->role->role != 'dordc' &&

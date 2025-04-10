@@ -67,6 +67,7 @@ const AppContent = () => {
           )}
           <Route path="/notifications" element={<AllNotificationsPage />} />
           <Route path="/presentation" element={<PresentationSemester/>} /> 
+          <Route path="/presentation/semester" element={<PresentationSemester/>} /> 
 
           <Route path="/presentation/form" element={<PresentationListPage/>} />  
           

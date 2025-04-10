@@ -27,7 +27,6 @@ class FacultyController extends Controller
 
         if(!$user->role->can_add_faculties)
         {
-            echo $user->current_role;
             return response()->json([
                 'message' => 'You do not have permission to add faculty'
             ], 403);

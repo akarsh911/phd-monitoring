@@ -66,9 +66,9 @@ const PagenationTable = ({
     });
   };
 
-  const openForm = (id) => {
-    if (customOpenForm) customOpenForm(id);
-    else window.open(`${endpoint}/${id}`, "_blank");
+  const openForm = (form) => {
+    if (customOpenForm) customOpenForm(form);
+    else window.open(`${endpoint}/${form.id}`, "_blank");
   };
 
   const handleApproval = async () => {
@@ -150,7 +150,7 @@ const PagenationTable = ({
               <tr
                 key={formId}
                 className={`form-row ${selectedForms.has(formId) ? "selected-row" : ""}`}
-                onClick={() => selectMode ? toggleSelectOne(formId) : openForm(formId)}
+                onClick={() => selectMode ? toggleSelectOne(formId) : openForm(form)}
               >
                 {selectMode && (
                   <td>

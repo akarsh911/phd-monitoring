@@ -5,6 +5,8 @@ use App\Http\Controllers\PresentationController;
 Route::middleware('auth:sanctum')->group(function () {
     //get semesters
     Route::get('/',[PresentationController::class, 'listSemesterPresentation']);
+    Route::get('/semester', [PresentationController::class, 'listSemesterPresentation']);
+
     // Filters
     Route::get('/filters', [PresentationController::class, 'listFilters']);
     Route::get('/form/filters', [PresentationController::class, 'listFilters']);

@@ -36,6 +36,9 @@ const PresentationSemester = () => {
             enableApproval={false}
             enableSelect={false}
             tableTitle="Past Semesters"
+            customOpenForm={(semester) => {
+                window.location.href=location+`/semester/${semester.semester_name}`;
+            }}
           />
         </>
       }
