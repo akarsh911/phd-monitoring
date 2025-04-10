@@ -9,8 +9,9 @@ import GridContainer from '../fields/GridContainer';
 import DropdownField from '../fields/DropdownField';
 
 import { generateReportPeriods } from "../../../utils/semester";
+import InputField from '../fields/InputField';
 
-const BulkSchedulePresentation = () => {
+const BulkSchedulePresentation = ({semester_name}) => {
   const { setLoading } = useLoading();
   const [csvData, setCsvData] = useState([]);
   const [reportPeriods, setReportPeriods] = useState([]);
@@ -23,6 +24,7 @@ const BulkSchedulePresentation = () => {
       title: period,
     }));
     setReportPeriods(formattedPeriods);
+    body.period_of_report = semester_name;
   }, []);
 
   const formatDate = (date) => {
@@ -169,13 +171,12 @@ const BulkSchedulePresentation = () => {
 
       <GridContainer
         elements={[
-          <DropdownField
-            label="Period of Report"
-            options={reportPeriods}
-            onChange={(value) =>
-              setBody((prev) => ({ ...prev, period_of_report: value }))
-            }
-          />,
+
+          <InputField 
+            label={"Period of Report"}
+            isLocked={true}
+            initialValue={semester_name }
+          />
         ]}
         space={2}
       />

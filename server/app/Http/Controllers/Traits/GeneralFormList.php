@@ -18,11 +18,12 @@ trait GeneralFormList
         // $filters= $request->input('filters', null);
         if(!$filters){
             $filtersJson = $request->query('filters');
-
             if ($filtersJson) {
                   $filters = json_decode(urldecode($filtersJson), true);
             }
         }
+        // else 
+        // echo json_encode($filters);
     
 
         switch ($role) {

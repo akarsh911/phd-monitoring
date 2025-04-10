@@ -11,7 +11,7 @@ import { generateReportPeriods } from "../../../utils/semester";
 import CustomButton from "../fields/CustomButton";
 import { toast } from "react-toastify";
 
-const SchedulePresentation = ({ close }) => {
+const SchedulePresentation = ({ close, semester }) => {
   const { setLoading } = useLoading();
   const [isLoaded, setIsLoaded] = useState(false);
   const [students, setStudents] = useState([]);
@@ -53,7 +53,7 @@ const SchedulePresentation = ({ close }) => {
                 pp.push(period1);
           });
          setReportPeriods(pp);
-
+          body.period_of_report = semester;
     }, []);
     
     const schedule = () => {
@@ -105,13 +105,11 @@ const SchedulePresentation = ({ close }) => {
           />
           <GridContainer
             elements={[
-              <DropdownField
-                label="Period of Report"
-                options={reportPeriods}
-                onChange={(value) =>
-                  setBody((prev) => ({ ...prev, period_of_report: value }))
-                }
-              />,
+              <InputField
+                label={"Period of Report"}
+                isLocked={true}
+                initialValue={semester}
+              />
             ]}
             space={2}
           />

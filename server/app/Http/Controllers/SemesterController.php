@@ -85,6 +85,7 @@ class SemesterController extends Controller
                 'message' => 'You do not have permission to create a semester.',
             ], 403);
         }
+        
         $semester = Semester::createOrUpdateFromCode($request->semester_name, $request->start_date, $request->end_date);
 
         return response()->json([

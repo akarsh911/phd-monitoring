@@ -10,6 +10,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import DropdownField from "../../components/forms/fields/DropdownField";
 import GridContainer from "../../components/forms/fields/GridContainer";
 import { generateReportPeriods } from "../../utils/semester";
+import InputField from "../../components/forms/fields/InputField";
+import { toast } from "react-toastify";
+import { Tabs, Tab } from "@mui/material";
+import BulkSchedulePresentation from "../../components/forms/presentations/BulkSchedulePresentation";
+import SchedulePresentation from "../../components/forms/presentations/SchedulePresentation";
 
 const SemesterStatsCard = ({ semesterName = null }) => {
   const [semesterStats, setSemesterStats] = useState(null);
@@ -17,13 +22,16 @@ const SemesterStatsCard = ({ semesterName = null }) => {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [body, setBody] = useState({});
   const [reportPeriods, setReportPeriods] = useState([]);
-
   const [editForm, setEditForm] = useState({
     semester_name: "",
     start_date: null,
     end_date: null,
     notification: false,
   });
+
+  const [open, setOpen] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
+
   const role = localStorage.getItem("userRole") || "student";
   const [createForm, setCreateForm] = useState({
     semester_name: "",
@@ -31,6 +39,14 @@ const SemesterStatsCard = ({ semesterName = null }) => {
     end_date: new Date(),
     notification: false,
   });
+
+  const openModal = () => {
+    setOpen(true);
+  };
+
+  const closeModal = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     fetchSemesterStats();
@@ -82,7 +98,15 @@ const SemesterStatsCard = ({ semesterName = null }) => {
         end_date: editForm.end_date,
         notification: editForm.notification,
       };
-      await customFetch(baseURL + "/semester", "POST", payload);
+      let hello = await customFetch(
+        baseURL + "/semester",
+        "POST",
+        payload,
+        true
+      );
+      if (hello.status === 200) {
+        toast.success("Semester updated successfully!");
+      }
       setOpenEditModal(false);
       fetchSemesterStats();
     } catch (err) {
@@ -98,7 +122,7 @@ const SemesterStatsCard = ({ semesterName = null }) => {
         end_date: createForm.end_date,
         notification: createForm.notification,
       };
-      await customFetch(baseURL + "/semester", "POST", payload);
+      await customFetch(baseURL + "/semester", "POST", payload, true);
       setOpenCreateModal(false);
       fetchSemesterStats();
     } catch (err) {
@@ -128,9 +152,6 @@ const SemesterStatsCard = ({ semesterName = null }) => {
         </div>
         <div className="semester-stats-line">
           <div className="stat-item">
-            <strong>Semester:</strong> {semester_name}
-          </div>
-          <div className="stat-item">
             <strong>Start Date:</strong>{" "}
             {new Date(start_date).toLocaleDateString()}
           </div>
@@ -152,22 +173,67 @@ const SemesterStatsCard = ({ semesterName = null }) => {
               </div>
             </>
           )}
-        </div>
-      </div>
-      {(role === "admin" || role === "dordc ") && (
-        <div>
-          {isInSemester || isBeforeSemester ? (
-            // <button className="button" onClick={() => setOpenEditModal(true)}>Edit Deadline</button>
-            <button className="button" onClick={() => setOpenCreateModal(true)}>
-              Create New Evaluation Semester
-            </button>
-          ) : (
-            <button className="button" onClick={() => setOpenCreateModal(true)}>
-              Create New Evaluation Semester
-            </button>
+          {(role === "admin" || role === "dordc ") && (
+            <div>
+              {isInSemester || isBeforeSemester ? (
+                // <button className="button" onClick={() => setOpenEditModal(true)}>Edit Deadline</button>
+                <button
+                  className="button"
+                  onClick={() => setOpenEditModal(true)}
+                >
+                  Edit Evaluation Semester
+                </button>
+              ) : (
+                <button
+                  className="button"
+                  onClick={() => setOpenCreateModal(true)}
+                >
+                  Create New Evaluation Semester
+                </button>
+              )}
+            </div>
+          )}
+
+          {(role === "faculty" || role === "phd_coordinator") && (
+            <div className="form-list-bar">
+              <CustomButton
+                onClick={openModal}
+                text="Schedule Presentation +"
+              />
+
+              <CustomModal
+                isOpen={open}
+                onClose={closeModal}
+                title={"Schedule Presentation"}
+                minHeight="200px"
+                maxHeight="600px"
+                minWidth="650px"
+                maxWidth="700px"
+                closeOnOutsideClick={false}
+              >
+                <>
+                  <Tabs
+                    value={tabIndex}
+                    onChange={(e, index) => setTabIndex(index)}
+                    style={{ marginBottom: "12px" }}
+                  >
+                    <Tab label="Individual Schedule" />
+                    <Tab label="Bulk Schedule" />
+                  </Tabs>
+
+                  {tabIndex === 0 && (
+                    <SchedulePresentation semester={semester_name} />
+                  )}
+                  {tabIndex === 1 && (
+                    <BulkSchedulePresentation semester_name={semester_name} />
+                  )}
+                </>
+              </CustomModal>
+            </div>
           )}
         </div>
-      )}
+      </div>
+
       {(role === "admin" || role === "dordc ") && (
         <CustomModal
           isOpen={openEditModal}
@@ -176,12 +242,10 @@ const SemesterStatsCard = ({ semesterName = null }) => {
         >
           <GridContainer
             elements={[
-              <DropdownField
+              <InputField
                 label="Period of Report"
-                options={reportPeriods}
-                onChange={(value) =>
-                  setEditForm((prev) => ({ ...prev, period_of_report: value }))
-                }
+                isLocked={true}
+                initialValue={editForm.semester_name}
               />,
             ]}
             space={2}
@@ -218,6 +282,7 @@ const SemesterStatsCard = ({ semesterName = null }) => {
           </div>
         </CustomModal>
       )}
+
       {(role === "admin" || role === "dordc ") && (
         <CustomModal
           isOpen={openCreateModal}

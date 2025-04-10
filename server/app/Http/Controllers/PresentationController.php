@@ -54,7 +54,7 @@ class PresentationController extends Controller
         if (is_array($mandatoryFilter)) {
             $parsedFilters = $this->is_assoc($mandatoryFilter) ? [$mandatoryFilter] : $mandatoryFilter;
         }
-    
+     
         $isMissing = collect($parsedFilters)->contains(function ($filter) {
             return isset($filter['key'], $filter['value']) &&
                 $filter['key'] === 'missed' &&
@@ -140,7 +140,7 @@ class PresentationController extends Controller
         }
     
         if($mandatoryFilter){
-            $filters['mandatory_filter'] = $mandatoryFilters;
+            $filters['mandatory_filter'] = array_merge($parsedFilters, $mandatoryFilters);
             $request->merge(['filters' => $filters]);    
         }
      
@@ -219,7 +219,7 @@ class PresentationController extends Controller
             if (!$student) {
                 return response()->json(['message' => 'Student not found'], 404);
             }
-            if (!$student->checkSupervises($user->faculty->faculty_code)) {
+            if (!$student->checkSupervises($user->faculty->faculty_code)&& !$student->department->checkCoordinates($user->faculty->faculty_code)) {
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
             }
             $old = Presentation::where('student_id', $request->student_id)->where('semester_id', $validator['semester_id'])->get();

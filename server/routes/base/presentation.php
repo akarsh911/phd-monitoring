@@ -7,6 +7,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/',[PresentationController::class, 'listSemesterPresentation']);
     Route::post('/', [PresentationController::class, 'createForm']);
+    
     Route::get('/semester', [PresentationController::class, 'listSemesterPresentation']);
 
     // Filters

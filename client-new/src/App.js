@@ -72,7 +72,7 @@ const AppContent = () => {
           <Route path="/presentation/form" element={<PresentationListPage/>} />  
           
           <Route path="/presentation/semester/:semester_id" element={<PresentationListPage/>} />  
-          <Route path="/presentation/form/:id" element={<Presentation/>} />  
+          <Route path="/presentation/semester/:semester_id/:id" element={<Presentation/>} />  
 
           <Route path="/forms/:form_type" element={<FormListPage/>} />
           <Route path="/forms/:form_type/:id" element={<MainFormPage/>} />
