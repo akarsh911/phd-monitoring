@@ -23,7 +23,7 @@ Route::get('/{key}', function ($key, Request $request) {
     $modelInstance = new $model;  // This will create an instance of IrbSubForm
 
     if (method_exists($modelInstance, 'handleApproval')) {
-        echo "Model: $model\n";
+        // echo "Model: $model\n";
         $modelInstance->handleApproval($approval->email, $approval->model_id, $approval->approved);
     } else {
         echo "The method 'externalApproval' does not exist in model: $model";
