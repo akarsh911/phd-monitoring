@@ -1,0 +1,103 @@
+.assign-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .assign-container {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .assign-card {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+  }
+  
+  .assign-card:hover {
+    transform: translateY(-4px);
+  }
+  
+  .assign-card h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1.25rem;
+    color: #333;
+  }
+  
+  .assign-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: #444;
+  }
+  
+  .assign-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    transition: border 0.2s;
+  }
+  
+  .assign-input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+  }
+  
+  .assign-button {
+    background-color: #4a90e2;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .assign-button:hover {
+    background-color: #357ABD;
+  }
+  
+  .assign-button.green {
+    background-color: #27ae60;
+  }
+  
+  .assign-button.green:hover {
+    background-color: #219150;
+  }
+  
+  .assign-error {
+    color: #e74c3c;
+    font-size: 0.875rem;
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .assign-message {
+    grid-column: span 2;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+  }
+  
+  .success {
+    background-color: #e0f7e9;
+    color: #2e7d32;
+  }
+  
+  .error {
+    background-color: #fcebea;
+    color: #c0392b;
+  }
+  

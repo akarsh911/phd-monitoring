@@ -150,6 +150,7 @@ const Student = ({ formData }) => {
                 apiUrl={apiUrl_suggestion}
                 onSelect={(value) => handlePrefrenceSelect(value, 1)}
                 lock={lock}
+                fields={["name","department"]}
                 label={"Preference 2"}
               />,
               <InputSuggestions
@@ -157,6 +158,7 @@ const Student = ({ formData }) => {
                 apiUrl={apiUrl_suggestion}
                 onSelect={(value) => handlePrefrenceSelect(value, 2)}
                 lock={lock}
+                fields={["name","department"]}
                 label={"Preference 3"}
               />,
             ]}
@@ -169,6 +171,7 @@ const Student = ({ formData }) => {
                 apiUrl={apiUrl_suggestion}
                 onSelect={(value) => handlePrefrenceSelect(value, 3)}
                 lock={lock}
+                fields={["name","department"]}
                 label={"Preference 4"}
               />,
               <InputSuggestions
@@ -176,6 +179,7 @@ const Student = ({ formData }) => {
                 apiUrl={apiUrl_suggestion}
                 onSelect={(value) => handlePrefrenceSelect(value, 4)}
                 lock={lock}
+                fields={["name","department"]}
                 label={"Preference 5"}
               />,
               <InputSuggestions
@@ -183,6 +187,7 @@ const Student = ({ formData }) => {
                 apiUrl={apiUrl_suggestion}
                 onSelect={(value) => handlePrefrenceSelect(value, 5)}
                 lock={lock}
+                fields={["name","department"]}
                 label={"Preference 6"}
               />,
             ]}

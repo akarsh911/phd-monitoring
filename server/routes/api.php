@@ -241,6 +241,9 @@ Route::prefix('semester')->group(function () {
 Route::prefix('approval')->group(function () {
     require base_path('routes/base/approvals.php');
 });
+Route::prefix('admin')->group(function () {
+    require base_path('routes/base/admin.php');
+});
 
 Route::get('/send-welcome', [EmailNotificationController::class, 'sendWelcomeEmail']);
 

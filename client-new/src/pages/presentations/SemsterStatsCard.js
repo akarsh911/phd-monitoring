@@ -194,7 +194,7 @@ const SemesterStatsCard = ({ semesterName = null }) => {
             </div>
           )}
 
-          {(role === "faculty" || role === "phd_coordinator") && (
+          {(isInSemester || isBeforeSemester) &&(role === "faculty" || role === "phd_coordinator") && (
             <div className="form-list-bar">
               <CustomButton
                 onClick={openModal}

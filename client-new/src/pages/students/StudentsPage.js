@@ -7,17 +7,19 @@ import PagenationTable from "../../components/pagenationTable/PagenationTable";
 import CustomModal from "../../components/forms/modal/CustomModal";
 import StudentForm from "../../components/studentForm/StudentForm";
 import CustomButton from "../../components/forms/fields/CustomButton";
+import AssignPanel from "../../components/assignDoctoral/AssignPanel";
 
 const StudentsPage = () => {
   const [filter, setFilter] = useState([]);
   const { setLoading } = useLoading();
   const location = useLocation();
-
+  const role = localStorage.getItem("userRole");
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
+  const [isModalEditStudentOpen, setIsModalEditStudentOpen] = useState(false);
   const [studentToEdit, setStudentToEdit] = useState(null);
 
   const handleOpenForm = (studentData = null) => {
@@ -37,27 +39,41 @@ const StudentsPage = () => {
       children={
         <>
           <FilterBar onSearch={handleFilterChange} />
-          <PagenationTable
-            endpoint={location.pathname}
-            filters={filter}
-            enableApproval={false}
-            // customOpenForm={handleOpenForm}
-            // extraTopbarComponents={
-            //   <CustomButton
-            //     text="Add Student +"
-            //     onClick={() => handleOpenForm()}
-            //   />
-            // }
-            // actions={[
-            //     {
-            //         icon: <i class="fa-solid fa-pen-to-square"></i>,
-            //         tooltip: "Edit",
-            //         onClick: (studentData) => handleOpenForm(studentData),
-            //     },
-           
-            // ]}
-          />
 
+          {role == "admin" ? (
+            <>
+              <PagenationTable
+                endpoint={location.pathname}
+                filters={filter}
+                enableApproval={false}
+              
+                extraTopbarComponents={
+                  <CustomButton
+                    text="Add Student +"
+                    onClick={() => handleOpenForm()}
+                  />
+                }
+                actions={[
+                    {
+                        icon: <i class="fa-solid fa-pen-to-square"></i>,
+                        tooltip: "Edit",
+                        onClick: (studentData) => {
+                          setStudentToEdit(studentData);
+                          setIsModalEditStudentOpen(true)},
+                    },
+
+                ]}
+              />
+            </>
+          ) : (
+            <>
+              <PagenationTable
+                endpoint={location.pathname}
+                filters={filter}
+                enableApproval={false}
+              />
+            </>
+          )}
           <CustomModal
             isOpen={isModalOpen}
             onClose={() => {
@@ -70,6 +86,16 @@ const StudentsPage = () => {
             width="80vw"
           >
             <StudentForm edit={editMode} studentData={studentToEdit} />
+          </CustomModal>
+
+          <CustomModal
+            isOpen={isModalEditStudentOpen}
+            onClose={() => {
+              setIsModalEditStudentOpen(false);
+            }}
+            title={ "Add Student Panel"}
+          >
+            <AssignPanel roll_no={studentToEdit?.roll_no}/>
           </CustomModal>
         </>
       }
