@@ -201,16 +201,25 @@ const SemesterStatsCard = ({ semesterName = null }) => {
 {(isInSemester || isBeforeSemester) && (role === "faculty" || role === "phd_coordinator") && (
   <div className="form-list-bar">
 
-<CustomButton
+<div style={{ display: "flex", gap: "12px", flexWrap: "wrap", width: "100%" }}>
+  <div style={{ flex: 1, minWidth: "250px" }}>
+    <CustomButton
       onClick={() => setFiltersEnabled(prev => !prev)}
       text={filtersEnabled ? "Disable Advanced Filters" : "Enable Advanced Filters"}
-      style={{ marginLeft: "10px" }}
+      fullWidth
     />
+  </div>
 
+  <div style={{ flex: 1, minWidth: "250px" }}>
     <CustomButton
       onClick={openModal}
       text="Schedule Presentation +"
+      fullWidth
     />
+  </div>
+</div>
+
+
 
     
     
