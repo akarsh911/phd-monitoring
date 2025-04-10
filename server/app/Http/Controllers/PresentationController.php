@@ -237,7 +237,7 @@ class PresentationController extends Controller
                 'status' => 'pending',
                 'completion' => 'incomplete',
                 'semester_id' => $validator['semester_id'],
-                'steps' => ['student', 'faculty', 'doctoral', 'hod', 'dra', 'dordc', 'complete'],
+                'steps' => ['student', 'faculty', 'doctoral', 'hod', 'dordc', 'dra', 'complete'],
             ]);
             if(!$request->venue){
             $calendarResult = PresentationService::scheduleCalendarEvent(
@@ -403,7 +403,7 @@ class PresentationController extends Controller
                 'leave' => $studentData['leave'] ?? false,
                 'status' => 'pending',
                 'completion' => 'incomplete',
-                'steps' => ['student', 'faculty', 'doctoral', 'hod', 'dra', 'dordc', 'complete'],
+                'steps' => ['student', 'faculty', 'doctoral', 'hod', 'dordc', 'dra', 'complete'],
             ]);
 
             $emails = $this->emailList($student, $request);
