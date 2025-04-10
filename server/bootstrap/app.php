@@ -23,6 +23,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->append([
             LogRequestResponse::class,
         ]);
+
+        $middleware->alias([
+            'add.approval' => \App\Http\Middleware\AddApprovalFlag::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (\Throwable $e, $request) {

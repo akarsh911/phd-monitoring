@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SupervisorController;
+use App\Jobs\ProcessBulkForgotPassword;
 use Illuminate\Support\Facades\Password;
 use App\Models\User;
 use App\Notifications\WelcomeResetPassword;
@@ -16,29 +17,14 @@ Route::middleware('auth:sanctum')->group(function () {
    
    Route::post('/bulk-forgot-password', function (Request $request) {
     $emails = $request->input('emails', []);
-    
-    Log::info('Incoming bulk emails: ', $emails);
 
-    $results = [];
+    Log::info('Queued bulk reset for: ', $emails);
 
-    foreach ($emails as $email) {
-        $user = \App\Models\User::where('email', $email)->first();
-
-        if (!$user) {
-            $results[$email] = 'User not found';
-            continue;
-        }
-
-        $token = Password::broker()->createToken($user);
-        $user->notify(new \App\Notifications\WelcomeResetPassword($token, $user));
-
-        $results[$email] = 'Reset link sent';
-    }
-
-    Log::info('Bulk reset results:', $results);
+    ProcessBulkForgotPassword::dispatch($emails); // Dispatching to queue
 
     return response()->json([
-        'results' => $results,
+        'status' => 'success',
+        'message' => 'Reset links are being processed in the background.'
     ]);
 });
 });

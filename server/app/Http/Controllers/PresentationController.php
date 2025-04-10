@@ -505,10 +505,12 @@ class PresentationController extends Controller
             'form_ids' => 'required|array',
             'form_ids.*' => 'exists:presentations,id',
         ]);
-        $request->merge(['approval' => true]);
+        
+  
         foreach ($request->form_ids as $form_id) {
             $this->submit($request,null, $form_id);
         }
+        
         return response()->json(['message' => 'Forms submitted successfully'], 200);
     }
 
