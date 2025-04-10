@@ -294,10 +294,7 @@ class PresentationController extends Controller
                 'fields' => ["semester_name", "start_date", "end_date", "semester", "year"],
                 'fieldsTitles' => ["Semester Name", "Start Date", "End Date", "Semester", "Year"],
                 'role' => $role->role,
-            ]);
-        
-
-      
+            ]);      
     }
 
 
@@ -432,7 +429,7 @@ class PresentationController extends Controller
             'errors' => $errors,
         ]);
     }
-    public function loadForm(Request $request, $form_id = null)
+    public function loadForm(Request $request, $semester_id=null,$form_id = null)
     {
         $user = Auth::user();
         $steps = ['student', 'faculty', 'doctoral', 'hod', 'dra', 'dordc', 'complete'];
@@ -445,7 +442,7 @@ class PresentationController extends Controller
                 $cur = 'doctoral';
             }
         }
-
+      
         switch ($cur) {
             case 'student':
                 return $this->handleStudentForm($user, $form_id, $model, $steps);

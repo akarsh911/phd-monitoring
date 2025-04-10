@@ -14,6 +14,7 @@ trait GeneralFormHandler
         
         
             $formInstance = $modelClass::where('id',$form_id)->where('student_id', $student->roll_no)->first();
+           
             if ($formInstance) {
                 if ($formInstance->student->id == $student->id) {
                     return response()->json($formInstance->fullForm($user));
