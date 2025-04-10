@@ -29,17 +29,17 @@ const PresentationForm = ({formData, refetchData = null,}) => {
           role="hod"
           allowRejection={false}
         ></Recommendation>
-        <Recommendation
-          formData={formData}
-          role="dra"
-          allowRejection={false}
-        ></Recommendation>
+       
         <Recommendation
           formData={formData}
           role="dordc"
           allowRejection={false}
         ></Recommendation>
-
+       <Recommendation
+          formData={formData}
+          role="dra"
+          allowRejection={false}
+        ></Recommendation>
        </RoleBasedWrapper>
       </div>
     </>
