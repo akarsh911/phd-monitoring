@@ -54,7 +54,6 @@ Route::post('/login', function (Request $request) {
     ], 401);
 });
 
-
 Route::post('/forgot-password', function (Request $request) {
     $validator = Validator::make($request->all(), [
         'email' => 'required|email|exists:users,email',
@@ -155,7 +154,6 @@ Route::post('/switch-role', function (Request $request) {
         ], 401);
     }
 })->middleware('auth:sanctum');
-
 
 Route::post('register', function (Request $request) {
     $request->validate([
