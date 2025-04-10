@@ -12,7 +12,7 @@ import TableComponent from '../forms/table/TableComponent';
 import CustomButton from '../forms/fields/CustomButton';
 
 const ProfileCard = ({ dataIP = null, link = false }) => {
-  const { state: locationState } = useLocation();
+  const { state: locationState, pathname } = useLocation();
   const { roll_no } = useParams();
   const navigate = useNavigate();
 
@@ -38,11 +38,11 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
   }, [roll_no, profile]);
 
   const navigateToForms = () => {
-    navigate('/forms');
+    navigate(pathname + '/forms');
   };
 
   const navigateToProgress = () => {
-    navigate('/presentation');
+    navigate(pathname + '/presentation');
   };
 
   if (loading) return <p>Loading...</p>;
@@ -208,6 +208,10 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
           />
         </div>
       </div> */}
+    <div className='profile-actions'>
+        <CustomButton text='View Forms' onClick={navigateToForms} />
+        <CustomButton text='View Presentations' onClick={navigateToProgress}  />
+      </div>
 
       <GridContainer
         label='Supervisors'
@@ -233,10 +237,7 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
         space={3}
       /> 
 
-<div className='profile-actions'>
-        <CustomButton text='View Forms' onClick={navigateToForms} />
-        <CustomButton text='View Presentations' onClick={navigateToProgress} />
-      </div>
+
     </div>
   )}
   else {

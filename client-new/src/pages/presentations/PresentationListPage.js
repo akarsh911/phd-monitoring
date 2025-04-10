@@ -35,8 +35,11 @@ const PresentationListPage = () => {
   };
  
   const [enableApproval, setEnableApproval] = useState(false);
-
-
+ useEffect(() => {
+  if(role==="student"){
+    setFilters({});
+  }
+ },[]);
   useEffect(() => {
     setNum(num + 1);
     setLocation(window.location.pathname);

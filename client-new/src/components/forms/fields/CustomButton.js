@@ -1,7 +1,7 @@
 import "./Fields.css";
-const CustomButton = ({ text, onClick }) => {
+const CustomButton = ({ text, onClick,disabled=false }) => {
     return (
-        <button onClick={onClick} className="custom-button">
+        <button onClick={onClick}   disabled={disabled} className="custom-button">
             {text}
         </button>
     );

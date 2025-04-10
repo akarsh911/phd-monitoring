@@ -80,7 +80,7 @@
     </div>
     <h2>Welcome {{ $user->name }},</h2>
     <p>You’ve been added to the <strong>PhD Coordination Portal</strong> at 
-        <a href="https://phdportal.thapar.edu" target="_blank">phdportal.thapar.edu</a>.
+        <a href="https://phdportal.thapar.edu/login" target="_blank">phdportal.thapar.edu</a>.
     </p>
 
     <p>We’re excited to have you on board during our <strong>pilot testing phase</strong>. The portal is currently in beta, and your participation will help us refine and improve the experience for all users — faculty, students, and administrators alike.</p>
