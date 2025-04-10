@@ -146,7 +146,7 @@ const SemesterStatsCard = ({semesterName=null}) => {
           </>)}
         </div>
         </div>
-        {(role==='admin'|| role==='hod '|| role==='phd_coordinator')&& (
+        {(role==='admin'|| role==='dordc ')&& (
         <div >
           {(isInSemester || isBeforeSemester) ? (
             // <button className="button" onClick={() => setOpenEditModal(true)}>Edit Deadline</button>
@@ -158,7 +158,7 @@ const SemesterStatsCard = ({semesterName=null}) => {
         )}
 
       {/* Edit Modal */}
-      {(role==='admin'|| role==='hod '|| role==='phd_coordinator')&& (
+      {(role==='admin'|| role==='dordc ')&& (
       <CustomModal
         isOpen={openEditModal}
         onClose={() => setOpenEditModal(false)}
@@ -206,7 +206,7 @@ const SemesterStatsCard = ({semesterName=null}) => {
         </div>
       </CustomModal>
       )}
-{(role==='admin'|| role==='hod '|| role==='phd_coordinator')&& (
+{(role==='admin'|| role==='dordc ')&& (
       <CustomModal
         isOpen={openCreateModal}
         onClose={() => setOpenCreateModal(false)}
