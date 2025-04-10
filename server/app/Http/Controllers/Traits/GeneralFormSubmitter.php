@@ -21,7 +21,7 @@ trait GeneralFormSubmitter
                 'comments' => 'string|nullable',
             ]);
         }
-
+        // $approval = $request->input('approval', true);
 
         // Check if comments are required
         if ($role != 'student' && !$request->approval && empty($request->comments)) {

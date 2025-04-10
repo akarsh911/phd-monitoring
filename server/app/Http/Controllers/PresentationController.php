@@ -492,6 +492,7 @@ class PresentationController extends Controller
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
     }
+
     public function bulkSubmit(Request $request)
     {
         $user = Auth::user();
@@ -510,6 +511,7 @@ class PresentationController extends Controller
         }
         return response()->json(['message' => 'Forms submitted successfully'], 200);
     }
+
     public function linkPublication(Request $request,$semester_id=null, $form_id)
     {
         try {
@@ -712,11 +714,16 @@ class PresentationController extends Controller
                     PresentationReview::where('presentation_id', $formInstance->id)->where('faculty_id', $user->faculty->faculty_code)
                         ->update(['progress' => 'satisfactory', 'review_status' => 'completed', 'comments' => $request->comments]);
                 }
+                else{
+                    PresentationReview::where('presentation_id', $formInstance->id)->where('faculty_id', $user->faculty->faculty_code)
+                        ->update(['progress' => 'not satisfactory', 'review_status' => 'completed', 'comments' => $request->comments]);
+                }
                 $approvals = PresentationReview::where('presentation_id', $formInstance->id)->where('is_supervisor', 0)->where('review_status', 'pending')->get();
+              
                 if (count($approvals) != 0) {
                     throw new \Exception("Your Prefrences have been saved. Please wait for other supervisors to approve", 201);
                 }
-                throw new \Exception("You have already reviewed this form");
+                
             }
         );
     }
