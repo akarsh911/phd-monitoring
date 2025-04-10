@@ -60,8 +60,7 @@ class PresentationController extends Controller
                 $filter['key'] === 'missed' &&
                 (string)$filter['value'] === '1';
         });
-        
-    
+          
         $isUpcoming = collect($parsedFilters)->contains(function ($filter) {
             return isset($filter['key'], $filter['value']) &&
                 $filter['key'] === 'upcoming' &&
@@ -74,7 +73,7 @@ class PresentationController extends Controller
                 (string)$filter['value'] === '1';
         });
 
-         $titles = ["Name", "Roll No", "Date", "Time", "Progress %", "Supervisors"];
+        $titles = ["Name", "Roll No", "Date", "Time", "Progress %", "Supervisors"];
         $fields = ["name", "roll_no", "date", "time", "progress", "supervisors"];
         $mandatoryFilters = [];
     
@@ -94,8 +93,7 @@ class PresentationController extends Controller
         }
        
     
-        if ($isUpcoming) {
-           
+        if ($isUpcoming) {      
             $parsedFilters = array_values(array_filter($parsedFilters, function ($filter) {
                 return !(isset($filter['key'], $filter['value']) &&
                     $filter['key'] === 'upcoming' &&
@@ -106,6 +104,11 @@ class PresentationController extends Controller
                 'key' => 'date',
                 'op' => '>=',
                 'value' => Carbon::now()->format('Y-m-d')
+            ];
+            $mandatoryFilters[] = [
+                'key' => 'leave',
+                'op' => '=',
+                'value' => 0
             ];
             $titles = ["Name", "Roll No", "Date", "Time", "Meet Link", "Supervisors"];
             $fields = ["name", "roll_no", "date", "time", "venue", "supervisors"];
@@ -136,16 +139,17 @@ class PresentationController extends Controller
             ];
         }
     
-        // Final filter merge
-        $filters['mandatory_filter'] = $mandatoryFilters;
-        $request->merge(['filters' => $filters]);
-    
+        if($mandatoryFilter){
+            $filters['mandatory_filter'] = $mandatoryFilters;
+            $request->merge(['filters' => $filters]);    
+        }
+     
         if (!$semester_id) {
             $titles[] = "Semester";
             $fields[] = "period";
         }
     
-        return $this->listForms($user, Presentation::class, $request, null, true, [
+        return $this->listForms($user, Presentation::class, $request, $filters, true, [
             'fields' => $fields,
             'titles' => $titles,
             'extra_fields' => [

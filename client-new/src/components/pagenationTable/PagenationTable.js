@@ -13,7 +13,8 @@ const PagenationTable = ({
   customBulkAction, // function(formIds)
   extraTopbarComponents = null,
   enableSelect=true,
-  actions = []
+  actions = [],
+  num = null,
 }) => {
   const [forms, setForms] = useState([]);
   const [fields, setFields] = useState(["name", "roll_no"]);
@@ -52,8 +53,9 @@ const PagenationTable = ({
   };
 
   useEffect(() => {
+    console.log("Fetching data for page:", currentPage, "with filters:", filters);
     fetchData(currentPage, rowsPerPage, filters);
-  }, [endpoint, currentPage, rowsPerPage, filters]);
+  }, [endpoint, currentPage, rowsPerPage, filters,num]);
 
   const toggleSelectOne = (id) => {
     setSelectedForms((prev) => {

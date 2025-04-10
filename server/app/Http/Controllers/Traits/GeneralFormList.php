@@ -15,7 +15,7 @@ trait GeneralFormList
         $role=$user->current_role->role;
         $page = $request->input('page', 1);
         $rows = $request->input('rows', 50);
-        $filters= $request->input('filters', null);
+        // $filters= $request->input('filters', null);
         if(!$filters){
             $filtersJson = $request->query('filters');
 
@@ -23,7 +23,7 @@ trait GeneralFormList
                   $filters = json_decode(urldecode($filtersJson), true);
             }
         }
-      
+       else echo json_encode($filters);
 
         switch ($role) {
             case 'student':

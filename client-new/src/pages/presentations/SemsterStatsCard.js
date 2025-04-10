@@ -25,7 +25,7 @@ const SemesterStatsCard = () => {
     end_date: null,
     notification: false,
   });
-
+  const role = localStorage.getItem("userRole") || "student";
   const [createForm, setCreateForm] = useState({
     semester_name: "",
     start_date: new Date(),
@@ -119,19 +119,29 @@ const SemesterStatsCard = () => {
       <div className="semester-card">
       <div className="semester-header">
         <h3>{semester_name} Semester Stats</h3>
-        {(isInSemester || isBeforeSemester) && (
+        {(isInSemester ) && (
           <span className="semester-status-indicator">● Active</span>
+        )}
+        {(isBeforeSemester) && (
+          <span className="semester-status-indicator">● Upcoming</span>
+        )}
+        {(new Date(end_date) < currentDate) && (
+          <span className="semester-status-indicator">● Completed</span>
         )}
       </div>
         <div className="semester-stats-line">
           <div className="stat-item"><strong>Semester:</strong> {semester_name}</div>
           <div className="stat-item"><strong>Start Date:</strong> {new Date(start_date).toLocaleDateString()}</div>
           <div className="stat-item"><strong>End Date:</strong> {new Date(end_date).toLocaleDateString()}</div>
-          <div className="stat-item"><strong>Leave Scheduled:</strong> {leave === 1 ? "Yes" : "No"}</div>
+       {(role==='admin'|| role==='hod '|| role==='phd_coordinator')&& (
+        <>
+          <div className="stat-item"><strong>Leaves Scheduled:</strong> {leave}</div>
           <div className="stat-item"><strong>Scheduled:</strong> {scheduled}</div>
           <div className="stat-item"><strong>Unscheduled:</strong> {unscheduled}</div>
+          </>)}
         </div>
         </div>
+        {(role==='admin'|| role==='hod '|| role==='phd_coordinator')&& (
         <div >
           {(isInSemester || isBeforeSemester) ? (
             // <button className="button" onClick={() => setOpenEditModal(true)}>Edit Deadline</button>
@@ -140,9 +150,10 @@ const SemesterStatsCard = () => {
             <button className="button" onClick={() => setOpenCreateModal(true)}>Create New Evaluation Semester</button>
           )}
         </div>
-      
+        )}
 
       {/* Edit Modal */}
+      {(role==='admin'|| role==='hod '|| role==='phd_coordinator')&& (
       <CustomModal
         isOpen={openEditModal}
         onClose={() => setOpenEditModal(false)}
@@ -189,8 +200,8 @@ const SemesterStatsCard = () => {
           <CustomButton onClick={handleEditSubmit} text="Save Changes" />
         </div>
       </CustomModal>
-
-      {/* Create Modal */}
+      )}
+{(role==='admin'|| role==='hod '|| role==='phd_coordinator')&& (
       <CustomModal
         isOpen={openCreateModal}
         onClose={() => setOpenCreateModal(false)}
@@ -239,6 +250,7 @@ const SemesterStatsCard = () => {
           <CustomButton onClick={handleCreateSubmit} text="Create" />
         </div>
       </CustomModal>
+      )}
     </div>
   );
 };

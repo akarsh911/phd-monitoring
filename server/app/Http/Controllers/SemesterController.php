@@ -15,16 +15,28 @@ class SemesterController extends Controller
     {
         $user = Auth::user();
         $curr_role = $user->role->role;
+      
 
         if (
             $curr_role != 'dordc' &&
             $curr_role != 'hod' &&
             $curr_role != 'admin'
         ) {
+            $semesters = Semester::latest('start_date')->first();
+            if (!$semesters) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'No semesters found.',
+                ], 404);
+            }
             return response()->json([
-                'status' => 'error',
-                'message' => 'You do not have permission to view semesters.',
-            ], 403);
+                'status' => 'success',
+                'data' => [
+                    'semester_name' => $semesters->semester_name,
+                    'start_date' => $semesters->start_date,
+                    'end_date' => $semesters->end_date,
+                ],
+            ]);
         }
 
         $semesters = Semester::latest('start_date')->first();

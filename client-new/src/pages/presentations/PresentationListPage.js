@@ -11,13 +11,22 @@ import FormTable from "../../components/forms/formTable/FormTable";
 import FilterBar from "../../components/filterBar/FilterBar";
 import PagenationTable from "../../components/pagenationTable/PagenationTable";
 import SemesterStatsCard from "./SemsterStatsCard";
+import { set } from "react-hook-form";
 
 const PresentationListPage = () => {
   const [role, setRole] = useState("");
   const [open, setOpen] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
-  const [filters, setFilters] = useState(null);
+  const [filters, setFilters] = useState({
+    mandatory_filter: [
+      {
+        key: "upcoming",
+        value: 1,
+      },
+    ]});
+  const [extraFilter, setExtraFilter] = useState(false);
   const [location, setLocation] = useState(window.location.pathname);
+  const [num, setNum] = useState(0);
   const handleSearch = (query) => {
     setFilters(query);
   };
@@ -37,6 +46,7 @@ const PresentationListPage = () => {
   };
 
   useEffect(() => {
+    setNum(num + 1);
       if(presentationTab === 0) {
         setFilters({
           mandatory_filter: [
@@ -45,21 +55,22 @@ const PresentationListPage = () => {
               value: 1,
             },
           ]})
-        setLocation(window.location.pathname);
+     
       }
       else if(presentationTab === 1) {
-        setFilters({
-          mandatory_filter: [
-            {
-              key: "upcoming",
-              value: 1,
-            },
-          ]});
+        //new
           setEnableApproval(false);
-          setLocation(window.location.pathname);                                                          
+                                                     
       }
       else if(presentationTab === 2) {
        //new route
+       setFilters({
+        mandatory_filter: [
+          {
+            key: "leave",
+            value: 1,
+          },
+        ]});
        setEnableApproval(false);
 
       }
@@ -88,6 +99,11 @@ const PresentationListPage = () => {
             },
           ]})
           setEnableApproval(true);
+      }
+      else if(presentationTab === 6) {
+        setFilters({})
+        setEnableApproval(false);
+        setExtraFilter(true);
       }
 
   },[presentationTab]);
@@ -142,7 +158,7 @@ const PresentationListPage = () => {
             ]}
           />
 
-          {/* <FilterBar onSearch={handleSearch}/> */}
+      
 
           <Tabs
             value={presentationTab}
@@ -155,9 +171,11 @@ const PresentationListPage = () => {
             <Tab label="Semester Off" />
             <Tab label="Not Submitted" />
             <Tab label="Action Required" />
+            <Tab label="All Presentaion" />
           </Tabs>
-          
+          {extraFilter && (<FilterBar onSearch={handleSearch}/>)}
           <PagenationTable
+            num={num}
             endpoint={location}
             filters={filters}
             enableApproval={enableApproval}
