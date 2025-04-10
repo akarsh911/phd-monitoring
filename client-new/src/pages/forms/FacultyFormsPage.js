@@ -17,10 +17,10 @@ const FacultyFormsPage = () => {
 
     useEffect(() => {
         setForms([
-            // {
-            //     form_type: "supervisor-allocation",
-            //     form_name: "Supervisor Allocation",
-            // },
+            {
+                form_type: "supervisor-allocation",
+                form_name: "Supervisor Allocation",
+            },
             {
                 form_type: "status-change",
                 form_name: "Status Change",
@@ -46,10 +46,10 @@ const FacultyFormsPage = () => {
                 form_name: "Synopsis Submission",
             },
                
-            // {
-            //     form_type: "supervisor-change",
-            //     form_name: "Supervisor Change",
-            // },
+            {
+                form_type: "supervisor-change",
+                form_name: "Supervisor Change",
+            },
             {
                 form_type: "list-of-examiners",
                 form_name: "List of Examiners",
