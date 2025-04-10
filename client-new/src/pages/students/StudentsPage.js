@@ -41,21 +41,21 @@ const StudentsPage = () => {
             endpoint={location.pathname}
             filters={filter}
             enableApproval={false}
-            customOpenForm={handleOpenForm}
-            extraTopbarComponents={
-              <CustomButton
-                text="Add Student +"
-                onClick={() => handleOpenForm()}
-              />
-            }
-            actions={[
-                {
-                    icon: <i class="fa-solid fa-pen-to-square"></i>,
-                    tooltip: "Edit",
-                    onClick: (studentData) => handleOpenForm(studentData),
-                },
+            // customOpenForm={handleOpenForm}
+            // extraTopbarComponents={
+            //   <CustomButton
+            //     text="Add Student +"
+            //     onClick={() => handleOpenForm()}
+            //   />
+            // }
+            // actions={[
+            //     {
+            //         icon: <i class="fa-solid fa-pen-to-square"></i>,
+            //         tooltip: "Edit",
+            //         onClick: (studentData) => handleOpenForm(studentData),
+            //     },
            
-            ]}
+            // ]}
           />
 
           <CustomModal

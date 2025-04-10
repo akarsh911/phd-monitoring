@@ -84,7 +84,7 @@ const SemesterStatsCard = ({semesterName=null}) => {
             end_date: editForm.end_date,
             notification: editForm.notification,
           };
-          await customFetch(baseURL + "/semester", "PUT", payload);
+          await customFetch(baseURL + "/semester", "POST", payload);
           setOpenEditModal(false);
           fetchSemesterStats();
         } catch (err) {
@@ -170,7 +170,7 @@ const SemesterStatsCard = ({semesterName=null}) => {
                     label="Period of Report"
                     options={reportPeriods}
                     onChange={(value) =>
-                      setBody((prev) => ({ ...prev, period_of_report: value }))
+                      setEditForm((prev) => ({ ...prev, period_of_report: value }))
                     }
                   />,
                 ]}
@@ -218,7 +218,7 @@ const SemesterStatsCard = ({semesterName=null}) => {
                     label="Period of Report"
                     options={reportPeriods}
                     onChange={(value) =>
-                      setBody((prev) => ({ ...prev, period_of_report: value }))
+                      setCreateForm((prev) => ({ ...prev, semester_name: value }))
                     }
                   />,
                 ]}
