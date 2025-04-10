@@ -43,6 +43,7 @@ const FormListPage = () => {
                         endpoint={location.pathname}
                         filters={filters}
                         enableApproval={role !== "faculty" && role !== "admin" }
+                        enableSelect={role !== "faculty" && role !== "admin"}
                         />                 
                     </>): <FormList />}
                     

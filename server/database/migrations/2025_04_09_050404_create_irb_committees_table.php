@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateIrbCommitteesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,15 +12,17 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('irb_committees', function (Blueprint $table) {
-            $table->increments('id');
-            $table->primary('id');
-            $table->integer('faculty_id')->unsigned()->index();
-            $table->foreign('faculty_id')->references('faculty_code')->on('faculty')->onDelete('cascade');
-            $table->integer('student_id')->unsigned()->index();
-            $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
-            $table->unique(['faculty_id', 'student_id']);
-            $table->enum('type',['outside','inside'])->default('outside');
+            $table->id();
+
+            $table->unsignedBigInteger('student_id');
+            $table->string('type'); // 'inside' or 'outside'
+            $table->unsignedBigInteger('member_id');
+            $table->string('member_type'); // for morphTo relation (Faculty::class or OutsideExpert::class)
+
             $table->timestamps();
+
+            // Assuming 'roll_no' is the primary key in students table
+            $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
         });
     }
 
@@ -31,4 +33,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('irb_committees');
     }
-};
+}
