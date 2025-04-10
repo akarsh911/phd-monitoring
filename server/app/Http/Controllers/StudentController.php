@@ -43,7 +43,7 @@ class StudentController extends Controller {
                 'address' => 'nullable|string',
                 'current_status' => 'required|string',
                 'overall_progress' => 'nullable|decimal:0,3',
-                'cgpa' => 'required|decimal:0,3'
+                'cgpa' => 'nullable|decimal:0,3'
                
             ]
         );

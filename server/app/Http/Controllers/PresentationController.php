@@ -464,7 +464,7 @@ class PresentationController extends Controller
         }
     }
 
-    public function submit(Request $request, $form_id)
+    public function submit(Request $request, $semester_id=null,$form_id)
     {
         $user = Auth::user();
         $role = $user->current_role;
@@ -506,11 +506,11 @@ class PresentationController extends Controller
         ]);
         $request->merge(['approval' => true]);
         foreach ($request->form_ids as $form_id) {
-            $this->submit($request, $form_id);
+            $this->submit($request,null, $form_id);
         }
         return response()->json(['message' => 'Forms submitted successfully'], 200);
     }
-    public function linkPublication(Request $request, $form_id)
+    public function linkPublication(Request $request,$semester_id=null, $form_id)
     {
         try {
             $user = Auth::user();
@@ -571,7 +571,7 @@ class PresentationController extends Controller
         }
     }
 
-    public function unlinkPublication(Request $request, $form_id)
+    public function unlinkPublication(Request $request,$semester_id=null, $form_id)
     {
         $user = Auth::user();
         $role = $user->current_role;
