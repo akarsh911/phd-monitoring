@@ -183,10 +183,17 @@ const SemesterStatsCard = ({ semesterName = null,setFilters=null}) => {
             </>
           )}
           {(role === "admin" || role === "dordc") && (
+            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", width: "100%" }}>
+             <div style={{ flex: 1, minWidth: "250px" }}>
+             <CustomButton
+               onClick={() => setFiltersEnabled(prev => !prev)}
+               text={filtersEnabled ? "Disable Advanced Filters" : "Enable Advanced Filters"}
+               fullWidth
+             />
+           </div>
             <div>
               {isInSemester || isBeforeSemester ? (
-                // <button className="button" onClick={() => setOpenEditModal(true)}>Edit Deadline</button>
-                <button
+                 <button
                   className="button"
                   onClick={() => setOpenEditModal(true)}
                 >
@@ -200,6 +207,7 @@ const SemesterStatsCard = ({ semesterName = null,setFilters=null}) => {
                   Create New Evaluation Semester
                 </button>
               )}
+            </div>
             </div>
           )}
 

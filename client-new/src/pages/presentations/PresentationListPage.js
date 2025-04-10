@@ -17,13 +17,7 @@ import { useParams } from "react-router-dom";
 const PresentationListPage = () => {
  
 
-  const [filters, setFilters] = useState({
-    mandatory_filter: [
-      {
-        key: "action",
-        value: 1,
-      },
-    ]});
+  const [filters, setFilters] = useState({});
   const [extraFilter, setExtraFilter] = useState(false);
   const [location, setLocation] = useState(window.location.pathname);
    const [num, setNum] = useState(0);
@@ -38,6 +32,15 @@ const PresentationListPage = () => {
  useEffect(() => {
   if(role==="student"){
     setFilters({});
+  }
+  else{
+    setFilters({
+      mandatory_filter: [
+        {
+          key: "action",
+          value: 1,
+        },
+      ]})
   }
  },[]);
   useEffect(() => {
