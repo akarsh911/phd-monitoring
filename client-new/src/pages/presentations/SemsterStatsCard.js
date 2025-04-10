@@ -159,7 +159,8 @@ const SemesterStatsCard = ({ semesterName = null }) => {
             <strong>End Date:</strong> {new Date(end_date).toLocaleDateString()}
           </div>
           {(role === "admin" ||
-            role === "hod " ||
+            role === "hod" ||
+            role === "dordc" ||
             role === "phd_coordinator") && (
             <>
               <div className="stat-item">
@@ -173,7 +174,7 @@ const SemesterStatsCard = ({ semesterName = null }) => {
               </div>
             </>
           )}
-          {(role === "admin" || role === "dordc ") && (
+          {(role === "admin" || role === "dordc") && (
             <div>
               {isInSemester || isBeforeSemester ? (
                 // <button className="button" onClick={() => setOpenEditModal(true)}>Edit Deadline</button>
@@ -234,7 +235,7 @@ const SemesterStatsCard = ({ semesterName = null }) => {
         </div>
       </div>
 
-      {(role === "admin" || role === "dordc ") && (
+      {(role === "admin" || role == "dordc") && (
         <CustomModal
           isOpen={openEditModal}
           onClose={() => setOpenEditModal(false)}
@@ -283,7 +284,7 @@ const SemesterStatsCard = ({ semesterName = null }) => {
         </CustomModal>
       )}
 
-      {(role === "admin" || role === "dordc ") && (
+      {(role === "admin" || role == "dordc") && (
         <CustomModal
           isOpen={openCreateModal}
           onClose={() => setOpenCreateModal(false)}
