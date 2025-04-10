@@ -26,7 +26,7 @@ const Student = ({ formData }) => {
       cgpa: formData.cgpa,
       address: formData.address,
       gender: formData.gender,
-      title: title,
+      title: formData.phd_title,
       objectives: formData.objectives?formData.objectives:[],
     });
     setIsLoaded(true);
