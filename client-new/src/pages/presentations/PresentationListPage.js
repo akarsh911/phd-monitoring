@@ -38,6 +38,7 @@ const PresentationListPage = () => {
 
   useEffect(() => {
     setNum(num + 1);
+    setLocation(window.location.pathname);
       if(presentationTab === 0) {
         setFilters({
           mandatory_filter: [
@@ -51,6 +52,7 @@ const PresentationListPage = () => {
       else if(presentationTab === 1) {
         //new
           setEnableApproval(false);
+          setLocation(window.location.pathname+"/not-scheduled");
                                                      
       }
       else if(presentationTab === 2) {

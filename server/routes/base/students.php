@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SemesterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -10,7 +11,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
 
 Route::get('/', [StudentController::class, 'list'])->middleware('auth:sanctum');
-  
+ 
 
 Route::post('/add', [StudentController::class, 'add'])->middleware('auth:sanctum');
 Route::get('/filters', [StudentController::class, 'listFilters'])->middleware('auth:sanctum');

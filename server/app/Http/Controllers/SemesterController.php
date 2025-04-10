@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class SemesterController extends Controller
 {
     use GeneralFormList;
-    public function getRecent(Request $request, $semester_id=null)
+    public function getRecent(Request $request, $semester_id = null)
     {
         $user = Auth::user();
         $curr_role = $user->role->role;
@@ -21,6 +21,7 @@ class SemesterController extends Controller
             $curr_role != 'dordc' &&
             $curr_role != 'hod' &&
             $curr_role != 'admin'
+            && $curr_role != 'phd_coordinator'
         ) {
             if ($semester_id) {
                 $semesters = Semester::where('semester_name', $semester_id)->first();
@@ -85,12 +86,83 @@ class SemesterController extends Controller
                 'message' => 'You do not have permission to create a semester.',
             ], 403);
         }
-        
+
         $semester = Semester::createOrUpdateFromCode($request->semester_name, $request->start_date, $request->end_date);
 
         return response()->json([
             'status' => 'success',
             'data' => $semester,
+        ]);
+    }
+
+    public function notScheduled(Request $request, $semester_id = null)
+    {
+        $user = Auth::user();
+        $curr_role = $user->role->role;
+        if ($semester_id) {
+            $semesters = Semester::where('semester_name', $semester_id)->first();
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No semesters found.',
+            ], 404);
+        }
+        switch ($curr_role) {
+            case 'hod':
+            case 'phd_coordinator':
+                return $this->ListNotScheduled($request, $semesters, true);
+                // case 'faculty':
+                //     $dep_id = $user->faculty->department->id;
+                //     return response()->json($this->ListNotScheduledDepartment($request,$semesters, $dep_id));
+            case 'dordc':
+            case 'admin':
+                return $this->ListNotScheduled($request, $semesters);
+            default:
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'You do not have permission to view this semester.',
+                ], 403);
+        }
+    }
+    private function ListNotScheduled($request, $semesters, $dep_id = null)
+    {
+        $user = Auth::user();
+        $role = $user->role->role;
+
+        // Apply pagination
+        $perPage = $request->query('rows', 50); // default 10 per page
+        $page = $request->query('page', 1);         // default to page 1
+
+        $query = $semesters->unscheduledStudents();
+
+        // Optional: Add department filter
+        if ($dep_id) {
+            $dep_id = $user->faculty->department->id;
+            $query = $semesters->unscheduledStudents()
+                ->where('students.department_id', $dep_id);
+        }
+
+        $students = $query->paginate($perPage, ['*'], 'page', $page);
+
+        $result = $students->map(function ($student) {
+            return [
+                'name' => $student->user->name(),
+                'designation' => $student->designation ?? '-',
+                'email' => $student->user->email,
+                'phone' => $student->user->phone,
+                'department' => $student->department->short_name ?? '-',
+            ];
+        });
+
+        return response()->json([
+            'data' => $result,
+            'total' => $students->total(),
+            'per_page' => $students->perPage(),
+            'current_page' => $students->currentPage(),
+            'totalPages' => $students->lastPage(),
+            'role' => $role,
+            'fields' => ['name', 'designation', 'email', 'phone', 'department'],
+            'fieldsTitles' => ['Name', 'Designation', 'Email', 'Phone', 'Department'],
         ]);
     }
 }

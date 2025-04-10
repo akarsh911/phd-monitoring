@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PresentationController;
+use App\Http\Controllers\SemesterController;
 
 Route::middleware('auth:sanctum')->group(function () {
     //get semesters
@@ -20,6 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/semester/{semester_id}', [PresentationController::class, 'createForm']);
     Route::post('/semester/{semester_id}/bulk-schedule', [PresentationController::class, 'createMultipleForm']);
     Route::get('/semester/{semester_id}/filters', [PresentationController::class, 'listFilters']);
+    Route::get('/semester/{semester_id}/not-scheduled', [SemesterController::class, 'notScheduled'])->middleware('auth:sanctum');
+ 
 
     // Form with ID (view, submit, link/unlink)
     Route::get('/semester/{semester_id}/{form_id}', [PresentationController::class, 'loadForm']);
