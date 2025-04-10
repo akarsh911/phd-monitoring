@@ -4,7 +4,9 @@ use App\Http\Controllers\PresentationController;
 
 Route::middleware('auth:sanctum')->group(function () {
     //get semesters
+
     Route::get('/',[PresentationController::class, 'listSemesterPresentation']);
+    Route::post('/', [PresentationController::class, 'createForm']);
     Route::get('/semester', [PresentationController::class, 'listSemesterPresentation']);
 
     // Filters
@@ -12,6 +14,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/form/filters', [PresentationController::class, 'listFilters']);
     
     // Bulk Scheduling
+
     Route::get('/semester/{semester_id}', [PresentationController::class, 'listForm']);
     Route::post('/semester/{semester_id}', [PresentationController::class, 'createForm']);
     Route::post('/semester/{semester_id}/bulk-schedule', [PresentationController::class, 'createMultipleForm']);
