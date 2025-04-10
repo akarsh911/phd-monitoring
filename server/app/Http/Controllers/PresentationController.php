@@ -265,7 +265,7 @@ class PresentationController extends Controller
         $role = $user->current_role;
         $cur = $role->role;
 
-        if ($cur != 'student') {
+    
             $page = $request->input('page', 1);
             $perPage = $request->input('per_page', 10);
 
@@ -295,17 +295,9 @@ class PresentationController extends Controller
                 'fieldsTitles' => ["Semester Name", "Start Date", "End Date", "Semester", "Year"],
                 'role' => $role->role,
             ]);
-        }
+        
 
-        return response()->json([
-            'data' => [],
-            'page' => 1,
-            'total' => 0,
-            'totalPages' => 0,
-            'fields' => [],
-            'fieldsTitles' => [],
-            'role' => $role->role,
-        ]);
+      
     }
 
 
