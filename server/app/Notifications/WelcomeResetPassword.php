@@ -25,10 +25,8 @@ class WelcomeResetPassword extends Notification
 
     protected function resetUrl()
     {
-        return url(config('app.frontend_url') . route('password.reset', [
-            'token' => $this->token,
-            'email' => $this->user->email,
-        ], false));        
+        return url(config('app.frontend_url') . '/reset-password?token=' . $this->token . '&email=' . urlencode($this->user->email));
+       
     }
 
     public function toMail($notifiable)
