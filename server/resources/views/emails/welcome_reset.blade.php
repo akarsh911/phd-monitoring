@@ -53,7 +53,11 @@
         }
         .button:hover {
             background-color: #792c2c;
+            color: #ffffff
         }
+        .ii a[href] {
+    color: white;
+}
         @media (max-width: 600px) {
             .email-container {
                 padding: 20px;
@@ -64,6 +68,7 @@
             .button {
                 padding: 12px 20px;
                 font-size: 15px;
+                color: #ffffff;
             }
         }
     </style>
