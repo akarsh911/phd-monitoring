@@ -669,6 +669,7 @@ class PresentationController extends Controller
                 }
 
                 if ($request->approval) {
+                    $formInstance->addHistoryEntry("Supervisor Submitted", $user->name(),$request->comments);
                     PresentationReview::where('presentation_id', $formInstance->id)->where('is_supervisor', 1)->where('faculty_id', $user->faculty->faculty_code)
                         ->update(['progress' => 'satisfactory', 'review_status' => 'completed', 'comments' => $request->comments]);
                     $approvals = PresentationReview::where('presentation_id', $formInstance->id)->where('is_supervisor', 1)->where('review_status', 'pending')->get();
@@ -711,6 +712,8 @@ class PresentationController extends Controller
                 }
 
                 if ($request->approval) {
+                    $formInstance->addHistoryEntry("Doctoral Committee Submitted", $user->name(),$request->comments);
+               
                     PresentationReview::where('presentation_id', $formInstance->id)->where('faculty_id', $user->faculty->faculty_code)
                         ->update(['progress' => 'satisfactory', 'review_status' => 'completed', 'comments' => $request->comments]);
                 }
@@ -753,13 +756,6 @@ class PresentationController extends Controller
             'dordc',
             'hod',
             'dra',
-            function ($formInstance) use ($request, $user) {
-                if ($request->approval) {
-                    $formInstance->completion = 'complete';
-                    $formInstance->status = 'approved';
-                    $formInstance->addHistoryEntry("Thesis approved by DORDC", $user->name());
-                }
-            }
         );
     }
 
@@ -775,6 +771,8 @@ class PresentationController extends Controller
             'dordc',
             'complete',
             function ($formInstance) use ($request, $user) {
+                $formInstance->completion = 'complete';
+                $formInstance->status = 'approved';
                 $formInstance->student->overall_progress = $formInstance->total_progress;
                 $formInstance->student->save();
                 $formInstance->addHistoryEntry("Presentation marked as completed by DRA", $user->name());
