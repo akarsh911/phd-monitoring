@@ -206,7 +206,7 @@ const SemesterStatsCard = ({ semesterName = null }) => {
                 isOpen={open}
                 onClose={closeModal}
                 title={"Schedule Presentation"}
-                minHeight="200px"
+                minHeight="300px"
                 maxHeight="600px"
                 minWidth="650px"
                 maxWidth="700px"
@@ -238,8 +238,10 @@ const SemesterStatsCard = ({ semesterName = null }) => {
       {(role === "admin" || role == "dordc") && (
         <CustomModal
           isOpen={openEditModal}
-          onClose={() => setOpenEditModal(false)}
+          onClose={() => {setOpenEditModal(false);window.Location.reload();}}
           title="Edit Semester Deadline"
+          minWidth="300px"
+          minHeight="300px"
         >
           <GridContainer
             elements={[
@@ -252,7 +254,7 @@ const SemesterStatsCard = ({ semesterName = null }) => {
             space={2}
           />
 
-          <label>Start Date:</label>
+          <label>Evaluation Start Date:</label>
           <DatePicker
             selected={editForm.start_date}
             readOnly
@@ -260,7 +262,7 @@ const SemesterStatsCard = ({ semesterName = null }) => {
             className="field-readonly"
           />
 
-          <label>End Date:</label>
+          <label>Evaluation End Date:</label>
           <DatePicker
             selected={editForm.end_date}
             onChange={(date) => setEditForm({ ...editForm, end_date: date })}
@@ -287,8 +289,10 @@ const SemesterStatsCard = ({ semesterName = null }) => {
       {(role === "admin" || role == "dordc") && (
         <CustomModal
           isOpen={openCreateModal}
-          onClose={() => setOpenCreateModal(false)}
+          onClose={() => {setOpenCreateModal(false);window.Location.reload();}}
           title="Create New Semester Presentation"
+                minWidth="300px"
+          minHeight="300px"
         >
           <GridContainer
             elements={[
@@ -303,7 +307,7 @@ const SemesterStatsCard = ({ semesterName = null }) => {
             space={2}
           />
 
-          <label>Start Date:</label>
+          <label>Evaluation Start Date:</label>
           <DatePicker
             selected={createForm.start_date}
             onChange={(date) =>
@@ -312,7 +316,7 @@ const SemesterStatsCard = ({ semesterName = null }) => {
             className="field-editable"
           />
 
-          <label>End Date:</label>
+          <label>Evaluation End Date:</label>
           <DatePicker
             selected={createForm.end_date}
             onChange={(date) =>

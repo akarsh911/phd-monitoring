@@ -206,6 +206,7 @@ class PresentationController extends Controller
                 'period_of_report' => 'required|string',
                 'guest_emails' => 'nullable|array',
                 'guest_emails.*' => 'email',
+                'venue' => 'nullable|string',
             ]);
             $validator = $this->validateSemesterCode($request->period_of_report);
             if (!$validator['valid']) {
@@ -238,6 +239,7 @@ class PresentationController extends Controller
                 'semester_id' => $validator['semester_id'],
                 'steps' => ['student', 'faculty', 'doctoral', 'hod', 'dra', 'dordc', 'complete'],
             ]);
+            if(!$request->venue){
             $calendarResult = PresentationService::scheduleCalendarEvent(
                 "PhD Presentation - " . $student->user->name(),
                 "Please Join for PhD Presentation of " . $student->user->name() . " scheduled for term " . $request->period_of_report . " scheduled by " . $user->first_name . " of Department " . $user->faculty->department->name,
@@ -245,7 +247,11 @@ class PresentationController extends Controller
                 $request->time,
                 $emails ?? []
             );
-            $form->venue = $calendarResult['event_link'];
+            $form->venue = $calendarResult['meet_link'];
+        }
+            else{
+                $form->venue = $request->venue;
+            }
             $form->save();
             $form->addHistoryEntry("Presentation Scheduled by Supervisor", $user->first_name);
             return response()->json($form);

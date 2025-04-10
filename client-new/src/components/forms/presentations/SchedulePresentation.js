@@ -127,7 +127,19 @@ const SchedulePresentation = ({ close, semester }) => {
                   setBody((prev) => ({ ...prev, time: value }))
                 }
               />,
+             
             ]}
+          />
+          <GridContainer
+            elements={[
+              <InputField
+              label={"Venue (Leave Blank to Auto Schedule Meet)"}
+              onChange={(value) =>
+                setBody((prev) => ({ ...prev, venue: value }))
+              }
+              />,
+            ]}
+            space={2}
           />
           <GridContainer
             elements={[
