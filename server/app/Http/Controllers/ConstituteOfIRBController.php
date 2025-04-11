@@ -483,11 +483,14 @@ class ConstituteOfIRBController extends Controller
                         'cognate_expert' => $cognateExpertId,
                         'completion'=>'complete',
                     ]);
+                    $student=$formInstance->student;
+                    $student->phd_title= $formInstance->phd_title;
+                    $student->save();
                     $formInstance->save();
                     $forms = [
                         [
                             'form_type' => 'irb-submission',
-                            'form_name' => 'IRB Constitution',
+                            'form_name' => 'Revised IRB',
                             'max_count' => 1,
                             'stage' => 'student',
                         ],

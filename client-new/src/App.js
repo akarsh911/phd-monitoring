@@ -53,7 +53,7 @@ const AppContent = () => {
       />
       <Router>
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<LoginPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
           <Route path="/reset-password" element={<ResetPasswordPage/>} />
@@ -71,7 +71,7 @@ const AppContent = () => {
           <Route path="/presentation" element={<PresentationSemester/>} /> 
           <Route path="/presentation/semester" element={<PresentationSemester/>} /> 
 
-          <Route path="/presentation/form" element={<PresentationListPage/>} />  
+          {/* <Route path="/presentation/form" element={<PresentationListPage/>} />   */}
           
           <Route path="/presentation/semester/:semester_id" element={<PresentationListPage/>} />  
           <Route path="/presentation/semester/:semester_id/:id" element={<Presentation/>} />  

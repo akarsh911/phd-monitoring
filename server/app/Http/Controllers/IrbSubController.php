@@ -19,6 +19,7 @@ use App\Models\PHDObjective;
 use App\Models\User;
 use App\Services\EmailService;
 use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\Log;
 
 class IrbSubController extends Controller
 {
@@ -314,6 +315,7 @@ class IrbSubController extends Controller
                     'model_id' => $formInstance->id,
                 ]);
                 $link= storage_path($formInstance->revised_irb_pdf);
+                Log::debug($link);
                 $success = $this->emailService->sendEmail(
                     $outsideExpert->email,
                     'approval',  // Use the Blade template 'emails/approval.blade.php'
@@ -329,11 +331,13 @@ class IrbSubController extends Controller
                     "IRB Submission Approval Request" ,
                     [$link]
                 );
-            
+                Log::debug($link);
+                Log::debug($success);
                 if ($success) {
-                    return response()->json(['success' => true, 'message' => 'Approval email sent successfully.']);
+                    // return response()->json(['success' => true, 'message' => 'Approval email sent successfully.']);
                 } else {
-                    return response()->json(['success' => false, 'message' => 'Failed to send approval email.']);
+                    Log::error('Error sending email to Outside Member');
+                    throw new \Exception('Error sending email to Outside Member',201);
                 }
 
             }
