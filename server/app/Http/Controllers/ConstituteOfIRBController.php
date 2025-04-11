@@ -487,7 +487,7 @@ class ConstituteOfIRBController extends Controller
                     $forms = [
                         [
                             'form_type' => 'irb-submission',
-                            'form_name' => 'IRB Submission',
+                            'form_name' => 'IRB Constitution',
                             'max_count' => 1,
                             'stage' => 'student',
                         ],

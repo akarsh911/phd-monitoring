@@ -242,37 +242,37 @@ class SupervisorAllocationController extends Controller
                     $student = $formInstance->student;
                     $forms = [
                         [
-                            'form_type' => 'irb-constitution',
-                            'form_name' => 'Constitute of IRB',
-                            'max_count' => 1,
-                            'stage' => 'student',
-                        ],
-                        [
                             'form_type' => 'supervisor-change',
                             'form_name' => 'Supervisor Change',
                             'max_count' => 10,
                             'stage' => 'student',
                         ],
                         [
+                            'form_type' => 'irb-constitution',
+                            'form_name' => 'IRB Constitution',
+                            'max_count' => 1,
+                            'stage' => 'student',
+                        ],
+                       
+                        [
                             'form_type' => 'status-change',
                             'form_name' => 'Change of Status',
                             'max_count' => 2,
                             'stage' => 'student',
-                        ],
-                        [
-                            'form_type' => 'semester-off',
-                            'form_name' => 'Semester Off',
-                            'max_count' => 10,
-                            'stage' => 'student',
-                        ],
-                        [
-                            'form_type' => 'list-of-examiners',
-                            'form_name' => 'List of Examiners',
-                            'student_available' => false,
-                            'supervisor_available' => true,
-                            'max_count' => 1,
-                            'stage' => 'supervisor',
-                        ],
+                        ],              
+                        // [
+                        //     'form_type' => 'list-of-examiners',
+                        //     'form_name' => 'List of Examiners',
+                        //     'student_available' => false,
+                        //     'supervisor_available' => true,
+                        //     'max_count' => 1,
+                        //     'stage' => 'supervisor',
+                        // ], [
+                        //     'form_type' => 'semester-off',
+                        //     'form_name' => 'Semester Off',
+                        //     'max_count' => 10,
+                        //     'stage' => 'student',
+                        // ],
                     ];
 
                     foreach ($forms as $form) {
