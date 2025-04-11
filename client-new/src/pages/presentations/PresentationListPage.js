@@ -20,23 +20,41 @@ const PresentationListPage = () => {
   const [num, setNum] = useState(0);
   const [presentationTab, setPresentationTab] = useState(0);
   const role = localStorage.getItem("userRole") || "student";
-  const [filters, setFilters] = useState(role==="student"?{}:{
-    mandatory_filter: [
-      {
-        key: "action",
-        value: 1,
-      },
-    ],
-  });
+  // const [filters, setFilters] = useState(role==="student"?{}:{
+  //   mandatory_filter: [
+  //     {
+  //       key: "action",
+  //       value: 1,
+  //     },
+  //   ],
+  // });
 
   const handleSearch = (query) => {
     setFilters(query);
   };
 
   const [enableApproval, setEnableApproval] = useState(false);
-
+  const getInitialFilters = () => {
+    const role = localStorage.getItem("userRole") || "student";
+    if (role === "student") {
+      return {};
+    } else {
+      return {
+        mandatory_filter: [
+          {
+            key: "action",
+            value: 1,
+          },
+        ],
+      };
+    }
+  };
+  
+  const [filters, setFilters] = useState(getInitialFilters);
+  
   useEffect(() => {
     setNum(num + 1);
+    if(role==='student') return;
     setLocation(window.location.pathname);
     if (presentationTab === 0) {
       setFilters({

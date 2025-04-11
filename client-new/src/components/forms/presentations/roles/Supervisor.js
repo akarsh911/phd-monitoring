@@ -26,7 +26,7 @@ const Supervisor = ({ formData }) => {
       contact_hours: formData.contact_hours,
       current_progress: formData.current_progress,
       progress: formData.progress,
-      total_progress: formData.current_progress + formData.progress,
+      total_progress: formData.total_progress,
     });
     }
     else{
@@ -39,7 +39,7 @@ const Supervisor = ({ formData }) => {
         total_progress: formData.total_progress,
       });
     }
-    setTotalProgress(formData.current_progress + formData.progress);
+    setTotalProgress(formData.total_progress);
     setIsLoaded(true);
   }, [formData]);
 
@@ -138,7 +138,8 @@ const Supervisor = ({ formData }) => {
                     ]}
                     space={2}
                   />
-                  <GridContainer 
+             
+                  {formData.teaching_work === "None" ? (     <GridContainer 
                     elements={[
                       <InputField
                       label={"% Attendence"}
@@ -151,19 +152,24 @@ const Supervisor = ({ formData }) => {
                         }));
                       }}
                     />,
-                    <InputField
-                    label={"No. of Contact Hours"}
-                    initialValue={formData.contact_hours}
-                    isLocked={lock}
-                    onChange={(updated) => {
-                      setBody((prev) => ({
-                        ...prev,
-                        contact_hours: updated,
-                      }));
-                    }}
-                  />,
+                  
                     ]}
-                  />
+                  />):( <GridContainer
+                    elements={[
+                      <InputField
+                      label={"No. of Contact Hours"}
+                      initialValue={formData.contact_hours}
+                      isLocked={lock}
+                      onChange={(updated) => {
+                        setBody((prev) => ({
+                          ...prev,
+                          contact_hours: updated,
+                        }));
+                      }}
+                    />,
+                    ]}
+                    />)}
+                 
                 </>
            
             </>
