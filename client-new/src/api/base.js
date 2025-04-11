@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 
 // In-memory cache store with timestamp
 const cacheStore = new Map();
-const CACHE_DURATION = 2 * 60 * 1000; // 5 minutes in milliseconds
+const CACHE_DURATION = 0 * 60 * 1000; // 5 minutes in milliseconds
 
 export const customFetch = async (
   link,

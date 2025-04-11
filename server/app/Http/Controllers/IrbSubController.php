@@ -228,17 +228,18 @@ class IrbSubController extends Controller
                     'stage' => 'student',
                 ],
                 [
-                    'form_type' => 'thesis-submission',
-                    'form_name' => 'Thesis Submission',
-                    'max_count' => 1,
-                    'stage' => 'student',
-                ],
-                [
                     'form_type' => 'thesis-extension',
                     'form_name' => 'Thesis Extension',
                     'max_count' => 10,
                     'stage' => 'student',
                 ],
+                [
+                    'form_type' => 'thesis-submission',
+                    'form_name' => 'Thesis Submission',
+                    'max_count' => 1,
+                    'stage' => 'student',
+                ],
+               
             ];
             $student = $formInstance->student;
             foreach ($forms as $form) {
