@@ -113,7 +113,7 @@ class PresentationController extends Controller
             $mandatoryFilters[] = [
                 'key' => 'missed',
                 'op' => '=',
-                'value' => 0
+                'value' => 1
             ];
             $titles = ["Name", "Roll No", "Date", "Time", "Meet Link", "Supervisors"];
             $fields = ["name", "roll_no", "date", "time", "venue", "supervisors"];
