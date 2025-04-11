@@ -131,7 +131,7 @@ const Supervisor = ({ formData }) => {
                     elements={[
                       <InputField
                         label={"Total Quantum Progress Percentage"}
-                        initialValue={totalProgress}
+                        initialValue={formData.total_progress}
                         isLocked={true}
                         
                       />,

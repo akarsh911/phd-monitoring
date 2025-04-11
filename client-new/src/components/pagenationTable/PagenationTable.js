@@ -83,7 +83,7 @@ const PagenationTable = ({
     }
 
     const url = `${baseURL}${endpoint}/bulk`;
-    customFetch(url, "POST", { form_ids: selectedIds })
+    customFetch(url, "POST", { form_ids: selectedIds,approval:true })
       .then((data) => {
         if (data.success) {
           toast.success("Selected forms approved successfully.");
