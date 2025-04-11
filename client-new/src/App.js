@@ -25,6 +25,7 @@ import FacultyPage from './pages/faculty/FacultyPage';
 import DepartmentPage from './pages/department/Department';
 import AllNotificationsPage from './components/notificationBox/AllNotificationsPage';
 import PresentationSemester from './pages/presentations/PresentationSemester';
+import Team from './pages/team/Team';
 
 
 const App = () => {
@@ -57,6 +58,7 @@ const AppContent = () => {
           <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
           <Route path="/reset-password" element={<ResetPasswordPage/>} />
           <Route path="/home" element={<Dashboard/>} />
+          <Route path="/team" element={<Team/>} />
           {role==='student' && (
             <>
             <Route path="/forms" element={<FormsPage/>} />
