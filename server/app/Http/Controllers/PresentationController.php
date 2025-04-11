@@ -110,6 +110,11 @@ class PresentationController extends Controller
                 'op' => '=',
                 'value' => 0
             ];
+            $mandatoryFilters[] = [
+                'key' => 'missed',
+                'op' => '=',
+                'value' => 0
+            ];
             $titles = ["Name", "Roll No", "Date", "Time", "Meet Link", "Supervisors"];
             $fields = ["name", "roll_no", "date", "time", "venue", "supervisors"];
         }
@@ -623,7 +628,7 @@ class PresentationController extends Controller
                 // $formInstance->no_paper_conference=$request->no_paper_conference;
 
                 $formInstance->presentation_pdf = $this->saveUploadedFile($request->file('presentation_pdf'), 'presentation_pdf', $user->student->roll_no);
-
+                $formInstance->missed=0;
                 $sups = $user->student->supervisors;
                 foreach ($sups as $sup) {
                     PresentationReview::create([
