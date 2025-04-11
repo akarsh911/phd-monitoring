@@ -84,6 +84,54 @@ const Student = ({ formData }) => {
               />,
             ]}
           />
+          
+          <GridContainer
+            elements={[
+              <InputField
+                label={"Date of Admission"}
+                initialValue={formatDate(formData.date_of_registration)}
+                isLocked={true}
+              />,
+              <InputField
+                label={"Department"}
+                initialValue={formData.department}
+                isLocked={true}
+              />,
+             
+            ]}
+          />
+
+          <GridContainer
+            elements={[
+              <InputField
+                label={"Chairman, Board of Studies of the Concerned Department"}
+                initialValue={formData.chairman.name}
+                isLocked={true}
+              />,
+            ]}
+            space={2}
+          />
+
+          <GridContainer
+            elements={formData.supervisors?.map((supervisor, index) => (
+              <InputField
+                label={`Supervisor ${index + 1}`}
+                initialValue={supervisor?.name}
+                isLocked={true}
+              />
+            ))}
+          />
+          <GridContainer
+            elements={[
+             
+              <InputField
+                label={"CGPA"}
+                initialValue={formData.cgpa}
+                isLocked={lock}
+                onChange={onUpdateCGPA}
+              />
+            ]}
+          />
            <GridContainer
             elements={[
               <InputField
@@ -110,47 +158,6 @@ const Student = ({ formData }) => {
               />,
             ]}
             space={2}
-          />
-          <GridContainer
-            elements={[
-              <InputField
-                label={"Date of Admission"}
-                initialValue={formatDate(formData.date_of_registration)}
-                isLocked={true}
-              />,
-              <InputField
-                label={"Department"}
-                initialValue={formData.department}
-                isLocked={true}
-              />,
-              <InputField
-                label={"CGPA"}
-                initialValue={formData.cgpa}
-                isLocked={lock}
-                onChange={onUpdateCGPA}
-              />,
-            ]}
-          />
-
-          <GridContainer
-            elements={[
-              <InputField
-                label={"Chairman, Board of Studies of the Concerned Department"}
-                initialValue={formData.chairman.name}
-                isLocked={true}
-              />,
-            ]}
-            space={2}
-          />
-
-          <GridContainer
-            elements={formData.supervisors?.map((supervisor, index) => (
-              <InputField
-                label={`Supervisor ${index + 1}`}
-                initialValue={supervisor?.name}
-                isLocked={true}
-              />
-            ))}
           />
 
           <GridContainer
