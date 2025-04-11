@@ -74,7 +74,7 @@ class ListOfExaminersController extends Controller
             'supervisor_lock'=>0,
             'name' => $user->first_name . ' ' . $user->last_name
         ];
-        return $this->createForms(ListOfExaminers::class, $data);
+        return $this->createForms(ListOfExaminers::class, $data,null,true);
     }
     public function bulkSubmit(Request $request)
     {

@@ -7,7 +7,7 @@ use App\Models\Forms;
 trait GeneralFormCreate
 {
     use GeneralFormSubmitter;
-    private function createForms($model, $data,callable $callback = null)
+    private function createForms($model, $data,callable $callback = null,$stage=null)
     {
         try{
         $form = new $model(
@@ -19,6 +19,9 @@ trait GeneralFormCreate
                 'steps'=>$data['steps']
             ]
         );
+        if($stage){
+            $form->supervisor_lock = false;
+        }
         $generalForm= Forms::where('form_type',$this->getFormType($model))->where('student_id',$data['roll_no'])->first();
         $field=$data['role'].'_available';
         if(!$generalForm||$generalForm->$field== false){

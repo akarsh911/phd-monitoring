@@ -171,6 +171,9 @@ trait GeneralFormSubmitter
     {
 
         $link='/forms/' . $this->getFormType($model).'/'.$formInstance->id;
+        if($this->getFormType($model)=='presentation'){
+            $link='/presentation/semester/'.$formInstance->period_of_report.'/'.$formInstance->id;
+        }
         $this->formNotification($formInstance->student, $this->getFormType($model).' form for '.$formInstance->student?->user->name().' has been rejected', 'Form has been rejected',  $link, $previousLevel, true);
     
         if ($previousLevel == 'faculty') {
@@ -203,6 +206,9 @@ trait GeneralFormSubmitter
             $formInstance->maximum_step = $index > $formInstance->maximum_step ? $index : $formInstance->maximum_step;
         } else {
             $link='/forms/' . $this->getFormType($model).'/'.$formInstance->id;
+            if($this->getFormType($model)=='presentation'){
+                $link='/presentation/semester/'.$formInstance->period_of_report.'/'.$formInstance->id;
+            }
             $this->formNotification($formInstance->student, $this->getFormType($model).' form for '.$formInstance->student?->user?->name().' has pending action', 'Form has pending  action',  $link, $nextLevel, true);
             if ($nextLevel == 'faculty') {
                 $nextLevel = 'supervisor';

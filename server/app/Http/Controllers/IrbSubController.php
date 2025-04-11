@@ -65,7 +65,7 @@ class IrbSubController extends Controller
     {
         $user = Auth::user();
         $role = $user->current_role;
-        $steps=['student','faculty','hod','dordc','complete'];
+        $steps=['student','faculty','external','hod','dordc','complete'];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }

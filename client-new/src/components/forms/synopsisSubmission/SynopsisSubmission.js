@@ -3,6 +3,7 @@ import Student from "./roles/Student";
 import FormTitleBar from "../formTitleBar/FormTitleBar";
 import Recommendation from "../layouts/Recommendation";
 import Supervisor from "./roles/Supervisor";
+import RoleBasedWrapper from "../roleWrapper/RoleBasedWrapper";
 
 
 const SynopsisSubmission=({formData}) => {
@@ -11,6 +12,10 @@ const SynopsisSubmission=({formData}) => {
       <>
         <FormTitleBar formName={"Synopsis Submission"} formData={formData} />
         <div className="form-container">
+          <RoleBasedWrapper
+            roleHierarchy={formData.steps}
+            currentRole={formData.role}
+            >
           <Student formData={formData}/>
           <Supervisor formData={formData}/>
           <Recommendation
@@ -33,11 +38,7 @@ const SynopsisSubmission=({formData}) => {
             role="dordc"
             allowRejection={false}
           ></Recommendation>
-          <Recommendation
-            formData={formData}
-            role="director"
-            allowRejection={false}
-          ></Recommendation>
+          </RoleBasedWrapper>
         </div>
       </>
     );

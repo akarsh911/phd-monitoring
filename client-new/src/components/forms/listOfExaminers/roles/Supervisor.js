@@ -55,7 +55,7 @@ const ExaminerManager = ({
         <AddExaminer data={modalData} onSubmit={handleAddExaminer} />
       </CustomModal>
       {console.log(formData)}
-      {!formData.locks.supervisor && formData.role === 'supervisor' && (
+      {!formData.locks.supervisor && formData.role === 'faculty' && (
         <>
           <GridContainer
             elements={[
@@ -156,9 +156,10 @@ const Supervisor = ({ formData }) => {
         apiUrl={`${baseURL}/suggestions/examiner`}
         onAddExaminer={handleAddInternationalExaminer}
       />
+       {!formData.locks.supervisor && formData.role === 'faculty' && (
       <GridContainer
         elements={[<CustomButton text='Submit' onClick={submitExaminers} />]}
-      />
+      />)}
     </div>
   );
 };

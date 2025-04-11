@@ -36,8 +36,7 @@ class SynopsisSubmission extends Model
      */
     public function fullForm($user)
     {
-        $irbFormId = IrbSubForm::where('student_id', $this->student_id)->latest()->first()->id;
-        $publicationsQuery = Publication::where('student_id', $this->student_id)->where('form_type', 'synopsis')->where('form_id', $this->id);
+         $publicationsQuery = Publication::where('student_id', $this->student_id)->where('form_type', 'synopsis')->where('form_id', $this->id);
         $patents = Patent::where('student_id', $this->student_id)->where('form_type', 'synopsis')->where('form_id', $this->id)->get();
         $commonJSON = $this->fullCommonForm($user);
          $formData=array_merge($commonJSON, [
@@ -55,12 +54,9 @@ class SynopsisSubmission extends Model
             'revised_objectives' => $this->objectives->map(function ($objective) {
                 return $objective->objective;
             }),
-            'objectives' => IrbFormObjective::where('irb_form_id', $irbFormId)
-            ->where('type','revised')
-            ->get()
-            ->map(function ($objective) {
+            'objectives' => $this->student->objectives()?->where('type', 'revised')->get()->map(function ($objective) {
                 return $objective->objective;
-            }),
+            })->values(),
             'fathers_name'=>$this->student->fathers_name,
             'current_status'=>$this->student->current_status,
             'address'=>$this->student->user->address,

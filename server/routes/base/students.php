@@ -22,9 +22,9 @@ Route::prefix('{id}')->group(function () {
     Route::get('/forms', [UserController::class, 'listForms'])->middleware('auth:sanctum');
 
     Route::prefix('/forms')->group(function () {
-        Route::middleware('parseRollNumber')->group(function () {
+        // Route::middleware('parseRollNumber')->group(function () {
             require base_path('routes/base/forms.php');
-        });
+        // });
     });
       
     

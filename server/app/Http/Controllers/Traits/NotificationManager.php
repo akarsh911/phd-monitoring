@@ -24,6 +24,7 @@ trait NotificationManager
 
     public function formNotification($student, $title, $body, $link, $role, $email_req = false)
     {
+        
         switch ($role) {
             case 'faculty':
                 $this->sendSupervisorNotification($student, $title, $body, $link, $email_req);

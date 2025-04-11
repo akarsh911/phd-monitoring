@@ -242,6 +242,7 @@ class PresentationController extends Controller
                 'status' => 'pending',
                 'completion' => 'incomplete',
                 'semester_id' => $validator['semester_id'],
+                'total_progress'=> $student->overall_progress,
                 'steps' => ['student', 'faculty', 'doctoral', 'hod', 'dordc', 'dra', 'complete'],
             ]);
             if(!$request->venue){
