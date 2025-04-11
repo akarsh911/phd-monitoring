@@ -20,6 +20,7 @@ use App\Models\User;
 use App\Services\EmailService;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class IrbSubController extends Controller
 {
@@ -31,12 +32,6 @@ class IrbSubController extends Controller
     use FilterLogicTrait;
     public function listFilters(Request $request){
         return response()->json($this->getAvailableFilters("forms"));
-    }
-    protected $emailService;
-    
-    public function __construct(EmailService $emailService)
-    {
-        $this->emailService = $emailService;
     }
 
     public function listForm(Request $request, $student_id=null)
@@ -316,21 +311,17 @@ class IrbSubController extends Controller
                 ]);
                 $link= storage_path($formInstance->revised_irb_pdf);
                 Log::debug($link);
-                $success = $this->emailService->sendEmail(
-                    $outsideExpert->email,
-                    'approval',  // Use the Blade template 'emails/approval.blade.php'
-                    [
-                        'name' => $outsideExpert->first_name. ' ' . $outsideExpert->last_name,
-                        'email' => $outsideExpert->email,
-                        'approverName' => $user->name(),
-                        'formId' => $formInstance->id,
-                        'approvalKey' => $approval->key,
-                    ],
-                    false,                               // Scheduled email
-                    '',             // Set desired schedule time
-                    "IRB Submission Approval Request" ,
-                    [$link]
-                );
+                $success=Mail::send('emails.approval', [
+                    'name' => $outsideExpert->first_name . ' ' . $outsideExpert->last_name,
+                    'email' => $outsideExpert->email,
+                    'approverName' => $user->name(),
+                    'formId' => $formInstance->id,
+                    'approvalKey' => $approval->key,
+                ], function ($message) use ($outsideExpert, $link) {
+                    $message->to($outsideExpert->email)
+                            ->subject('IRB Submission Approval Request')
+                            ->attach($link); // This must be full path to the PDF
+                });
                 Log::debug($link);
                 Log::debug($success);
                 if ($success) {
