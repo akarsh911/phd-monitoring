@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/semester/{semester_id}/filters', [PresentationController::class, 'listFilters']);
     Route::get('/semester/{semester_id}/not-scheduled', [SemesterController::class, 'notScheduled'])->middleware('auth:sanctum');
  
+    Route::post('/semester/{semester_id}/bulk', [PresentationController::class, 'bulkSubmit']);
 
     // Form with ID (view, submit, link/unlink)
     Route::get('/semester/{semester_id}/{form_id}', [PresentationController::class, 'loadForm']);
@@ -31,7 +32,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/semester/{semester_id}/{form_id}/unlink', [PresentationController::class, 'unlinkPublication']);
 
     // Bulk form submission
-    Route::post('/semester/{semester_id}/bulk', [PresentationController::class, 'bulkSubmit']);
 
     // Semester-based form listing
 });
