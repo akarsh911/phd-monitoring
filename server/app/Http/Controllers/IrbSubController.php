@@ -311,7 +311,7 @@ class IrbSubController extends Controller
                 ]);
                 $link= storage_path($formInstance->revised_irb_pdf);
                 Log::debug($link);
-                $success=Mail::send('emails.approval', [
+                Mail::send('emails.approval', [
                     'name' => $outsideExpert->first_name . ' ' . $outsideExpert->last_name,
                     'email' => $outsideExpert->email,
                     'approverName' => $user->name(),
@@ -321,15 +321,7 @@ class IrbSubController extends Controller
                     $message->to($outsideExpert->email)
                             ->subject('IRB Submission Approval Request')
                             ->attach($link); // This must be full path to the PDF
-                });
-                Log::debug($link);
-                Log::debug($success);
-                if ($success) {
-                    // return response()->json(['success' => true, 'message' => 'Approval email sent successfully.']);
-                } else {
-                    Log::error('Error sending email to Outside Member');
-                    throw new \Exception('Error sending email to Outside Member',201);
-                }
+                });            
 
             }
         }

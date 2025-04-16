@@ -51,6 +51,7 @@ const ShowPublications = ({
        refetchData();
    }
    useEffect(() => {
+    if (!formData) return;
         let c=0;
         c+=formData?.sci?.length;
         c+=formData?.non_sci?.length;
@@ -59,7 +60,8 @@ const ShowPublications = ({
         c+=formData?.book?.length;
         c+=formData?.patents?.length;
         setTotalPublications(c);
-   });
+   }, [formData]);
+
    const renderActions = (publicationId, publicationType) => (
        <>
            {enableSelect && (
@@ -215,8 +217,12 @@ const ShowPublications = ({
                     }
                      {enableSubmit && (
                         <GridContainer elements={[
-                            <>{totalPublications>0 && (<CustomButton text="Link Selected Publications with Form" onClick={onSubmit} />)}</>,
-                         
+                            <> {Object.values(selectedRows).some(
+                                group => group && Object.values(group).some(selected => selected)
+                              ) && (
+                                <CustomButton text="Link Selected Publications with Form" onClick={onSubmit} />
+                              )}
+                              </>
                         ]}
                             space={3}
                         ></GridContainer>

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import FormTitleBar from "../formTitleBar/FormTitleBar";
 import Recommendation from "../layouts/Recommendation";
 import Student from "./roles/Student";
+import RoleBasedWrapper from "../roleWrapper/RoleBasedWrapper";
 
 
 
@@ -11,6 +12,10 @@ const StatusChange=({formData}) => {
       <>
         <FormTitleBar formName={"Application for Status Change"} formData={formData} />
         <div className="form-container">
+          <RoleBasedWrapper
+            roleHierarchy={formData.steps}
+            currentRole={formData.role}
+            >
           <Student formData={formData}/>
           <Recommendation
             formData={formData}
@@ -42,6 +47,7 @@ const StatusChange=({formData}) => {
             role="director"
             allowRejection={false}
           ></Recommendation>
+          </RoleBasedWrapper>
         </div>
       </>
     );
