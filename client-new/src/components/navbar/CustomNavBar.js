@@ -11,6 +11,7 @@ const buttonConfig = [
     { path: '/faculty', icon: <i class="fa-solid fa-person-chalkboard"></i>, text: 'Faculty', roles: ['hod','phd_coordinator','dordc','dra','director','admin'] },
     { path: '/departments', icon: <i class="fa-solid fa-building"></i>, text: 'Departments', roles: ['dordc','dra','director','admin'] },
     { path: '/logs', icon: <i class="fa-solid fa-history"></i>, text: 'Logs', roles: ['admin'] },
+    { path: '/notifications', icon: <i class="fa-solid fa-bell"></i>, text: 'Notifications', roles: ['student', 'hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external','admin'] },
 
 ];
 

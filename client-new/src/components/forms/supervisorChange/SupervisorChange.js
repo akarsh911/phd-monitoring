@@ -11,7 +11,7 @@ const SupervisorChange = ({formData}) => {
 
   return (
     <>
-      <FormTitleBar formName="Supervisor Allocation" formData={formData} />
+      <FormTitleBar formName="Supervisor Change" formData={formData} />
       <div className="form-container">
         <RoleBasedWrapper
           roleHierarchy={formData.steps}

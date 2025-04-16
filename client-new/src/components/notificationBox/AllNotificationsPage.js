@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { APIlistUnreadNotifications } from "../../api/notifications";
+import { APIlistAllNotifications } from "../../api/notifications";
 import "./AllNotificationsPage.css";
 import Layout from "../dashboard/layout";
 
@@ -8,7 +8,7 @@ const AllNotificationsPage = () => {
   const [loading, setLoading] = useState(true); // Add loading state
 
   useEffect(() => {
-    APIlistUnreadNotifications((data) => {
+    APIlistAllNotifications((data) => {
       setNotifications(data);
       setLoading(false);
     });
