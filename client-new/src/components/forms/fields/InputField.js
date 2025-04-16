@@ -1,9 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./Fields.css";
 
 const InputField = ({ label, initialValue, isLocked, onChange,hint=null,showLabel=true }) => {
     const [hintText, setHintText] = useState(hint || 'Enter Value...');
     const [value, updateValue] = useState(initialValue);
+    useEffect(() => {
+        if (initialValue !== undefined) {
+            updateValue(initialValue);
+        }
+      }, [initialValue]);
+
+      
     return (
         <div className="input-field-container">
             {showLabel && (<label className="input-label">{label}</label>)}

@@ -21,8 +21,6 @@ trait GeneralFormSubmitter
                 'comments' => 'string|nullable',
             ]);
         }
-
-
         // Check if comments are required
         if ($role != 'student' && !$request->approval && empty($request->comments)) {
             return response()->json(['message' => 'Comments are required when approval is false'], 403);
@@ -122,7 +120,6 @@ trait GeneralFormSubmitter
             }
         }
 
-        // Update comments fields based on role
         switch ($role) {
             case 'faculty':
                 $formInstance->supervisor_comments = $request->comments;
