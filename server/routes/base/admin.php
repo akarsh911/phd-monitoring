@@ -10,7 +10,7 @@ use App\Notifications\WelcomeResetPassword;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-Route::get('/assign', [SupervisorController::class, 'showAssignForm']); 
+
 Route::middleware('auth:sanctum')->group(function () {
   Route::post('/allot-supervisor', [SupervisorController::class, 'assign']);
    Route::post('/allot-doctoral', [SupervisorController::class, 'assignDoctoral']);
@@ -28,5 +28,5 @@ Route::middleware('auth:sanctum')->group(function () {
         'message' => 'Reset links are being processed in the background.'
     ]);
 });
-Route::get('/logs', [LogViewerController::class, 'fetchLogs']);
+   Route::get('/logs', [LogViewerController::class, 'fetchLogs']);
 });

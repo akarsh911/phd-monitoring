@@ -2,12 +2,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class LogViewerController extends Controller
 {
     public function fetchLogs(Request $request)
     {
+        $loggenInUser = Auth::user();
+        if($loggenInUser->current_role->role != 'admin'){
+            return response()->json([
+                'message' => 'You do not have permission to create supervisor'
+            ], 403);
+        }
         $filePath = storage_path('logs/laravel.log');
         $offset = intval($request->query('offset', 0));
         $direction = $request->query('direction', 'forward');

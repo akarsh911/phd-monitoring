@@ -286,8 +286,6 @@ class IrbSubController extends Controller
                 $faculty->supervised_campus=$supervised_campus->count();
                 $faculty->save();
             
-           
-
             $formInstance->supervisorApprovals()->where('supervisor_id', $faculty_code)->update([
               'status' => 'approved',
             ]);
@@ -310,7 +308,7 @@ class IrbSubController extends Controller
                     'model_id' => $formInstance->id,
                 ]);
                 $link= storage_path($formInstance->revised_irb_pdf);
-                Log::debug($link);
+
                 Mail::send('emails.approval', [
                     'name' => $outsideExpert->first_name . ' ' . $outsideExpert->last_name,
                     'email' => $outsideExpert->email,

@@ -57,7 +57,7 @@ const FacultyFormsPage = () => {
        
             
             {
-                form_type: 'thesis-extention',
+                form_type: 'thesis-extension',
                 form_name: 'Thesis Extension',
             },
             {

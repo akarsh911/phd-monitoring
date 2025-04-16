@@ -6,10 +6,12 @@ use App\Http\Controllers\DepartmentController;
 use App\Models\Approval;
 
 Route::get('/{key}', function ($key, Request $request) {
-    $approval = Approval::where('key', $key)->firstOrFail();
+    $approval = Approval::where('key', $key)->first();
 
     $action = $request->query('action');
-
+    if (!$approval) {
+        return response()->json(['message' => 'Invalid approval key.'], 404);
+    }
     if ($action === 'accept') {
         $approval->approved = true;
     } elseif ($action === 'reject') {
