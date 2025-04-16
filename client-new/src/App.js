@@ -25,6 +25,7 @@ import FacultyPage from './pages/faculty/FacultyPage';
 import DepartmentPage from './pages/department/Department';
 import AllNotificationsPage from './components/notificationBox/AllNotificationsPage';
 import PresentationSemester from './pages/presentations/PresentationSemester';
+import Logs from './pages/logs/Logs';
 // import Team from './pages/team/Team';
 
 
@@ -93,6 +94,17 @@ const AppContent = () => {
             <>
               <Route path="/faculty" element={<FacultyPage />} />
               <Route path="/departments" element={<DepartmentPage/>}/>
+              {/* <Route path="/faculty/:roll_no" element={<StudentProfile />} />
+              <Route path="/faculty/:roll_no/forms" element={<FormsPage />} />
+              <Route path="/faculty/:roll_no/forms/:form_type" element={<FormListPage />} />
+              <Route path="/faculty/:roll_no/forms/:form_type/:id" element={<MainFormPage />} /> */}
+            </>
+          )}
+            {(
+           role==='admin') && (
+            <>
+              <Route path="/logs" element={<Logs />} />
+         
               {/* <Route path="/faculty/:roll_no" element={<StudentProfile />} />
               <Route path="/faculty/:roll_no/forms" element={<FormsPage />} />
               <Route path="/faculty/:roll_no/forms/:form_type" element={<FormListPage />} />

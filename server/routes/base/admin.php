@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LogViewerController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SupervisorController;
 use App\Jobs\ProcessBulkForgotPassword;
@@ -27,4 +28,5 @@ Route::middleware('auth:sanctum')->group(function () {
         'message' => 'Reset links are being processed in the background.'
     ]);
 });
+Route::get('/logs', [LogViewerController::class, 'fetchLogs']);
 });
