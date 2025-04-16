@@ -9,7 +9,7 @@ const RoleBasedWrapper = ({ roleHierarchy, currentRole, children }) => {
                 if (!React.isValidElement(child)) return null;
 
                 console.log(index,currentRoleIndex,currentRole)
-                if (index <= currentRoleIndex) {
+                if (index <= currentRoleIndex || currentRole === "admin") {
                     return child; // Render the component if allowed by role hierarchy
                 }
 
