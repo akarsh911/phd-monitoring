@@ -7,6 +7,7 @@ use App\Models\Forms;
 use App\Models\Presentation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 trait GeneralFormSubmitter
@@ -14,7 +15,11 @@ trait GeneralFormSubmitter
     use NotificationManager;
     private function submitForm($user, Request $request, $form_id, $model, $role, $previousLevel, $nextLevel, callable $extraSteps = null)
     {
-
+        Log::info('Submitting form with ID: ' . $form_id);
+        Log::info('Model: ' . $model);
+        Log::info('Role: ' . $role);
+        Log::info('Previous Level: ' . $previousLevel);
+        Log::info('Next Level: ' . $nextLevel);
         if ($role != 'student') {
             $request->validate([
                 'approval' => 'required|boolean',
@@ -195,7 +200,7 @@ trait GeneralFormSubmitter
         $student_id = $formInstance->student->roll_no;
         $index = array_search($nextLevel, $formInstance->steps);
       
-    
+        Log::info('Next Level: ' . $nextLevel);
         if ($nextLevel == 'complete') {
             $formInstance->completion = 'complete';
             $formInstance->stage = 'complete';
