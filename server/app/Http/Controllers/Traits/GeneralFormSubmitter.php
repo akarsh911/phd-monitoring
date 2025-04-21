@@ -50,6 +50,7 @@ trait GeneralFormSubmitter
 
             if ($role != 'student') {
                 if (!$request->approval) {
+                    Log::info('Form rejected by: ' . $user->name());
                     $this->updateApprovalAndComments($formInstance, $request, $role);
                     return $this->handleFallbackToPreviousLevel($user, $formInstance, $previousLevel, $request->comments,$model);
                 }
@@ -61,6 +62,8 @@ trait GeneralFormSubmitter
             }
 
             if ($role != 'student') {
+
+                Log::info('Form approved by: ' . $user->name());
                 $this->updateApprovalAndComments($formInstance, $request, $role);
             } else {
                 $formInstance->student_lock = true;
@@ -200,7 +203,7 @@ trait GeneralFormSubmitter
         $student_id = $formInstance->student->roll_no;
         $index = array_search($nextLevel, $formInstance->steps);
       
-        Log::info('Next Level: ' . $nextLevel);
+        Log::info('Next Level Post Approval: ' . $nextLevel);
         if ($nextLevel == 'complete') {
             $formInstance->completion = 'complete';
             $formInstance->stage = 'complete';
