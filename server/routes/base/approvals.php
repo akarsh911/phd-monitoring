@@ -26,11 +26,12 @@ Route::get('/{key}', function ($key, Request $request) {
 
     if (method_exists($modelInstance, 'handleApproval')) {
         // echo "Model: $model\n";
-        $modelInstance->handleApproval($approval->email, $approval->model_id, $approval->approved);
+       return $modelInstance->handleApproval($approval->email, $approval->model_id, $approval->approved);
     } else {
         echo "The method 'externalApproval' does not exist in model: $model";
+        return response()->json(['message' => "The method 'externalApproval' does not exist in model: $model"], 500);
     }
 
 
-    return response()->json(['message' => "Action '{$action}' completed."]);
+    // return response()->json(['message' => "Action '{$action}' completed."]);
 });
