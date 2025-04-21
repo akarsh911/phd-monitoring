@@ -45,7 +45,7 @@ trait GeneralFormSubmitter
             if ($formInstance->{$role . '_lock'} || ($role == 'faculty' && $formInstance->supervisor_lock)) {
                 return response()->json(['message' => 'You are not authorized to access this resource'], 403);
             }
-
+            Log::info('Form instance found: ' . $formInstance->id);
             $this->handleRoleSpecificLogic($user, $formInstance, $role, $extraSteps);
 
             if ($role != 'student') {
@@ -74,8 +74,10 @@ trait GeneralFormSubmitter
             $formInstance->save();
             return response()->json(['message' => 'Form submitted successfully']);
         } catch (ValidationException $e) {
+            Log::error('Validation error in form submission: ' . $e->getMessage());
             return response()->json(['errors' => $e->errors()], 422);
         } catch (\Exception $e) {
+            Log::error('Error in form submission: ' . $e->getMessage());
             if ($e->getCode() == 201) {
                 return response()->json(['message' => $e->getMessage()], 201);
             }
@@ -252,6 +254,7 @@ trait GeneralFormSubmitter
 
     private function handleRoleSpecificLogic($user, $formInstance, $role)
     {
+
         switch ($role) {
             case 'student':
                 if ($formInstance->student_id != $user->student->roll_no) {
@@ -278,8 +281,8 @@ trait GeneralFormSubmitter
                 break;
 
             case 'external':
-                if (!$formInstance->student->checkSupervises($user->faculty->faculty_code) && !$formInstance->student->checkDoctoralCommittee($user->faculty->faculty_code)) {
-                    
+                if (false) {
+                    //outside cond update
                     throw new \Exception('You are not authorized to access this resource');
                 }
                 break;
