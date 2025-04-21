@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\ModelCommonFormFields;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Traits\GeneralFormSubmitter;
+use Illuminate\Support\Facades\Log;
+
 class IrbSubForm extends Model
 {
     use HasFactory;
@@ -105,6 +107,8 @@ class IrbSubForm extends Model
             'comment' => ' '
         ]); 
         $model = IrbSubForm::class;
+        Log::info('Handling approval for user: ' . $user->email);
+        Log::info('Approval value: ' . $val);
         return $this->submitForm($user, $request, $id, $model, 'external', 'faculty', 'hod');        
     }
 }
