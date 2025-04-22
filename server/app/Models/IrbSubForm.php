@@ -101,7 +101,7 @@ class IrbSubForm extends Model
 
     public function handleApproval($email, $id, $val)
     {
-        $user = User::where('email', $email)->firstOrFail();
+        $user = User::where('email', $email)->first();
         $request = Request::create('/', 'POST', [
             'approval' => $val,
             'comment' => ' '

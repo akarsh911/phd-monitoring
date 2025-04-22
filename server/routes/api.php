@@ -41,7 +41,7 @@ Route::post('/login', function (Request $request) {
         $ret['email'] = $user->email;
         $ret['phone'] = $user->phone;
         $ret['gender'] = $user->gender;
-        $ret['role']['role'] = $user->role->role;
+        $ret['role']['role'] = $user->current_role->role;
         $token = $user->createToken('auth_token', ['server:access'], now()->addDays(10))->plainTextToken;
         return response()->json([
             "user" => $ret,
