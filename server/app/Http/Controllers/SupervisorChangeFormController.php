@@ -212,6 +212,9 @@ class SupervisorChangeFormController extends Controller {
                     if (!Faculty::find($supervisor)) {
                         throw new \Exception("Invalid supervisor selected");
                     }
+                    if($formInstance->student->checkSupervises($supervisor)){
+                        throw new \Exception("The faculty already supervises the student");
+                    }
                 }
                 $formInstance->new_supervisors = $supervisors;
             }
