@@ -42,7 +42,7 @@ const Supervisor = ({ formData }) => {
     <>
       {isLoaded && formData && (
         <>
-          {formData.form_type === "revised" && (
+          {lock && (
             <>
               <p>Supervisors</p>
               <GridContainer
@@ -76,9 +76,9 @@ const Supervisor = ({ formData }) => {
             moreFields={formData.form_type === "revised"  ? false : (true && !lock)}
             handleRecommendationChange={handleApprovalChange}
           />
-          {body.approval && formData.form_type === "draft" && (
+          {body.approval  && (
             <>
-              {formData.role === "faculty" && (
+              {formData.role === "faculty" && !lock && (
                 <>
                   <GridContainer
                     elements={[

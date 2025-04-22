@@ -153,7 +153,7 @@ const Student = ({ formData }) => {
 <GridContainer
             elements={[
               <InputField
-                label="Reason for Semester Off"
+                label="Reason for Supervisor Change"
                 initialValue={formData.reason}
                 isLocked={lock}
                 onChange={(value) => {
