@@ -26,6 +26,7 @@ import DepartmentPage from './pages/department/Department';
 import AllNotificationsPage from './components/notificationBox/AllNotificationsPage';
 import PresentationSemester from './pages/presentations/PresentationSemester';
 import Logs from './pages/logs/Logs';
+import Team from './pages/team/Team';
 // import Team from './pages/team/Team';
 
 
@@ -55,6 +56,7 @@ const AppContent = () => {
       <Router>
         <Routes>
           <Route path="/" element={<LoginPage />} />
+          <Route path="/team" element={<Team />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
           <Route path="/reset-password" element={<ResetPasswordPage/>} />

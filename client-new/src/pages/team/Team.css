@@ -1,0 +1,115 @@
+/* Team.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .team-container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .logo {
+    width: 120px;
+    margin-bottom: 20px;
+  }
+  
+  .heading {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 40px;
+  }
+  
+  .subheading {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #34495e;
+    margin: 40px 0 20px;
+  }
+  
+  .grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+  
+  .person-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    width: 260px;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .person-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  .avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border: 3px solid #3498db;
+  }
+  
+  .card-content h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    color: #2c3e50;
+  }
+  
+  .card-content .title {
+    font-size: 0.95rem;
+    color: #7f8c8d;
+    margin: 10px 0 15px;
+  }
+  
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+  }
+  
+  .social-icons a {
+    color: #2c3e50;
+    font-size: 1.2rem;
+    transition: color 0.2s ease;
+  }
+  
+  .social-icons a:hover {
+    color: #3498db;
+  }
+  
+  .divider {
+    border: none;
+    height: 2px;
+    background: #ecf0f1;
+    margin: 50px auto;
+    width: 60%;
+  }
+  
+  .contact {
+    font-size: 1rem;
+    color: #34495e;
+    margin-top: 20px;
+  }
+  
+  .contact a {
+    color: #2980b9;
+    text-decoration: none;
+  }
+  
+  .contact a:hover {
+    text-decoration: underline;
+  }
+  
