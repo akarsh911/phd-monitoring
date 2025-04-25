@@ -26,9 +26,17 @@ const mentors = [
 ];
 
 const team2025_2026 = [
+    {
+        name: 'Aadi Jain',
+        role: '   UI and UX Designer   ',
+        image: '/images/aadi.png',
+        github: 'https://github.com/nandinnijainn',
+        linkedin: 'https://www.linkedin.com/in/aadi-jain-3732b4247/',
+        email: 'ajain6_be21@thapar.edu',
+      },
   {
     name: 'Abhinav Jain',
-    role: 'App Developer',
+    role: 'Mobile App Developer',
     image: '/images/abhinav.jpeg',
     github: 'https://github.com/AbhinavJain1234',
     linkedin: 'https://www.linkedin.com/in/abhinavjain30/',
@@ -58,14 +66,7 @@ const team2025_2026 = [
     linkedin: 'https://www.linkedin.com/in/nandini-jain-446271267/',
     email: 'nandini1904jain@gmail.com',
   },
-  {
-    name: 'Aadi Jain',
-    role: 'UI/UX Designer',
-    image: '/images/aadi.png',
-    github: 'https://github.com/nandinnijainn',
-    linkedin: 'https://www.linkedin.com/in/aadi-jain-3732b4247/',
-    email: 'ajain6_be21@thapar.edu',
-  },
+  
 ];
 
 const PersonCard = ({ name, title, image, github, linkedin, email }) => (
@@ -113,7 +114,7 @@ const Team = () => {
       <h2 className='subheading'>Team 2025-2026</h2>
       <div className='grid'>
         {team2025_2026.map((person) => (
-          <PersonCard key={person.name} {...person} />
+          <PersonCard key={person.name} {...person} title={person.role}/>
         ))}
       </div>
 

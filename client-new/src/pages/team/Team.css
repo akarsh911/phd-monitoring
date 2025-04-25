@@ -44,6 +44,9 @@ body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     width: 260px;
     padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
   

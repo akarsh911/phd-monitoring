@@ -209,7 +209,7 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
         </div>
       </div> */}
     <div className='profile-actions'>
-        <CustomButton text='View Forms' onClick={navigateToForms} />
+        <CustomButton text='View Forms' onClick={navigateToForms} disabled={true}/>
         <CustomButton text='View Presentations' onClick={navigateToProgress} disabled={true} />
       </div>
 
