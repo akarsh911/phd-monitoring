@@ -8,18 +8,17 @@ import { submitForm } from "../../../../api/form";
 import { useLocation } from "react-router-dom";
 import { useLoading } from "../../../../context/LoadingContext";
 import FileUploadField from "../../fields/FileUploadField";
+import TableComponent from "../../table/TableComponent";
 
 const Student = ({ formData }) => {
   const [lock, setLock] = useState(formData.locks?.student);
   const [body, setBody] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
-   const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState([]);
   const location = useLocation();
   const { setLoading } = useLoading();
 
   useEffect(() => {
-  
-
     let title = (formData.form_type = "");
     setLock(formData.locks?.student);
     setBody({
@@ -27,7 +26,7 @@ const Student = ({ formData }) => {
       address: formData.address,
       gender: formData.gender,
       title: formData.phd_title,
-      objectives: formData.objectives?formData.objectives:[],
+      objectives: formData.objectives ? formData.objectives : [],
     });
     setIsLoaded(true);
   }, [formData]);
@@ -36,8 +35,6 @@ const Student = ({ formData }) => {
       ...prevBody,
       objectives: [...prevBody.objectives, ""],
     }));
-
-   
   };
   const onUpdateCGPA = (value) => {
     body.cgpa = value;
@@ -50,8 +47,13 @@ const Student = ({ formData }) => {
           <GridContainer
             elements={[
               <InputField
-                label={"Date"}
+                label={"Date of Form Submission"}
                 initialValue={formatDate(formData.created_at)}
+                isLocked={true}
+              />,
+              <InputField
+                label={"Date of Admission"}
+                initialValue={formatDate(formData.date_of_registration)}
                 isLocked={true}
               />,
             ]}
@@ -84,7 +86,7 @@ const Student = ({ formData }) => {
               />,
             ]}
           />
-          
+
           <GridContainer
             elements={[
               <InputField
@@ -97,7 +99,6 @@ const Student = ({ formData }) => {
                 initialValue={formData.department}
                 isLocked={true}
               />,
-             
             ]}
           />
 
@@ -123,16 +124,15 @@ const Student = ({ formData }) => {
           />
           <GridContainer
             elements={[
-             
               <InputField
                 label={"CGPA"}
                 initialValue={formData.cgpa}
                 isLocked={lock}
                 onChange={onUpdateCGPA}
-              />
+              />,
             ]}
           />
-           <GridContainer
+          <GridContainer
             elements={[
               <InputField
                 initialValue={formData.address}
@@ -172,27 +172,41 @@ const Student = ({ formData }) => {
               </>,
             ]}
           />
-
-          <GridContainer
-            elements={body.objectives?.map((objective, index) => (
-          
+          {formData.role == "student" ? (
+            <GridContainer
+              elements={body.objectives?.map((objective, index) => (
                 <InputField
                   initialValue={objective}
                   isLocked={lock}
                   onChange={(value) => {
-       
                     body.objectives[index] = value;
                   }}
-                  hint={`Enter Objective ${index+1} Here`}
+                  hint={`Enter Objective ${index + 1} Here`}
                   showLabel={false}
                 />
-            
-            ))}
-            space={1}
-            
-          />
+              ))}
+              space={1}
+            />
+          ) : (
+            <>
+              {console.log(formData.objectives)}
+              <GridContainer
+                elements={[
+                  <TableComponent
+                    data={formData.objectives.map((obj) => ({
+                      objective: obj,
+                    }))}
+                    keys={["objective"]}
+                    titles={["Objective"]}
+                  />,
+                ]}
+                space={2}
+              />
+            </>
+          )}
+
           <GridContainer
-          label="Upload IRB PDF File"
+            label="Upload IRB PDF File"
             elements={[
               <FileUploadField
                 initialValue={formData.irb_pdf}
@@ -207,8 +221,7 @@ const Student = ({ formData }) => {
 
           {formData.role === "student" && !lock && (
             <>
-             
-                   <GridContainer
+              <GridContainer
                 elements={[
                   <CustomButton
                     text="Submit"
@@ -221,8 +234,6 @@ const Student = ({ formData }) => {
                       );
                     }}
                   />,
-                  
-                  
                 ]}
               />
             </>

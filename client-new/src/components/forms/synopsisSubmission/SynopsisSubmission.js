@@ -18,6 +18,11 @@ const SynopsisSubmission=({formData}) => {
             >
           <Student formData={formData}/>
           <Supervisor formData={formData}/>
+           <Recommendation
+            formData={formData}
+            role="doctoral"
+            allowRejection={false}
+          ></Recommendation>
           <Recommendation
             formData={formData}
             role="phd_coordinator"
@@ -36,6 +41,11 @@ const SynopsisSubmission=({formData}) => {
           <Recommendation
             formData={formData}
             role="dordc"
+            allowRejection={false}
+          ></Recommendation>
+          <Recommendation
+            formData={formData}
+            role="director"
             allowRejection={false}
           ></Recommendation>
           </RoleBasedWrapper>

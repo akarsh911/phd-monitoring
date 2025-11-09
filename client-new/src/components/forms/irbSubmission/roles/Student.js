@@ -58,6 +58,11 @@ const Student = ({ formData }) => {
                 initialValue={formData.name}
                 isLocked={true}
               />,
+              <InputField
+                label="Gender"
+                initialValue={formData.gender}
+                isLocked={true}
+              />,
             ]}
           />
 
@@ -163,6 +168,7 @@ const Student = ({ formData }) => {
             ]}
        
           />
+             {/* {console.log(formData)}, */}
            <GridContainer
                 elements={[
                   <DateField
@@ -174,8 +180,14 @@ const Student = ({ formData }) => {
                       body.date_of_irb = value;
                     }}
                   />,
+               
+                  <DateField
+                    label={"Date of IRB Revision"}
+                    initialValue={formatDate(formData.created_at)}  
+                    isLocked={true}
+                  />,
                 ]}
-                space={2}
+                space={1}
               />
    
           {!lock && formData.role === "student" && (

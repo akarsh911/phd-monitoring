@@ -50,7 +50,7 @@ class SynopsisSubmissionController extends Controller
     {
         $user = Auth::user();
         $role = $user->current_role;
-        $steps=['student','faculty','phd_coordinator','hod','dra','dordc','director','complete'];
+        $steps=['student','faculty','doctoral','phd_coordinator','hod','dra','dordc','director','complete'];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
@@ -69,12 +69,23 @@ class SynopsisSubmissionController extends Controller
         $user = Auth::user();
         $role = $user->current_role;
         $model = SynopsisSubmission::class;
-        $steps=['student','faculty','phd_coordinator','hod','dra','dordc','director'];
-        switch ($role->role) {
+        $role = $user->current_role;
+        $cur = $role->role;
+        $form = SynopsisSubmission::find($form_id);
+        if ($form) {
+            if ($form->student->checkDoctoralCommittee($user->faculty?->faculty_code)) {
+                $cur = 'doctoral';
+            }
+        }
+        $steps=['student','faculty','doctoral','phd_coordinator','hod','dra','dordc','director'];
+        switch ($cur) {
             case 'student':
                 return $this->handleStudentForm($user, $form_id, $model,$steps);
             case 'hod':
                 return $this->handleHodForm($user, $form_id, $model);
+            
+            case 'doctoral':
+                return $this->handleDoctoralForm($user, $request, $form_id);
             case 'phd_coordinator':
                 return $this->handleCoordinatorForm($user, $form_id, $model);
             case 'dra':
@@ -94,12 +105,20 @@ class SynopsisSubmissionController extends Controller
     {
         $user = Auth::user();
         $role = $user->current_role;
-
-        switch ($role->role) {
+         $cur = $role->role;
+        $form = SynopsisSubmission::find($form_id);
+        if ($form) {
+            if ($form->student->checkDoctoralCommittee($user->faculty?->faculty_code)) {
+                $cur = 'doctoral';
+            }
+        }
+        switch ($cur) {
             case 'student':
                 return $this->studentSubmit($user, $request, $form_id);
             case 'faculty':
                 return $this->supervisorSubmit($user, $request, $form_id);
+            case 'doctoral':
+                return $this->handleDoctoralForm($user, $request, $form_id);
             case 'hod':
                 return $this->hodSubmit($user, $request, $form_id);
             case 'dra':
@@ -233,26 +252,24 @@ class SynopsisSubmissionController extends Controller
             function ($formInstance) use ($request, $user) {
                 $request->validate([
                    'revised_title' => 'string',
-                   'objectives' => 'array',
-                   'objectives.*' => 'string',
                    'synopsis_pdf' => 'required|file|mimes:pdf|max:2048',
                 ]);
                 $formInstance->revised_title = $request->revised_title;
                 $link=$this->saveUploadedFile($request->file('synopsis_pdf'), 'synopsis', $user->student->roll_no);
                 $formInstance->synopsis_pdf = $link;
-                $oldObjectives = $formInstance->objectives;
-                if($oldObjectives->count() > 0){
-                    $formInstance->objectives()->delete();
-                }
+                // $oldObjectives = $formInstance->objectives;
+                // if($oldObjectives->count() > 0){
+                //     $formInstance->objectives()->delete();
+                // }
             
-              if($request->objectives){
-                foreach ($request->objectives as $objective) {
-                    $newObjective = new SynopsisObjectives();
-                    $newObjective->objective = $objective;
-                    $newObjective->synopsis_id = $formInstance->id;
-                    $newObjective->save();
-                }
-            }            
+            //   if($request->objectives){
+            //     foreach ($request->objectives as $objective) {
+            //         $newObjective = new SynopsisObjectives();
+            //         $newObjective->objective = $objective;
+            //         $newObjective->synopsis_id = $formInstance->id;
+            //         $newObjective->save();
+            //     }
+            // }            
              
             }
         );
@@ -267,7 +284,7 @@ class SynopsisSubmissionController extends Controller
             $model,
             'faculty',
             'student',
-            'phd_coordinator',
+            'doctoral',
             function ($formInstance) use ($request, $user) {
                $request->validate([
                    'current_progress' => 'integer',
@@ -278,7 +295,21 @@ class SynopsisSubmissionController extends Controller
             }
         );
     }
+    private function handleDoctoralForm($user, $request, $form_id){
 
+         $model = SynopsisSubmission::class;
+      
+        return $this->submitForm(
+            $user,
+            $request,
+            $form_id,
+            $model,
+            'doctoral',
+            'faculty',
+            'phd_coordinator',
+        );
+    }
+            
     private function coordinatorSubmit($user, $request, $form_id)
     {
         $model = SynopsisSubmission::class;

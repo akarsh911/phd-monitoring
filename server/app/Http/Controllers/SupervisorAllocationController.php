@@ -260,19 +260,19 @@ class SupervisorAllocationController extends Controller
                             'max_count' => 2,
                             'stage' => 'student',
                         ],              
-                        // [
-                        //     'form_type' => 'list-of-examiners',
-                        //     'form_name' => 'List of Examiners',
-                        //     'student_available' => false,
-                        //     'supervisor_available' => true,
-                        //     'max_count' => 1,
-                        //     'stage' => 'supervisor',
-                        // ], [
-                        //     'form_type' => 'semester-off',
-                        //     'form_name' => 'Semester Off',
-                        //     'max_count' => 10,
-                        //     'stage' => 'student',
-                        // ],
+                        [
+                            'form_type' => 'list-of-examiners',
+                            'form_name' => 'List of Examiners',
+                            'student_available' => false,
+                            'supervisor_available' => true,
+                            'max_count' => 1,
+                            'stage' => 'supervisor',
+                        ], [
+                            'form_type' => 'semester-off',
+                            'form_name' => 'Semester Off',
+                            'max_count' => 10,
+                            'stage' => 'student',
+                        ],
                     ];
 
                     foreach ($forms as $form) {

@@ -203,6 +203,11 @@ const Student = ({ formData }) => {
                 initialValue={formData.department}
                 isLocked={true}
               />,
+              <InputField
+                label="Gender"
+                initialValue={formData.gender}
+                isLocked={true}
+              />,
             ]}
           />
           <GridContainer
@@ -237,7 +242,7 @@ const Student = ({ formData }) => {
           <GridContainer elements={[
               <InputField
               label="Current Status"
-              initialValue={formData.current_status}
+              initialValue={formData.current_status==="part-time"?"Part Time":"Full Time"}
               isLocked={true}
             />,
             <>

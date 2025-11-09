@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
+use function Laravel\Prompts\form;
+
 class IrbSubController extends Controller
 {
     use GeneralFormHandler;
@@ -234,8 +236,7 @@ class IrbSubController extends Controller
                     'form_name' => 'Thesis Submission',
                     'max_count' => 1,
                     'stage' => 'student',
-                ],
-               
+                ]
             ];
             $student = $formInstance->student;
             foreach ($forms as $form) {

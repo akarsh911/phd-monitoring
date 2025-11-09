@@ -283,6 +283,7 @@ const Student = ({ formData }) => {
           <GridContainer
             elements={[
               <TableComponent
+                label={"Objectives of Research"}
                 data={objectivesData}
                 keys={["objective"]}
                 titles={["Objective"]}
@@ -291,7 +292,7 @@ const Student = ({ formData }) => {
             space={3}
           />
 
-          {formData.role === "student" && !lock && (
+          {/* {formData.role === "student" && !lock && (
             <GridContainer
               elements={[
                 <CustomButton
@@ -305,9 +306,9 @@ const Student = ({ formData }) => {
                 />,
               ]}
             />
-          )}
+          )} */}
 
-          {body.revisedOBJ && (
+          {/* {body.revisedOBJ && (
             <>
               {!lock && formData.role === "student" ? (
                 <>
@@ -341,6 +342,7 @@ const Student = ({ formData }) => {
                 <GridContainer
                   elements={[
                     <TableComponent
+                      label={"Approved Objectives"}
                       data={robjectivesData}
                       keys={["objective"]}
                       titles={["Objective"]}
@@ -350,7 +352,7 @@ const Student = ({ formData }) => {
                 />
               )}
             </>
-          )}
+          )} */}
           <>
             {formData?.role === "student" && !lock && (
               <GridContainer

@@ -8,30 +8,32 @@ import Recommendation from "../../layouts/Recommendation";
 import CustomButton from "../../fields/CustomButton";
 import { submitForm } from "../../../../api/form";
 import { set } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const Supervisor = ({ formData }) => {
   const [lock, setLock] = useState(formData.locks?.supervisor);
   const [body, setBody] = useState({});
   const [isLoaded, setIsLoaded] = useState(true);
-  const [totalProgress,setTotalProgress]=useState(0);
+  const [totalProgress, setTotalProgress] = useState(0);
   const location = useLocation();
   const { setLoading } = useLoading();
 
   useEffect(() => {
     setLock(formData.locks?.supervisor);
-    if(formData.role === "faculty"){
-    setBody({
-      approval: formData.current_review?.progress === "satisfactory",
-      attendance: formData.attendance,
-      contact_hours: formData.contact_hours,
-      current_progress: formData.current_progress,
-      progress: formData.progress,
-      total_progress: formData.total_progress,
-    });
-    }
-    else{
+    if (formData.role === "faculty") {
+      setBody({
+        approval: formData.current_review?.progress === "satisfactory",
+        comments: formData.current_review?.comments || "",
+        attendance: formData.attendance,
+        contact_hours: formData.contact_hours,
+        current_progress: formData.current_progress,
+        progress: formData.progress,
+        total_progress: formData.total_progress,
+      });
+    } else {
       setBody({
         approval: formData.approvals.supervisor,
+        comments: formData.comments.supervisor || "",
         attendance: formData.attendance,
         contact_hours: formData.contact_hours,
         current_progress: formData.current_progress,
@@ -47,13 +49,21 @@ const Supervisor = ({ formData }) => {
   useEffect(() => {
     setBody((prev) => ({
       ...prev,
-      total_progress: parseFloat(prev.current_progress) + parseFloat(prev.progress || 0),
+      total_progress:
+        parseFloat(prev.current_progress) + parseFloat(prev.progress || 0),
     }));
-    setTotalProgress(parseFloat(body.current_progress) + parseFloat(body.progress || 0));
-
+    setTotalProgress(
+      parseFloat(body.current_progress) + parseFloat(body.progress || 0)
+    );
   }, [body.progress]);
 
-  
+  useEffect(() => {
+    if (body.current_progress + formData.previous_progress > 100) {
+      body.current_progress = 100 - formData.previous_progress;
+      toast.error("Total progress cannot exceed 100%");
+    }
+  }, [body]);
+
   const handleApprovalChange = (value) => {
     setBody((prevBody) => ({
       ...prevBody,
@@ -63,9 +73,10 @@ const Supervisor = ({ formData }) => {
   };
   const updateTotal = (updated) => {
     setBody((prev) => {
-      const newTotal = parseFloat(prev.current_progress || 0) + parseFloat(updated || 0);
+      const newTotal =
+        parseFloat(prev.current_progress || 0) + parseFloat(updated || 0);
       setTotalProgress(newTotal);
-  
+
       return {
         ...prev,
         progress: updated,
@@ -73,7 +84,6 @@ const Supervisor = ({ formData }) => {
       };
     });
   };
-  
 
   return (
     <>
@@ -104,74 +114,78 @@ const Supervisor = ({ formData }) => {
           />
           {body.approval && (
             <>
-              
-                <>
+              <>
+                <GridContainer
+                  elements={[
+                    <InputField
+                      label={"Previous Quantum Progress Percentage"}
+                      initialValue={body.current_progress}
+                      isLocked={true}
+                    />,
+                  ]}
+                  space={2}
+                />
+                <GridContainer
+                  elements={[
+                    <InputField
+                      label={"Increase in Quantum Progress Percentage"}
+                      initialValue={body.progress}
+                      isLocked={lock}
+                      onChange={updateTotal}
+                    />,
+                  ]}
+                  space={2}
+                />
+                {parseFloat(body.progress || 0) > 20 && (
+                  <div style={{ color: "red", marginTop: 0 }}>
+                    Supervisor has marked progress of student more than 20%
+                  </div>
+                )}
+                <GridContainer
+                  elements={[
+                    <InputField
+                      label={"Total Quantum Progress Percentage"}
+                      initialValue={formData.total_progress}
+                      isLocked={true}
+                    />,
+                  ]}
+                  space={2}
+                />
+
+                {formData.teaching_work === "None" ? (
                   <GridContainer
                     elements={[
                       <InputField
-                        label={"Previous Quantum Progress Percentage"}
-                        initialValue={body.current_progress}
-                        isLocked={true}
-                      />,
-                    ]}
-                    space={2}
-                  />
-                  <GridContainer
-                    elements={[
-                      <InputField
-                        label={"Increase in Quantum Progress Percentage"}
-                        initialValue={body.progress}
+                        label={"% Attendence"}
+                        initialValue={formData.attendance}
                         isLocked={lock}
-                        onChange={updateTotal            }
+                        onChange={(updated) => {
+                          setBody((prev) => ({
+                            ...prev,
+                            attendance: updated,
+                          }));
+                        }}
                       />,
                     ]}
-                    space={2}
                   />
+                ) : (
                   <GridContainer
                     elements={[
                       <InputField
-                        label={"Total Quantum Progress Percentage"}
-                        initialValue={formData.total_progress}
-                        isLocked={true}
-                        
+                        label={"No. of Contact Hours"}
+                        initialValue={formData.contact_hours}
+                        isLocked={lock}
+                        onChange={(updated) => {
+                          setBody((prev) => ({
+                            ...prev,
+                            contact_hours: updated,
+                          }));
+                        }}
                       />,
                     ]}
-                    space={2}
                   />
-             
-                  {formData.teaching_work === "None" ? (     <GridContainer 
-                    elements={[
-                      <InputField
-                      label={"% Attendence"}
-                      initialValue={formData.attendance}
-                      isLocked={lock}
-                      onChange={(updated) => {
-                        setBody((prev) => ({
-                          ...prev,
-                          attendance: updated,
-                        }));
-                      }}
-                    />,
-                  
-                    ]}
-                  />):( <GridContainer
-                    elements={[
-                      <InputField
-                      label={"No. of Contact Hours"}
-                      initialValue={formData.contact_hours}
-                      isLocked={lock}
-                      onChange={(updated) => {
-                        setBody((prev) => ({
-                          ...prev,
-                          contact_hours: updated,
-                        }));
-                      }}
-                    />,
-                    ]}
-                    />)}
-                 
-                </>
-           
+                )}
+              </>
             </>
           )}
           {formData.role === "faculty" && !lock && (

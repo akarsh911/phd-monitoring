@@ -1,7 +1,7 @@
 import React from 'react';
 import './TableComponent.css';
 
-const TableComponent = ({ data, keys, titles, components = [], rowStyle }) => {
+const TableComponent = ({ data, keys, titles, components = [], rowStyle,label }) => {
     // Create a dictionary from components for easy lookup
     const componentMap = components.reduce((acc, comp) => {
         acc[comp.key] = comp.component;
@@ -10,6 +10,7 @@ const TableComponent = ({ data, keys, titles, components = [], rowStyle }) => {
 
     return (
         <div className="table-container">
+            {label && <h3 className="table-label" style={{ textAlign: 'left', fontWeight: 'bold' }}>{label}</h3>}
             <table className="custom-table">
                 <thead>
                     <tr className="table-header">

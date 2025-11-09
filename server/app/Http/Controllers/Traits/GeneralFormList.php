@@ -191,7 +191,7 @@ private function listHodForms($user, $model, $filters = null, $override = false,
     $students = Student::where('department_id', $department->id)->pluck('roll_no');
 
     $formsQuery = $model::whereIn('student_id', $students);
-
+    
     if ($filters) {
         $formsQuery = $this->applyDynamicFilters($formsQuery, $filters);
     }

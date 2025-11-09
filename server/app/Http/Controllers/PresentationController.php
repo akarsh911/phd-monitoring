@@ -448,7 +448,6 @@ class PresentationController extends Controller
                 $cur = 'doctoral';
             }
         }
-      
         switch ($cur) {
             case 'student':
                 return $this->handleStudentForm($user, $form_id, $model, $steps);

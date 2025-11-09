@@ -18,6 +18,9 @@ return new class extends Migration
             $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
             $table->string('form_type');
             $table->string('form_name');
+            $table->integer('max_level')->default(0);
+            $table->integer('current_level')->default(0);
+            $table->json('steps')->nullable();
             $table->integer('department_id')->unsigned()->index();
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
             $table->boolean('student_available')->default(false);

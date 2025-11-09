@@ -45,11 +45,26 @@ const Recommendation = ({formData,allowRejection,role,moreFields,handleRecommend
     return (
         <>
             <RecommendationField role={roleName} allowRejection={allowRejection} onRecommendationChange={(data)=>{onRecommendationChange(data)}} initialValue={body} lock={lock} />
-            {(!lock || body.comments) && ( <GridContainer elements={[
-                <InputField    key={body.comments}  label={"Remarks" + !lock?" (if Any)":""} initialValue={body.comments} isLocked={lock} hint="Enter Comments.." onChange={(value) => body.comments=value} />
-            ]}
-            space={2}
-            />)}
+            {(!lock || body.comments) && (
+                <GridContainer
+                    elements={[
+                        <InputField
+                            label={"Remarks  (if Any)"}
+                            initialValue={body.comments || ''}
+                            isLocked={lock}
+                            hint="Enter Comments.."
+                            onChange={(value) => {
+                                const updated = { ...body, comments: value };
+                                setBody(updated);
+                                if (handleRecommendationChange) {
+                                    handleRecommendationChange(updated);
+                                }
+                            }}
+                        />,
+                    ]}
+                    space={2}
+                />
+            )}
            
             { !lock && moreFields!==true && ( <GridContainer elements={[
                 <CustomButton text='Submit' onClick={()=>{submitForm(body,location,setLoading)}} />
