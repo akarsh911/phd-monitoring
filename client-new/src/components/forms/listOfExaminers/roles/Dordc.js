@@ -27,10 +27,10 @@ const Dordc = ({ formData }) => {
 
       setSelected([
         ...formData.national
-          .filter((item) => item.recommendation === "accepted")
+          .filter((item) => item.recommendation === "approved")
           .map((item) => item.email),
         ...formData.international
-          .filter((item) => item.recommendation === "accepted")
+          .filter((item) => item.recommendation === "approved")
           .map((item) => item.email),
       ]);
 
@@ -60,6 +60,7 @@ const Dordc = ({ formData }) => {
 
   const handleSelection = useCallback(
     (email, value) => {
+      console.log("Handling selection for:", email, "with value:", value);
       if (value === 1) {
         // Add to `selected` if not already present and remove from `rejected`
         setSelected((prevSelected) => {
@@ -97,6 +98,11 @@ const Dordc = ({ formData }) => {
   useEffect(() => {
     console.log("Updated selected:", selected);
     console.log("Updated rejected:", rejected);
+    setBody({
+      approval: true,
+      approvals:selected,
+      rejections:rejected
+    })
   }, [selected, rejected]);
   
   const handleSubmit = async () => {
@@ -130,6 +136,7 @@ const Dordc = ({ formData }) => {
     <>
       {isLoaded ? (
         <>
+        {formData.role === "dordc" && formData.stage=== "dordc"  && (<>
           <GridContainer
             elements={[
               <TableComponent
@@ -223,9 +230,11 @@ const Dordc = ({ formData }) => {
             label="International Examiners"
             space={3}
           />
-
+          
+          </>
+  )}
 {
-            formData.role === "dordc"  && (
+            formData.role === "dordc" && formData.stage=== "dordc"  && (
                 <>
                   <GridContainer elements={[
                     <CustomButton text="Submit" onClick={() => {submitForm(body,location,setLoading)}}/>

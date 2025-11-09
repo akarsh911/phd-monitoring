@@ -34,8 +34,20 @@ export const submitForm = async (body, location, setLoading, files = null) => {
         if (data && data.success) {
             toast.success("Form Submitted Successfully");
             window.location.reload();
+        } else {
+            // show validation errors if available
+            if (data && data.response && data.response.errors) {
+                const errorString = Object.values(data.response.errors).flat().join("\n");
+                toast.error(errorString);
+            } else if (data && data.response && data.response.message) {
+                toast.error(data.response.message);
+            } else {
+                toast.error("Failed to submit the form");
+            }
+            console.log("Form submission response:", data);
         }
     } catch (error) {
+        toast.error("Failed to submit the form:" + (error.message || error));
         console.log(error);
     } finally {
         setLoading(false);

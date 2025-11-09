@@ -7,7 +7,7 @@ import { useLoading } from "../../../context/LoadingContext";
 import CustomButton from '../fields/CustomButton';
 import GridContainer from '../fields/GridContainer';
 
-const CreateNewBar = ({rollNumber=null}) => {
+const CreateNewBar = ({rollNumber=null,label}) => {
     const { setLoading } = useLoading();
     const location = useLocation();
    
@@ -39,7 +39,7 @@ const CreateNewBar = ({rollNumber=null}) => {
           <></>,
           <></>,
           <>
-            <CustomButton onClick={handleClick} text='Create New Form +' />
+            <CustomButton onClick={handleClick} text={label || 'Create New Form +'} />
         </>
         ]}
         />

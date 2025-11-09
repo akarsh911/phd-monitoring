@@ -257,7 +257,7 @@ class ListOfExaminersController extends Controller
                         'supervisor_lock'=>false,
                         'maximum_step' => $index > $formInstance->maximum_step ? $index : $formInstance->maximum_step,
                     ]);
-                    throw new \Exception("Form Moved to Supervisor");
+                    throw new \Exception("Form Moved to Supervisor to add more examiners. At least 4 approved examiners are required in both National and International categories.");
                 }
             }
         );
@@ -277,24 +277,24 @@ class ListOfExaminersController extends Controller
         }
     
         // Get the last form submitted by the faculty
-        // $lastForm = ListOfExaminers::where('faculty_id', $user->faculty->faculty_code)
-        //     ->where('id', '<', $formInstance->id) // Assuming `id` represents the chronological order of forms
-        //     ->latest('id')
-        //     ->first();
+        $lastForm = ListOfExaminers::where('faculty_id', $user->faculty->faculty_code)
+            ->where('id', '<', $formInstance->id) // Assuming `id` represents the chronological order of forms
+            ->latest('id')
+            ->first();
     
-        // if ($lastForm) {
-        //     // Get the examiners of the last form
-        //     $lastFormExaminers = ExaminersRecommendation::where('form_id', $lastForm->id)
-        //         ->where('type', $type)
-        //         ->pluck('email')
-        //         ->toArray();
+        if ($lastForm) {
+            // Get the examiners of the last form
+            $lastFormExaminers = ExaminersRecommendation::where('form_id', $lastForm->id)
+                ->where('type', $type)
+                ->pluck('email')
+                ->toArray();
     
-        //     // Check for common examiners
-        //     $commonExaminers = array_intersect($emails, $lastFormExaminers);
-        //     if (count($commonExaminers) > 2) {
-        //         throw new \Exception("The $type list cannot have more than 2 examiners in common with the last submitted form");
-        //     }
-        // }
+            // Check for common examiners
+            $commonExaminers = array_intersect($emails, $lastFormExaminers);
+            if (count($commonExaminers) > 2) {
+                throw new \Exception("The $type list cannot have more than 2 examiners in common with the last submitted form");
+            }
+        }
     
         $count = 0;
         foreach ($examiners as $examiner) {

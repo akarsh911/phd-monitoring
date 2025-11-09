@@ -77,7 +77,7 @@ const ExaminerManager = ({
           />
         </>
       )}
-      {formData.locks.dordc && (
+      {formData.role !== 'dordc' && (
         <>
           {' '}
           <GridContainer

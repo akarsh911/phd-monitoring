@@ -16,6 +16,7 @@ const FilterBar = ({ onSearch, default_filter,mandatory_filter }) => {
   const [activeFilters, setActiveFilters] = useState([]);
 
   useEffect(() => {
+    try{
     const fetchFilters = async () => {
       let location = window.location;
       let data = await customFetch(
@@ -27,6 +28,9 @@ const FilterBar = ({ onSearch, default_filter,mandatory_filter }) => {
       setFiltersMeta(data?.response);
     };
     fetchFilters();
+  }catch(error){
+    console.error("Error fetching filters:", error);
+  }
   }, []);
 
   useEffect(() => {
