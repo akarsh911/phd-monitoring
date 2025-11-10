@@ -118,7 +118,7 @@ class SynopsisSubmissionController extends Controller
             case 'faculty':
                 return $this->supervisorSubmit($user, $request, $form_id);
             case 'doctoral':
-                return $this->handleDoctoralForm($user, $request, $form_id);
+                return $this->doctoralFormSubmit($user, $request, $form_id);
             case 'hod':
                 return $this->hodSubmit($user, $request, $form_id);
             case 'dra':
@@ -295,7 +295,7 @@ class SynopsisSubmissionController extends Controller
             }
         );
     }
-    private function handleDoctoralForm($user, $request, $form_id){
+    private function doctoralFormSubmit($user, $request, $form_id){
 
          $model = SynopsisSubmission::class;
       
