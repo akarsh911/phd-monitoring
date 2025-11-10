@@ -17,13 +17,7 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
   const [role, setRole] = useState("");
   const [showEditButton, setShowEditButton] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  useEffect(() => {
-    // Set the user role from localStorage
-    setRole(localStorage.getItem("userRole"));
-    if (role === "hod" || role === "admin") {
-      setShowEditButton(true);
-    }
-  }, []);
+
   const { state: locationState, pathname } = useLocation();
   const { roll_no } = useParams();
   const navigate = useNavigate();
@@ -48,7 +42,14 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
       setLoading(false);
     }
   }, [roll_no, profile]);
-
+  useEffect(() => {
+    // Set the user role from localStorage
+    setRole(localStorage.getItem("userRole"));
+    console.log("Role in ProfileCard:", role);
+    if (role === "hod" || role === "admin" || role === "dordc") {
+      setShowEditButton(true);
+    }
+  }, [loading]);
   const navigateToForms = () => {
     navigate(pathname + "/forms");
   };
