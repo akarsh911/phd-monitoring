@@ -245,40 +245,7 @@ const Student = ({ formData }) => {
             ]}
             space={2}
           />
-          {formData.role === "student" && !lock && (
-            <GridContainer
-              elements={[
-                <CustomButton
-                  onClick={() => {
-                    setBody((prev) => ({
-                      ...prev,
-                      revised: prev.revised === true ? false : true,
-                    }));
-                  }}
-                  text={"Revise Title of PhD"}
-                />,
-              ]}
-            />
-          )}
 
-          {(body.revised || formData.revised_title) && (
-            <GridContainer
-              elements={[
-                <InputField
-                  label="Revised Title of Phd Thesis"
-                  initialValue={formData.revised_title}
-                  isLocked={lock}
-                  onChange={(value) => {
-                    setBody((prev) => ({
-                      ...prev,
-                      revised_title: value,
-                    }));
-                  }}
-                />,
-              ]}
-              space={2}
-            />
-          )}
 
           <GridContainer
             elements={[
