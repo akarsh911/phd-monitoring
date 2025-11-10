@@ -16,6 +16,7 @@ import StatusChange from "../../components/forms/statusChange/StatusChange";
 import IrbExtention from "../../components/forms/irbExtention/IrbExtention";
 import SupervisorChange from "../../components/forms/supervisorChange/SupervisorChange";
 import ListOfExaminers from "../../components/forms/listOfExaminers/ListOfExaminers";
+import ReviseTitle from "../../components/forms/reviseTitle/ReviseTitle";
 const MainFormPage = () => {
   const [formData, setFormData] = useState({});
   const { setLoading } = useLoading();
@@ -70,6 +71,8 @@ const MainFormPage = () => {
                     return <SupervisorChange formData={formData}/>
                   case "list-of-examiners":
                     return <ListOfExaminers formData={formData}/>
+                  case "revise-title":
+                    return <ReviseTitle formData={formData}/>
                   default:
                     return <p>Are You Sure this is a FORM?</p>;
                 }

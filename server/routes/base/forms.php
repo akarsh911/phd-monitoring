@@ -43,7 +43,9 @@ Route::prefix('status-change')->group(function () {
 Route::prefix('synopsis-submission')->group(function () {
     require base_path('routes/base/synopsis_submission.php');
 });
-
+Route::prefix('revise-title')->group(function () {
+    require base_path('routes/base/synopsis_submission.php');
+});
 Route::prefix('semester-off')->group(function () {
     require base_path('routes/base/semester_off.php');
 });
