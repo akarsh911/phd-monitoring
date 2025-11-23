@@ -68,6 +68,16 @@ class IrbSubForm extends Model
                     'name' => $approval->supervisor->user->name(),                
                 ];
             }),
+             'supervisorReviews' => $this->supervisorApprovals->map(function ($review) {
+                return [
+                    'faculty' => $review->supervisor->user->name(),
+                    'progress' => $review->status,
+                    'comments' => $review->comments,
+                    'review_status' => $review->review_status,
+                ];
+            }),
+
+           
         ]);
         $formData['supervisors']=$this->student->supervisors->map(function ($supervisor) {
             return [

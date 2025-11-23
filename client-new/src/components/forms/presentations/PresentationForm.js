@@ -1,5 +1,5 @@
 import "./Presentation.css";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Student from "./roles/Student";
 import FormTitleBar from "../formTitleBar/FormTitleBar";
 import Recommendation from "../layouts/Recommendation";

@@ -14,7 +14,7 @@ import CounterField from "../../fields/CounterField";
 import Recommendation from "../../layouts/Recommendation";
 
 
-const Supervisor = ({ formData }) => {
+const Doctoral = ({ formData }) => {
   const [lock, setLock] = useState(formData.locks?.supervisor);
   const [body, setBody] = useState({});
   const [isLoaded, setIsLoaded] = useState(true);
@@ -71,7 +71,7 @@ const Supervisor = ({ formData }) => {
           )}
           <Recommendation
             formData={formData}
-            role="supervisor"
+            role="doctoral"
             allowRejection={false}
             moreFields={formData.form_type === "revised"  ? false : (true && !lock)}
             handleRecommendationChange={handleApprovalChange}
@@ -138,7 +138,7 @@ const Supervisor = ({ formData }) => {
             </>
           )}
 
-          {formData.role === "faculty" && !lock && (
+          {formData.role === "doctoral" && !lock && (
             <>
               <GridContainer
                 elements={[
@@ -158,4 +158,4 @@ const Supervisor = ({ formData }) => {
   );
 };
 
-export default Supervisor;
+export default Doctoral;
