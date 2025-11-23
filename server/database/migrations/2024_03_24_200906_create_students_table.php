@@ -24,9 +24,9 @@ return new class extends Migration
             $table->text('phd_title')->nullable();
             $table->text('fathers_name')->nullable();
             $table->text('address')->nullable();
-            $table->enum('current_status',['part-time','full-time']);
+            $table->enum('current_status',['part-time','full-time','executive']);
             $table->float('overall_progress');
-            $table->float('cgpa');
+            $table->float('cgpa')->nullable();
             $table->timestamps();
         });
      

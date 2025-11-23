@@ -10,12 +10,14 @@ import { useLocation } from "react-router-dom";
 import { useLoading } from "../../../../context/LoadingContext";
 import { baseURL } from "../../../../api/urls";
 import TableComponent from "../../table/TableComponent";
+import { toast } from "react-toastify";
 
 const Supervisor = ({ formData }) => {
   const [lock, setLock] = useState(formData.locks?.supervisor);
   const [body, setBody] = useState({});
   const [isLoaded, setIsLoaded] = useState(true);
   const [greater, setGreater] = useState(true);
+  const [externalMembers, setExternalMembers] = useState([]);
 
   const location = useLocation();
   const { setLoading } = useLoading();
@@ -36,14 +38,39 @@ const Supervisor = ({ formData }) => {
       nominee_cognates: cognates,
      
     });
+
+    // Initialize external members (can be loaded from formData if available)
+    setExternalMembers([]);
     setIsLoaded(true);
   }, [formData]);
+
+  const handleAddExternalMember = () => {
+    if (externalMembers.length >= 3) {
+      toast.error("You can only add maximum 3 external members");
+      return;
+    }
+    setExternalMembers([
+      ...externalMembers,
+      { name: "", email: "", phone: "", college: "" },
+    ]);
+  };
+
+  const handleExternalMemberChange = (index, field, value) => {
+    const updatedMembers = [...externalMembers];
+    updatedMembers[index][field] = value;
+    setExternalMembers(updatedMembers);
+  };
+
+  const handleRemoveExternalMember = (index) => {
+    const updatedMembers = externalMembers.filter((_, i) => i !== index);
+    setExternalMembers(updatedMembers);
+  };
 
   return (
     <>
       {isLoaded && formData && (
         <>
-          <p>List of nominee of the DoRDC in cognate area from the institute</p>
+          <p>List of nominees of the DoRDC in cognate area from the institute</p>
           {greater && lock && formData.nominee_cognates.length === 3 ? (
             <>
               <GridContainer
@@ -68,7 +95,7 @@ const Supervisor = ({ formData }) => {
                     onSelect={(value) => {
                       body.nominee_cognates[0] = value.id;
                     }}
-                    body={{ department_id: formData.department_id }}
+                    // body={{ department_id: formData.department_id }}
                     lock={lock}
                   />,
                   <InputSuggestion
@@ -78,7 +105,7 @@ const Supervisor = ({ formData }) => {
                     onSelect={(value) => {
                       body.nominee_cognates[1] = value.id;
                     }}
-                    body={{ department_id: formData.department_id }}
+                    // body={{ department_id: formData.department_id }}
                     lock={lock}
                   />,
                   <InputSuggestion
@@ -88,7 +115,7 @@ const Supervisor = ({ formData }) => {
                     onSelect={(value) => {
                       body.nominee_cognates[2] = value.id;
                     }}
-                    body={{ department_id: formData.department_id }}
+                    // body={{ department_id: formData.department_id }}
                     lock={lock}
                   />,
                 ]}
@@ -96,7 +123,100 @@ const Supervisor = ({ formData }) => {
             </>
           )}
 
+                    <p>List of external members recommended by Supervisor</p>
+          {false && externalMembers.length > 0 ? (
+            <>
+              <GridContainer
+                elements={[
+                  <TableComponent
+                    data={externalMembers}
+                    keys={["name", "email", "phone", "college"]}
+                    titles={["Name", "Email", "Phone", "College"]}
+                  />,
+                ]}
+                space={3}
+              />
+            </>
+          ) : (
+            <>
   
+              <GridContainer
+                elements={[
+                  <></>,
+                  <></>,
+                  <>
+                    {(
+                      <CustomButton
+                        text="+ Add External Member"
+                        onClick={handleAddExternalMember}
+                      />
+                    )}
+                  </>,
+                ]}
+              />
+
+              {externalMembers.map((member, index) => (
+                <div key={index} style={{ marginBottom: "20px" }}>
+                  <GridContainer
+                    elements={[
+                      <p style={{ fontWeight: "bold" }}>
+                        External Member {index + 1}
+                      </p>,
+                      <></>,
+                      <>
+                        {!lock && (
+                          <CustomButton
+                            text="Remove"
+                            onClick={() => handleRemoveExternalMember(index)}
+                          />
+                        )}
+                      </>,
+                    ]}
+                  />
+                  <GridContainer
+                    elements={[
+                      <InputField
+                        label="Name"
+                        initialValue={member.name}
+                        isLocked={lock}
+                        onChange={(value) =>
+                          handleExternalMemberChange(index, "name", value)
+                        }
+                      />,
+                      <InputField
+                        label="Email"
+                        initialValue={member.email}
+                        isLocked={lock}
+                        onChange={(value) =>
+                          handleExternalMemberChange(index, "email", value)
+                        }
+                      />,
+                    ]}
+                  />
+                  <GridContainer
+                    elements={[
+                      <InputField
+                        label="Phone"
+                        initialValue={member.phone}
+                        isLocked={lock}
+                        onChange={(value) =>
+                          handleExternalMemberChange(index, "phone", value)
+                        }
+                      />,
+                      <InputField
+                        label="College"
+                        initialValue={member.college}
+                        isLocked={lock}
+                        onChange={(value) =>
+                          handleExternalMemberChange(index, "college", value)
+                        }
+                      />,
+                    ]}
+                  />
+                </div>
+              ))}
+            </>
+          )}
           {formData.role === "faculty" && !lock && (
             <>
               <GridContainer

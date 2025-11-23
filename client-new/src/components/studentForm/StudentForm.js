@@ -173,6 +173,7 @@ const StudentForm = ({ edit = false, studentData = {} }) => {
             options={[
               { title: "Full Time", value: "full-time" },
               { title: "Part Time", value: "part-time" },
+              {title: "Executive", value: "executive"},
             ]}
           />,
           <InputField

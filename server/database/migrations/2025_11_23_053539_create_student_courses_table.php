@@ -11,31 +11,26 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('outside_experts', function (Blueprint $table) {
-            $table->increments('id');
-    
+        Schema::create('student_courses', function (Blueprint $table) {
+            $table->id();
             $table->integer('student_id')->unsigned()->index();
             $table->foreign('student_id')->references('roll_no')->on('students')->onDelete('cascade');
-    
-            $table->enum('type', ['inside', 'outside'])->default('outside');
-    
-            // Polymorphic columns
-            $table->unsignedInteger('member_id');
-            $table->string('member_type'); // Either "faculty" or "outside_experts"
-    
+            $table->unsignedInteger('course_id')->nullable()->index();
+            $table->foreign('course_id')
+                ->references('id')
+                ->on('courses')
+                ->onDelete('set null');
+            $table->enum('status', ['enrolled', 'completed'])->default('enrolled');
+            $table->string('grade')->nullable();
             $table->timestamps();
-    
-            // Enforce one unique combination per student
-            $table->unique(['student_id', 'member_id', 'member_type']);
         });
     }
-    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('outside_experts');
+        Schema::dropIfExists('student_courses');
     }
 };

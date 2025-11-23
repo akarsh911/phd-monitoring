@@ -262,7 +262,7 @@ const Student = ({ formData, refetchData = null, }) => {
                <GridContainer
                   elements={[
                     <InputField
-                      label="No. of Papers in SCI/SCIE/SSCI/ABCD/AHCI Journal"
+                      label="No. of Papers in SCI/SCIE/SSCI/ABDC/AHCI Journal"
                       initialValue={formData.no_paper_sci_journal}
                       isLocked={lock}
                       onChange={(value) => {
@@ -310,7 +310,7 @@ const Student = ({ formData, refetchData = null, }) => {
                 <GridContainer
                   elements={[
                     <InputField
-                      label="Total of Papers in SCI/SCIE/SSCI/ABCD/AHCI Journal"
+                      label="Total of Number of Papers"
                       initialValue={formData.total_paper_sci_journal}
                       isLocked={true}
                       onChange={(value) => {

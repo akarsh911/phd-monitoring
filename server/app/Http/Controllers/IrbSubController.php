@@ -214,7 +214,7 @@ class IrbSubController extends Controller
     private function dordcSubmit($user, $request, $form_id)
     {
         $model = IrbSubForm::class;
-        return $this->submitForm($user, $request, $form_id, $model, 'dordc', 'dra', 'complete', function ($formInstance) use ($request, $user) {
+        return $this->submitForm($user, $request, $form_id, $model, 'dordc', 'phd_coordinator', 'complete', function ($formInstance) use ($request, $user) {
  
                $formInstance->completion='complete';
                $formInstance->status='approved';

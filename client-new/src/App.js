@@ -27,6 +27,7 @@ import AllNotificationsPage from './components/notificationBox/AllNotificationsP
 import PresentationSemester from './pages/presentations/PresentationSemester';
 import Logs from './pages/logs/Logs';
 import Team from './pages/team/Team';
+import Courses from './pages/courses/Courses';
 // import Team from './pages/team/Team';
 
 
@@ -57,7 +58,7 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/team" element={<Team />} />
-          <Route path="/login" element={<LoginPage />} />
+           <Route path="/login" element={<LoginPage />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
           <Route path="/reset-password" element={<ResetPasswordPage/>} />
           <Route path="/home" element={<Dashboard/>} />
@@ -73,7 +74,8 @@ const AppContent = () => {
           <Route path="/notifications" element={<AllNotificationsPage />} />
           <Route path="/presentation" element={<PresentationSemester/>} /> 
           <Route path="/presentation/semester" element={<PresentationSemester/>} /> 
-
+              <Route path="/courses" element={<Courses />} />
+     
           {/* <Route path="/presentation/form" element={<PresentationListPage/>} />   */}
           
           <Route path="/presentation/semester/:semester_id" element={<PresentationListPage/>} />  
