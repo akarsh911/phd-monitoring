@@ -35,7 +35,7 @@ const AdminFormManagement = () => {
     { label: "PhD Coordinator", value: "phd_coordinator" },
     { label: "DoRDC", value: "dordc" },
     { label: "DRA", value: "dra" },
-    { label: "Director", value: "director" },
+    { label: "Vice Chancellor", value: "director" },
     { label: "Doctoral", value: "doctoral" },
     { label: "External", value: "external" },
     { label: "Complete", value: "complete" },
@@ -61,7 +61,7 @@ const AdminFormManagement = () => {
     phd_coordinator: "PhD Coordinator",
     dordc: "DoRDC",
     dra: "DRA",
-    director: "Director",
+    director: "Vice Chancellor",
     doctoral: "Doctoral",
     external: "External"
   };
@@ -667,7 +667,7 @@ const AdminFormManagement = () => {
                   { key: 'phd_coordinator_available', role: 'phd_coordinator', label: 'PhD Coordinator' },
                   { key: 'dordc_available', role: 'dordc', label: 'DoRDC' },
                   { key: 'dra_available', role: 'dra', label: 'DRA' },
-                  { key: 'director_available', role: 'director', label: 'Director' },
+                  { key: 'director_available', role: 'director', label: 'Vice Chancellor' },
                   { key: 'doctoral_available', role: 'doctoral', label: 'Doctoral' },
                 ].map((role) => (
                   <div key={role.key} className="availability-item-editable">

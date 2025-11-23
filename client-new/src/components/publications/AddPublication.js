@@ -48,9 +48,9 @@ const AddPublication = ({close}) => {
                   value: JSON.stringify({
                     publication_type: "journal",
                     type: "sci",
-                    label: "Papers in SCI/SCIE/SSCI/ABCD/AHCI Journal",
+                    label: "Papers in SCI/SCIE/SSCI/ABDC/AHCI Journal",
                   }),
-                  title: "Papers in SCI/SCIE/SSCI/ABCD/AHCI Journal",
+                  title: "Papers in SCI/SCIE/SSCI/ABDC/AHCI Journal",
                 },
                 {
                   value: JSON.stringify({

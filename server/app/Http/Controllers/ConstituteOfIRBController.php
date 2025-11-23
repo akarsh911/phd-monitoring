@@ -481,7 +481,9 @@ class ConstituteOfIRBController extends Controller
                     DoctoralCommittee::create([
                         'student_id' => $formInstance->student->roll_no,
                         'faculty_id' => $cognateExpertId,
+                        'type' => 'internal',
                     ]);
+
                     
                     IRBCommittee::create([
                         'student_id'  => $formInstance->student->roll_no,
@@ -495,6 +497,7 @@ class ConstituteOfIRBController extends Controller
                         DoctoralCommittee::create([
                             'student_id' => $formInstance->student->roll_no,
                             'faculty_id' => $irbExpert->expert_id,
+                            'type' => 'internal',
                         ]);
                         IRBCommittee::create([
                             'student_id'  => $formInstance->student->roll_no,
@@ -503,6 +506,9 @@ class ConstituteOfIRBController extends Controller
                             'member_id'   => $irbExpert->expert_id,
                         ]);
                     }
+                    $area=$formInstance->student->areaOfSpecialization;
+                    $expert=$area->expert_name;
+                    
                     $formInstance->update([
                         'outside_expert' => $outsideExpertId,
                         'cognate_expert' => $cognateExpertId,

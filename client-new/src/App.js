@@ -29,6 +29,7 @@ import AdminFormManagement from './pages/admin/AdminFormManagement';
 import AreaOfSpecialization from './pages/areaOfSpecialization/AreaOfSpecialization';
 import StudentCourses from './pages/StudentCourses/StudentCourses';
 import AdminCourseManagement from './pages/AdminCourseManagement/AdminCourseManagement';
+import OutsideExperts from './pages/OutsideExperts/OutsideExperts';
 // import Team from './pages/team/Team';
 
 
@@ -114,6 +115,7 @@ const AppContent = () => {
                 <Route path="/forms/manage" element={<AdminFormManagement/>} />
                 <Route path='/areasOfSpecialization' element={<AreaOfSpecialization/>}/>
                 <Route path="/courses/manage" element={<AdminCourseManagement />} />
+                <Route path="/outside-experts" element={<OutsideExperts />} />
               <Route path="/logs" element={<Logs />} />
          
               {/* <Route path="/faculty/:roll_no" element={<StudentProfile />} />

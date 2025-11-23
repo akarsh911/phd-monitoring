@@ -127,7 +127,7 @@ const PresentationListPage = () => {
             >
               <Tab label="Action Required" />
               <Tab label="Upcoming Presentations" />
-              <Tab label="Submitted" />
+              <Tab label="Completed" />
               <Tab label="Not Scheduled" />
 
               <Tab label="Semester Off" />

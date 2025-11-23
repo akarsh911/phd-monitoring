@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('outside_experts', function (Blueprint $table) {
+        Schema::create('irb_committees', function (Blueprint $table) {
             $table->increments('id');
     
             $table->integer('student_id')->unsigned()->index();
@@ -36,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('outside_experts');
+        Schema::dropIfExists('irb_committees');
     }
 };

@@ -100,7 +100,7 @@ const ShowPublications = ({
                      )}
                    {formData.sci && formData.sci.length > 0 && (
                         <>
-                            <GridContainer elements={[<h2>SCI/SCIE/SSCI/ABCD/AHCI Journal</h2>]} space={1} />
+                            <GridContainer elements={[<h2>SCI/SCIE/SSCI/ABDC/AHCI Journal</h2>]} space={1} />
                             <GridContainer elements={[
                                 <TableComponent
                                     data={formData.sci}

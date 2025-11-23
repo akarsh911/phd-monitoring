@@ -14,6 +14,7 @@ const buttonConfig = [
     { path: '/logs', icon: <i class="fa-solid fa-history"></i>, text: 'Logs', roles: ['admin'] },
     { path: '/notifications', icon: <i class="fa-solid fa-bell"></i>, text: 'Notifications', roles: ['student', 'hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external','admin'] },
     {path: '/areasOfSpecialization', icon: <i class="fa fa-list" aria-hidden="true"></i>, text: 'Areas of Specialization', roles: ['admin']},
+    {path: '/outside-experts', icon: <i class="fa fa-user-tie" aria-hidden="true"></i>, text: 'Outside Experts', roles: ['admin']},
 ];
 
 const CustomNavBar = () => {

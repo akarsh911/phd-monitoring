@@ -15,7 +15,7 @@ const IRBSubmission = ({ formData }) => {
       roleHierarchy={formData.steps}
       currentRole={formData.role}> 
         <Student formData={formData}></Student>
-        <Supervisor formData={formData}></Supervisor>
+        <Supervisor formData={formData} ></Supervisor>
         <Recommendation
           formData={formData}
           role="hod"

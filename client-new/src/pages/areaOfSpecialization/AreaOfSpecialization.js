@@ -28,6 +28,8 @@ const AreaOfSpecialization = () => {
     expert_email: '',
     expert_phone: '',
     expert_college: '',
+    expert_designation: '',
+    expert_website: '',
   });
   const [csvFile, setCsvFile] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -69,6 +71,8 @@ const AreaOfSpecialization = () => {
         expert_email: data.expert_email || '',
         expert_phone: data.expert_phone || '',
         expert_college: data.expert_college || '',
+        expert_designation: data.expert_designation || '',
+        expert_website: data.expert_website || '',
       });
     } else {
       setEditData(null);
@@ -79,6 +83,9 @@ const AreaOfSpecialization = () => {
         expert_email: '',
         expert_phone: '',
         expert_college: '',
+        expert_designation: '',
+        expert_website: '',
+
       });
     }
     setIsOpen(true);
@@ -178,9 +185,9 @@ const AreaOfSpecialization = () => {
   };
 
   const downloadCSVTemplate = () => {
-    const csvContent = 'name,department_id,expert_name,expert_email,expert_phone,expert_college\n' +
-      'Machine Learning,1,Dr. John Doe,john@example.com,1234567890,MIT\n' +
-      'Data Science,1,Dr. Jane Smith,jane@example.com,0987654321,Stanford';
+    const csvContent = 'name,department_id,expert_name,expert_email,expert_phone,expert_college,expert_designation,expert_website\n' +
+      'Machine Learning,1,Dr. John Doe,john@example.com,1234567890,MIT,Professor,http://johndoe.com\n' +
+      'Data Science,1,Dr. Jane Smith,jane@example.com,0987654321,Stanford,Associate Professor,http://janesmith.com';
     
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
@@ -293,6 +300,24 @@ const AreaOfSpecialization = () => {
                   initialValue={formData.expert_college}
                   onChange={(value) => setFormData({ ...formData, expert_college: value })}
                   hint="Institution name"
+                />,
+              ]}
+            />
+            
+
+            <GridContainer
+              elements={[
+                <InputField
+                  label="Expert Designation"
+                  initialValue={formData.expert_designation}
+                  onChange={(value) => setFormData({ ...formData, expert_designation: value })}
+                  hint="Designation of the expert"
+                />,
+                <InputField
+                  label="Expert Website"
+                  initialValue={formData.expert_website}
+                  onChange={(value) => setFormData({ ...formData, expert_website: value })}
+                  hint="Website URL"
                 />,
               ]}
             />

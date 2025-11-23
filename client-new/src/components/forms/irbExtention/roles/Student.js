@@ -98,7 +98,7 @@ const Student = ({ formData }) => {
           <GridContainer
             elements={[
               <InputField
-                label="Tentive Title of Phd Thesis"
+                label="Tentative Title of Phd Thesis"
                 initialValue={formData.phd_title}
                 isLocked={true}
               />,

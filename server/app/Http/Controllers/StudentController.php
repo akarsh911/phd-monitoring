@@ -155,8 +155,8 @@ class StudentController extends Controller {
         'current_page' => $students->currentPage(),
         'totalPages' => $students->lastPage(),
         'role' => $role,
-         'fields'=>['name','phd_title','roll_no','overall_progress','department','email','phone','current_status'],
-         'fieldsTitles'=>['Name','PhD Title','Roll No','Overall Progress','Department','Email','Phone','Current Status'],
+         'fields'=>['name','roll_no','overall_progress','department','email','phone'],
+         'fieldsTitles'=>['Name','Roll No','Overall Progress','Department','Email','Phone'],
     ]);
 }
 

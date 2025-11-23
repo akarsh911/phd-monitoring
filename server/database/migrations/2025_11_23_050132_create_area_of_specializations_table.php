@@ -20,6 +20,8 @@ return new class extends Migration
             $table->text('expert_email')->nullable();
             $table->text('expert_phone')->nullable();
             $table->text('expert_college')->nullable();
+            $table->text('expert_designation')->nullable();
+            $table->text('expert_website')->nullable();
             $table->timestamps();
         });
         Schema::table('students', function (Blueprint $table) {

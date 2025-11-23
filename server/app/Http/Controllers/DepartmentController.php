@@ -117,6 +117,7 @@ class DepartmentController extends Controller
             [
                 'broad_area' => 'required|string',
                 'department_id' => 'required|integer',
+
             ]
         );
         $department = \App\Models\Department::find($request->department_id);
@@ -157,6 +158,8 @@ class DepartmentController extends Controller
                 'expert_email' => 'nullable|email',
                 'expert_phone' => 'nullable|string',
                 'expert_college' => 'nullable|string',
+                'expert_designation' => 'nullable|string',
+                'expert_website' => 'nullable|string',
             ]);
 
             $department = \App\Models\Department::find($request->department_id);
@@ -173,6 +176,8 @@ class DepartmentController extends Controller
             $areaOfSpecialization->expert_email = $request->expert_email;
             $areaOfSpecialization->expert_phone = $request->expert_phone;
             $areaOfSpecialization->expert_college = $request->expert_college;
+            $areaOfSpecialization->expert_designation = $request->expert_designation;
+            $areaOfSpecialization->expert_website = $request->expert_website;
             $areaOfSpecialization->save();
 
             return response()->json([

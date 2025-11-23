@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import GridContainer from './GridContainer';
 import "./Fields.css";
+import { Table } from 'lucide-react';
+import TableComponent from '../table/TableComponent';
 
-const RecommendationField = ({ role, allowRejection = false, onRecommendationChange, initialValue ,lock=false}) => {
+const RecommendationField = ({ role, allowRejection = false, onRecommendationChange, initialValue ,lock=false,formData=null}) => {
     const [approval, setApproval] = useState(null);
     const [rejected, setRejected] = useState(false);
 
@@ -30,6 +32,56 @@ const RecommendationField = ({ role, allowRejection = false, onRecommendationCha
     };
 
     return (
+        <>
+        <GridContainer elements={[
+
+            <>
+            
+            {role==='doctoral' && formData&& (<>
+                <TableComponent
+                    data={formData.doctoralCommitteeReviews}
+                    keys={[
+                      "faculty",
+                      "progress",
+                      "comments",
+                      "review_status",
+                   
+                    ]}
+                    titles={[
+                      "Doctoral Member Name",
+                      "Review",
+                      "Comments",
+                      "Review Status",
+                     
+                    ]}
+                  />,
+            
+            </>)}
+              <>{role==='supervisor'&& formData && (<>
+                <TableComponent
+                    data={formData.supervisorReviews}
+                    keys={[
+                      "faculty",
+                      "progress",
+                      "comments",
+                      "review_status",
+                   
+                    ]}
+                    titles={[
+                      "Doctoral Member Name",
+                      "Review",
+                      "Comments",
+                      "Review Status",
+                     
+                    ]}
+                  />,
+            
+            </>)}</>
+            
+            
+            </>,
+            
+        ]}/>
         <GridContainer 
             elements={[
                 <div className="recommendation-field" key="recommendation-field">
@@ -74,6 +126,7 @@ const RecommendationField = ({ role, allowRejection = false, onRecommendationCha
             ]} 
             space={3}
         />
+        </>
     );
 };
 

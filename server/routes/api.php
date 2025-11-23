@@ -247,6 +247,10 @@ Route::prefix('courses')->group(function () {
     require base_path('routes/base/courses.php');
 });
 
+Route::prefix('outside-experts')->group(function () {
+    require base_path('routes/base/outside_experts.php');
+});
+
 Route::get('/send-welcome', [EmailNotificationController::class, 'sendWelcomeEmail']);
 
 
