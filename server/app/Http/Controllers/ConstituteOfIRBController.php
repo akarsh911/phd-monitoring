@@ -61,8 +61,12 @@ class ConstituteOfIRBController extends Controller
                 return $supervisor->user->name();
             })->join(', ');
             },
+            'broad_area_of_research' => function ($form) {
+                $area = $form->student->areaOfSpecialization;
+                return $area ? $area->name : null;
+            },
         ],
-        'titles' => [ "Name", "Roll No",  "Email","Supervisors",],
+        'titles' => [ "Name", "Roll No",  "Email","Supervisors","Broad Area of Research"],
     ]);
     }
 
@@ -174,6 +178,7 @@ class ConstituteOfIRBController extends Controller
             'title' => 'required|string',
             'irb_pdf' => 'required|file|mimes:pdf|max:2048',
             'address' => 'required|string',
+            'broad_area_of_research' => 'nullable|integer|exists:area_of_specializations,id',
         ]);
         return $this->submitForm($user,$request, $form_id, ConstituteOfIRB::class, 'student','student','faculty',  function ($formInstance) use ($request, $user) {
             if(!$formInstance->student->gender) {
@@ -218,6 +223,13 @@ class ConstituteOfIRBController extends Controller
             $link=$this->saveUploadedFile($request->file('irb_pdf'), 'irb_const', $user->student->roll_no);
            
             $formInstance->student->address = $request->address;
+            
+            // Save broad area of research
+            if ($request->has('broad_area_of_research') && $request->broad_area_of_research) {
+                $formInstance->broad_area_of_research = $request->broad_area_of_research;
+                $formInstance->student->area_of_specialization_id = $request->broad_area_of_research;
+            }
+            
             $formInstance->student->save();
             $formInstance->phd_title = $request->title;
 
@@ -521,16 +533,15 @@ class ConstituteOfIRBController extends Controller
                             ->first();
 
                         if (!$existingForm) {
-                            Forms::create([
-                                'student_id' => $student->roll_no,
-                                'department_id' => $student->department_id,
-                                'count' => 0,
-                                'student_available' => true,
-                                'form_type' => $form['form_type'],
-                                'form_name' => $form['form_name'],
-                                'max_count' => $form['max_count'],
-                                'stage' => $form['stage'],
-                            ]);
+                            $formData = (new \App\Http\Controllers\AdminFormController())->getFormCreationData(
+                                $form['form_type'],
+                                $student->roll_no,
+                                $student->department_id
+                            );
+                            
+                            if ($formData) {
+                                Forms::create($formData);
+                            }
                         }
                     }
             });

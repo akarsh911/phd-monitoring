@@ -14,9 +14,17 @@ import CustomModal from "../forms/modal/CustomModal";
 import { toast } from "react-toastify";
 
 const ProfileCard = ({ dataIP = null, link = false }) => {
-  const [role, setRole] = useState("");
   const [showEditButton, setShowEditButton] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTagModalOpen, setIsTagModalOpen] = useState(false);
+  const [courses, setCourses] = useState([]);
+  const [allCourses, setAllCourses] = useState([]);
+  const [tagData, setTagData] = useState({
+    course_id: '',
+    semester: '',
+    status: 'enrolled',
+    grade: ''
+  });
 
   const { state: locationState, pathname } = useLocation();
   const { roll_no } = useParams();
@@ -42,11 +50,68 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
       setLoading(false);
     }
   }, [roll_no, profile]);
+  
+  const fetchCourses = async () => {
+    const studentId = profile?.database_id || profile?.id;
+    if (!studentId) return;
+    try {
+      let response = await customFetch(`${baseURL}/courses/student/courses/${studentId}`, "GET", {}, false, false);
+      response = response.response;
+      console.log("Courses response:", response);
+      if (response?.success) {
+        setCourses(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching courses:', error);
+    }
+  };
+  
+  useEffect(() => {
+    const studentId = profile?.database_id || profile?.id;
+    if (studentId) {
+      fetchCourses();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profile?.database_id, profile?.id]);
+
+  const fetchAllCourses = async () => {
+    try {
+      const response = await customFetch(`${baseURL}/courses/all`, "GET", {}, false, false);
+      if (response?.success) {
+        setAllCourses(response.response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching all courses:', error);
+    }
+  };
+
+  const handleTagCourse = async () => {
+    try {
+      const studentId = profile.database_id || profile.id;
+      const payload = {
+        student_id: studentId,
+        ...tagData
+      };
+      const response = await customFetch(`${baseURL}/courses/student/tag`, "POST", payload, false, false);
+      if (response?.success) {
+        toast.success('Course tagged successfully');
+        setIsTagModalOpen(false);
+        setTagData({ course_id: '', semester: '', status: 'enrolled', grade: '' });
+        fetchCourses();
+      } else {
+        toast.error(response.message || 'Failed to tag course');
+      }
+    } catch (error) {
+      console.error('Error tagging course:', error);
+      toast.error('Failed to tag course');
+    }
+  };
+
   useEffect(() => {
     // Set the user role from localStorage
-    setRole(localStorage.getItem("userRole"));
-    console.log("Role in ProfileCard:", role);
-    if (role === "hod" || role === "admin" || role === "dordc") {
+    const userRole = localStorage.getItem("userRole");
+    console.log("Role in ProfileCard:", userRole);
+    if (userRole === "hod" || userRole === "admin" || userRole === "dordc") {
       setShowEditButton(true);
     }
   }, [loading]);
@@ -172,8 +237,17 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
               onClick={navigateToProgress}
               disabled={true}
             />
+            {showEditButton && (
+              <CustomButton text="Tag Course" onClick={() => {
+                fetchAllCourses();
+                setIsTagModalOpen(true);
+              }} />
+            )}
           </div>
-            {showEditButton && (<><CustomButton text="Edit" onClick={() => setIsModalOpen(true)} /></>)}
+          {showEditButton && (<><CustomButton text="Edit" onClick={() => setIsModalOpen(true)} /></>)}
+          
+        
+
           <GridContainer
             label="Supervisors"
             elements={[
@@ -193,6 +267,30 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
                 data={doctoralTableData}
                 keys={["name", "email", "phone", "designation"]}
                 titles={["Name", "Email", "Phone", "Designation"]}
+              />,
+            ]}
+            space={3}
+          />
+
+            <GridContainer
+            label="Enrolled Courses"
+            elements={[
+              <TableComponent
+                data={courses?.filter(c => c.status === 'enrolled')}
+                keys={["course_code", "course_name", "credits", "semester"]}
+                titles={["Course Code", "Course Name", "Credits", "Semester"]}
+              />,
+            ]}
+            space={3}
+          />
+
+          <GridContainer
+            label="Completed Courses"
+            elements={[
+              <TableComponent
+                data={courses?.filter(c => c.status === 'completed')}
+                keys={["course_code", "course_name", "credits", "semester", "grade"]}
+                titles={["Course Code", "Course Name", "Credits", "Semester", "Grade"]}
               />,
             ]}
             space={3}
@@ -283,6 +381,74 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
             ]}
           />
         }
+        
+        {/* Tag Course Modal */}
+        <CustomModal
+          isOpen={isTagModalOpen}
+          onClose={() => setIsTagModalOpen(false)}
+        >
+          <div style={{ padding: '1rem' }}>
+            <h3>Tag Student with Course</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
+              <div>
+                <label>Course</label>
+                <select
+                  value={tagData.course_id}
+                  onChange={(e) => setTagData({ ...tagData, course_id: e.target.value })}
+                  style={{ width: '100%', padding: '0.5rem', borderRadius: '0.25rem', border: '1px solid #d1d5db' }}
+                >
+                  <option value="">Select Course</option>
+                  {allCourses.map(course => (
+                    <option key={course.id} value={course.id}>
+                      {course.course_code} - {course.course_name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label>Semester</label>
+                <input
+                  type="text"
+                  value={tagData.semester}
+                  onChange={(e) => setTagData({ ...tagData, semester: e.target.value })}
+                  placeholder="e.g., Fall 2024"
+                  style={{ width: '100%', padding: '0.5rem', borderRadius: '0.25rem', border: '1px solid #d1d5db' }}
+                />
+              </div>
+              
+              <div>
+                <label>Status</label>
+                <select
+                  value={tagData.status}
+                  onChange={(e) => setTagData({ ...tagData, status: e.target.value })}
+                  style={{ width: '100%', padding: '0.5rem', borderRadius: '0.25rem', border: '1px solid #d1d5db' }}
+                >
+                  <option value="enrolled">Enrolled</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+              
+              {tagData.status === 'completed' && (
+                <div>
+                  <label>Grade</label>
+                  <input
+                    type="text"
+                    value={tagData.grade}
+                    onChange={(e) => setTagData({ ...tagData, grade: e.target.value })}
+                    placeholder="e.g., A+"
+                    style={{ width: '100%', padding: '0.5rem', borderRadius: '0.25rem', border: '1px solid #d1d5db' }}
+                  />
+                </div>
+              )}
+              
+              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1rem' }}>
+                <CustomButton text="Cancel" onClick={() => setIsTagModalOpen(false)} />
+                <CustomButton text="Tag Course" onClick={handleTagCourse} />
+              </div>
+            </div>
+          </div>
+        </CustomModal>
       </>
     );
   } else {

@@ -27,6 +27,7 @@ class ConstituteOfIRB extends Model
             'outside_expert',
             'phd_title',
             'irb_pdf',
+            'broad_area_of_research',
         ], $commonFieldKeys);
 
         parent::__construct($attributes);
@@ -42,6 +43,11 @@ class ConstituteOfIRB extends Model
                 return $objective->objective;
             })->values(),
             'irb_pdf' => $this->irb_pdf,
+            'broad_area_of_research' => $this->broad_area_of_research,
+            'area_of_specialization' => $this->student->areaOfSpecialization ? [
+                'id' => $this->student->areaOfSpecialization->id,
+                'name' => $this->student->areaOfSpecialization->name,
+            ] : null,
             'chairman' => [
                 'name' => $this->student->department->hod->user->name(),
                 'designation' => $this->student->department->hod->designation,

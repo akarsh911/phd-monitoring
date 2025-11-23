@@ -71,6 +71,9 @@ const MainFormPage = () => {
                     return <SupervisorChange formData={formData}/>
                   case "list-of-examiners":
                     return <ListOfExaminers formData={formData}/>
+                 //fix yaha p
+                    case "thesis-extension":
+                    return <ThesisSubmission formData={formData} />
                   case "revise-title":
                     return <ReviseTitle formData={formData}/>
                   default:

@@ -86,14 +86,16 @@ class StudentController extends Controller {
 
         $student->save();
         //create new entry in students table
-        Forms::create([
-            'student_id' => $student->roll_no,
-            'department_id' => $student->department_id,
-            'count'=>0,
-            'student_available'=>true,
-            'form_type'=>'supervisor-allocation',
-            'form_name'=>'Supervisor Allocation Form',            
-        ]);
+        $adminFormController = new \App\Http\Controllers\AdminFormController();
+        $formData = $adminFormController->getFormCreationData(
+            'supervisor-allocation',
+            $student->roll_no,
+            $student->department_id
+        );
+        
+        if ($formData) {
+            Forms::create($formData);
+        }
         return response()->json($password,200);
         //return the password to the user
         //TODO: Send email to the user with the password        

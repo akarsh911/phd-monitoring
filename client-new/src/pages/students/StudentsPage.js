@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/dashboard/layout";
 import { useLoading } from "../../context/LoadingContext";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import FilterBar from "../../components/filterBar/FilterBar";
 import PagenationTable from "../../components/pagenationTable/PagenationTable";
 import CustomModal from "../../components/forms/modal/CustomModal";
@@ -13,6 +13,7 @@ const StudentsPage = () => {
   const [filter, setFilter] = useState([]);
   const { setLoading } = useLoading();
   const location = useLocation();
+  const navigate = useNavigate();
   const role = localStorage.getItem("userRole");
   const handleFilterChange = (newFilter) => {
     setFilter(newFilter);
@@ -55,11 +56,18 @@ const StudentsPage = () => {
                 }
                 actions={[
                     {
-                        icon: <i class="fa-solid fa-pen-to-square"></i>,
+                        icon: <i className="fa-solid fa-pen-to-square"></i>,
                         tooltip: "Edit",
                         onClick: (studentData) => {
                           setStudentToEdit(studentData);
                           setIsModalEditStudentOpen(true)},
+                    },
+                    {
+                        icon: <i className="fa-solid fa-file-lines"></i>,
+                        tooltip: "Manage Forms",
+                        onClick: (studentData) => {
+                          navigate(`/forms/manage?roll_no=${studentData.roll_no}`);
+                        },
                     },
 
                 ]}

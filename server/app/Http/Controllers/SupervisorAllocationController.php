@@ -281,16 +281,16 @@ class SupervisorAllocationController extends Controller
                             ->first();
 
                         if (!$existingForm) {
-                            Forms::create([
-                                'student_id' => $student->roll_no,
-                                'department_id' => $student->department_id,
-                                'count' => 0,
-                                'student_available' => true,
-                                'form_type' => $form['form_type'],
-                                'form_name' => $form['form_name'],
-                                'max_count' => $form['max_count'],
-                                'stage' => $form['stage'],
-                            ]);
+                            $adminController = app()->make(\App\Http\Controllers\AdminFormController::class);
+                            $formData = $adminController->getFormCreationData(
+                                $form['form_type'],
+                                $student->roll_no,
+                                $student->department_id
+                            );
+                            
+                            if ($formData) {
+                                Forms::create($formData);
+                            }
                         }
                     }
 

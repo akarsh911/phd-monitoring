@@ -21,6 +21,7 @@ return new class extends Migration
                 ->on('courses')
                 ->onDelete('set null');
             $table->enum('status', ['enrolled', 'completed'])->default('enrolled');
+            $table->text('semester')->nullable();
             $table->string('grade')->nullable();
             $table->timestamps();
         });

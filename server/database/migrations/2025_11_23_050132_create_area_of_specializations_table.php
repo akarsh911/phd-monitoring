@@ -16,6 +16,10 @@ return new class extends Migration
             $table->integer('department_id')->unsigned()->nullable();
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
             $table->text('name')->nullable();
+            $table->text('expert_name')->nullable();
+            $table->text('expert_email')->nullable();
+            $table->text('expert_phone')->nullable();
+            $table->text('expert_college')->nullable();
             $table->timestamps();
         });
         Schema::table('students', function (Blueprint $table) {

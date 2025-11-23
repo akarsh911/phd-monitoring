@@ -17,6 +17,7 @@ class Student extends Model
         'user_id',
         'roll_no',
         'department_id',
+        'area_of_specialization_id',
         'date_of_registration',
         'date_of_irb',
         'date_of_synopsis',
@@ -64,6 +65,11 @@ class Student extends Model
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+
+    public function areaOfSpecialization()
+    {
+        return $this->belongsTo(AreaOfSpecialization::class, 'area_of_specialization_id');
     }
 
     public function supervisors()

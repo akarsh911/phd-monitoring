@@ -218,8 +218,10 @@ private function listDoctoralForms($user, $model, $filters = null, $override = f
 public function ListStudentProfile($student){
     return [
         'id' => $student->roll_no,
+        'database_id' => $student->id,
         'name' => $student->user->name(),
         'phd_title' => $student->phd_title,
+        'department_id'=>$student->department_id,
         'overall_progress' => $student->overall_progress,
         'roll_no' => $student->roll_no,
         'department' => $student->department->name,

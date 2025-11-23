@@ -243,6 +243,10 @@ Route::prefix('admin')->group(function () {
     require base_path('routes/base/admin.php');
 });
 
+Route::prefix('courses')->group(function () {
+    require base_path('routes/base/courses.php');
+});
+
 Route::get('/send-welcome', [EmailNotificationController::class, 'sendWelcomeEmail']);
 
 

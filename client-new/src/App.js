@@ -1,8 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
-import HomePage from './pages/home/HomePage';
-import Layout from './components/dashboard/layout';
 import LoginPage from './pages/login/Login';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -27,7 +25,10 @@ import AllNotificationsPage from './components/notificationBox/AllNotificationsP
 import PresentationSemester from './pages/presentations/PresentationSemester';
 import Logs from './pages/logs/Logs';
 import Team from './pages/team/Team';
-import Courses from './pages/courses/Courses';
+import AdminFormManagement from './pages/admin/AdminFormManagement';
+import AreaOfSpecialization from './pages/areaOfSpecialization/AreaOfSpecialization';
+import StudentCourses from './pages/StudentCourses/StudentCourses';
+import AdminCourseManagement from './pages/AdminCourseManagement/AdminCourseManagement';
 // import Team from './pages/team/Team';
 
 
@@ -68,13 +69,13 @@ const AppContent = () => {
             <Route path="/forms" element={<FormsPage/>} />
             
             <Route path="/publications" element={<Publications/>} />  
+            <Route path="/courses" element={<StudentCourses />} />
             
             </>
           )}
           <Route path="/notifications" element={<AllNotificationsPage />} />
           <Route path="/presentation" element={<PresentationSemester/>} /> 
           <Route path="/presentation/semester" element={<PresentationSemester/>} /> 
-              <Route path="/courses" element={<Courses />} />
      
           {/* <Route path="/presentation/form" element={<PresentationListPage/>} />   */}
           
@@ -91,11 +92,14 @@ const AppContent = () => {
                 <Route path="/students/:roll_no/forms" element={<FormsPage />} />
                 <Route path="/students/:roll_no/forms/:form_type" element={<FormListPage />} />
                 <Route path="/students/:roll_no/forms/:form_type/:id" element={<MainFormPage />} />
+                {(role === 'hod' || role === 'phd_coordinator' || role==='admin') && (
+                  <Route path="/courses" element={<AdminCourseManagement />} />
+                )}
             </>
           ) }
           {(
             role === 'hod' || role === 'phd_coordinator' || role==='doctoral'|| role==='external'|| role==='dordc'  || role==='dra' || role==='director' || role==='admin') && (
-            <>
+              <>
               <Route path="/faculty" element={<FacultyPage />} />
               <Route path="/departments" element={<DepartmentPage/>}/>
               {/* <Route path="/faculty/:roll_no" element={<StudentProfile />} />
@@ -105,8 +109,11 @@ const AppContent = () => {
             </>
           )}
             {(
-           role==='admin') && (
-            <>
+              role==='admin') && (
+                <>
+                <Route path="/forms/manage" element={<AdminFormManagement/>} />
+                <Route path='/areasOfSpecialization' element={<AreaOfSpecialization/>}/>
+                <Route path="/courses/manage" element={<AdminCourseManagement />} />
               <Route path="/logs" element={<Logs />} />
          
               {/* <Route path="/faculty/:roll_no" element={<StudentProfile />} />
