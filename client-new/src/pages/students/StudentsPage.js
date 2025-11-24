@@ -8,6 +8,7 @@ import CustomModal from "../../components/forms/modal/CustomModal";
 import StudentForm from "../../components/studentForm/StudentForm";
 import CustomButton from "../../components/forms/fields/CustomButton";
 import AssignPanel from "../../components/assignDoctoral/AssignPanel";
+import SupervisorDoctoralManager from "../../components/supervisorDoctoralManager/SupervisorDoctoralManager";
 
 const StudentsPage = () => {
   const [filter, setFilter] = useState([]);
@@ -41,13 +42,12 @@ const StudentsPage = () => {
         <>
           <FilterBar onSearch={handleFilterChange} />
 
-          {role == "admin" ? (
+          {role === "admin" ? (
             <>
               <PagenationTable
                 endpoint={location.pathname}
                 filters={filter}
                 enableApproval={false}
-              
                 extraTopbarComponents={
                   <CustomButton
                     text="Add Student +"
@@ -55,21 +55,41 @@ const StudentsPage = () => {
                   />
                 }
                 actions={[
-                    {
-                        icon: <i className="fa-solid fa-pen-to-square"></i>,
-                        tooltip: "Edit",
-                        onClick: (studentData) => {
-                          setStudentToEdit(studentData);
-                          setIsModalEditStudentOpen(true)},
+                  {
+                    icon: <i className="fa-solid fa-pen-to-square"></i>,
+                    tooltip: "Edit",
+                    onClick: (studentData) => {
+                      setStudentToEdit(studentData);
+                      setIsModalEditStudentOpen(true);
                     },
-                    {
-                        icon: <i className="fa-solid fa-file-lines"></i>,
-                        tooltip: "Manage Forms",
-                        onClick: (studentData) => {
-                          navigate(`/forms/manage?roll_no=${studentData.roll_no}`);
-                        },
+                  },
+                  {
+                    icon: <i className="fa-solid fa-file-lines"></i>,
+                    tooltip: "Manage Forms",
+                    onClick: (studentData) => {
+                      navigate(`/forms/manage?roll_no=${studentData.roll_no}`);
                     },
-
+                  },
+                ]}
+              />
+            </>
+          ) : role === "phd_coordinator" ||
+            role === "hod" ||
+            role === "dordc" ? (
+            <>
+              <PagenationTable
+                endpoint={location.pathname}
+                filters={filter}
+                enableApproval={false}
+                actions={[
+                  {
+                    icon: <i className="fa-solid fa-pen-to-square"></i>,
+                    tooltip: "Edit",
+                    onClick: (studentData) => {
+                      setStudentToEdit(studentData);
+                      setIsModalEditStudentOpen(true);
+                    },
+                  },
                 ]}
               />
             </>
@@ -101,9 +121,22 @@ const StudentsPage = () => {
             onClose={() => {
               setIsModalEditStudentOpen(false);
             }}
-            title={ "Add Student Panel"}
+            title={"Add Student Panel"}
           >
-            <AssignPanel roll_no={studentToEdit?.roll_no}/>
+              {/* {role=== "admin" && <AssignPanel roll_no={studentToEdit?.roll_no}/>} */}
+            {(role === "hod" ||
+              role === "phd_coordinator" ||
+              role === "dordc" ||
+              role === "admin") && (
+              <SupervisorDoctoralManager
+                studentId={studentToEdit?.roll_no}
+                supervisors={studentToEdit?.supervisors}
+                doctoralCommittee={studentToEdit?.doctoral}
+                onClose={() => {
+                  setIsModalEditStudentOpen(false);
+                }}
+              />
+            )}
           </CustomModal>
         </>
       }

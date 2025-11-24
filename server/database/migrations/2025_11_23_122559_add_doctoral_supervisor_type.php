@@ -12,12 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         //
-        Schema::table('doctoral', function (Blueprint $table) {
-            $table->enum('type', ['internal', 'external'])->default('internal')->after('status');
+        Schema::table('doctoral_commitee', function (Blueprint $table) {
+            $table->enum('type', ['internal', 'external'])->default('internal')->after('student_id');
         });
         Schema::table('supervisors', function (Blueprint $table) {
-            $table->enum('type', ['internal', 'external'])->default('internal')->after('designation');
+            $table->enum('type', ['internal', 'external'])->default('internal')->after('student_id');
         });
+        
     }
 
     /**

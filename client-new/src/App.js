@@ -30,6 +30,7 @@ import AreaOfSpecialization from './pages/areaOfSpecialization/AreaOfSpecializat
 import StudentCourses from './pages/StudentCourses/StudentCourses';
 import AdminCourseManagement from './pages/AdminCourseManagement/AdminCourseManagement';
 import OutsideExperts from './pages/OutsideExperts/OutsideExperts';
+import SupervisorDoctoralApproval from './pages/SupervisorDoctoralApproval/SupervisorDoctoralApproval';
 // import Team from './pages/team/Team';
 
 
@@ -109,6 +110,9 @@ const AppContent = () => {
               <Route path="/faculty/:roll_no/forms/:form_type/:id" element={<MainFormPage />} /> */}
             </>
           )}
+            {role === 'dordc' && (
+              <Route path="/supervisor-doctoral-approvals" element={<SupervisorDoctoralApproval />} />
+            )}
             {(
               role==='admin') && (
                 <>

@@ -17,6 +17,7 @@ class Supervisor extends Model
     protected $fillable = [
         'faculty_id',
         'student_id',
+        'type'
     ];
 
     /**

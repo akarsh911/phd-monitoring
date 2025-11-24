@@ -251,6 +251,10 @@ Route::prefix('outside-experts')->group(function () {
     require base_path('routes/base/outside_experts.php');
 });
 
+Route::prefix('supervisor-doctoral-changes')->group(function () {
+    require base_path('routes/base/supervisor_doctoral_changes.php');
+});
+
 Route::get('/send-welcome', [EmailNotificationController::class, 'sendWelcomeEmail']);
 
 

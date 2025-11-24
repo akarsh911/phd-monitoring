@@ -3,6 +3,7 @@ import InputField from "../forms/fields/InputField";
 import GridContainer from "../forms/fields/GridContainer";
 import CustomButton from "../forms/fields/CustomButton";
 import InputSuggestions from "../forms/fields/InputSuggestions";
+import DropdownField from "../forms/fields/DropdownField";
 import { customFetch } from "../../api/base";
 import { baseURL } from "../../api/urls";
 
@@ -15,6 +16,9 @@ const FacultyForm = ({ edit = false, facultyData = {} }) => {
     department_id: "",
     designation: "",
     faculty_code: "",
+    type: "internal",
+    institution: "Thapar Institute of Engineering and Technology",
+    website_link: "",
   });
 
   useEffect(() => {
@@ -27,6 +31,9 @@ const FacultyForm = ({ edit = false, facultyData = {} }) => {
         department_id: facultyData.department_id || "",
         designation: facultyData.designation || "",
         faculty_code: facultyData.faculty_code || "",
+        type: facultyData.type || "internal",
+        institution: facultyData.institution || "Thapar Institute of Engineering and Technology",
+        website_link: facultyData.website_link || "",
       });
     }
   }, [edit, facultyData]);
@@ -73,7 +80,7 @@ const FacultyForm = ({ edit = false, facultyData = {} }) => {
             onChange={(val) => handleChange("first_name", val)}
           />,
           <InputField
-            label="Last Name*"
+            label="Last Name"
             initialValue={formData.last_name}
             onChange={(val) => handleChange("last_name", val)}
           />,
@@ -97,8 +104,21 @@ const FacultyForm = ({ edit = false, facultyData = {} }) => {
       />
       <GridContainer
         elements={[
+          <DropdownField
+            label="Faculty Type*"
+            initialValue={formData.type}
+            options={[
+              { value: "internal", title: "Internal" },
+              { value: "external", title: "External" },
+            ]}
+            onChange={(val) => handleChange("type", val)}
+          />,
+        ]}
+      />
+      <GridContainer
+        elements={[
           <InputSuggestions
-            label="Department*"
+            label={formData.type === "internal" ? "Department*" : "Department"}
             initialValue={formData.department_id}
             onSelect={(val) => handleChange("department_id", val.id)}
             apiUrl={baseURL + "/suggestions/department"}
@@ -111,15 +131,40 @@ const FacultyForm = ({ edit = false, facultyData = {} }) => {
           />,
         ]}
       />
-      <GridContainer
-        elements={[
-          <InputField
-            label="Faculty Code*"
-            initialValue={formData.faculty_code}
-            onChange={(val) => handleChange("faculty_code", val)}
-          />,
-        ]}
-      />
+      {formData.type === "internal" && (
+        <GridContainer
+          elements={[
+            <InputField
+              label="Faculty Code*"
+              initialValue={formData.faculty_code}
+              onChange={(val) => handleChange("faculty_code", val)}
+            />,
+          ]}
+        />
+      )}
+      {formData.type === "external" && (
+        <>
+          <GridContainer
+            elements={[
+              <InputField
+                label="Institution*"
+                initialValue={formData.institution}
+                onChange={(val) => handleChange("institution", val)}
+              />,
+            ]}
+          />
+          <GridContainer
+            elements={[
+              <InputField
+                label="Website Link"
+                initialValue={formData.website_link}
+                onChange={(val) => handleChange("website_link", val)}
+                placeholder="https://example.com"
+              />,
+            ]}
+          />
+        </>
+      )}
       <GridContainer
         elements={[
           <CustomButton

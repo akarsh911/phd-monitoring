@@ -23,6 +23,9 @@ class Faculty extends Model
         'faculty_code',
         'supervised_campus',
         'supervied_outside',
+        'type',
+        'institution',
+        'website_link',
     ];
 
     /**

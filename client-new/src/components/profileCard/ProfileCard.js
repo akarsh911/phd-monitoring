@@ -11,12 +11,14 @@ import GridContainer from "../forms/fields/GridContainer";
 import TableComponent from "../forms/table/TableComponent";
 import CustomButton from "../forms/fields/CustomButton";
 import CustomModal from "../forms/modal/CustomModal";
+import SupervisorDoctoralManager from "../supervisorDoctoralManager/SupervisorDoctoralManager";
 import { toast } from "react-toastify";
 
 const ProfileCard = ({ dataIP = null, link = false }) => {
   const [showEditButton, setShowEditButton] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTagModalOpen, setIsTagModalOpen] = useState(false);
+  const [showSupervisorDoctoralModal, setShowSupervisorDoctoralModal] = useState(false);
   const [courses, setCourses] = useState([]);
   const [allCourses, setAllCourses] = useState([]);
   const [tagData, setTagData] = useState({
@@ -111,7 +113,7 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
     // Set the user role from localStorage
     const userRole = localStorage.getItem("userRole");
     console.log("Role in ProfileCard:", userRole);
-    if (userRole === "hod" || userRole === "admin" || userRole === "dordc") {
+    if (userRole === "hod" || userRole === "admin" || userRole === "dordc" || userRole === "doctoral") {
       setShowEditButton(true);
     }
   }, [loading]);
@@ -238,13 +240,15 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
               disabled={true}
             />
             {showEditButton && (
-              <CustomButton text="Tag Course" onClick={() => {
-                fetchAllCourses();
-                setIsTagModalOpen(true);
-              }} />
+              <>
+                <CustomButton text="Tag Course" onClick={() => {
+                  fetchAllCourses();
+                  setIsTagModalOpen(true);
+                }} />
+                <CustomButton text="Manage Supervisors/Doctoral" onClick={() => setShowSupervisorDoctoralModal(true)} />
+              </>
             )}
           </div>
-          {showEditButton && (<><CustomButton text="Edit" onClick={() => setIsModalOpen(true)} /></>)}
           
         
 
@@ -449,6 +453,33 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
             </div>
           </div>
         </CustomModal>
+
+        {/* Supervisor/Doctoral Committee Management Modal */}
+        {showSupervisorDoctoralModal && (
+          <CustomModal
+            isOpen={showSupervisorDoctoralModal}
+            onClose={() => setShowSupervisorDoctoralModal(false)}
+          >
+            <SupervisorDoctoralManager
+              studentId={profile.roll_no}
+              supervisors={supervisors || []}
+              doctoralCommittee={doctoral || []}
+              onClose={() => {
+                setShowSupervisorDoctoralModal(false);
+                // Refresh profile data to show updated supervisors/doctoral
+                const url = roll_no
+                  ? `${baseURL}/students/${roll_no}`
+                  : `${baseURL}/students`;
+                customFetch(url, "GET", {}, true, false).then((data) => {
+                  if (data?.success) {
+                    const student = data.response.data[0];
+                    setProfile(student);
+                  }
+                });
+              }}
+            />
+          </CustomModal>
+        )}
       </>
     );
   } else {

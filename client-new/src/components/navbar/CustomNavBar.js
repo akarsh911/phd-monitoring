@@ -11,6 +11,7 @@ const buttonConfig = [
     { path: '/students', icon: <i class="fa fa-users" aria-hidden="true"></i>, text: 'Students', roles: ['hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external','admin'] },
     { path: '/faculty', icon: <i class="fa-solid fa-person-chalkboard"></i>, text: 'Faculty', roles: ['hod','phd_coordinator','dordc','dra','director','admin'] },
     { path: '/departments', icon: <i class="fa-solid fa-building"></i>, text: 'Departments', roles: ['dordc','dra','director','admin'] },
+    { path: '/supervisor-doctoral-approvals', icon: <i class="fa-solid fa-check-circle"></i>, text: 'Supervisor Approvals', roles: ['dordc', 'admin'] },
     { path: '/logs', icon: <i class="fa-solid fa-history"></i>, text: 'Logs', roles: ['admin'] },
     { path: '/notifications', icon: <i class="fa-solid fa-bell"></i>, text: 'Notifications', roles: ['student', 'hod','phd_coordinator','faculty','dordc','dra','director','doctoral','external','admin'] },
     {path: '/areasOfSpecialization', icon: <i class="fa fa-list" aria-hidden="true"></i>, text: 'Areas of Specialization', roles: ['admin']},

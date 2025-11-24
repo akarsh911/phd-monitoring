@@ -73,7 +73,7 @@ class IrbSubForm extends Model
                     'faculty' => $review->supervisor->user->name(),
                     'progress' => $review->status,
                     'comments' => $review->comments,
-                    'review_status' => $review->review_status,
+                    'review_status' => $review->status,
                 ];
             }),
 

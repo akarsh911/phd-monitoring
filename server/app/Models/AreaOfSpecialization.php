@@ -59,6 +59,9 @@ class AreaOfSpecialization extends Model
             'faculty_code' => $facultyCode,
             'designation' => $this->expert_designation,
             'department_id' => $this->department_id,
+            'institution'=>$this->expert_college,
+            'type'=>'external',
+            'website_link'=>$this->expert_website
         ]);
 
         return $faculty;
