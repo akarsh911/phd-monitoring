@@ -126,6 +126,15 @@ Jane,,jane.smith@example.com,9876543210,Associate Professor,external,,CHED,Exter
       let allErrors = [];
       let allCreatedDepartments = new Set();
 
+      // Get fresh token before starting
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.error('Authentication required. Please login again.');
+        setLoading(false);
+        setSubmitting(false);
+        return;
+      }
+
       // Process each batch
       for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
         const batch = batches[batchIndex];
@@ -152,30 +161,83 @@ Jane,,jane.smith@example.com,9876543210,Associate Professor,external,,CHED,Exter
           row_number: row._rowNumber
         }));
 
-        // Send batch to server
-        const response = await fetch(`${baseURL}/faculty/bulk-import`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ batch_data: batchData }),
-        });
+        // Send batch to server with retry logic
+        let retryCount = 0;
+        const maxRetries = 2;
+        let batchSuccess = false;
 
-        const data = await response.json();
+        while (retryCount <= maxRetries && !batchSuccess) {
+          try {
+            const response = await fetch(`${baseURL}/faculty/bulk-import`, {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+              },
+              body: JSON.stringify({ batch_data: batchData }),
+            });
 
-        if (data.success) {
-          totalSuccess += data.data.success_count;
-          totalUpdated += data.data.update_count;
-          totalErrors += data.data.error_count;
-          allErrors = allErrors.concat(data.data.errors);
-          
-          if (data.data.created_departments) {
-            data.data.created_departments.forEach(dept => allCreatedDepartments.add(dept));
+            // Check for redirect (302) - authentication issue
+            if (response.status === 302 || response.redirected) {
+              toast.error('Session expired. Please login again.');
+              setLoading(false);
+              setSubmitting(false);
+              return;
+            }
+
+            // Try to parse JSON response
+            let data;
+            try {
+              data = await response.json();
+            } catch (jsonError) {
+              console.error('Failed to parse response:', jsonError);
+              throw new Error('Invalid server response');
+            }
+
+            // Check HTTP status
+            if (!response.ok) {
+              if (retryCount < maxRetries) {
+                console.log(`Batch ${batchIndex + 1} failed, retrying... (${retryCount + 1}/${maxRetries})`);
+                retryCount++;
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retry
+                continue;
+              }
+              
+              toast.error(`Batch ${batchIndex + 1} failed after ${maxRetries} retries: ${data.message || 'Server error'}`);
+              totalErrors += batch.length;
+              break;
+            }
+
+            if (data.success) {
+              totalSuccess += data.data.success_count || 0;
+              totalUpdated += data.data.update_count || 0;
+              totalErrors += data.data.error_count || 0;
+              allErrors = allErrors.concat(data.data.errors || []);
+              
+              if (data.data.created_departments) {
+                data.data.created_departments.forEach(dept => allCreatedDepartments.add(dept));
+              }
+              batchSuccess = true;
+            } else {
+              if (retryCount < maxRetries) {
+                retryCount++;
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                continue;
+              }
+              toast.error(`Batch ${batchIndex + 1} failed: ${data.message}`);
+              totalErrors += batch.length;
+            }
+          } catch (fetchError) {
+            console.error(`Batch ${batchIndex + 1} error:`, fetchError);
+            if (retryCount < maxRetries) {
+              retryCount++;
+              await new Promise(resolve => setTimeout(resolve, 1000));
+              continue;
+            }
+            toast.error(`Batch ${batchIndex + 1} network error: ${fetchError.message}`);
+            totalErrors += batch.length;
           }
-        } else {
-          toast.error(`Batch ${batchIndex + 1} failed: ${data.message}`);
-          totalErrors += batch.length;
         }
       }
 
