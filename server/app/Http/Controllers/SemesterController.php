@@ -172,8 +172,8 @@ class SemesterController extends Controller
             'current_page' => $students->currentPage(),
             'totalPages' => $students->lastPage(),
             'role' => $role,
-            'fields' => ['name', 'designation', 'email', 'phone', 'department', 'broad_area'],
-            'fieldsTitles' => ['Name', 'Designation', 'Email', 'Phone', 'Department', 'Broad Area of Research'  ],
+            'fields' => ['name', 'roll_no', 'email', 'phone', 'department', 'broad_area'],
+            'fieldsTitles' => ['Name', 'Roll No', 'Email', 'Phone', 'Department', 'Broad Area of Research'  ],
         ]);
     }
 
@@ -219,8 +219,8 @@ class SemesterController extends Controller
             'totalPages' => $students->lastPage(),
             'role' => $role,
             'type' => $type,
-            'fields' => ['name', 'designation', 'email', 'phone', 'department', 'broad_area'],
-            'fieldsTitles' => ['Name', 'Designation', 'Email', 'Phone', 'Department', 'Broad Area of Research'],
+            'fields' => ['name', 'roll_no', 'email', 'phone', 'department', 'broad_area'],
+            'fieldsTitles' => ['Name', 'Roll No', 'Email', 'Phone', 'Department', 'Broad Area of Research'],
         ]);
     }
     

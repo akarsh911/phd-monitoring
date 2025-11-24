@@ -90,7 +90,7 @@ class Presentation extends Model
             'extention_availed' => ResearchExtentions::where('student_id', $this->student_id)->count()>0?true:false,
 
             'teaching_work' => $this->teaching_work,
-            
+            'ppt_file' => $this->ppt_file,
             'progress' => $this->progress,
             'total_progress' => $this->total_progress,
             'contact_hours' => $this->contact_hours,

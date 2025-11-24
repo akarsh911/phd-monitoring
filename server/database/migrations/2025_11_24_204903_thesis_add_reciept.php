@@ -12,11 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         //
-        Schema::table('semesters', function (Blueprint $table) {
-            $table->text('ppt_file')->nullable();
-        });
-         Schema::table('presentations', function (Blueprint $table) {
-            $table->text('ppt_file')->nullable();
+        Schema::table('thesis_submissions', function (Blueprint $table) {
+            $table->text('fee_receipt')->nullable();
         });
     }
 

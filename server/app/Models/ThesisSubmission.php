@@ -26,6 +26,7 @@ class ThesisSubmission extends Model
             'reciept_no',
             'date_of_fee_submission',
             'thesis_pdf',
+            'fee_receipt',
         ], $commonFieldKeys);
 
         parent::__construct($attributes);
@@ -46,6 +47,7 @@ class ThesisSubmission extends Model
             'date_of_synopsis' => $this->date_of_synopsis,
             'reciept_no' => $this->reciept_no,
             'date_of_fee_submission' => $this->date_of_fee_submission,
+            'fee_receipt' => $this->fee_receipt,
             'thesis_pdf' => $this->thesis_pdf,
             'fathers_name'=>$this->student->fathers_name,
             'current_status'=>$this->student->current_status,

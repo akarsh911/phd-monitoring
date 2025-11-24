@@ -221,11 +221,13 @@ class ThesisSubmissionController extends Controller
                     'reciept_no' => 'required|string',
                     'date_of_fee_submission' => 'required|date',
                     'thesis_pdf' => 'required|file|mimes:pdf|max:2048',
+                    'fee_receipt' => 'required|file|mimes:pdf,jpg,jpeg,png|max:2048',
                 ]);
                 $formInstance->date_of_synopsis = $request->date_of_synopsis;
                 $formInstance->reciept_no = $request->reciept_no;
                 $formInstance->date_of_fee_submission = $request->date_of_fee_submission;
                 $formInstance->thesis_pdf = $this->saveUploadedFile($request->file('thesis_pdf'), 'thesis', $user->student->roll_no);
+                $formInstance->fee_receipt = $this->saveUploadedFile($request->file('fee_receipt'), 'fee_receipt', $user->student->roll_no);
                
         }
         );

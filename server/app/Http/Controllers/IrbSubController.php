@@ -215,7 +215,9 @@ class IrbSubController extends Controller
     {
         $model = IrbSubForm::class;
         return $this->submitForm($user, $request, $form_id, $model, 'dordc', 'phd_coordinator', 'complete', function ($formInstance) use ($request, $user) {
- 
+            $student = $formInstance->student;
+            $student->phd_title=$formInstance->revised_phd_title;
+            $student->save();
                $formInstance->completion='complete';
                $formInstance->status='approved';
                $forms = [
@@ -238,7 +240,7 @@ class IrbSubController extends Controller
                     'stage' => 'student',
                 ]
             ];
-            $student = $formInstance->student;
+            // $student = $formInstance->student;
             foreach ($forms as $form) {
                 $existingForm = Forms::where('student_id', $student->roll_no)
                     ->where('form_type', $form['form_type'])

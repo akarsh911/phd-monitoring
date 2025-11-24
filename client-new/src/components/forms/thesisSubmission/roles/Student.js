@@ -27,7 +27,6 @@ const Student = ({ formData }) => {
   const [temp, setTemp] = useState([]);
   const [files, setFiles] = useState([]);
 
-
   useEffect(() => {
     setBody({
       sci: formData.sci,
@@ -231,74 +230,83 @@ const Student = ({ formData }) => {
             ]}
             space={2}
           />
-          <GridContainer elements={[
+          <GridContainer
+            elements={[
               <InputField
-              label="Status of Student at Time of Admission"
-              initialValue={formData.initial_status}
-              isLocked={true}
-            />,
-          ]} space={2}/>
-
-          <GridContainer elements={[
-              <InputField
-              label="Current Status"
-              initialValue={formData.current_status==="part-time"?"Part Time":"Full Time"}
-              isLocked={true}
-            />,
-            <>
-            
-            {formData.previous_extension_date!=='NA' ?(
-            <InputField
-              label="Date of Change of Status"
-              initialValue={formatDate(formData.previous_extension_date)}
-              isLocked={true}
-            />
-          ):(
-            <InputField
-              label="Date of Change of Status"
-              initialValue={formData.previous_extension_date}
-              isLocked={true}
-            />
-          )}
-            </>
-          ]}/>
-            <GridContainer elements={[
-              <DateField
-              label="Date of Synopsis Presentation"
-              initialValue={formData.date_of_synopsis}
-              isLocked={lock}
-              onChange={(value)=>{
-                setBody((prev) => ({
-                  ...prev,
-                  date_of_synopsis: value,
-                }));
-              }}
-            />,
-
-            <InputField
-            label="Receipt Number"
-            initialValue={formData.reciept_no}
-            isLocked={lock}
-            onChange={(value)=>{
-              setBody((prev) => ({
-                ...prev,
-                reciept_no: value,
-              }));
-            }}
-          />,
-          <DateField
-          label="Date of Fee Submission"
-          initialValue={formData.date_of_synopsis}
-          isLocked={lock}
-          onChange={(value)=>{
-            setBody((prev) => ({
-              ...prev,
-              date_of_fee_submission: value,
-            }));
-          }}
-        />,
+                label="Status of Student at Time of Admission"
+                initialValue={formData.initial_status}
+                isLocked={true}
+              />,
             ]}
-            />
+            space={2}
+          />
+
+          <GridContainer
+            elements={[
+              <InputField
+                label="Current Status"
+                initialValue={
+                  formData.current_status === "part-time"
+                    ? "Part Time"
+                    : "Full Time"
+                }
+                isLocked={true}
+              />,
+              <>
+                {formData.previous_extension_date !== "NA" ? (
+                  <InputField
+                    label="Date of Change of Status"
+                    initialValue={formatDate(formData.previous_extension_date)}
+                    isLocked={true}
+                  />
+                ) : (
+                  <InputField
+                    label="Date of Change of Status"
+                    initialValue={formData.previous_extension_date}
+                    isLocked={true}
+                  />
+                )}
+              </>,
+            ]}
+          />
+          <GridContainer
+            elements={[
+              <DateField
+                label="Date of Synopsis Presentation"
+                initialValue={formData.date_of_synopsis}
+                isLocked={lock}
+                onChange={(value) => {
+                  setBody((prev) => ({
+                    ...prev,
+                    date_of_synopsis: value,
+                  }));
+                }}
+              />,
+
+              <InputField
+                label="Receipt Number"
+                initialValue={formData.reciept_no}
+                isLocked={lock}
+                onChange={(value) => {
+                  setBody((prev) => ({
+                    ...prev,
+                    reciept_no: value,
+                  }));
+                }}
+              />,
+              <DateField
+                label="Date of Fee Submission"
+                initialValue={formData.date_of_synopsis}
+                isLocked={lock}
+                onChange={(value) => {
+                  setBody((prev) => ({
+                    ...prev,
+                    date_of_fee_submission: value,
+                  }));
+                }}
+              />,
+            ]}
+          />
           <>
             {formData?.role === "student" && !lock && (
               <GridContainer
@@ -334,12 +342,26 @@ const Student = ({ formData }) => {
           <GridContainer
             elements={[
               <FileUploadField
-                label={"Upload PDF"}
+                label={"Upload Thesis PDF"}
                 onChange={(file) => {
-                  setFiles([{ key: "thesis_pdf", file }]);
+                  setFiles((prev) => {
+                    const updated = prev.filter((f) => f.key !== "thesis_pdf");
+                    return [...updated, { key: "thesis_pdf", file }];
+                  });
                 }}
                 isLocked={lock}
                 initialValue={formData.thesis_pdf}
+              />,
+              <FileUploadField
+                label={"Upload Fee Receipt"}
+                onChange={(file) => {
+                  setFiles((prev) => {
+                    const updated = prev.filter((f) => f.key !== "fee_receipt");
+                    return [...updated, { key: "fee_receipt", file }];
+                  });
+                }}
+                isLocked={lock}
+                initialValue={formData.fee_receipt}
               />,
             ]}
           />
