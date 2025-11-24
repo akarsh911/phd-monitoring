@@ -58,6 +58,7 @@ class Presentation extends Model
             'semester_id',
             'leave',
             'missed',
+            'ppt_file',
         ], $commonFieldKeys);
 
         parent::__construct($attributes);

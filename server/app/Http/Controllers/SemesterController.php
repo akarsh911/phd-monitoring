@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\GeneralFormList;
+use App\Http\Controllers\Traits\SaveFile;
 use App\Models\Semester;
 
 use Illuminate\Http\Request;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 
 class SemesterController extends Controller
 {
-    use GeneralFormList;
+    use GeneralFormList, SaveFile;
     public function getRecent(Request $request, $semester_id = null)
     {
         $user = Auth::user();
@@ -74,6 +75,7 @@ class SemesterController extends Controller
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after:start_date',
             'notification' => 'nullable|boolean',
+            'ppt_file' => 'nullable|file|mimes:ppt,pptx|max:5120',
         ]);
 
         $user = Auth::user();
@@ -88,6 +90,13 @@ class SemesterController extends Controller
         }
 
         $semester = Semester::createOrUpdateFromCode($request->semester_name, $request->start_date, $request->end_date);
+
+        // Handle PPT file upload
+        if ($request->hasFile('ppt_file')) {
+            $link = $this->saveUploadedFile($request->file('ppt_file'), 'semester_ppt', $request->semester_name);
+            $semester->ppt_file = $link;
+            $semester->save();
+        }
 
         return response()->json([
             'status' => 'success',
@@ -150,6 +159,8 @@ class SemesterController extends Controller
                 'designation' => $student->designation ?? '-',
                 'email' => $student->user->email,
                 'phone' => $student->user->phone,
+                'roll_no' => $student->roll_no,
+                'broad_area'=>$student->areaOfSpecialization->name ?? '-',
                 'department' => $student->department->short_name ?? '-',
             ];
         });
@@ -161,8 +172,8 @@ class SemesterController extends Controller
             'current_page' => $students->currentPage(),
             'totalPages' => $students->lastPage(),
             'role' => $role,
-            'fields' => ['name', 'designation', 'email', 'phone', 'department'],
-            'fieldsTitles' => ['Name', 'Designation', 'Email', 'Phone', 'Department'],
+            'fields' => ['name', 'designation', 'email', 'phone', 'department', 'broad_area'],
+            'fieldsTitles' => ['Name', 'Designation', 'Email', 'Phone', 'Department', 'Broad Area of Research'  ],
         ]);
     }
 
@@ -194,6 +205,8 @@ class SemesterController extends Controller
                 'designation' => $student->designation ?? '-',
                 'email' => $student->user->email,
                 'phone' => $student->user->phone,
+                'roll_no' => $student->roll_no,
+                'broad_area'=>$student->areaOfSpecialization->name ?? '-',
                 'department' => $student->department->short_name ?? '-',
             ];
         });
@@ -206,8 +219,8 @@ class SemesterController extends Controller
             'totalPages' => $students->lastPage(),
             'role' => $role,
             'type' => $type,
-            'fields' => ['name', 'designation', 'email', 'phone', 'department'],
-            'fieldsTitles' => ['Name', 'Designation', 'Email', 'Phone', 'Department'],
+            'fields' => ['name', 'designation', 'email', 'phone', 'department', 'broad_area'],
+            'fieldsTitles' => ['Name', 'Designation', 'Email', 'Phone', 'Department', 'Broad Area of Research'],
         ]);
     }
     

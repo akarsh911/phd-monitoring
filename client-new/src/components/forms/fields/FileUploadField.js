@@ -9,21 +9,29 @@ const FileUploadField = ({
   isLocked = false,
   onChange,
   showLabel = true,
+  acceptedTypes = '.pdf',
+  maxSizeMB = 2,
+  fileTypeLabel = 'PDF',
 }) => {
   const [fileName, setFileName] = useState(
-    initialValue ? 'View Uploaded File' : 'Upload PDF (Max 2MB)'
+    initialValue ? 'View Uploaded File' : `Upload ${fileTypeLabel} (Max ${maxSizeMB}MB)`
   );
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
 
     if (file) {
-      if (file.type !== 'application/pdf') {
-        toast.error('Only PDF files are allowed.');
+      // Validate file type based on accepted types
+      const acceptedExtensions = acceptedTypes.split(',').map(ext => ext.trim());
+      const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+      
+      if (!acceptedExtensions.includes(fileExtension)) {
+        toast.error(`Only ${fileTypeLabel} files are allowed.`);
         return;
       }
-      if (file.size > 2 * 1024 * 1024) {
-        toast.error('File size should be less than 2 MB.');
+      
+      if (file.size > maxSizeMB * 1024 * 1024) {
+        toast.error(`File size should be less than ${maxSizeMB} MB.`);
         return;
       }
       setFileName(file.name);
@@ -47,7 +55,7 @@ const FileUploadField = ({
       ) : (
         <input
           type='file'
-          accept='.pdf'
+          accept={acceptedTypes}
           className='file-input'
           onChange={handleFileChange}
           disabled={isLocked}

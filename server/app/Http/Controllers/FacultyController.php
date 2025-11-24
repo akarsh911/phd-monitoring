@@ -86,7 +86,7 @@ class FacultyController extends Controller
 
         // Generate faculty code for external faculty
         if ($request->type === 'external') {
-            $facultyCode = 'EXT' . str_pad($newUser->id, 6, '0', STR_PAD_LEFT);
+            $facultyCode = '777' . str_pad($newUser->id, 6, '0', STR_PAD_LEFT);
         } else {
             $facultyCode = $request->faculty_code;
         }
@@ -261,82 +261,85 @@ class FacultyController extends Controller
         }
 
         $request->validate([
-            'file' => 'required|mimes:csv,txt'
+            'batch_data' => 'required|array',
+            'batch_data.*.first_name' => 'required|string',
+            'batch_data.*.last_name' => 'nullable|string',
+            'batch_data.*.email' => 'required|email',
+            'batch_data.*.phone' => 'required|string',
+            'batch_data.*.designation' => 'required|string',
+            'batch_data.*.type' => 'required|in:internal,external',
+            'batch_data.*.faculty_code' => 'nullable|string',
+            'batch_data.*.department_code' => 'nullable|string',
+            'batch_data.*.institution' => 'nullable|string',
+            'batch_data.*.website_link' => 'nullable|string',
+            'batch_data.*.row_number' => 'required|integer',
         ]);
 
-        $file = $request->file('file');
-        $csvData = array_map('str_getcsv', file($file->getRealPath()));
-        $header = array_shift($csvData);
-
+        $batchData = $request->batch_data;
         $successCount = 0;
         $updateCount = 0;
         $errorCount = 0;
         $errors = [];
+        $createdDepartments = [];
 
-        foreach ($csvData as $index => $row) {
+        foreach ($batchData as $data) {
             try {
-                if (count($row) < 5) {
-                    $errors[] = "Row " . ($index + 2) . ": Insufficient columns";
-                    $errorCount++;
-                    continue;
-                }
-
-                $firstName = trim($row[0]);
-                $lastName = trim($row[1]);
-                $email = trim($row[2]);
-                $phone = trim($row[3]);
-                $designation = trim($row[4]);
-                $type = isset($row[5]) ? trim($row[5]) : 'internal';
+                $rowNumber = $data['row_number'];
+                $firstName = trim($data['first_name']);
+                $lastName = isset($data['last_name']) ? trim($data['last_name']) : '';
+                $email = trim($data['email']);
+                $phone = trim($data['phone']);
+                $designation = trim($data['designation']);
+                $type = strtolower(trim($data['type']));
+                $facultyCode = isset($data['faculty_code']) ? trim($data['faculty_code']) : null;
+                $departmentCode = isset($data['department_code']) ? trim($data['department_code']) : null;
+                $institution = isset($data['institution']) ? trim($data['institution']) : null;
+                $websiteLink = isset($data['website_link']) ? trim($data['website_link']) : null;
                 
                 // Validate type
                 if (!in_array($type, ['internal', 'external'])) {
-                    $errors[] = "Row " . ($index + 2) . ": Invalid type (must be 'internal' or 'external')";
+                    $errors[] = "Row " . $rowNumber . ": Invalid type (must be 'internal' or 'external')";
                     $errorCount++;
                     continue;
                 }
 
-                // For internal: faculty_code, department_code required
-                // For external: institution required, department_code optional
+                // Validate required fields based on type
                 if ($type === 'internal') {
-                    $facultyCode = isset($row[6]) ? trim($row[6]) : null;
-                    $departmentCode = isset($row[7]) ? trim($row[7]) : null;
-                    $institution = 'Thapar Institute of Engineering and Technology';
-                    $websiteLink = isset($row[8]) ? trim($row[8]) : null;
-
                     if (empty($facultyCode)) {
-                        $errors[] = "Row " . ($index + 2) . ": Faculty code required for internal faculty";
+                        $errors[] = "Row " . $rowNumber . ": Faculty code required for internal faculty";
                         $errorCount++;
                         continue;
                     }
                     if (empty($departmentCode)) {
-                        $errors[] = "Row " . ($index + 2) . ": Department code required for internal faculty";
+                        $errors[] = "Row " . $rowNumber . ": Department code required for internal faculty";
                         $errorCount++;
                         continue;
+                    }
+                    // Set default institution for internal if empty
+                    if (empty($institution)) {
+                        $institution = 'Thapar Institute of Engineering and Technology';
                     }
                 } else {
                     // External faculty
-                    $departmentCode = isset($row[6]) ? trim($row[6]) : null;
-                    $institution = isset($row[7]) ? trim($row[7]) : null;
-                    $websiteLink = isset($row[8]) ? trim($row[8]) : null;
-
                     if (empty($institution)) {
-                        $errors[] = "Row " . ($index + 2) . ": Institution required for external faculty";
+                        $errors[] = "Row " . $rowNumber . ": Institution required for external faculty";
                         $errorCount++;
                         continue;
                     }
-                    $facultyCode = null; // Will be auto-generated
+                    // Faculty code will be auto-generated for external
+                    $facultyCode = null;
                 }
 
                 // Validate required fields
                 if (empty($firstName) || empty($email) || empty($designation)) {
-                    $errors[] = "Row " . ($index + 2) . ": Missing required fields (first_name, email, designation)";
+                    $errors[] = "Row " . $rowNumber . ": Missing required fields (first_name, email, designation)";
                     $errorCount++;
                     continue;
                 }
 
                 // Validate email
                 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                    $errors[] = "Row " . ($index + 2) . ": Invalid email format";
+                    $errors[] = "Row " . $rowNumber . ": Invalid email format";
                     $errorCount++;
                     continue;
                 }
@@ -346,9 +349,15 @@ class FacultyController extends Controller
                 if ($departmentCode) {
                     $department = Department::where('code', $departmentCode)->first();
                     if (!$department) {
-                        $errors[] = "Row " . ($index + 2) . ": Department code '{$departmentCode}' not found";
-                        $errorCount++;
-                        continue;
+                        // Auto-create department for bulk upload
+                        $department = Department::create([
+                            'code' => $departmentCode,
+                            'name' => ucfirst($departmentCode) . ' Department', // Auto-generate name from code
+                        ]);
+                        
+                        if (!in_array($departmentCode, $createdDepartments)) {
+                            $createdDepartments[] = $departmentCode;
+                        }
                     }
                 }
 
@@ -382,7 +391,7 @@ class FacultyController extends Controller
                     } else {
                         // User exists but not faculty - create faculty record
                         if ($type === 'external') {
-                            $facultyCode = 'EXT' . str_pad($existingUser->id, 6, '0', STR_PAD_LEFT);
+                            $facultyCode = '777' . str_pad($existingUser->id, 6, '0', STR_PAD_LEFT);
                         }
 
                         Faculty::create([
@@ -415,7 +424,7 @@ class FacultyController extends Controller
 
                     // Generate faculty code for external
                     if ($type === 'external') {
-                        $facultyCode = 'EXT' . str_pad($newUser->id, 6, '0', STR_PAD_LEFT);
+                        $facultyCode = '777' . str_pad($newUser->id, 6, '0', STR_PAD_LEFT);
                     }
 
                     Faculty::create([
@@ -431,19 +440,21 @@ class FacultyController extends Controller
                     $successCount++;
                 }
             } catch (\Exception $e) {
-                $errors[] = "Row " . ($index + 2) . ": " . $e->getMessage();
+                $errors[] = "Row " . $rowNumber . ": " . $e->getMessage();
                 $errorCount++;
             }
         }
 
         return response()->json([
             'success' => true,
-            'message' => "Import completed: {$successCount} created, {$updateCount} updated, {$errorCount} errors",
+            'message' => "Import completed: {$successCount} created, {$updateCount} updated, {$errorCount} errors" . 
+                        (count($createdDepartments) > 0 ? ", " . count($createdDepartments) . " department(s) auto-created" : ""),
             'data' => [
                 'success_count' => $successCount,
                 'update_count' => $updateCount,
                 'error_count' => $errorCount,
                 'errors' => $errors,
+                'created_departments' => $createdDepartments,
             ]
         ], 200);
     }

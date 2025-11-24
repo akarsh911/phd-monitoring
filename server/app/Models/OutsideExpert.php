@@ -61,7 +61,7 @@ class OutsideExpert extends Model
         }
 
         // Create faculty with arbitrary faculty code
-        $facultyCode = 'EXT' . str_pad($user->id, 6, '0', STR_PAD_LEFT);
+        $facultyCode = '777' . str_pad($user->id, 6, '0', STR_PAD_LEFT);
         
         $faculty = \App\Models\Faculty::create([
             'user_id' => $user->id,

@@ -23,10 +23,17 @@ return new class extends Migration
             $table->string('phone')->nullable()->unique();
             $table->text('area_of_expertise')->nullable();
             $table->string('website')->nullable();
-            
+        });
+        Schema::table('constitute_of_irb', function (Blueprint $table) {
+            $table->integer('outside_expert')->unsigned()->index()->nullable();;
+            $table->foreign('outside_expert')->references('id')->on('outside_experts')->onDelete('cascade');
+        });
+        Schema::table('irb_outside_experts',function (Blueprint $table){
+            $table->integer('expert_id')->unsigned()->index();
+            $table->foreign('expert_id')->references('id')->on('outside_experts')->onDelete('cascade');
         });
     }
-    
+
 
     /**
      * Reverse the migrations.

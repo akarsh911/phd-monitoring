@@ -49,7 +49,6 @@ class ConstituteOfIRBController extends Controller
             "name","roll_no", "email","supervisors"
         ],
         'extra_fields' => [
-          
             "email" => function ($form) {
             return $form->student->user->email;
             },
@@ -287,9 +286,9 @@ class ConstituteOfIRBController extends Controller
                 if($formInstance->student->checkSupervises($nomineeCognate)){
                     throw new \Exception('Supervisor can not be a nominee cognate');
                 }
-                if($faculty->department_id != $formInstance->student->department_id){
-                    throw new \Exception('Nominee cognates must be from the same department');
-                }
+                // if($faculty->department_id != $formInstance->student->department_id){
+                //     throw new \Exception('Nominee cognates must be from the same department');
+                // }
             }
             $oldNomineeCognates=IrbNomineeCognate::where('irb_form_id',$formInstance->id)->get();
             if(count($oldNomineeCognates) != 0){
@@ -507,7 +506,7 @@ class ConstituteOfIRBController extends Controller
                         ]);
                     }
                     $area=$formInstance->student->areaOfSpecialization;
-                    $expert=$area->getExpertFaculty;
+                    $expert=$area->getExpertFaculty();
                     DoctoralCommittee::create([
                         'student_id' => $formInstance->student->roll_no,
                         'faculty_id' => $expert->faculty_code,

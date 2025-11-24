@@ -17,9 +17,7 @@ return new class extends Migration
             $table->foreign('irb_form_id')->references('id')->on('constitute_of_irb')->onDelete('cascade');
             // $table->int('hod_id')->unsigned()->index();
             // $table->foreign('hod_id')->references('hod_id')->on('departments')->onDelete('cascade')->onUpdate('update');
-            $table->integer('expert_id')->unsigned()->index();
-            $table->foreign('expert_id')->references('id')->on('outside_experts')->onDelete('cascade');
-            $table->timestamps();
+                $table->timestamps();
         });
     }
 

@@ -371,7 +371,8 @@ trait GeneralFormSubmitter
     {
         if($model===Presentation::class)
         return;
-        $form = Forms::where('form_type', $this->getFormType($model))->where('student_id', $student_id)->first();
+    $form = Forms::where('form_type', $this->getFormType($model))->where('student_id', $student_id)->first();
+        if($next=='external') $next='doctoral';
         if ($next != 'complete') {
             $field = $next . '_available';
             $form->$field = true;

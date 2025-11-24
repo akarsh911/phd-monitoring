@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import FilterBar from '../../components/filterBar/FilterBar';
 import PagenationTable from '../../components/pagenationTable/PagenationTable';
 import CustomModal from '../../components/forms/modal/CustomModal';
-import FacultyForm from '../../components/facultyForm/FacultyForm'; // assume it's placed here
+import DepartmentManager from '../../components/departmentManager/DepartmentManager';
 import { customFetch } from '../../api/base';
 import { baseURL } from '../../api/urls';
 import CustomButton from '../../components/forms/fields/CustomButton';
@@ -14,6 +14,7 @@ const DepartmentPage = () => {
   const [filter, setFilter] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [editData, setEditData] = useState(null);
+  const [refreshKey, setRefreshKey] = useState(0);
   const { setLoading } = useLoading();
   const location = useLocation();
 
@@ -24,17 +25,20 @@ const DepartmentPage = () => {
   const openForm = async (data) => {
     if (data) {
       setLoading(true);
-      // const res = await customFetch(baseURL + `/faculty/${id}`, 'GET');
-     
-        setEditData(data);
-        console.log(data);
-        setIsOpen(true);
-    
+      setEditData(data);
+      console.log(data);
+      setIsOpen(true);
       setLoading(false);
     } else {
       setEditData(null);
       setIsOpen(true);
     }
+  };
+
+  const handleUpdate = () => {
+    setIsOpen(false);
+    setEditData(null);
+    setRefreshKey(prev => prev + 1);
   };
 
   return (
@@ -43,6 +47,7 @@ const DepartmentPage = () => {
         <>
           <FilterBar onSearch={handleFilterChange} />
           <PagenationTable
+            key={refreshKey}
             endpoint={location.pathname}
             filters={filter}
             enableApproval={false}
@@ -53,21 +58,35 @@ const DepartmentPage = () => {
             
             actions={[
               {
-                icon: <i className="fa-solid fa-pen-to-square"></i>,
-                tooltip: 'Edit',
-                onClick: (facultyData) => openForm(facultyData),
+                icon: <i className="fa-solid fa-users-gear"></i>,
+                tooltip: 'Manage HOD & Coordinators',
+                onClick: (deptData) => openForm(deptData),
               },
             ]}
           />
           <CustomModal
             isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
-            width="800px"
+            onClose={() => {
+              setIsOpen(false);
+              setEditData(null);
+            }}
+            width="90vw"
           >
-            <FacultyForm
-              edit={!!editData}
-              facultyData={editData}
-            />
+            {editData ? (
+              <DepartmentManager
+                departmentId={editData.id}
+                departmentName={editData.name || editData.department_name}
+                currentHod={editData.hod}
+                currentCoordinators={editData.phd_coordinators || []}
+                onClose={() => {
+                  setIsOpen(false);
+                  setEditData(null);
+                }}
+                onUpdate={handleUpdate}
+              />
+            ) : (
+              <div>Add Department Form - To be implemented</div>
+            )}
           </CustomModal>
         </>
       }

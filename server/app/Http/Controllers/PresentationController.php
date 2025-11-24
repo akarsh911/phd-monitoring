@@ -240,6 +240,7 @@ class PresentationController extends Controller
                 'time' => $request->time,
                 'period_of_report' => $request->period_of_report,
                 'status' => 'pending',
+                'ppt_file' => $validator['ppt_file'],
                 'completion' => 'incomplete',
                 'semester_id' => $validator['semester_id'],
                 'total_progress'=> $student->overall_progress,
@@ -275,7 +276,11 @@ class PresentationController extends Controller
             $page = $request->input('page', 1);
             $perPage = $request->input('per_page', 10);
 
-            $query = Semester::orderBy('year', 'desc')->orderBy('semester', 'desc');
+            // Exclude current/active and upcoming semesters - only show completed ones
+            $currentDate = now();
+            $query = Semester::where('end_date', '<', $currentDate)
+                ->orderBy('year', 'desc')
+                ->orderBy('semester', 'desc');
 
             $total = $query->count();
             $totalPages = ceil($total / $perPage);
@@ -408,6 +413,7 @@ class PresentationController extends Controller
                 'period_of_report' => $studentData['period_of_report'],
                 'leave' => $studentData['leave'] ?? false,
                 'status' => 'pending',
+                'ppt_file' => $validator['ppt_file'],
                 'completion' => 'incomplete',
                 'steps' => ['student', 'faculty', 'doctoral', 'hod', 'dordc', 'dra', 'complete'],
             ]);

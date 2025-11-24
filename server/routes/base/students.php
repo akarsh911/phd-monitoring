@@ -14,6 +14,7 @@ Route::get('/', [StudentController::class, 'list'])->middleware('auth:sanctum');
  
 
 Route::post('/add', [StudentController::class, 'add'])->middleware('auth:sanctum');
+Route::post('/bulk-upload', [StudentController::class, 'bulkUpload'])->middleware('auth:sanctum');
 Route::get('/filters', [StudentController::class, 'listFilters'])->middleware('auth:sanctum');
 
 Route::prefix('{id}')->group(function () {

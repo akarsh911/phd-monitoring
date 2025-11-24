@@ -15,6 +15,7 @@ import { set } from "react-hook-form";
 import { useParams } from "react-router-dom";
 
 const PresentationListPage = () => {
+  const { semester_id } = useParams();
   const [extraFilter, setExtraFilter] = useState(false);
   const [location, setLocation] = useState(window.location.pathname);
   const [num, setNum] = useState(0);
@@ -117,7 +118,7 @@ const PresentationListPage = () => {
         <>
           <h1>Presentation List</h1>
 
-          <SemesterStatsCard setFilters={setExtraFilter} />
+          <SemesterStatsCard semesterName={semester_id} setFilters={setExtraFilter} />
 
           {role !== "student" && (
             <Tabs

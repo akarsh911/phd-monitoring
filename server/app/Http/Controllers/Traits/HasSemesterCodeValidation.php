@@ -34,6 +34,7 @@ trait HasSemesterCodeValidation
             'past' => false,
             'semesters_old' => null,
             'in_db' => false,
+            'ppt_file' => null,
         ];
 
         $semester = Semester::where('semester_name', $code)
@@ -48,6 +49,7 @@ trait HasSemesterCodeValidation
         }
         $result['in_db'] = true;
         $result['semester_id'] = $semester->id;
+        $result['ppt_file'] = $semester->ppt_file;
         $now = Carbon::now();
         $start = $semester->start_date ? Carbon::parse($semester->start_date) : null;
         $end = $semester->end_date ? Carbon::parse($semester->end_date) : null;

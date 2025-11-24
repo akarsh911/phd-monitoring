@@ -16,6 +16,7 @@ class Semester extends Model
         'end_date',
         'year',
         'semester',
+        'ppt_file'
     ];
 
     protected $casts = [

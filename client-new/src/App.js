@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import LoginPage from './pages/login/Login';
 import { ToastContainer } from "react-toastify";
@@ -77,7 +77,7 @@ const AppContent = () => {
           )}
           <Route path="/notifications" element={<AllNotificationsPage />} />
           <Route path="/presentation" element={<PresentationSemester/>} /> 
-          <Route path="/presentation/semester" element={<PresentationSemester/>} /> 
+          <Route path="/presentation/semester" element={<Navigate to="/presentation" replace />} /> 
      
           {/* <Route path="/presentation/form" element={<PresentationListPage/>} />   */}
           

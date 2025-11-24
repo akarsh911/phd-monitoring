@@ -10,7 +10,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Role;
 use App\Models\Student;
+use App\Models\Department;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller {
     use FilterLogicTrait;
@@ -31,20 +34,19 @@ class StudentController extends Controller {
         $request->validate(
             [
                 'first_name' => 'required|string',
-                'last_name' => 'required|string',
+                'last_name' => 'nullable|string',
                 'phone' => 'required|string',
                 'email' => 'required|email|unique:users',
                 'roll_no' => 'required|string',
                 'department_id' => 'required|integer',
                 'date_of_registration' => 'required|date',
+                'current_status' => 'required|in:part-time,full-time,executive',
                 'date_of_irb' => 'nullable|date',
                 'phd_title' => 'nullable|string',
                 'fathers_name' => 'nullable|string',
                 'address' => 'nullable|string',
-                'current_status' => 'required|string',
-                'overall_progress' => 'nullable|decimal:0,3',
-                'cgpa' => 'nullable|decimal:0,3'
-               
+                'overall_progress' => 'nullable|numeric',
+                'cgpa' => 'nullable|numeric'
             ]
         );
         $password = Str::password(8, true, true, true, false);
@@ -52,7 +54,7 @@ class StudentController extends Controller {
 
         $user = new \App\Models\User();
         $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
+        $user->last_name = $request->last_name ?? ' ';
         $user->phone = $request->phone;
         $user->email = $request->email;
         $user->password = bcrypt($password);
@@ -80,7 +82,7 @@ class StudentController extends Controller {
         if($request->has('overall_progress'))
              $student->overall_progress = $request->overall_progress;
         else
-             $student->overall_progress = 0.0;
+             $student->overall_progress = 0;
         
      
 
@@ -100,6 +102,136 @@ class StudentController extends Controller {
         //return the password to the user
         //TODO: Send email to the user with the password        
     }
+
+    public function bulkUpload(Request $request)
+    {
+        $loggedInUser = Auth::user();
+        if($loggedInUser->current_role->can_add_student == 'false'){
+            return response()->json([
+                'message' => 'You do not have permission to create students'
+            ], 403);
+        }
+
+        $request->validate([
+            'students' => 'required|array',
+            'students.*.first_name' => 'required|string',
+            'students.*.last_name' => 'nullable|string',
+            'students.*.phone' => 'required|string',
+            'students.*.email' => 'required|email',
+            'students.*.roll_no' => 'required|string',
+            'students.*.department_code' => 'required|string',
+            'students.*.date_of_registration' => 'required|date',
+            'students.*.current_status' => 'required|in:part-time,full-time,executive',
+            'students.*.date_of_irb' => 'nullable|date',
+            'students.*.phd_title' => 'nullable|string',
+            'students.*.fathers_name' => 'nullable|string',
+            'students.*.address' => 'nullable|string',
+            'students.*.overall_progress' => 'nullable|numeric',
+            'students.*.cgpa' => 'nullable|numeric'
+        ]);
+
+        $role_id = Role::where('role', 'student')->first()->id;
+        $successful = 0;
+        $failed = 0;
+        $errors = [];
+
+        DB::beginTransaction();
+        
+        try {
+            foreach ($request->students as $index => $studentData) {
+                try {
+                    // Find department by code
+                    $department = Department::where('code', $studentData['department_code'])->first();
+                    
+                    if (!$department) {
+                        $errors[] = "Row " . ($index + 1) . ": Department code '{$studentData['department_code']}' not found";
+                        $failed++;
+                        continue;
+                    }
+
+                    // Check if email already exists
+                    $existingUser = \App\Models\User::where('email', $studentData['email'])->first();
+                    if ($existingUser) {
+                        $errors[] = "Row " . ($index + 1) . ": Email '{$studentData['email']}' already exists";
+                        $failed++;
+                        continue;
+                    }
+
+                    // Check if roll number already exists
+                    $existingStudent = Student::where('roll_no', $studentData['roll_no'])->first();
+                    if ($existingStudent) {
+                        $errors[] = "Row " . ($index + 1) . ": Roll number '{$studentData['roll_no']}' already exists";
+                        $failed++;
+                        continue;
+                    }
+
+                    // Generate random password
+                    $password = Str::password(8, true, true, true, false);
+
+                    // Create user
+                    $user = new \App\Models\User();
+                    $user->first_name = $studentData['first_name'];
+                    $user->last_name = $studentData['last_name'] ?? ' ';
+                    $user->phone = $studentData['phone'];
+                    $user->email = $studentData['email'];
+                    $user->password = bcrypt($password);
+                    $user->address = $studentData['address'] ?? null;
+                    $user->role_id = $role_id;
+                    $user->current_role_id = $role_id;
+                    $user->save();
+
+                    // Create student
+                    $student = new Student();
+                    $student->user_id = $user->id;
+                    $student->roll_no = $studentData['roll_no'];
+                    $student->department_id = $department->id;
+                    $student->date_of_registration = $studentData['date_of_registration'];
+                    $student->date_of_irb = $studentData['date_of_irb'] ?? null;
+                    $student->phd_title = $studentData['phd_title'] ?? null;
+                    $student->fathers_name = $studentData['fathers_name'] ?? null;
+                    $student->current_status = $studentData['current_status'];
+                    $student->address = $studentData['address'] ?? null;
+                    $student->cgpa = $studentData['cgpa'] ?? null;
+                    $student->overall_progress = $studentData['overall_progress'] ?? 0.0;
+                    $student->save();
+
+                    // Create supervisor allocation form
+                    $adminFormController = new \App\Http\Controllers\AdminFormController();
+                    $formData = $adminFormController->getFormCreationData(
+                        'supervisor-allocation',
+                        $student->roll_no,
+                        $student->department_id
+                    );
+                    
+                    if ($formData) {
+                        Forms::create($formData);
+                    }
+
+                    $successful++;
+
+                } catch (\Exception $e) {
+                    $errors[] = "Row " . ($index + 1) . ": " . $e->getMessage();
+                    $failed++;
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'successful' => $successful,
+                'failed' => $failed,
+                'errors' => $errors
+            ], 200);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Bulk upload failed',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
  public function list(Request $request)
 {
     $loggedInUser = Auth::user();

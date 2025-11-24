@@ -234,7 +234,7 @@ const Student = ({ formData }) => {
                   showLabel={false}
                 />
               ))}
-              space={1}
+              space={2}
             />
           ) : (
             <>

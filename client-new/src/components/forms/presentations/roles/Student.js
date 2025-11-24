@@ -365,6 +365,12 @@ const Student = ({ formData, refetchData = null, }) => {
                  isLocked={lock}
                 initialValue={formData.presentation_pdf}
               />,
+               <FileUploadField
+                label={"Download Sample PDF"}
+               
+                 isLocked={true}
+                initialValue={formData.ppt_file}
+              />,
             ]}
           />
           <CustomModal

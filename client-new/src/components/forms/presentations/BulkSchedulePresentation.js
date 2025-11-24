@@ -46,6 +46,9 @@ const BulkSchedulePresentation = ({semester_name}) => {
 
       const headers = [
         "Student's Roll Number",
+        "Student's Name",
+        "Broad Area",
+        "Period of Report",
         'Date',
         'Time',
         'Additional Guest Email',
@@ -126,7 +129,7 @@ const BulkSchedulePresentation = ({semester_name}) => {
       student_id: entry["Student's Roll Number"],
       date: entry['Date'],
       time: entry['Time'],
-      period_of_report: body.period_of_report,
+      period_of_report: entry['Period of Report'] || body.period_of_report,
       guest_emails: entry['Additional Guest Email'] || [],
     }));
 
@@ -144,11 +147,72 @@ const BulkSchedulePresentation = ({semester_name}) => {
       });
   };
 
-  const downloadSampleCSV = () => {
-    const link = document.createElement('a');
-    // Add link.href to actual sample file if available
-    link.download = 'sample_bulk_schedule.csv';
-    link.click();
+  const downloadSampleCSV = async () => {
+    setLoading(true);
+    try {
+      // Get the current path to extract semester info
+      const currentPath = window.location.pathname;
+      const response = await customFetch(
+        baseURL + currentPath + '/not-scheduled?page=1&rows=1000',
+        'GET'
+      );
+
+      if (response?.success) {
+        const students = response.response.data || [];
+        
+        // Create CSV content
+        const headers = [
+          "Student's Roll Number",
+          "Student's Name",
+          "Broad Area",
+          "Period of Report",
+          "Date",
+          "Time",
+          "Additional Guest Email"
+        ];
+        
+        const rows = students.map(student => [
+          student.roll_no || '',
+          student.name || '',
+          student.broad_area || '',
+          semester_name || '',
+          '', // Empty Date field for user to fill
+          '', // Empty Time field for user to fill
+          '' // Empty Additional Guest Email field for user to fill
+        ]);
+
+        // Combine headers and rows
+        const csvContent = [
+          headers.join(','),
+          ...rows.map(row => row.map(cell => {
+            // Escape cells containing commas or quotes
+            const cellStr = String(cell);
+            if (cellStr.includes(',') || cellStr.includes('"') || cellStr.includes('\n')) {
+              return `"${cellStr.replace(/"/g, '""')}"`;
+            }
+            return cellStr;
+          }).join(','))
+        ].join('\n');
+
+        // Create and download the file
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        link.href = url;
+        link.download = `bulk_schedule_${semester_name || 'presentation'}.csv`;
+        link.click();
+        URL.revokeObjectURL(url);
+        
+        toast.success('Sample CSV downloaded successfully');
+      } else {
+        toast.error('Failed to fetch student data');
+      }
+    } catch (error) {
+      console.error('Error downloading sample CSV:', error);
+      toast.error('Error downloading sample CSV');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

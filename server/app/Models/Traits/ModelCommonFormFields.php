@@ -139,6 +139,7 @@ trait ModelCommonFormFields
             'role' => $user->current_role->role,   
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'department_id' => $this->student->department->id,
         ], $extraData);
         if($user->current_role->role!='student'){
             $arr['department_id'] = $this->student->department->id;

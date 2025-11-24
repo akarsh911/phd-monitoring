@@ -42,6 +42,6 @@ class PhdCoordinator extends Model
      */
     public function faculty()
     {
-        return $this->belongsTo(Faculty::class,'faculty_code','faculty_id');
+        return $this->belongsTo(Faculty::class, 'faculty_id', 'faculty_code');
     }
 }

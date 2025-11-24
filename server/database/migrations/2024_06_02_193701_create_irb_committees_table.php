@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('member_type'); // Either "faculty" or "outside_experts"
     
             $table->timestamps();
-    
+            
             // Enforce one unique combination per student
             $table->unique(['student_id', 'member_id', 'member_type']);
         });

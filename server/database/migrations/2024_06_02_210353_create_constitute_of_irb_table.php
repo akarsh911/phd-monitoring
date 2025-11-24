@@ -23,8 +23,6 @@ return new class extends Migration
             $table->text('irb_pdf')->nullable();
             $table->integer('cognate_expert')->unsigned()->index()->nullable();;
             $table->foreign('cognate_expert')->references('faculty_code')->on('faculty')->onDelete('cascade');
-            $table->integer('outside_expert')->unsigned()->index()->nullable();;
-            $table->foreign('outside_expert')->references('id')->on('outside_experts')->onDelete('cascade');     
             $table->date('date_of_admission')->nullable();       
         });
     }

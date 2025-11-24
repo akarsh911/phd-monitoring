@@ -96,6 +96,7 @@ const Supervisor = ({ formData }) => {
                       body.nominee_cognates[0] = value.id;
                     }}
                     // body={{ department_id: formData.department_id }}
+                     fields={["name","department"]}
                     lock={lock}
                   />,
                   <InputSuggestion
@@ -105,6 +106,7 @@ const Supervisor = ({ formData }) => {
                     onSelect={(value) => {
                       body.nominee_cognates[1] = value.id;
                     }}
+                     fields={["name","department"]}
                     // body={{ department_id: formData.department_id }}
                     lock={lock}
                   />,
@@ -115,6 +117,7 @@ const Supervisor = ({ formData }) => {
                     onSelect={(value) => {
                       body.nominee_cognates[2] = value.id;
                     }}
+                     fields={["name","department"]}
                     // body={{ department_id: formData.department_id }}
                     lock={lock}
                   />,

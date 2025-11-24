@@ -48,11 +48,11 @@ class ConstituteOfIRB extends Model
                 'id' => $this->student->areaOfSpecialization->id,
                 'name' => $this->student->areaOfSpecialization->name,
             ] : null,
-            'chairman' => [
+            'chairman' => ($this->student->department->hod && $this->student->department->hod->user) ? [
                 'name' => $this->student->department->hod->user->name(),
                 'designation' => $this->student->department->hod->designation,
                 'department' => $this->student->department->name
-            ],
+            ] : null,
             'nominee_cognates' => $this->nomineeCognates->map(function ($nominee) {
                 return [
                     'faculty_code' => $nominee->nominee->faculty_code,

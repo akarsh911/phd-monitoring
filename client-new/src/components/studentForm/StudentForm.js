@@ -23,7 +23,7 @@ const StudentForm = ({ edit = false, studentData = {} }) => {
     fathers_name: "",
     address: "",
     current_status: "",
-    overall_progress: "",
+    overall_progress: 0,
     cgpa: "",
   });
 
@@ -42,7 +42,7 @@ const StudentForm = ({ edit = false, studentData = {} }) => {
         fathers_name: studentData.fathers_name || "",
         address: studentData.address || "",
         current_status: studentData.current_status || "",
-        overall_progress: studentData.overall_progress || "",
+        overall_progress: studentData.overall_progress || 0,
         cgpa: studentData.cgpa || "",
       });
     }

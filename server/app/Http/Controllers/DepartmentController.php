@@ -48,16 +48,35 @@ class DepartmentController extends Controller
             return [
                 'id' => $department->id,
                 'name' => $department->name,
-                'hod' => [
-                    'name' => optional($department?->hod?->user)->name(),
-                    'email' => optional($department?->hod?->user)->email,
-                    'phone' => optional($department?->hod?->user)->phone,
-                ],
-                'phd_coordinators' => $department->phdCoordinators->map(function ($coordinator) {
+                'code' => $department->code,
+                'hod' => $department->hod ? [
+                    'faculty_code' => $department->hod->faculty_code,
+                    'designation' => $department->hod->designation,
+                    'user' => [
+                        'name' => optional($department->hod->user)->name(),
+                        'email' => optional($department->hod->user)->email,
+                        'phone' => optional($department->hod->user)->phone,
+                    ],
+                    'department' => [
+                        'name' => $department->name
+                    ]
+                ] : null,
+                'phd_coordinators' => $department->phdCoordinators->map(function ($coordinator) use ($department) {
+
                     return [
-                        'name' => optional($coordinator?->faculty?->user)->name(),
-                        'email' => optional($coordinator?->faculty?->user)->email,
-                        'phone' => optional($coordinator?->faculty?->user)->phone,
+                        'id' => $coordinator->id,
+                        'faculty' => $coordinator->faculty ? [
+                            'faculty_code' => $coordinator->faculty->faculty_code,
+                            'designation' => $coordinator->faculty->designation,
+                            'user' => [
+                                'name' => optional($coordinator->faculty->user)->name(),
+                                'email' => optional($coordinator->faculty->user)->email,
+                                'phone' => optional($coordinator->faculty->user)->phone,
+                            ],
+                            'department' => [
+                                'name' => $department->name
+                            ]
+                        ] : null
                     ];
                 }),
                 'students_count' => $department->students()->count(),
@@ -71,7 +90,7 @@ class DepartmentController extends Controller
             'current_page' => $faculties->currentPage(),
             'totalPages' => $faculties->lastPage(),
             'role' => $role,
-            'fields' => ['name', 'hod.name', 'email', 'phone', 'department'],
+            'fields' => ['name', 'hod.user.name', 'hod.user.email', 'hod.user.phone', 'department'],
             'fieldsTitles' => ['Name', 'HOD Name', 'Email', 'Phone', 'Department'],
         ]);
     }
@@ -473,14 +492,14 @@ class DepartmentController extends Controller
         $loggenInUser = Auth::user();
         if($loggenInUser->current_role->can_add_department == 'false'){
             return response()->json([
-                'message' => 'You do not have permission to create department'
+                'message' => 'You do not have permission to add HOD'
             ], 403);
         }
 
         $request->validate(
             [
                 'department_id' => 'required|integer',
-                'faculty_code' => 'required|integer',
+                'faculty_code' => 'required',
             ]
         );
         $department = \App\Models\Department::find($request->department_id);
@@ -501,18 +520,34 @@ class DepartmentController extends Controller
             ], 400);
         }
 
-        $user=$faculty->user;
-        $user->role_id=Role::where('name', 'hod')->first()->id;
+        // If there's an existing HOD, revert their role to faculty
+        if($department->hod_id) {
+            $oldHod = Faculty::where('faculty_code', $department->hod_id)->first();
+            if($oldHod && $oldHod->user) {
+                $oldHod->user->role_id = Role::where('role', 'faculty')->first()->id;
+                $oldHod->user->current_role_id = $oldHod->user->role_id;
+                $oldHod->user->save();
+            }
+        }
+
+        // Update new HOD's role
+        $user = $faculty->user;
+        $hodRole = Role::where('role', 'hod')->first();
+        $user->role_id = $hodRole->id;
+        $user->current_role_id = $hodRole->id;
         $user->save();
-        $department->hod_id = $request->user_id;
+        
+        // Update department's HOD
+        $department->hod_id = $request->faculty_code;
         $department->save();
+        
         return response()->json([
-            'message' => 'HOD added successfully'
+            'message' => 'HOD assigned successfully'
         ], 200);
       }
         catch(\Exception $e){
             return response()->json([
-                'message' => 'An error occured'
+                'message' => $e->getMessage()
             ], 500);
         }
     }
@@ -523,14 +558,14 @@ class DepartmentController extends Controller
         $loggenInUser = Auth::user();
         if($loggenInUser->current_role->can_add_department == 'false'){
             return response()->json([
-                'message' => 'You do not have permission to create department'
+                'message' => 'You do not have permission to add coordinator'
             ], 403);
         }
 
         $request->validate(
             [
                 'department_id' => 'required|integer',
-                'faculty_code' => 'required|integer',
+                'faculty_code' => 'required',
             ]
         );
         $department = \App\Models\Department::find($request->department_id);
@@ -550,21 +585,75 @@ class DepartmentController extends Controller
                 'message' => 'Faculty does not belong to this department'
             ], 400);
         }
-        $user=$faculty->user;
-        $user->role_id=Role::where('name', 'phd_coordinator')->first()->id;
+
+        // Check if already a coordinator
+        $existing = PhdCoordinator::where('department_id', $request->department_id)
+            ->where('faculty_id', $request->faculty_code)
+            ->first();
+        if($existing){
+            return response()->json([
+                'message' => 'Faculty is already a PhD Coordinator for this department'
+            ], 400);
+        }
+
+        // Update role
+        $user = $faculty->user;
+        $coordinatorRole = Role::where('role', 'phd_coordinator')->first();
+        $user->role_id = $coordinatorRole->id;
+        $user->current_role_id = $coordinatorRole->id;
         $user->save();
+        
         PhdCoordinator::create([
             'department_id' => $request->department_id,
             'faculty_id' => $request->faculty_code
         ]);
 
         return response()->json([
-            'message' => 'Coordinator added successfully'
+            'message' => 'PhD Coordinator added successfully'
         ], 200);
       }
         catch(\Exception $e){
             return response()->json([
-                'message' => 'An error occured'.$e->getMessage()
+                'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function removeCoordinator(Request $request, $id)
+    {
+        try{
+        $loggenInUser = Auth::user();
+        if($loggenInUser->current_role->can_add_department == 'false'){
+            return response()->json([
+                'message' => 'You do not have permission to remove coordinator'
+            ], 403);
+        }
+
+        $coordinator = PhdCoordinator::find($id);
+        if(!$coordinator){
+            return response()->json([
+                'message' => 'PhD Coordinator not found'
+            ], 404);
+        }
+
+        $faculty = Faculty::where('faculty_code', $coordinator->faculty_id)->first();
+        if($faculty && $faculty->user) {
+            // Revert role to faculty
+            $facultyRole = Role::where('role', 'faculty')->first();
+            $faculty->user->role_id = $facultyRole->id;
+            $faculty->user->current_role_id = $facultyRole->id;
+            $faculty->user->save();
+        }
+
+        $coordinator->delete();
+
+        return response()->json([
+            'message' => 'PhD Coordinator removed successfully'
+        ], 200);
+      }
+        catch(\Exception $e){
+            return response()->json([
+                'message' => $e->getMessage()
             ], 500);
         }
     }

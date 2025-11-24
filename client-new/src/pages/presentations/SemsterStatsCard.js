@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { Tabs, Tab } from "@mui/material";
 import BulkSchedulePresentation from "../../components/forms/presentations/BulkSchedulePresentation";
 import SchedulePresentation from "../../components/forms/presentations/SchedulePresentation";
+import FileUploadField from "../../components/forms/fields/FileUploadField";
 // import FilterBar from "../../components/filterBar/FilterBar";
 import { set } from "react-hook-form";
 
@@ -24,13 +25,15 @@ const SemesterStatsCard = ({ semesterName = null,setFilters=null}) => {
   const [openCreateModal, setOpenCreateModal] = useState(false);
   const [body, setBody] = useState({});
   const [filtersEnabled, setFiltersEnabled] = useState(false);
-
+ const [location, setLocation] = useState(window.location.pathname);
+ 
   const [reportPeriods, setReportPeriods] = useState([]);
   const [editForm, setEditForm] = useState({
     semester_name: "",
     start_date: null,
     end_date: null,
     notification: false,
+    ppt_file: null,
   });
   useEffect(() => {
     if(setFilters) 
@@ -45,6 +48,7 @@ const SemesterStatsCard = ({ semesterName = null,setFilters=null}) => {
     start_date: new Date(),
     end_date: new Date(),
     notification: false,
+    ppt_file: null,
   });
 
   const openModal = () => {
@@ -82,9 +86,12 @@ const SemesterStatsCard = ({ semesterName = null,setFilters=null}) => {
         start_date: new Date(data.start_date),
         end_date: new Date(data.end_date),
         notification: data.notification,
+        ppt_file: data.ppt_file || null,
       });
     } catch (error) {
       console.error("Error fetching semester stats:", error);
+      // Set empty state when no semesters exist
+      setSemesterStats(null);
     }
   };
 
@@ -99,17 +106,34 @@ const SemesterStatsCard = ({ semesterName = null,setFilters=null}) => {
 
   const handleEditSubmit = async () => {
     try {
-      const payload = {
-        semester_name: editForm.semester_name,
-        start_date: editForm.start_date,
-        end_date: editForm.end_date,
-        notification: editForm.notification,
-      };
+      const formData = new FormData();
+      formData.append('semester_name', editForm.semester_name);
+      
+      // Format dates as Y-m-d
+      const startDate = editForm.start_date instanceof Date 
+        ? editForm.start_date.toISOString().split('T')[0]
+        : editForm.start_date;
+      const endDate = editForm.end_date instanceof Date 
+        ? editForm.end_date.toISOString().split('T')[0]
+        : editForm.end_date;
+      
+      formData.append('start_date', startDate);
+      formData.append('end_date', endDate);
+      
+      // Convert boolean to string '0' or '1' for FormData
+      formData.append('notification', editForm.notification ? '1' : '0');
+      
+      // Only append ppt_file if a new file was selected
+      if (editForm.ppt_file && editForm.ppt_file instanceof File) {
+        formData.append('ppt_file', editForm.ppt_file);
+      }
+
       let hello = await customFetch(
         baseURL + "/semester",
         "POST",
-        payload,
-        true
+        formData,
+        true,
+        true // isFormData flag
       );
       if (hello.status === 200) {
         toast.success("Semester updated successfully!");
@@ -124,13 +148,29 @@ const SemesterStatsCard = ({ semesterName = null,setFilters=null}) => {
 
   const handleCreateSubmit = async () => {
     try {
-      const payload = {
-        semester_name: createForm.semester_name,
-        start_date: createForm.start_date,
-        end_date: createForm.end_date,
-        notification: createForm.notification,
-      };
-      await customFetch(baseURL + "/semester", "POST", payload, true);
+      const formData = new FormData();
+      formData.append('semester_name', createForm.semester_name);
+      
+      // Format dates as Y-m-d
+      const startDate = createForm.start_date instanceof Date 
+        ? createForm.start_date.toISOString().split('T')[0]
+        : createForm.start_date;
+      const endDate = createForm.end_date instanceof Date 
+        ? createForm.end_date.toISOString().split('T')[0]
+        : createForm.end_date;
+      
+      formData.append('start_date', startDate);
+      formData.append('end_date', endDate);
+      
+      // Convert boolean to string '0' or '1' for FormData
+      formData.append('notification', createForm.notification ? '1' : '0');
+      
+      // Only append ppt_file if a file was selected
+      if (createForm.ppt_file && createForm.ppt_file instanceof File) {
+        formData.append('ppt_file', createForm.ppt_file);
+      }
+
+      await customFetch(baseURL + "/semester", "POST", formData, true, true);
       setOpenCreateModal(false);
       fetchSemesterStats();
     } catch (err) {
@@ -138,10 +178,198 @@ const SemesterStatsCard = ({ semesterName = null,setFilters=null}) => {
     }
   };
 
-  if (!semesterStats) return null;
+  if (!semesterStats) {
+    // No semesters exist - show create option for admin/dordc
+    if (role === "admin" || role === "dordc") {
+      return (
+        <div className="semester-card">
+          <div className="semester-header">
+            <h3>No Evaluation Semester Found</h3>
+          </div>
+          <div className="semester-stats-line">
+            <p style={{ marginBottom: "16px" }}>
+              No evaluation semester has been created yet. Create the first semester to start scheduling presentations.
+            </p>
+            <button
+              className="button"
+              onClick={() => setOpenCreateModal(true)}
+            >
+              Create First Evaluation Semester
+            </button>
+          </div>
+          
+          <CustomModal
+            isOpen={openCreateModal}
+            onClose={() => {setOpenCreateModal(false); window.location.reload();}}
+            title="Create New Semester Presentation"
+            minWidth="300px"
+            minHeight="300px"
+          >
+            <GridContainer
+              elements={[
+                <DropdownField
+                  label="Period of Report"
+                  options={reportPeriods}
+                  onChange={(value) =>
+                    setCreateForm((prev) => ({ ...prev, semester_name: value }))
+                  }
+                />,
+              ]}
+              space={2}
+            />
+
+            <label>Evaluation Start Date:</label>
+            <DatePicker
+              selected={createForm.start_date}
+              onChange={(date) =>
+                setCreateForm({ ...createForm, start_date: date })
+              }
+              className="field-editable"
+            />
+
+            <label>Evaluation End Date:</label>
+            <DatePicker
+              selected={createForm.end_date}
+              onChange={(date) =>
+                setCreateForm({ ...createForm, end_date: date })
+              }
+              className="field-editable"
+            />
+
+            <label>Notification:</label>
+            <ToggleSwitch
+              isOn={createForm.notification}
+              onToggle={() =>
+                setCreateForm((prev) => ({
+                  ...prev,
+                  notification: !prev.notification,
+                }))
+              }
+            />
+
+            <FileUploadField
+              label="Sample PPT Template (Optional)"
+              initialValue={createForm.ppt_file}
+              isLocked={false}
+              onChange={(file) => setCreateForm({ ...createForm, ppt_file: file })}
+              showLabel={true}
+              acceptedTypes=".ppt,.pptx"
+              maxSizeMB={5}
+              fileTypeLabel="PPT/PPTX"
+            />
+
+            <div style={{ textAlign: "right", marginTop: "10px" }}>
+              <CustomButton onClick={handleCreateSubmit} text="Create" />
+            </div>
+          </CustomModal>
+        </div>
+      );
+    }
+    // For non-admin users, show nothing when no semesters exist
+    return null;
+  }
 
   const { semester_name, start_date, end_date, leave, scheduled, unscheduled } =
     semesterStats;
+
+  const isSemesterCompleted = new Date(end_date) < currentDate;
+
+  // If semester is completed AND we're not viewing a specific past semester, show only the create new semester prompt
+  // If semesterName is provided, it means we're viewing a specific past semester, so show full stats
+  if (isSemesterCompleted && !semesterName && (role === "admin" || role === "dordc")) {
+    return (
+      <div>
+        <div className="semester-card">
+          <div className="semester-header">
+            <h3>Evaluation Semester Completed</h3>
+          </div>
+          <div className="semester-stats-line">
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", width: "100%" }}>
+              <p style={{ margin: 0, fontSize: "14px", color: "#666" }}>
+                Semester <strong>{semester_name}</strong> was completed recently. Create a new semester to continue scheduling presentations.
+              </p>
+              <button
+                className="button"
+                onClick={() => setOpenCreateModal(true)}
+              >
+                Create New Evaluation Semester
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <CustomModal
+          isOpen={openCreateModal}
+          onClose={() => {setOpenCreateModal(false);window.location.reload();}}
+          title="Create New Semester Presentation"
+          minWidth="300px"
+          minHeight="300px"
+        >
+          <GridContainer
+            elements={[
+              <DropdownField
+                label="Period of Report"
+                options={reportPeriods}
+                onChange={(value) =>
+                  setCreateForm((prev) => ({ ...prev, semester_name: value }))
+                }
+              />,
+            ]}
+            space={2}
+          />
+
+          <label>Evaluation Start Date:</label>
+          <DatePicker
+            selected={createForm.start_date}
+            onChange={(date) =>
+              setCreateForm({ ...createForm, start_date: date })
+            }
+            className="field-editable"
+          />
+
+          <label>Evaluation End Date:</label>
+          <DatePicker
+            selected={createForm.end_date}
+            onChange={(date) =>
+              setCreateForm({ ...createForm, end_date: date })
+            }
+            className="field-editable"
+          />
+
+          <label>Notification:</label>
+          <ToggleSwitch
+            isOn={createForm.notification}
+            onToggle={() =>
+              setCreateForm((prev) => ({
+                ...prev,
+                notification: !prev.notification,
+              }))
+            }
+          />
+
+          <FileUploadField
+            label="Sample PPT Template (Optional)"
+            initialValue={createForm.ppt_file}
+            isLocked={false}
+            onChange={(file) => setCreateForm({ ...createForm, ppt_file: file })}
+            showLabel={true}
+            acceptedTypes=".ppt,.pptx"
+            maxSizeMB={5}
+            fileTypeLabel="PPT/PPTX"
+          />
+
+          <div style={{ textAlign: "right", marginTop: "10px" }}>
+            <CustomButton onClick={handleCreateSubmit} text="Create" />
+          </div>
+        </CustomModal>
+      </div>
+    );
+  }
+
+  // If semester is completed and user is not admin/dordc, and not viewing specific semester, show nothing
+  if (isSemesterCompleted && !semesterName) {
+    return null;
+  }
 
   return (
     <div>
@@ -153,9 +381,6 @@ const SemesterStatsCard = ({ semesterName = null,setFilters=null}) => {
           )}
           {isBeforeSemester && (
             <span className="semester-status-indicator">● Upcoming</span>
-          )}
-          {new Date(end_date) < currentDate && (
-            <span className="semester-status-indicator">● Completed</span>
           )}
         </div>
         <div className="semester-stats-line">
@@ -191,23 +416,29 @@ const SemesterStatsCard = ({ semesterName = null,setFilters=null}) => {
                fullWidth
              />
            </div>
-            <div>
-              {isInSemester || isBeforeSemester ? (
-                 <button
+            {(isInSemester || isBeforeSemester) && (
+              <div>
+                <button
                   className="button"
                   onClick={() => setOpenEditModal(true)}
                 >
                   Edit Evaluation Semester
                 </button>
-              ) : (
-                <button
-                  className="button"
-                  onClick={() => setOpenCreateModal(true)}
-                >
-                  Create New Evaluation Semester
-                </button>
-              )}
+              </div>
+            )}
             </div>
+          )}
+
+          {/* View Current Semester button - visible to all roles when semester is active */}
+          {isInSemester && !semesterName && (
+            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", width: "100%", marginTop: role === "admin" || role === "dordc" ? "0" : "12px" }}>
+              <div style={{ flex: 1, minWidth: "250px" }}>
+                <CustomButton
+                  onClick={() => window.location.href = location+`/semester/${semester_name}`}
+                  text="View Current Semester Details"
+                  fullWidth
+                />
+              </div>
             </div>
           )}
 
@@ -269,7 +500,7 @@ const SemesterStatsCard = ({ semesterName = null,setFilters=null}) => {
 )}        </div>
       </div>
 
-      {(role === "admin" || role == "dordc") && (
+      {(role === "admin" || role === "dordc") && (
         <CustomModal
           isOpen={openEditModal}
           onClose={() => {setOpenEditModal(false); 
@@ -315,64 +546,19 @@ const SemesterStatsCard = ({ semesterName = null,setFilters=null}) => {
             }
           />
 
+          <FileUploadField
+            label="Sample PPT Template (Optional)"
+            initialValue={editForm.ppt_file}
+            isLocked={false}
+            onChange={(file) => setEditForm({ ...editForm, ppt_file: file })}
+            showLabel={true}
+            acceptedTypes=".ppt,.pptx"
+            maxSizeMB={5}
+            fileTypeLabel="PPT/PPTX"
+          />
+
           <div style={{ textAlign: "right", marginTop: "10px" }}>
             <CustomButton onClick={handleEditSubmit} text="Save Changes" />
-          </div>
-        </CustomModal>
-      )}
-
-      {(role === "admin" || role == "dordc") && (
-        <CustomModal
-          isOpen={openCreateModal}
-          onClose={() => {setOpenCreateModal(false);window.Location.reload();}}
-          title="Create New Semester Presentation"
-                minWidth="300px"
-          minHeight="300px"
-        >
-          <GridContainer
-            elements={[
-              <DropdownField
-                label="Period of Report"
-                options={reportPeriods}
-                onChange={(value) =>
-                  setCreateForm((prev) => ({ ...prev, semester_name: value }))
-                }
-              />,
-            ]}
-            space={2}
-          />
-
-          <label>Evaluation Start Date:</label>
-          <DatePicker
-            selected={createForm.start_date}
-            onChange={(date) =>
-              setCreateForm({ ...createForm, start_date: date })
-            }
-            className="field-editable"
-          />
-
-          <label>Evaluation End Date:</label>
-          <DatePicker
-            selected={createForm.end_date}
-            onChange={(date) =>
-              setCreateForm({ ...createForm, end_date: date })
-            }
-            className="field-editable"
-          />
-
-          <label>Notification:</label>
-          <ToggleSwitch
-            isOn={createForm.notification}
-            onToggle={() =>
-              setCreateForm((prev) => ({
-                ...prev,
-                notification: !prev.notification,
-              }))
-            }
-          />
-
-          <div style={{ textAlign: "right", marginTop: "10px" }}>
-            <CustomButton onClick={handleCreateSubmit} text="Create" />
           </div>
         </CustomModal>
       )}

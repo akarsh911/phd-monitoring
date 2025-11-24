@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Layout from "../../components/dashboard/layout";
-import { useLoading } from "../../context/LoadingContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import FilterBar from "../../components/filterBar/FilterBar";
 import PagenationTable from "../../components/pagenationTable/PagenationTable";
 import CustomModal from "../../components/forms/modal/CustomModal";
 import StudentForm from "../../components/studentForm/StudentForm";
 import CustomButton from "../../components/forms/fields/CustomButton";
-import AssignPanel from "../../components/assignDoctoral/AssignPanel";
 import SupervisorDoctoralManager from "../../components/supervisorDoctoralManager/SupervisorDoctoralManager";
+import BulkUploadStudents from "../../components/bulkUploadStudents/BulkUploadStudents";
 
 const StudentsPage = () => {
   const [filter, setFilter] = useState([]);
-  const { setLoading } = useLoading();
   const location = useLocation();
   const navigate = useNavigate();
   const role = localStorage.getItem("userRole");
@@ -22,6 +20,7 @@ const StudentsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [isModalEditStudentOpen, setIsModalEditStudentOpen] = useState(false);
+  const [isBulkUploadModalOpen, setIsBulkUploadModalOpen] = useState(false);
   const [studentToEdit, setStudentToEdit] = useState(null);
 
   const handleOpenForm = (studentData = null) => {
@@ -49,10 +48,36 @@ const StudentsPage = () => {
                 filters={filter}
                 enableApproval={false}
                 extraTopbarComponents={
-                  <CustomButton
-                    text="Add Student +"
-                    onClick={() => handleOpenForm()}
-                  />
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    <CustomButton
+                      text="Add Student"
+                      onClick={() => handleOpenForm()}
+                      style={{
+                        backgroundColor: '#4CAF50',
+                        color: 'white',
+                        padding: '10px 20px',
+                        borderRadius: '6px',
+                        fontWeight: '500',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                      }}
+                    />
+                    <CustomButton
+                      text="Bulk Upload"
+                      onClick={() => setIsBulkUploadModalOpen(true)}
+                      style={{
+                        backgroundColor: '#2196F3',
+                        color: 'white',
+                        padding: '10px 20px',
+                        borderRadius: '6px',
+                        fontWeight: '500',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                      }}
+                    />
+                  </div>
                 }
                 actions={[
                   {
@@ -137,6 +162,22 @@ const StudentsPage = () => {
                 }}
               />
             )}
+          </CustomModal>
+
+          <CustomModal
+            isOpen={isBulkUploadModalOpen}
+            onClose={() => {
+              setIsBulkUploadModalOpen(false);
+            }}
+            title={"Bulk Upload Students"}
+            width="90vw"
+          >
+            <BulkUploadStudents
+              onSuccess={() => {
+                setIsBulkUploadModalOpen(false);
+                window.location.reload();
+              }}
+            />
           </CustomModal>
         </>
       }
