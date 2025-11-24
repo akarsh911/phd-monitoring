@@ -507,8 +507,12 @@ class ConstituteOfIRBController extends Controller
                         ]);
                     }
                     $area=$formInstance->student->areaOfSpecialization;
-                    $expert=$area->expert_name;
-                    
+                    $expert=$area->getExpertFaculty;
+                    DoctoralCommittee::create([
+                        'student_id' => $formInstance->student->roll_no,
+                        'faculty_id' => $expert->faculty_code,
+                        'type' => 'external',
+                    ]);
                     $formInstance->update([
                         'outside_expert' => $outsideExpertId,
                         'cognate_expert' => $cognateExpertId,
@@ -518,6 +522,7 @@ class ConstituteOfIRBController extends Controller
                     $student->phd_title= $formInstance->phd_title;
                     $student->save();
                     $formInstance->save();
+
                     $forms = [
                         [
                             'form_type' => 'irb-submission',
