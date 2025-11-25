@@ -65,6 +65,8 @@ export const customFetch = async (
           if (showToast) toast.error(data.message);
         } else if (error.status === 401) {
           if (showToast) toast.error(data.error);
+          localStorage.clear();
+          sessionStorage.clear();
           window.location.href = "/login";
         } else if (error.status === 500) {
           if (showToast)
