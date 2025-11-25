@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Fields.css';
 import { toast } from 'react-toastify';
-import { rootURL } from '../../../api/urls';
+import { baseURL } from '../../../api/urls';
 
 const FileUploadField = ({
   label,
@@ -45,7 +45,7 @@ const FileUploadField = ({
 
       {initialValue && isLocked ? (
         <a
-          href={rootURL + initialValue.replace('app/public', 'storage')}
+          href={baseURL + initialValue.replace('app/public', 'storage')}
           target='_blank'
           rel='noopener noreferrer'
           className='file-link'
