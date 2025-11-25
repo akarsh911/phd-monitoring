@@ -40,7 +40,7 @@ class ExaminersRecommendation extends Model
 
     public function listOfExaminers()
     {
-        return $this->belongsTo(ListOfExaminers::class, 'form_id', 'id');
+        return $this->belongsTo(ListOfExaminersForm::class, 'form_id', 'id');
     }
 
     public function faculty()

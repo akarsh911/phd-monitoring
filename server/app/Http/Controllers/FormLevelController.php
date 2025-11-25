@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ConstituteOfIRB;
 use App\Models\Forms;
 use App\Models\IrbSubForm;
-use App\Models\ListOfExaminers;
+use App\Models\ListOfExaminersForm;
 use App\Models\Presentation;
 use App\Models\ResearchExtentionsForm;
 use App\Models\StudentSemesterOffForm;
@@ -104,7 +104,7 @@ class FormLevelController extends Controller
             case 'synopsis-submission':
                 return SynopsisSubmission::class;
             case 'list-of-examiners':
-                return ListOfExaminers::class;
+                return ListOfExaminersForm::class;
             case 'thesis-submission':
                 return ThesisSubmission::class;
             case 'status-change':

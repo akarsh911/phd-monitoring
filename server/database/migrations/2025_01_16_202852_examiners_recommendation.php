@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('examiners_recommendation', function (Blueprint $table) {
             $table->id();
             $table->integer('form_id')->unsigned()->index();
-            $table->foreign('form_id')->references('id')->on('list_of_examiners')->onDelete('cascade');
+            $table->foreign('form_id')->references('id')->on('list_of_examiners_forms')->onDelete('cascade');
             $table->string('name');
             $table->string('email');
             $table->string('institution');

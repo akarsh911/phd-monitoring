@@ -7,7 +7,7 @@ use App\Models\Student;
 use App\Models\ConstituteOfIRB;
 use App\Models\IrbSubForm;
 use App\Models\ResearchExtentionsForm;
-use App\Models\ListOfExaminers;
+use App\Models\ListOfExaminersForm;
 use App\Models\Presentation;
 use App\Models\StudentSemesterOffForm;
 use App\Models\SupervisorChangeForm;
@@ -27,7 +27,7 @@ class AdminFormController extends Controller
         'irb-constitution' => ConstituteOfIRB::class,
         'irb-submission' => IrbSubForm::class,
         'irb-extension' => ResearchExtentionsForm::class,
-        'list-of-examiners' => ListOfExaminers::class,
+        'list-of-examiners' => ListOfExaminersForm::class,
         'presentation' => Presentation::class,
         'semester-off' => StudentSemesterOffForm::class,
         'status-change' => StudentStatusChangeForms::class,
@@ -272,7 +272,7 @@ class AdminFormController extends Controller
                     'form_type' => $request->form_type,
                     'form_name' => $metadata['form_name'] ?? ucwords(str_replace('-', ' ', $request->form_type)),
                     'department_id' => $student->department_id,
-                    'stage' => 'student',
+                    'stage' => $metadata['steps'] ? $metadata['steps'][0] : 'student',
                     'count' => 0,
                     'max_count' => $metadata['max_count'] ?? 1,
                     'student_available' => in_array('student', $availableRoles),

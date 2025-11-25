@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('examiners_details', function (Blueprint $table) {
-            $table->increments('id');
-            $table->primary('id');
+            $table->increments('id')->index();
+            
             $table->timestamps();
             $table->text('name');
             $table->text('designation');

@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Traits\ModelCommonFormFields;
 
-class ListOfExaminers extends Model
+class ListOfExaminersForm extends Model
 {
     use HasFactory;
     use ModelCommonFormFields;
 
     // The table associated with the model
-    protected $table = 'list_of_examiners';
+    protected $table = 'list_of_examiners_forms';
 
     // The primary key associated with the table
     protected $primaryKey = 'id';

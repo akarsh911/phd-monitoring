@@ -361,7 +361,7 @@ trait GeneralFormSubmitter
             'ResearchExtentionsForm' => 'irb-extension',
             'ThesisSubmission' => 'thesis-submission',
             'ThesisExtentionForm' => 'thesis-extension',
-            'ListOfExaminers' => 'list-of-examiners',
+            'ListOfExaminersForm' => 'list-of-examiners',
             'SynopsisSubmission' => 'synopsis-submission',
             'Presentation' => 'presentation',
         };

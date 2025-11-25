@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Faculty;
 use App\Models\Forms;
-use App\Models\ListOfExaminers;
+use App\Models\ListOfExaminersForm;
 use App\Models\Role;
 use App\Models\User;
 
@@ -33,8 +33,8 @@ class ListOfExaminersController extends Controller
     {
         $user = Auth::user();
         if ($student_id)
-            return $this->listFormsStudent($user, ListOfExaminers::class, $student_id);
-        return $this->listForms($user, ListOfExaminers::class,$request,null,false,[
+            return $this->listFormsStudent($user, ListOfExaminersForm::class, $student_id);
+        return $this->listForms($user, ListOfExaminersForm::class,$request,null,false,[
             'fields' => [
                 "name","roll_no","supervisors"
             ],
@@ -74,7 +74,7 @@ class ListOfExaminersController extends Controller
             'supervisor_lock'=>0,
             'name' => $user->first_name . ' ' . $user->last_name
         ];
-        return $this->createForms(ListOfExaminers::class, $data,null,true);
+        return $this->createForms(ListOfExaminersForm::class, $data,null,true);
     }
     public function bulkSubmit(Request $request)
     {
@@ -98,7 +98,7 @@ class ListOfExaminersController extends Controller
     {
         $user = Auth::user();
         $role = $user->current_role;
-        $model = ListOfExaminers::class;
+        $model = ListOfExaminersForm::class;
         $steps = [
             'faculty',
             'hod',
@@ -145,7 +145,7 @@ class ListOfExaminersController extends Controller
     {
 
         $request->merge(['approval' => true]);
-        return $this->submitForm($user, $request, $form_id, ListOfExaminers::class, 'faculty', 'faculty', 'hod', function ($formInstance) use ($request, $user) {
+        return $this->submitForm($user, $request, $form_id, ListOfExaminersForm::class, 'faculty', 'faculty', 'hod', function ($formInstance) use ($request, $user) {
 
             $request->validate([
                 'national' => 'array|required',
@@ -166,7 +166,7 @@ class ListOfExaminersController extends Controller
             $user,
             $request,
             $form_id,
-            ListOfExaminers::class,
+            ListOfExaminersForm::class,
             'hod',
             'faculty',
             'dordc',
@@ -180,7 +180,7 @@ class ListOfExaminersController extends Controller
             $user,
             $request,
             $form_id,
-            ListOfExaminers::class,
+            ListOfExaminersForm::class,
             'director',
             'dordc',
             'complete',
@@ -195,7 +195,7 @@ class ListOfExaminersController extends Controller
             $user,
             $request,
             $form_id,
-            ListOfExaminers::class,
+            ListOfExaminersForm::class,
             'dordc',
             'hod',
             'director',
@@ -277,7 +277,7 @@ class ListOfExaminersController extends Controller
         }
     
         // Get the last form submitted by the faculty
-        $lastForm = ListOfExaminers::where('faculty_id', $user->faculty->faculty_code)
+        $lastForm = ListOfExaminersForm::where('faculty_id', $user->faculty->faculty_code)
             ->where('id', '<', $formInstance->id) // Assuming `id` represents the chronological order of forms
             ->latest('id')
             ->first();
