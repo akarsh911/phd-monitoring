@@ -202,7 +202,7 @@ class ListOfExaminersController extends Controller
             function ($formInstance, $user) use ($request) {
                 $request->validate([
                     'approvals' => "array | required",
-                    'rejections' => "array | required",
+                    'rejections' => "array | nullable",
                 ]);
                 $approvals = $request->approvals;
                 foreach ($approvals as $email) {
