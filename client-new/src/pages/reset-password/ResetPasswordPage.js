@@ -9,10 +9,17 @@ import { toast } from "react-toastify";
 
 const ResetPasswordPage = () => {
   const [loading, setLoading] = React.useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
+  const email = searchParams.get("email");
 
-  const { register, handleSubmit, watch } = useForm();
+  const { register, handleSubmit, watch } = useForm({
+    defaultValues: {
+      email: email || ""
+    }
+  });
 
  
   const onSubmit = async (data) => {
@@ -44,9 +51,50 @@ const ResetPasswordPage = () => {
                className="tw-mx-auto tw-mb-4 tw-w-24"/>
           <h2 className="tw-text-xl tw-font-bold tw-text-center tw-mb-4">Reset Password</h2>
           <form onSubmit={handleSubmit(onSubmit)} className="tw-space-y-4">
-            <input {...register("email")} type="email" placeholder="Email" className="tw-w-full tw-p-2 tw-border tw-rounded" />
-            <input {...register("password")} type="password" placeholder="New Password" className="tw-w-full tw-p-2 tw-border tw-rounded" />
-            <input {...register("confirmPassword")} type="password" placeholder="Confirm Password" className="tw-w-full tw-p-2 tw-border tw-rounded" />
+            <input {...register("email")} type="email" placeholder="Email" className="tw-w-full tw-p-2 tw-border tw-rounded tw-bg-gray-100" disabled value={email || ""} />
+            
+            <div className="tw-relative">
+              <input 
+                {...register("password")} 
+                type={showPassword ? "text" : "password"} 
+                placeholder="New Password" 
+                className="tw-w-full tw-p-2 tw-border tw-rounded tw-pr-10" 
+                autoComplete="new-password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="tw-absolute tw-right-2 tw-top-1/2 tw-transform -tw-translate-y-1/2 tw-text-gray-600 hover:tw-text-gray-800"
+              >
+                {showPassword ? (
+                  <i className="fa fa-eye-slash"></i>
+                ) : (
+                  <i className="fa fa-eye"></i>
+                )}
+              </button>
+            </div>
+
+            <div className="tw-relative">
+              <input 
+                {...register("confirmPassword")} 
+                type={showConfirmPassword ? "text" : "password"} 
+                placeholder="Confirm Password" 
+                className="tw-w-full tw-p-2 tw-border tw-rounded tw-pr-10" 
+                autoComplete="new-password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="tw-absolute tw-right-2 tw-top-1/2 tw-transform -tw-translate-y-1/2 tw-text-gray-600 hover:tw-text-gray-800"
+              >
+                {showConfirmPassword ? (
+                  <i className="fa fa-eye-slash"></i>
+                ) : (
+                  <i className="fa fa-eye"></i>
+                )}
+              </button>
+            </div>
+
             <button type="submit" className="tw-bg-[#932f2f] tw-text-white tw-py-2 tw-rounded tw-w-full hover:tw-bg-[#7a2626]">
               Reset Password
             </button>
