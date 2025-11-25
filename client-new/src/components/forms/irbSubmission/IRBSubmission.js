@@ -16,6 +16,11 @@ const IRBSubmission = ({ formData }) => {
       currentRole={formData.role}> 
         <Student formData={formData}></Student>
         <Supervisor formData={formData} ></Supervisor>
+         <Recommendation
+          formData={formData}
+          role="doctoral"
+          allowRejection={false}
+        ></Recommendation>
         <Recommendation
           formData={formData}
           role="hod"

@@ -109,6 +109,11 @@ class IrbSubForm extends Model
         return $this->hasMany(IrbSupervisorApproval::class, 'irb_sub_form_id', 'id');
     }
 
+    public function doctoralApprovals()
+    {
+        return $this->hasMany(IrbDoctoralApproval::class, 'irb_sub_form_id', 'id');
+    }
+
     public function handleApproval($email, $id, $val)
     {
         $user = User::where('email', $email)->first();
@@ -119,6 +124,16 @@ class IrbSubForm extends Model
         $model = IrbSubForm::class;
         Log::info('Handling approval for user: ' . $user->email);
         Log::info('Approval value: ' . $val);
-        return $this->submitForm($user, $request, $id, $model, 'external', 'faculty', 'hod');        
+        return $this->submitForm($user, $request, $id, $model, 'external', 'faculty', 'doctoral',   function ($formInstance) use ($request, $user) {
+               $student=$formInstance->student;
+                $doctoral = $formInstance->student->doctoralCommittee;        
+               foreach ($doctoral as $doc) {
+                            IrbDoctoralApproval::create([
+                                'irb_sub_form_id' => $formInstance->id,
+                                'doctoral_id' => $doc->faculty_code,
+                                'status' => 'pending',
+                            ]);
+                 }
+        });        
     }
 }

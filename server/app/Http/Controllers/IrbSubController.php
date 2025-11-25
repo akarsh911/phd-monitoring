@@ -63,7 +63,7 @@ class IrbSubController extends Controller
     {
         $user = Auth::user();
         $role = $user->current_role;
-        $steps=['student','faculty','external','hod','dordc','complete'];
+        $steps=['student','faculty','external','doctoral','hod','dordc','complete'];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
@@ -88,8 +88,9 @@ class IrbSubController extends Controller
                 return $this->handleStudentForm($user, $form_id, $model,$steps);
             case 'hod':
                 return $this->handleHodForm($user, $form_id, $model);
+            case 'doctoral':
+                return $this->handleDoctoralForm($user, $form_id, $model);
             case 'dordc':
-            case 'external':
                 return $this->handleAdminForm($user, $form_id, $model);
             case 'faculty':
                 return $this->handleFacultyForm($user, $form_id, $model);
@@ -111,6 +112,8 @@ class IrbSubController extends Controller
                 return $this->studentSubmit($user, $request, $form_id);
             case 'faculty':
                 return $this->supervisorSubmit($user, $request, $form_id);
+            case 'doctoral':
+                return $this->doctoralSubmit($user, $request, $form_id);
             case 'hod':
                 return $this->hodSubmit($user, $request, $form_id);
             case 'dordc':
@@ -203,6 +206,13 @@ class IrbSubController extends Controller
         });
     }   
 
+    private function doctoralSubmit($user, $request, $form_id)
+    {
+        $model = IrbSubForm::class;
+        return $this->submitForm($user, $request, $form_id, $model, 'doctoral', 'faculty', 'hod',  function ($formInstance) use ($request, $user) {
+            $this->handleDoctoralSubmitForm($user, $request, $formInstance);
+        });
+    }
     
 
     private function hodSubmit($user, $request, $form_id)
@@ -324,6 +334,35 @@ class IrbSubController extends Controller
                 });            
 
             }
+        }
+        else{
+            $formInstance->supervisorApprovals()->where('supervisor_id', $faculty_code)->update([
+              'status' => 'rejected',
+            ]);
+        }
+    }
+
+     private function handleDoctoralSubmitForm($user, $request, $formInstance)
+    {
+        $faculty_code = $user->faculty->faculty_code;
+        if($request->approval){
+            
+            if($formInstance->doctoralApprovals()->where('doctoral_id', $faculty_code)->first()->status=='approved'){
+                throw new \Exception('You have already approved the form, Can Only Submit once all the supervisors approve');
+            }            
+                           
+            $formInstance->doctoralApprovals()->where('doctoral_id', $faculty_code)->update([
+              'status' => 'approved',
+            ]);
+            
+            $formInstance->addHistoryEntry("Doctoral Member Approved The Form", $user->name());
+    
+            $approvals=$formInstance->doctoralApprovals()->where('status','approved')->get();
+           
+            if($approvals->count()!=$formInstance->student->doctoralCommittee->count()){
+                throw new \Exception('Your Prefrences Saved, Form Will be submitted once all Members from IRB Committee approve',201);
+            }
+        
         }
         else{
             $formInstance->supervisorApprovals()->where('supervisor_id', $faculty_code)->update([

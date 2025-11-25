@@ -52,7 +52,7 @@ class AdminFormController extends Controller
         'irb-submission' => [
             'form_name' => 'Revised IRB',
             'max_count' => 1,
-            'steps' => ['student', 'faculty','external', 'hod', 'dordc', 'complete']
+            'steps' => ['student', 'faculty','external','doctoral', 'hod', 'dordc', 'complete']
         ],
         'irb-extension' => [
             'form_name' => 'IRB Extension',
