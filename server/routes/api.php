@@ -61,6 +61,7 @@ Route::post('/forgot-password', function (Request $request) {
 
     if ($validator->fails()) {
         return response()->json([
+            'success' => false,
             'errors' => $validator->errors(),
         ], 422);
     }
@@ -71,11 +72,13 @@ Route::post('/forgot-password', function (Request $request) {
 
     if ($status === Password::RESET_LINK_SENT) {
         return response()->json([
+            'success' => true,
             'message' => __($status),
         ], 200);
     }
 
     return response()->json([
+        'success' => false,
         'error' => __($status),
     ], 500);
 });
@@ -100,14 +103,26 @@ Route::post('/reset-password', function (Request $request) {
                 'password' => Hash::make($password),
                 'remember_token' => Str::random(60),
             ])->save();
+
+            // Mark first activation as complete if this is their first time setting password
+            if ($user->first_activation === null) {
+                $user->first_activation = now();
+                $user->save();
+            }
         }
     );
 
     if ($status === Password::PASSWORD_RESET) {
-        return response()->json(['message' => __($status)], 200);
+        return response()->json([
+            'success' => true,
+            'message' => __($status)
+        ], 200);
     }
 
-    return response()->json(['error' => __($status)], 500);
+    return response()->json([
+        'success' => false,
+        'error' => __($status)
+    ], 500);
 });
 
 Route::post('/switch-role', function (Request $request) {

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Welcome Email</title>
+    <title>Reset Password</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -56,8 +56,8 @@
             color: #ffffff
         }
         .ii a[href] {
-    color: white;
-}
+            color: white;
+        }
         @media (max-width: 600px) {
             .email-container {
                 padding: 20px;
@@ -78,20 +78,18 @@
     <div class="logo">
         <img src="https://phdportal.thapar.edu/images/tiet_logo.png" alt="PhD Portal Logo">
     </div>
-    <h2>Welcome {{ $user->name }},</h2>
-    <p>You’ve been added to the <strong>PhD Coordination Portal</strong> at 
+    <h2>Hello {{ $user->name }},</h2>
+    <p>We received a request to reset your password for your <strong>PhD Coordination Portal</strong> account at 
         <a href="https://phdportal.thapar.edu/login" target="_blank">phdportal.thapar.edu</a>.
     </p>
 
-    <p>We’re excited to have you on board during our <strong>pilot testing phase</strong>. The portal is currently in beta, and your participation will help us refine and improve the experience for all users i.e. faculty, students, and administrators alike.</p>
+    <p>If you made this request, please click the button below to reset your password. This link will remain valid for 60 minutes.</p>
 
-    <p>To get started, please set your password by clicking the button below. This link will remain valid for 24 hours.</p>
+    <a href="{{ $resetUrl }}" class="button">Reset Password</a>
 
-    <a href="{{ $resetUrl }}" class="button">Set Password</a>
+    <p>If you didn't request a password reset, you can safely ignore this email. Your password will remain unchanged.</p>
 
-    <p>If you didn’t expect this email, you can safely ignore it.</p>
-
-    <p>Thank you for being part of this important phase.</p>
+    <p>For security reasons, this link will expire after one hour.</p>
 
     <p>Best regards,<br>
     PhD Coordination Team<br>

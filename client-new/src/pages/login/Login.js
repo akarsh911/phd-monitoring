@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { loginAPI } from "../../api/login";
@@ -8,6 +8,14 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { register, handleSubmit } = useForm();
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      window.location.href = "/home";
+    }
+  }, []);
 
   // Define the onSubmit function
   const onSubmit = async (data) => {
@@ -83,18 +91,9 @@ const LoginPage = () => {
                 style={{ transform: 'translateY(-50%)' }}
               >
                 {showPassword ? (
-                  // eye-off icon
-                  <svg xmlns="http://www.w3.org/2000/svg" className="tw-h-5 tw-w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-5 0-9.27-3.11-11-7 1.05-2.1 2.6-3.92 4.45-5.18" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M1 1l22 22" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M9.88 9.88A3 3 0 0 0 14.12 14.12" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                  <i className="fa fa-eye-slash"></i>
                 ) : (
-                  // eye icon
-                  <svg xmlns="http://www.w3.org/2000/svg" className="tw-h-5 tw-w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" strokeLinecap="round" strokeLinejoin="round" />
-                    <circle cx="12" cy="12" r="3" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
+                  <i className="fa fa-eye"></i>
                 )}
               </button>
 
