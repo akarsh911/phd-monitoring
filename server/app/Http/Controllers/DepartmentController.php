@@ -592,11 +592,7 @@ class DepartmentController extends Controller
                 'message' => 'Faculty not found'
             ], 404);
         }
-        if($faculty->department_id != $request->department_id){
-            return response()->json([
-                'message' => 'Faculty does not belong to this department'
-            ], 400);
-        }
+     
 
         // If there's an existing ADORDC, revert their role to faculty
         if($department->adordc_id) {

@@ -123,11 +123,11 @@ const FacultyForm = ({ edit = false, facultyData = {} }) => {
             onSelect={(val) => handleChange("department_id", val.id)}
             apiUrl={baseURL + "/suggestions/department"}
           />,
-          <InputSuggestions
+          <InputField
             label="Designation*"
             initialValue={formData.designation}
-            onSelect={(val) => {console.log(val);handleChange("designation", val.name)}}
-            apiUrl={baseURL + "/suggestions/designation"}
+            onChange={(val) => {console.log(val);handleChange("designation", val)}}
+     
           />,
         ]}
       />

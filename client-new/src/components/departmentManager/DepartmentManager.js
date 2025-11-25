@@ -366,7 +366,7 @@ const DepartmentManager = ({ departmentId, departmentName, currentHod, currentAd
               elements={[
                 <InputSuggestions
                   label="Select Faculty from Department*"
-                  apiUrl={`${baseURL}/suggestions/faculty?department_id=${departmentId}`}
+                  apiUrl={`${baseURL}/suggestions/faculty`}
                   onSelect={(val) => setSelectedFaculty(val.id)}
                   fields={['name', 'designation', 'email']}
                 />
