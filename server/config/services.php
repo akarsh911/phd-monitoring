@@ -31,4 +31,8 @@ return [
         ],
     ],
 
+    'cloudflare' => [
+        'secret_key' => env('CLOUDFLARE_SECRET_KEY'),
+    ],
+
 ];

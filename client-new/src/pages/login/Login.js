@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { loginAPI } from "../../api/login";
+import { CLOUDFLARE_SITE_KEY } from "../../api/urls";
 import Loader from "../../components/loader/loader";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState(null);
   const { register, handleSubmit } = useForm();
 
   // Check if user is already logged in
@@ -15,25 +18,56 @@ const LoginPage = () => {
     if (token) {
       window.location.href = "/home";
     }
+
+    // Load Cloudflare Turnstile script
+    const script = document.createElement('script');
+    script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+
+    // Setup callback for captcha
+    window.onTurnstileSuccess = function(token) {
+      setCaptchaToken(token);
+    };
+
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+      delete window.onTurnstileSuccess;
+    };
   }, []);
 
   // Define the onSubmit function
   const onSubmit = async (data) => {
-    console.log(data); // Log the submitted data to the console
-    setLoading(true); // Set loading state to true
+    if (!captchaToken) {
+      toast.error('Please complete the captcha verification');
+      return;
+    }
 
-    let success = await loginAPI(data.email, data.password); // Call the API
-    if (success) {
+    setLoading(true);
+
+    const result = await loginAPI(data.email, data.password, captchaToken);
+    
+    if (result.success) {
       const onLogin = new URLSearchParams(window.location.search).get(
         "onLogin"
       );
       if (onLogin) {
-        window.location.href = onLogin; // Redirect if onLogin query param is present
+        window.location.href = onLogin;
       } else {
-        window.location.href = "/home"; // Redirect to homepage
+        window.location.href = "/home";
       }
     } else {
-      setLoading(false); // Reset loading state if login fails
+      setLoading(false);
+      toast.error(result.error || 'Invalid credentials');
+      
+      // Reset captcha
+      setCaptchaToken(null);
+      if (window.turnstile) {
+        window.turnstile.reset();
+      }
     }
   };
 
@@ -112,6 +146,15 @@ const LoginPage = () => {
                 Forgot Password?
               </Link>
             </div>
+            <div className="tw-flex tw-justify-center tw-my-4">
+              <div 
+                className="cf-turnstile" 
+                data-sitekey="0x4AAAAAACC7RmZQ9q6PlXgB"
+                data-callback="onTurnstileSuccess"
+                data-theme="light"
+              ></div>
+            </div>
+
             <button
               type="submit" // Make sure the button submits the form
               className="tw-bg-[#932f2f] tw-w-4/5 tw-mx-auto tw-block tw-text-center tw-text-white tw-py-2 tw-rounded-md tw-font-bold hover:tw-bg-[#7a2626] tw-duration-200"

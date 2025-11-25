@@ -1,20 +1,26 @@
 import { customFetch } from "./base"
 import { ENDPOINTS } from "./urls"
 
-export const loginAPI = async (email, password) => {
-    const data = await customFetch(ENDPOINTS.LOGIN,"POST",{
+export const loginAPI = async (email, password, captchaToken) => {
+    const result = await customFetch(ENDPOINTS.LOGIN,"POST",{
         email: email,
-        password: password
+        password: password,
+        captcha_token: captchaToken
     });
   
-    if(data && data.success){
-        localStorage.setItem("token",data.response.token);
-        localStorage.setItem("userRole",data.response.user.role.role);
-        localStorage.setItem("available_roles",JSON.stringify(data.response.available_roles));
-        localStorage.setItem("user",JSON.stringify(data.response.user));
-        return true;
+    if(result && result.success){
+        localStorage.setItem("token",result.response.token);
+        localStorage.setItem("userRole",result.response.user.role.role);
+        localStorage.setItem("available_roles",JSON.stringify(result.response.available_roles));
+        localStorage.setItem("user",JSON.stringify(result.response.user));
+        return { success: true };
     }
-    return false;
+    
+    // Return error information
+    return { 
+        success: false, 
+        error: result?.response?.error || result?.response?.message || 'Login failed'
+    };
 }
 
 export const logoutAPI = async () => {

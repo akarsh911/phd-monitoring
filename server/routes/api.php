@@ -16,12 +16,22 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Helpers\CloudflareHelper;
 
 Route::post('/login', function (Request $request) {
     $request->validate([
         'email' => 'required|email',
         'password' => 'required',
+        'captcha_token' => 'required|string',
     ]);
+
+    // Verify captcha
+    if (!CloudflareHelper::verifyCaptcha($request->captcha_token)) {
+        return response()->json([
+            'error' => 'Captcha verification failed'
+        ], 422);
+    }
+
     if (Auth::attempt($request->only('email', 'password'))) {
         /** @var \App\Models\MyUserModel $user **/
         $user = Auth::user();
@@ -57,12 +67,21 @@ Route::post('/login', function (Request $request) {
 Route::post('/forgot-password', function (Request $request) {
     $validator = Validator::make($request->all(), [
         'email' => 'required|email|exists:users,email',
+        'captcha_token' => 'required|string',
     ]);
 
     if ($validator->fails()) {
         return response()->json([
             'success' => false,
             'errors' => $validator->errors(),
+        ], 422);
+    }
+
+    // Verify captcha
+    if (!CloudflareHelper::verifyCaptcha($request->captcha_token)) {
+        return response()->json([
+            'success' => false,
+            'error' => 'Captcha verification failed'
         ], 422);
     }
 
