@@ -184,6 +184,9 @@ class ListOfExaminersController extends Controller
             'director',
             'dordc',
             'complete',
+               function ($formInstance, $user) use ($request) {
+                    //yaha p move the examiners to list_of_examiners table
+               }
         );
     }
 
