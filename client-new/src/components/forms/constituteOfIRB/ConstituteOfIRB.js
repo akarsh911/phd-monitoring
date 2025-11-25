@@ -6,6 +6,7 @@ import Supervisor from "./roles/Supervisor";
 import Hod from "./roles/Hod";
 import Dordc from "./roles/Dordc";
 import RoleBasedWrapper from "../roleWrapper/RoleBasedWrapper";
+import Recommendation from "../layouts/Recommendation";
 const ConstituteOfIRB = ({formData}) => {
  
 
@@ -20,6 +21,11 @@ const ConstituteOfIRB = ({formData}) => {
         <Student formData={formData} ></Student>
         <Supervisor formData={formData} />
         <Hod formData={formData} />
+         <Recommendation
+          formData={formData}
+          role="adordc"
+          allowRejection={false}
+        ></Recommendation>
         <Dordc formData={formData} />
         </RoleBasedWrapper>
       </div>

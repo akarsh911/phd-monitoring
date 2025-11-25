@@ -15,6 +15,7 @@ Route::put('/area-of-specialization/update/{id}', [DepartmentController::class, 
 Route::delete('/area-of-specialization/delete/{id}', [DepartmentController::class, 'deleteAreaOfSpecialization'])->middleware('auth:sanctum');
 Route::post('/area-of-specialization/import', [DepartmentController::class, 'importAreasFromCSV'])->middleware('auth:sanctum');
 Route::post('/add-hod', [DepartmentController::class, 'addHOD'])->middleware('auth:sanctum');
+Route::post('/add-adordc', [DepartmentController::class, 'addAdordc'])->middleware('auth:sanctum');
 Route::post('/add-coordinator', [DepartmentController::class, 'addCoordinator'])->middleware('auth:sanctum');
 Route::delete('/remove-coordinator/{id}', [DepartmentController::class, 'removeCoordinator'])->middleware('auth:sanctum');
 Route::post('/phd_coordinator', [DepartmentController::class, 'addCoordinator'])->middleware('auth:sanctum');

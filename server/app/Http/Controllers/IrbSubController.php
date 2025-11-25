@@ -63,7 +63,7 @@ class IrbSubController extends Controller
     {
         $user = Auth::user();
         $role = $user->current_role;
-        $steps=['student','faculty','external','doctoral','hod','dordc','complete'];
+        $steps=['student','faculty','external','doctoral','hod','adordc','dordc','complete'];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
@@ -82,7 +82,7 @@ class IrbSubController extends Controller
         $user = Auth::user();
         $role = $user->current_role;
         $model = IrbSubForm::class;
-        $steps=['student','faculty','external','hod','dra','dordc'];
+        $steps=['student','faculty','external','doctoral','hod','adordc','dordc','complete'];
         switch ($role->role) {
             case 'student':
                 return $this->handleStudentForm($user, $form_id, $model,$steps);
@@ -92,6 +92,8 @@ class IrbSubController extends Controller
                 return $this->handleDoctoralForm($user, $form_id, $model);
             case 'dordc':
                 return $this->handleAdminForm($user, $form_id, $model);
+            case 'adordc':
+                return $this->handleAdordcForm($user, $form_id, $model);
             case 'faculty':
                 return $this->handleFacultyForm($user, $form_id, $model);
             case 'admin':
@@ -116,6 +118,8 @@ class IrbSubController extends Controller
                 return $this->doctoralSubmit($user, $request, $form_id);
             case 'hod':
                 return $this->hodSubmit($user, $request, $form_id);
+            case 'adordc':
+                return $this->adordcSubmit($user, $request, $form_id);
             case 'dordc':
                 return $this->dordcSubmit($user, $request, $form_id);
             default:
@@ -214,11 +218,16 @@ class IrbSubController extends Controller
         });
     }
     
+     private function adordcSubmit($user, $request, $form_id)
+    {
+        $model = IrbSubForm::class;
+        return $this->submitForm($user, $request, $form_id, $model, 'adordc', 'hod', 'dordc');
+    }
 
     private function hodSubmit($user, $request, $form_id)
     {
         $model = IrbSubForm::class;
-        return $this->submitForm($user, $request, $form_id, $model, 'hod', 'faculty', 'dordc');
+        return $this->submitForm($user, $request, $form_id, $model, 'hod', 'faculty', 'adordc');
     }
 
     private function dordcSubmit($user, $request, $form_id)

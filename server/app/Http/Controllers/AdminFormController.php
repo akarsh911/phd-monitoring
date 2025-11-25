@@ -47,12 +47,12 @@ class AdminFormController extends Controller
         'irb-constitution' => [
             'form_name' => 'IRB Constitution',
             'max_count' => 1,
-            'steps' => ['student', 'faculty', 'hod', 'dordc', 'complete']
+            'steps' => ['student', 'faculty', 'hod','adordc' ,'dordc', 'complete']
         ],
         'irb-submission' => [
             'form_name' => 'Revised IRB',
             'max_count' => 1,
-            'steps' => ['student', 'faculty','external','doctoral', 'hod', 'dordc', 'complete']
+            'steps' => ['student', 'faculty','external','doctoral', 'hod','adordc' , 'dordc', 'complete']
         ],
         'irb-extension' => [
             'form_name' => 'IRB Extension',
@@ -86,12 +86,12 @@ class AdminFormController extends Controller
         'synopsis-submission' => [
             'form_name' => 'Synopsis Submission',
             'max_count' => 1,
-            'steps' => ['student', 'faculty',  'phd_coordinator', 'hod', 'dra','dordc', 'director',  'complete']
+            'steps' => ['student', 'faculty',  'phd_coordinator', 'hod', 'dra','adordc' ,'dordc', 'director',  'complete']
         ],
         'thesis-submission' => [
             'form_name' => 'Thesis Submission',
             'max_count' => 1,
-            'steps' => ['student', 'faculty',  'phd_coordinator','hod',  'dra','dordc', 'complete']
+            'steps' => ['student', 'faculty',  'phd_coordinator','hod',  'dra','adordc','dordc', 'complete']
         ],
         'thesis-extension' => [
             'form_name' => 'Thesis Extension',

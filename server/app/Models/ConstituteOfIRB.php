@@ -38,12 +38,13 @@ class ConstituteOfIRB extends Model
     {
         $commonJSON = $this->fullCommonForm($user);
         return array_merge($commonJSON, [
+            'phd_title'=> $this->phd_title,
             'address' => $this->student->address,
             'objectives' => $this->student->objectives()?->where('type', 'draft')->get()->map(function ($objective) {
                 return $objective->objective;
             })->values(),
             'irb_pdf' => $this->irb_pdf,
-            'broad_area_of_research' => $this->broad_area_of_research,
+            'broad_area_of_research' => AreaOfSpecialization::find($this->broad_area_of_research)?->name,
             'area_of_specialization' => $this->student->areaOfSpecialization ? [
                 'id' => $this->student->areaOfSpecialization->id,
                 'name' => $this->student->areaOfSpecialization->name,

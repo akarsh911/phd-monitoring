@@ -19,6 +19,7 @@ class Department extends Model
         'name',
         'code',
         'hod_id',
+        'adordc_id',
     ];
 
     /**
@@ -39,7 +40,10 @@ class Department extends Model
         return $this->belongsTo(Faculty::class, 'hod_id', 'faculty_code');
     }
     
-
+    public function adordc()
+    {
+        return $this->belongsTo(Faculty::class, 'adordc_id', 'faculty_code');
+    }
     /**
      * Get the students associated with the department.
      */

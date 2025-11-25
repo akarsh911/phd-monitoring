@@ -31,6 +31,7 @@ class User extends Authenticatable
         'password',
         'email_verified_at',
         'first_activation',
+        'available_roles',
         'status',
     ];
 
@@ -65,6 +66,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'available_roles' => 'array',
         ];
     }
     public function role()
@@ -100,6 +102,9 @@ class User extends Authenticatable
     public function availableRoles()
     {
         $roles = [];
+        if($this->available_roles){
+            return $this->available_roles;
+        }
         if ($this->role->role == 'student') {
             array_push($roles, 'student');
         }
@@ -122,14 +127,25 @@ class User extends Authenticatable
             array_push($roles, 'external');
         }
         if ($this->role->role == 'dra') {
+             array_push($roles, 'doctoral');
+            array_push($roles, 'faculty');
             array_push($roles, 'dra');
         }
         if ($this->role->role == 'dordc') {
+             array_push($roles, 'doctoral');
+            array_push($roles, 'faculty');
             array_push($roles, 'dordc');
+        }
+        if ($this->role->role == 'adordc') {
+             array_push($roles, 'doctoral');
+            array_push($roles, 'faculty');
+            array_push($roles, 'adordc');
         }
         if ($this->role->role == 'director') {
             array_push($roles, 'director');
         }
+        $this->available_roles=$roles;
+        $this->save();
         return $roles;
     }
 

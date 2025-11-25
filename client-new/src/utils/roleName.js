@@ -22,5 +22,7 @@ export const getRoleName = (role) => {
             return 'Form Complete'
         case 'director':
             return 'Vice Chancellor'
+        case 'adordc':
+            return 'ADORDC';
     }
 }

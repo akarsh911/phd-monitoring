@@ -77,6 +77,7 @@ class ConstituteOfIRBController extends Controller
             'student',
             'faculty',
             'hod',
+            'adordc',
             'dordc',
             'complete'
         ];
@@ -101,7 +102,7 @@ class ConstituteOfIRBController extends Controller
             'student',
             'faculty',
             'hod',
-            'dra',
+            'adordc',
             'dordc'
         ];
         switch ($role->role) {
@@ -112,6 +113,8 @@ class ConstituteOfIRBController extends Controller
             case 'dra':
             case 'dordc':
                 return $this->handleAdminForm($user, $form_id, $model);
+            case 'adordc':
+                return $this->handleAdordcForm($user,$form_id,$model);
             case 'faculty':
                 return $this->handleFacultyForm($user, $form_id, $model);
             case 'admin':
@@ -133,6 +136,8 @@ class ConstituteOfIRBController extends Controller
                 return $this->supervisorSubmit($user, $request, $form_id);
             case 'hod':
                 return $this->hodSubmit($user, $request, $form_id);
+            case 'adordc':
+                return $this->adordcSubmit($user, $request, $form_id);
             case 'dra':
                 return $this->draSubmit($user, $request, $form_id);
             case 'dordc':
@@ -233,6 +238,7 @@ class ConstituteOfIRBController extends Controller
             $formInstance->phd_title = $request->title;
 
             $formInstance->irb_pdf = $link;
+            $formInstance->save();
             $formInstance->student->save();
 
             if($formInstance->supervisorApprovals())
@@ -347,7 +353,7 @@ class ConstituteOfIRBController extends Controller
             ConstituteOfIRB::class, 
             'hod', 
             'faculty', 
-            'dordc', 
+            'adordc', 
             function ($formInstance, $user) use ($request) {
                 $request->validate([
                     'chairman_experts' => 'array|required',
@@ -423,6 +429,18 @@ class ConstituteOfIRBController extends Controller
             ConstituteOfIRB::class, 
             'dra', 
             'hod', 
+            'adordc',   function ($formInstance, $user) use ($request) {}
+        );
+    }
+
+    private function adordcSubmit($user, Request $request, $form_id){
+        return $this->submitForm(
+            $user, 
+            $request, 
+            $form_id, 
+            ConstituteOfIRB::class, 
+            'adordc', 
+            'dra', 
             'dordc',   function ($formInstance, $user) use ($request) {}
         );
     }

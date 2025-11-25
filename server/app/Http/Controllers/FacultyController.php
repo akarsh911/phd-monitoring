@@ -188,10 +188,15 @@ class FacultyController extends Controller
         $page = $request->input('page', 1);
     
         $facultyQuery = Faculty::with(['user', 'department']);
-    
+        
         if ($role === 'hod'||$role === 'phd_coordinator') {
             $facultyQuery->where('department_id', $loggedInUser->faculty->department_id);
-        }  elseif ($role === 'admin'||$role === 'director' || $role === 'dra' || $role === 'dordc') {
+        }  
+        else if($role==='adordc'){
+             $departments = $loggedInUser->faculty->adordcDepartments->pluck('id');
+             $facultyQuery->whereIn('department_id', $departments);
+        }
+        elseif ($role === 'admin'||$role === 'director' || $role === 'dra' || $role === 'dordc') {
           
         } else {
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);

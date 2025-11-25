@@ -244,7 +244,7 @@ class PresentationController extends Controller
                 'completion' => 'incomplete',
                 'semester_id' => $validator['semester_id'],
                 'total_progress'=> $student->overall_progress,
-                'steps' => ['student', 'faculty', 'doctoral', 'hod', 'dordc', 'dra', 'complete'],
+                'steps' => ['student', 'faculty', 'doctoral', 'hod','adordc', 'dordc', 'dra', 'complete'],
             ]);
             if(!$request->venue){
             $calendarResult = PresentationService::scheduleCalendarEvent(
@@ -347,7 +347,7 @@ class PresentationController extends Controller
                     'status' => 'pending',
                     'completion' => 'incomplete',
                     'semester_id' => $validator['semester_id'],
-                    'steps' => ['student', 'faculty', 'doctoral', 'hod', 'dra', 'dordc', 'complete'],
+                    'steps' => ['student', 'faculty', 'doctoral', 'hod','adordc', 'dordc', 'dra', 'complete'],
                 ]);
             }
         } else {
@@ -415,7 +415,7 @@ class PresentationController extends Controller
                 'status' => 'pending',
                 'ppt_file' => $validator['ppt_file'],
                 'completion' => 'incomplete',
-                'steps' => ['student', 'faculty', 'doctoral', 'hod', 'dordc', 'dra', 'complete'],
+                'steps' => ['student', 'faculty', 'doctoral', 'hod','adordc', 'dordc', 'dra', 'complete'],
             ]);
 
             $emails = $this->emailList($student, $request);
@@ -444,7 +444,7 @@ class PresentationController extends Controller
     public function loadForm(Request $request, $semester_id=null,$form_id = null)
     {
         $user = Auth::user();
-        $steps = ['student', 'faculty', 'doctoral', 'hod', 'dra', 'dordc', 'complete'];
+        $steps = ['student', 'faculty', 'doctoral', 'hod', 'dra', 'adordc','dordc', 'complete'];
         $model = Presentation::class;
         $form = Presentation::find($form_id);
         $role = $user->current_role;
@@ -465,6 +465,8 @@ class PresentationController extends Controller
             case 'dra':
             case 'dordc':
                 return $this->handleAdminForm($user, $form_id, $model);
+            case 'adordc':
+                return $this->handleAdordcForm($user, $form_id, $model, false);
             case 'faculty':
                 return $this->handleFacultyForm($user, $form_id, $model);
             case 'admin':
@@ -497,6 +499,8 @@ class PresentationController extends Controller
                 return $this->draSubmit($user, $request, $form_id);
             case 'dordc':
                 return $this->dordcSubmit($user, $request, $form_id);
+            case 'adordc':
+                return $this->adordcSubmit($user, $request, $form_id);
             case 'doctoral':
                 return $this->doctoralSubmit($user, $request, $form_id);
             default:
@@ -754,10 +758,22 @@ class PresentationController extends Controller
             $model,
             'hod',
             'faculty',
+            'adordc',
+        );
+    }
+    private function adordcSubmit($user, $request, $form_id)
+    {
+        $model = Presentation::class;
+        return $this->submitForm(
+            $user,
+            $request,
+            $form_id,
+            $model,
+            'adordc',
+            'hod',
             'dordc',
         );
     }
-
     private function dordcSubmit($user, $request, $form_id)
     {
         $model = Presentation::class;
@@ -767,7 +783,7 @@ class PresentationController extends Controller
             $form_id,
             $model,
             'dordc',
-            'hod',
+            'adordc',
             'dra',
         );
     }

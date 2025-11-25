@@ -20,7 +20,7 @@ trait MigrationCommonFormFields
    
         $table->enum('completion', ['incomplete', 'complete'])->nullable()->default('incomplete');
         $table->enum('status', ['draft','pending', 'approved', 'rejected'])->nullable()->default('pending'); // Common field
-        $table->enum('stage', ['student', 'hod','phd_coordinator', 'supervisor','doctoral','external', 'dordc', 'dra','director','complete'])->nullable()->default('student'); // Common field
+        $table->enum('stage', ['student', 'hod','phd_coordinator', 'supervisor','doctoral','external', 'adordc', 'dordc', 'dra','director','complete'])->nullable()->default('student'); // Common field
         $table->json('history')->nullable(); 
         $table->json('steps')->nullable();
         $table->integer('current_step')->nullable()->default(0); 
@@ -31,6 +31,7 @@ trait MigrationCommonFormFields
         $table->boolean('phd_coordinator_approval')->nullable()->default(false);
         $table->boolean('hod_approval')->nullable()->default(false);
         $table->boolean('dordc_approval')->nullable()->default(false);
+        $table->boolean('adordc_approval')->nullable()->default(false);
         $table->boolean('dra_approval')->nullable()->default(false);
         $table->boolean('director_approval')->nullable()->default(false);
         $table->boolean('external_approval')->nullable()->default(false);
@@ -43,6 +44,7 @@ trait MigrationCommonFormFields
         $table->boolean('hod_lock')->nullable()->default(true); 
         $table->boolean('supervisor_lock')->nullable()->default(true); 
         $table->boolean('dordc_lock')->nullable()->default(true); 
+        $table->boolean('adordc_lock')->nullable()->default(true);
         $table->boolean('dra_lock')->nullable()->default(true); 
         $table->boolean('director_lock')->nullable()->default(true);
         $table->boolean('doctoral_lock')->nullable()->default(true);
@@ -54,6 +56,7 @@ trait MigrationCommonFormFields
         $table->text('hod_comments')->nullable();
         $table->text('supervisor_comments')->nullable();
         $table->text('dordc_comments')->nullable();
+        $table->text('adordc_comments')->nullable();
         $table->text('dra_comments')->nullable();
         $table->text('director_comments')->nullable();
         $table->text('external_comments')->nullable();

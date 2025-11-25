@@ -262,6 +262,10 @@ class StudentController extends Controller {
         case 'student':
             $studentsQuery->where('user_id', $loggedInUser->id);
             break;
+        case 'adordc': 
+            $departments = $loggedInUser->faculty->adordcDepartments->pluck('id');
+            $studentsQuery->whereIn('department_id', $departments);
+            break;
         case 'admin':
         case 'director':
         case 'dra':
@@ -306,6 +310,11 @@ class StudentController extends Controller {
             case 'dordc':
                 $student = Student::find($roll_no);
                 break;
+            case 'adordc': 
+                 $departments = $loggenInUser->faculty->adordcDepartments->pluck('id');
+                $student = Student::whereIn('department_id', $departments)
+                    ->where('roll_no', $roll_no)->first();
+            break;
             case 'hod':
             case 'phd_coordinator':
                 $student = Student::where('department_id',$loggenInUser->faculty->department_id)->where('roll_no',$roll_no)->first();

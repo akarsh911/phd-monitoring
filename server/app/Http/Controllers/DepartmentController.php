@@ -36,7 +36,7 @@ class DepartmentController extends Controller
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
     
-        $facultyQuery = Department::with(['hod.user', 'phdCoordinators.faculty.user']);
+        $facultyQuery = Department::with(['hod.user', 'adordc.user', 'phdCoordinators.faculty.user']);
     
         if ($filters) {
             $facultyQuery = $this->applyDynamicFilters($facultyQuery, $filters);
@@ -56,6 +56,18 @@ class DepartmentController extends Controller
                         'name' => optional($department->hod->user)->name(),
                         'email' => optional($department->hod->user)->email,
                         'phone' => optional($department->hod->user)->phone,
+                    ],
+                    'department' => [
+                        'name' => $department->name
+                    ]
+                ] : null,
+                'adordc' => $department->adordc ? [
+                    'faculty_code' => $department->adordc->faculty_code,
+                    'designation' => $department->adordc->designation,
+                    'user' => [
+                        'name' => optional($department->adordc->user)->name(),
+                        'email' => optional($department->adordc->user)->email,
+                        'phone' => optional($department->adordc->user)->phone,
                     ],
                     'department' => [
                         'name' => $department->name
@@ -548,6 +560,80 @@ class DepartmentController extends Controller
         catch(\Exception $e){
             return response()->json([
                 'message' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function addAdordc(Request $request)
+    {
+        try{
+        $loggenInUser = Auth::user();
+        if($loggenInUser->current_role->can_add_department == 'false'){
+            return response()->json([
+                'message' => 'You do not have permission to assign ADORDC'
+            ], 403);
+        }
+
+        $request->validate(
+            [
+                'department_id' => 'required|exists:departments,id',
+                'faculty_code' => 'required|exists:faculty,faculty_code',
+            ]
+        );
+        $department = \App\Models\Department::find($request->department_id);
+        if(!$department){
+            return response()->json([
+                'message' => 'Department not found'
+            ], 404);
+        }
+        $faculty = Faculty::where('faculty_code', $request->faculty_code)->first();
+        if(!$faculty){
+            return response()->json([
+                'message' => 'Faculty not found'
+            ], 404);
+        }
+        if($faculty->department_id != $request->department_id){
+            return response()->json([
+                'message' => 'Faculty does not belong to this department'
+            ], 400);
+        }
+
+        // If there's an existing ADORDC, revert their role to faculty
+        if($department->adordc_id) {
+            $oldAdordc = Faculty::where('faculty_code', $department->adordc_id)->first();
+            if($oldAdordc && $oldAdordc->user) {
+                $facultyRole = Role::where('role', 'faculty')->first();
+                $oldAdordc->user->role_id = $facultyRole->id;
+                $oldAdordc->user->current_role_id = $facultyRole->id;
+                $oldAdordc->user->save();
+            }
+        }
+
+        // Update new ADORDC's role
+        $user = $faculty->user;
+        $adordcRole = Role::where('role', 'adordc')->first();
+        if(!$adordcRole) {
+            return response()->json([
+                'message' => 'ADORDC role not found in system'
+            ], 404);
+        }
+        $user->role_id = $adordcRole->id;
+        $user->current_role_id = $adordcRole->id;
+        $user->save();
+        
+        // Update department's ADORDC
+        $department->adordc_id = $request->faculty_code;
+        $department->save();
+        
+        return response()->json([
+            'success' => true,
+            'message' => 'ADORDC assigned successfully'
+        ], 200);
+      }
+        catch(\Exception $e){
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage()
             ], 500);
         }
     }

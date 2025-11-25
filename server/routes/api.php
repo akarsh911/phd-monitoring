@@ -255,6 +255,10 @@ Route::prefix('supervisor-doctoral-changes')->group(function () {
     require base_path('routes/base/supervisor_doctoral_changes.php');
 });
 
+Route::prefix('users')->group(function () {
+    require base_path('routes/base/users.php');
+});
+
 Route::get('/send-welcome', [EmailNotificationController::class, 'sendWelcomeEmail']);
 
 

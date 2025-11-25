@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('phone')->nullable()->unique();
             $table->string('email')->unique();
             $table->enum('gender',['Male','Female'])->nullable()->default('Female');
-           
+            $table->json('available_roles')->nullable();
             $table->integer('role_id')->unsigned()->index();
             $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             

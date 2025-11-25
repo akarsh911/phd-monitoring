@@ -77,6 +77,7 @@ const DepartmentPage = () => {
                 departmentId={editData.id}
                 departmentName={editData.name || editData.department_name}
                 currentHod={editData.hod}
+                currentAdordc={editData.adordc}
                 currentCoordinators={editData.phd_coordinators || []}
                 onClose={() => {
                   setIsOpen(false);

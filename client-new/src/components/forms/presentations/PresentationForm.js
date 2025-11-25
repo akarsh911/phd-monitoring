@@ -29,7 +29,11 @@ const PresentationForm = ({formData, refetchData = null,}) => {
           role="hod"
           allowRejection={false}
         ></Recommendation>
-       
+        <Recommendation
+          formData={formData}
+          role="adordc"
+          allowRejection={false}
+        ></Recommendation>
         <Recommendation
           formData={formData}
           role="dordc"

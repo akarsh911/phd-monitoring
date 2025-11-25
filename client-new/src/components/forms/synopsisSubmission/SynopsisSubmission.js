@@ -39,6 +39,11 @@ const SynopsisSubmission=({formData}) => {
             allowRejection={false}
           ></Recommendation>
           <Recommendation
+          formData={formData}
+          role="adordc"
+          allowRejection={false}
+        ></Recommendation>
+          <Recommendation
             formData={formData}
             role="dordc"
             allowRejection={false}

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Role extends Model
 {
     use HasFactory;
-    protected $table='roles';
+    protected $table = 'roles';
     /**
      * The attributes that are mass assignable.
      *
@@ -60,7 +60,7 @@ class Role extends Model
     public function setAllTrue()
     {
         $attributes = $this->getFillable();
-        
+
         // Exclude the 'role' attribute
         $attributes = array_diff($attributes, ['role']);
 
@@ -69,7 +69,7 @@ class Role extends Model
             $this->{$attribute} = true;
         }
     }
-        /**
+    /**
      * Override the save method to lowercase the role attribute.
      *
      * @param  array  $options

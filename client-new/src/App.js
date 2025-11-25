@@ -31,6 +31,7 @@ import StudentCourses from './pages/StudentCourses/StudentCourses';
 import AdminCourseManagement from './pages/AdminCourseManagement/AdminCourseManagement';
 import OutsideExperts from './pages/OutsideExperts/OutsideExperts';
 import SupervisorDoctoralApproval from './pages/SupervisorDoctoralApproval/SupervisorDoctoralApproval';
+import UsersPage from './pages/users/UsersPage';
 // import Team from './pages/team/Team';
 
 
@@ -86,7 +87,7 @@ const AppContent = () => {
 
           <Route path="/forms/:form_type" element={<FormListPage/>} />
           <Route path="/forms/:form_type/:id" element={<MainFormPage/>} />
-          {(role === 'faculty' || role === 'phd_coordinator' || role==='hod' || role==='doctoral'|| role==='external'|| role==='dordc'  || role==='dra' || role==='director' || role==='admin') && (
+          {(role === 'faculty' || role === 'phd_coordinator' || role==='hod' || role==='doctoral'|| role==='external'|| role==='dordc'  || role==='adordc'  ||role==='dra' || role==='director' || role==='admin') && (
             <>
                  <Route path="/forms" element={<FacultyFormsPage/>} />
                 <Route path="/students" element={<StudentsPage />} />
@@ -100,7 +101,7 @@ const AppContent = () => {
             </>
           ) }
           {(
-            role === 'hod' || role === 'phd_coordinator' || role==='doctoral'|| role==='external'|| role==='dordc'  || role==='dra' || role==='director' || role==='admin') && (
+            role === 'hod' || role === 'phd_coordinator' || role==='doctoral'|| role==='external'|| role==='dordc'  ||role==='adordc'  ||  role==='dra' || role==='director' || role==='admin') && (
               <>
               <Route path="/faculty" element={<FacultyPage />} />
               <Route path="/departments" element={<DepartmentPage/>}/>
@@ -120,7 +121,8 @@ const AppContent = () => {
                 <Route path='/areasOfSpecialization' element={<AreaOfSpecialization/>}/>
                 <Route path="/courses/manage" element={<AdminCourseManagement />} />
                 <Route path="/outside-experts" element={<OutsideExperts />} />
-              <Route path="/logs" element={<Logs />} />
+                <Route path="/logs" element={<Logs />} />
+                <Route path="/users" element={<UsersPage />} />
          
               {/* <Route path="/faculty/:roll_no" element={<StudentProfile />} />
               <Route path="/faculty/:roll_no/forms" element={<FormsPage />} />

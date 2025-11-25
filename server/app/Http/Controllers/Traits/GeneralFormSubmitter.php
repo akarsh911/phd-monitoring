@@ -36,7 +36,7 @@ trait GeneralFormSubmitter
             if (!$formInstance) {
                 return response()->json(['message' => 'No form found'], 404);
             }
-    
+
             if ($formInstance->completion === 'complete') {
                 return response()->json(['message' => 'Form already completed'], 403);
             }
@@ -52,7 +52,7 @@ trait GeneralFormSubmitter
                 if (!$request->approval) {
                     Log::info('Form rejected by: ' . $user->name());
                     $this->updateApprovalAndComments($formInstance, $request, $role);
-                    return $this->handleFallbackToPreviousLevel($user, $formInstance, $previousLevel, $request->comments,$model);
+                    return $this->handleFallbackToPreviousLevel($user, $formInstance, $previousLevel, $request->comments, $model);
                 }
             }
 
@@ -107,7 +107,9 @@ trait GeneralFormSubmitter
                     $formInstance->dordc_approval = true;
 
                     break;
-
+                case 'adordc':
+                    $formInstance->adordc_approval=true;
+                    break;
                 case 'dra':
                     $formInstance->dra_approval = true;
 
@@ -145,7 +147,9 @@ trait GeneralFormSubmitter
                 $formInstance->hod_comments = $request->comments;
                 $formInstance->hod_lock = true;
                 break;
-
+            case 'adordc':
+                $formInstance->adordc_comments=$request->comments;
+                $formInstance->adordc_lock = true;
             case 'dordc':
                 $formInstance->dordc_comments = $request->comments;
                 $formInstance->dordc_lock = true;
@@ -174,15 +178,15 @@ trait GeneralFormSubmitter
         }
     }
 
-    private function handleFallbackToPreviousLevel($user, $formInstance, $previousLevel, $comments,$model)
+    private function handleFallbackToPreviousLevel($user, $formInstance, $previousLevel, $comments, $model)
     {
 
-        $link='/forms/' . $this->getFormType($model).'/'.$formInstance->id;
-        if($this->getFormType($model)=='presentation'){
-            $link='/presentation/semester/'.$formInstance->period_of_report.'/'.$formInstance->id;
+        $link = '/forms/' . $this->getFormType($model) . '/' . $formInstance->id;
+        if ($this->getFormType($model) == 'presentation') {
+            $link = '/presentation/semester/' . $formInstance->period_of_report . '/' . $formInstance->id;
         }
-        $this->formNotification($formInstance->student, $this->getFormType($model).' form for '.$formInstance->student?->user->name().' has been rejected', 'Form has been rejected',  $link, $previousLevel, true);
-    
+        $this->formNotification($formInstance->student, $this->getFormType($model) . ' form for ' . $formInstance->student?->user->name() . ' has been rejected', 'Form has been rejected',  $link, $previousLevel, true);
+
         if ($previousLevel == 'faculty') {
             $previousLevel = 'supervisor';
         }
@@ -204,7 +208,7 @@ trait GeneralFormSubmitter
     {
         $student_id = $formInstance->student->roll_no;
         $index = array_search($nextLevel, $formInstance->steps);
-      
+
         Log::info('Next Level Post Approval: ' . $nextLevel);
         if ($nextLevel == 'complete') {
             $formInstance->completion = 'complete';
@@ -212,11 +216,11 @@ trait GeneralFormSubmitter
             $formInstance->current_step = $index;
             $formInstance->maximum_step = $index > $formInstance->maximum_step ? $index : $formInstance->maximum_step;
         } else {
-            $link='/forms/' . $this->getFormType($model).'/'.$formInstance->id;
-            if($this->getFormType($model)=='presentation'){
-                $link='/presentation/semester/'.$formInstance->period_of_report.'/'.$formInstance->id;
+            $link = '/forms/' . $this->getFormType($model) . '/' . $formInstance->id;
+            if ($this->getFormType($model) == 'presentation') {
+                $link = '/presentation/semester/' . $formInstance->period_of_report . '/' . $formInstance->id;
             }
-            $this->formNotification($formInstance->student, $this->getFormType($model).' form for '.$formInstance->student?->user?->name().' has pending action', 'Form has pending  action',  $link, $nextLevel, true);
+            $this->formNotification($formInstance->student, $this->getFormType($model) . ' form for ' . $formInstance->student?->user?->name() . ' has pending action', 'Form has pending  action',  $link, $nextLevel, true);
             if ($nextLevel == 'faculty') {
                 $nextLevel = 'supervisor';
             }
@@ -242,6 +246,7 @@ trait GeneralFormSubmitter
             'phd_coordinator' => 'phd_coordinator_lock',
             'hod' => 'hod_lock',
             'dordc' => 'dordc_lock',
+            'adordc'=>'adordc_lock',
             'dra' => 'dra_lock',
             'external' => 'external_lock',
             'director' => 'director_lock',
@@ -291,6 +296,12 @@ trait GeneralFormSubmitter
                     throw new \Exception('You are not authorized to access this resource');
                 }
                 break;
+            case 'adordc':
+                if (!$user->faculty->adordcDepartments->pluck('id')->contains($formInstance->student->department_id)) {
+                    return response()->json(['message' => 'You are not authorized to access this resource'], 403);
+                }
+                break;
+
             case 'dordc':
                 if ($user->current_role->role != 'dordc') {
                     throw new \Exception('You are not authorized to access this resource');
@@ -323,6 +334,7 @@ trait GeneralFormSubmitter
             'hod' => "$name (HOD) submitted the form",
             'dordc' => "$name (DORDC) submitted the form",
             'dra' => "$name (DRA) submitted the form",
+            'adordc' => "$name (ADORDC) submitted the form",
             'director' => "$name (Director) submitted the form",
             'external' => "$name (External) submitted the form",
             'doctoral' => "$name (Doctoral Committee) submitted the form",
@@ -342,7 +354,7 @@ trait GeneralFormSubmitter
             'dra' => "$name (DRA) Rejected the form",
             'director' => "$name (Director) Rejected the form",
             'doctoral' => "$name (Doctoral Committee) Rejected the form",
-        
+
             default => "$name Rejected the form",
         };
     }
@@ -350,7 +362,7 @@ trait GeneralFormSubmitter
     private function getFormType($model)
     {
         $model = (new \ReflectionClass($model))->getShortName();
-        
+
         return match ($model) {
             'SupervisorAllocation' => 'supervisor-allocation',
             'SupervisorChangeForm' => 'supervisor-change',
@@ -369,10 +381,10 @@ trait GeneralFormSubmitter
 
     private function updateForm($model, $student_id, $next)
     {
-        if($model===Presentation::class)
-        return;
-    $form = Forms::where('form_type', $this->getFormType($model))->where('student_id', $student_id)->first();
-        if($next=='external') $next='doctoral';
+        if ($model === Presentation::class)
+            return;
+        $form = Forms::where('form_type', $this->getFormType($model))->where('student_id', $student_id)->first();
+        if ($next == 'external') $next = 'doctoral';
         if ($next != 'complete') {
             $field = $next . '_available';
             $form->$field = true;

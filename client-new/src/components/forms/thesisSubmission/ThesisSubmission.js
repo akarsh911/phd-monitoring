@@ -37,6 +37,11 @@ const ThesisSubmission=({formData}) => {
             role="dra"
             allowRejection={false}
           ></Recommendation>
+             <Recommendation
+          formData={formData}
+          role="adordc"
+          allowRejection={false}
+        ></Recommendation>
           <Recommendation
             formData={formData}
             role="dordc"

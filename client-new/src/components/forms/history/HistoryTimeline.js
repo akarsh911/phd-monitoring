@@ -5,7 +5,7 @@ const HistoryTimeline = ({ formData }) => {
     const {history}=formData;
     return (
         <div className="history-timeline-container">
-            {history.map((item, index) => (
+            {history?.map((item, index) => (
                 <div key={index} className="history-timeline-item-wrapper">
                     <div className="history-timeline-item">
                         <div className="history-timeline-dot"></div>

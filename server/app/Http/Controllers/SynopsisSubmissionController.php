@@ -50,7 +50,7 @@ class SynopsisSubmissionController extends Controller
     {
         $user = Auth::user();
         $role = $user->current_role;
-        $steps=['student','faculty','doctoral','phd_coordinator','hod','dra','dordc','director','complete'];
+        $steps=['student','faculty','doctoral','phd_coordinator','hod','dra','adordc','dordc','director','complete'];
         if($role->role != 'student'){
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }
@@ -77,8 +77,8 @@ class SynopsisSubmissionController extends Controller
                 $cur = 'doctoral';
             }
         }
-        $steps=['student','faculty','doctoral','phd_coordinator','hod','dra','dordc','director'];
-        switch ($cur) {
+        $steps=['student','faculty','doctoral','phd_coordinator','hod','dra','adordc','dordc','director','complete'];
+       switch ($cur) {
             case 'student':
                 return $this->handleStudentForm($user, $form_id, $model,$steps);
             case 'hod':
@@ -88,6 +88,8 @@ class SynopsisSubmissionController extends Controller
                 return $this->handleDoctoralForm($user, $request, $form_id);
             case 'phd_coordinator':
                 return $this->handleCoordinatorForm($user, $form_id, $model);
+            case 'adordc':
+                return $this->handleAdordcForm($user,$form_id,$model);
             case 'dra':
             case 'dordc':
                 return $this->handleAdminForm($user, $form_id, $model);
@@ -123,6 +125,8 @@ class SynopsisSubmissionController extends Controller
                 return $this->hodSubmit($user, $request, $form_id);
             case 'dra':
                 return $this->draSubmit($user, $request, $form_id);
+            case 'adordc':
+                return $this->adordcSubmit($user, $request, $form_id); 
             case 'dordc':
                 return $this->dordcSubmit($user, $request, $form_id);
             case 'phd_coordinator':
@@ -349,10 +353,23 @@ class SynopsisSubmissionController extends Controller
             $model,
             'dra',
             'hod',
-            'dordc',
+            'adordc',
         );
     }
 
+      private function adordcSubmit($user, $request, $form_id)
+    {
+        $model = SynopsisSubmission::class;
+        return $this->submitForm(
+            $user,
+            $request,
+            $form_id,
+            $model,
+            'adordc',
+            'dra',
+            'dordc',
+        );
+    }
 
     private function dordcSubmit($user, $request, $form_id)
     {

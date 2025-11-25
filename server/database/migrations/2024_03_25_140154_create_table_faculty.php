@@ -25,6 +25,9 @@ return new class extends Migration
         Schema::table('departments', function (Blueprint $table) {
             $table->integer('hod_id')->unsigned()->nullable()->unique();
             $table->foreign('hod_id')->references('faculty_code')->on('faculty')->onDelete('cascade');
+             $table->integer('adordc_id')->unsigned()->nullable();
+            $table->foreign('adordc_id')->references('faculty_code')->on('faculty')->onDelete('cascade');
+      
         });
         
     }   
