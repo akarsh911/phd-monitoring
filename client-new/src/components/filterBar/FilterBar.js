@@ -36,7 +36,7 @@ const FilterBar = ({ onSearch, default_filter,mandatory_filter }) => {
   useEffect(() => {
     if (!default_filter || default_filter.length === 0) return;
     // Always clear old filters and apply new ones
-    const newDefaults = default_filter.map((filter) => ({
+    const newDefaults = default_filter?.map((filter) => ({
       label: filter.label,
       key: filter.key_name,
       op: filter.op || "=",
@@ -180,7 +180,7 @@ const FilterBar = ({ onSearch, default_filter,mandatory_filter }) => {
       </div>
 
       <div className="active-filters">
-        {activeFilters.map((f, i) => (
+        {activeFilters?.map((f, i) => (
           <div key={i} className="filter-chip">
             {`${f.label} ${f.op} ${f.value}`}
             <span className="remove-filter" onClick={() => removeFilter(i)}>

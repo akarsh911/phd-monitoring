@@ -77,7 +77,11 @@ class AdminFormController extends Controller
         'list-of-examiners' => [
             'form_name' => 'List of Examiners',
             'max_count' => 1,
-            'steps' => ['faculty', 'external']
+            'steps' => [            'faculty',
+            'hod',
+            'dordc',
+            'director',
+            'complete']
         ],
         'synopsis-submission' => [
             'form_name' => 'Synopsis Submission',
