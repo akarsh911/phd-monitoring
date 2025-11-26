@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Fields.css';
 import { toast } from 'react-toastify';
-import { baseURL } from '../../../api/urls';
+import {  rootURL } from '../../../api/urls';
 
 const FileUploadField = ({
   label,
@@ -39,20 +39,13 @@ const FileUploadField = ({
     }
   };
 
-  // Sanitize baseURL to avoid duplicate '/api/api' and ensure no trailing slash
-  const sanitizedBaseURL = baseURL
-    ? baseURL.replace(/\/api\/api/g, '/api').replace(/\/$/, '')
-    : '';
-  const filePath = initialValue ? initialValue.replace('app/public', 'storage') : '';
-  const publicFileUrl = sanitizedBaseURL + (filePath.startsWith('/') ? '' : '/') + filePath;
-
   return (
     <div className='file-upload-container'>
       {showLabel && <label className='input-label'>{label}</label>}
 
       {initialValue && isLocked ? (
         <a
-          href={publicFileUrl}
+          href={rootURL + initialValue.replace('app/public', 'storage')}
           target='_blank'
           rel='noopener noreferrer'
           className='file-link'

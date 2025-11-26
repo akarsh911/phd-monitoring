@@ -1,4 +1,5 @@
 export const baseURL= 'https://phdportal.thapar.edu/api/api';
+export const rootURL= 'https://phdportal.thapar.edu/api';
 // export const rootURL= 'http://localhost:8000';
 // export const baseURL= rootURL+'/api';
 

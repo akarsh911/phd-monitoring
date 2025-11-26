@@ -54,6 +54,30 @@ const Student = ({ formData, refetchData = null, }) => {
     setOpen(false);
   };
 
+  const refetchPublications = () => {
+    setLoading(true);
+    customFetch(baseURL + location.pathname, "GET")
+      .then((data) => {
+        if (data && data.success) {
+          const formdata = data.response;
+          setBody((prev) => ({
+            ...prev,
+            sci: formdata.sci,
+            non_sci: formdata.non_sci,
+            patents: formdata.patents,
+            books: formdata.books,
+            national: formdata.national,
+            international: formdata.international,
+          }));
+          setLoading(false);
+        }
+      })
+      .catch((error) => {
+        setLoading(false);
+        toast.error("Error refetching publications: " + error);
+      });
+  };
+
   const removePublication = (id, type) => {
     const tt = {
       publications: [],
@@ -348,7 +372,7 @@ const Student = ({ formData, refetchData = null, }) => {
                       enableEdit={!lock}
                       enableDelete={!lock}
                       onDelete={removePublication}
-                      refetchData={refetchData}
+                      refetchData={refetchPublications}
                     />,
                   ]}
                   space={3}

@@ -444,7 +444,7 @@ class PresentationController extends Controller
     public function loadForm(Request $request, $semester_id=null,$form_id = null)
     {
         $user = Auth::user();
-        $steps = ['student', 'faculty', 'doctoral', 'hod', 'dra', 'adordc','dordc', 'complete'];
+        $steps = ['student', 'faculty', 'doctoral', 'hod', 'dra', 'adordc','dordc','dra', 'complete'];
         $model = Presentation::class;
         $form = Presentation::find($form_id);
         $role = $user->current_role;
@@ -512,7 +512,7 @@ class PresentationController extends Controller
     {
         $user = Auth::user();
         $role = $user->current_role;
-        $allowedRoles = ['hod', 'dra', 'dordc', 'doctoral'];
+        $allowedRoles = ['hod', 'dra', 'dordc', 'doctoral','adordc'];
         if (!in_array($role->role, $allowedRoles)) {
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }

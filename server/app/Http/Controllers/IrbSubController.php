@@ -131,7 +131,7 @@ class IrbSubController extends Controller
         $user = Auth::user();
         $role = $user->current_role;
         $form_ids = $request->input('form_ids');
-        $allowed_roles = ['hod', 'dordc'];
+        $allowed_roles = ['hod', 'dordc','adordc'];
         if (!in_array($role->role, $allowed_roles)) {
             return response()->json(['message' => 'You are not authorized to access this resource'], 403);
         }

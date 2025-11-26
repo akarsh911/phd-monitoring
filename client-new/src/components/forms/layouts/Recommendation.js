@@ -45,7 +45,7 @@ const Recommendation = ({formData,allowRejection,role,moreFields,handleRecommend
 
     return (
         <>
-              <GridContainer elements={[
+              {/* <GridContainer elements={[
 
             <>
             
@@ -93,7 +93,7 @@ const Recommendation = ({formData,allowRejection,role,moreFields,handleRecommend
             
             </>,
             
-        ]}/>
+                 ]}/> */}
             <RecommendationField role={roleName} allowRejection={allowRejection} onRecommendationChange={(data)=>{onRecommendationChange(data)}} initialValue={body} lock={lock} formData={formData}/>
             {(!lock || body.comments) && (
                 <GridContainer
