@@ -33,55 +33,7 @@ const RecommendationField = ({ role, allowRejection = false, onRecommendationCha
 
     return (
         <>
-        <GridContainer elements={[
-
-            <>
-            
-            {role==='doctoral' && formData&& (<>
-                <TableComponent
-                    data={formData.doctoralCommitteeReviews}
-                    keys={[
-                      "faculty",
-                      "progress",
-                      "comments",
-                      "review_status",
-                   
-                    ]}
-                    titles={[
-                      "Doctoral Member Name",
-                      "Review",
-                      "Comments",
-                      "Review Status",
-                     
-                    ]}
-                  />,
-            
-            </>)}
-              <>{role==='supervisor'&& formData && (<>
-                <TableComponent
-                    data={formData.supervisorReviews}
-                    keys={[
-                      "faculty",
-                      "progress",
-                      "comments",
-                      "review_status",
-                   
-                    ]}
-                    titles={[
-                      "Doctoral Member Name",
-                      "Review",
-                      "Comments",
-                      "Review Status",
-                     
-                    ]}
-                  />,
-            
-            </>)}</>
-            
-            
-            </>,
-            
-        ]}/>
+      
         <GridContainer 
             elements={[
                 <div className="recommendation-field" key="recommendation-field">

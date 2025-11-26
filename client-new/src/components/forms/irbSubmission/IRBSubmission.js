@@ -18,6 +18,11 @@ const IRBSubmission = ({ formData }) => {
         <Supervisor formData={formData} ></Supervisor>
          <Recommendation
           formData={formData}
+          role="external"
+          allowRejection={false}
+        ></Recommendation>
+         <Recommendation
+          formData={formData}
           role="doctoral"
           allowRejection={false}
         ></Recommendation>

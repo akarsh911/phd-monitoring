@@ -85,7 +85,7 @@ class SynopsisSubmissionController extends Controller
                 return $this->handleHodForm($user, $form_id, $model);
             
             case 'doctoral':
-                return $this->handleDoctoralForm($user, $request, $form_id);
+                return $this->handleDoctoralForm($user,  $form_id, $model);
             case 'phd_coordinator':
                 return $this->handleCoordinatorForm($user, $form_id, $model);
             case 'adordc':

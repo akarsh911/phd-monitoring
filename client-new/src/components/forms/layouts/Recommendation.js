@@ -7,6 +7,7 @@ import InputField from '../fields/InputField';
 import { getRoleName } from '../../../utils/roleName';
 import { useLoading } from '../../../context/LoadingContext';
 import { submitForm } from '../../../api/form';
+import TableComponent from '../table/TableComponent';
 
 const Recommendation = ({formData,allowRejection,role,moreFields,handleRecommendationChange,isLocked}) => {
     const [roleName, setRoleName] = useState('');
@@ -44,6 +45,55 @@ const Recommendation = ({formData,allowRejection,role,moreFields,handleRecommend
 
     return (
         <>
+              <GridContainer elements={[
+
+            <>
+            
+            {role==='doctoral' && formData&& (<>
+                <TableComponent
+                    data={formData.doctoralCommitteeReviews}
+                    keys={[
+                      "faculty",
+                      "progress",
+                      "comments",
+                      "review_status",
+                   
+                    ]}
+                    titles={[
+                      "Doctoral Member Name",
+                      "Review",
+                      "Comments",
+                      "Review Status",
+                     
+                    ]}
+                  />,
+            
+            </>)}
+              <>{role==='supervisor'&& formData && (<>
+                <TableComponent
+                    data={formData.supervisorReviews}
+                    keys={[
+                      "faculty",
+                      "progress",
+                      "comments",
+                      "review_status",
+                   
+                    ]}
+                    titles={[
+                      "Doctoral Member Name",
+                      "Review",
+                      "Comments",
+                      "Review Status",
+                     
+                    ]}
+                  />,
+            
+            </>)}</>
+            
+            
+            </>,
+            
+        ]}/>
             <RecommendationField role={roleName} allowRejection={allowRejection} onRecommendationChange={(data)=>{onRecommendationChange(data)}} initialValue={body} lock={lock} formData={formData}/>
             {(!lock || body.comments) && (
                 <GridContainer

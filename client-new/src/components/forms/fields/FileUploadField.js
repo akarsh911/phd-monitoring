@@ -39,13 +39,20 @@ const FileUploadField = ({
     }
   };
 
+  // Sanitize baseURL to avoid duplicate '/api/api' and ensure no trailing slash
+  const sanitizedBaseURL = baseURL
+    ? baseURL.replace(/\/api\/api/g, '/api').replace(/\/$/, '')
+    : '';
+  const filePath = initialValue ? initialValue.replace('app/public', 'storage') : '';
+  const publicFileUrl = sanitizedBaseURL + (filePath.startsWith('/') ? '' : '/') + filePath;
+
   return (
     <div className='file-upload-container'>
       {showLabel && <label className='input-label'>{label}</label>}
 
       {initialValue && isLocked ? (
         <a
-          href={baseURL + initialValue.replace('app/public', 'storage')}
+          href={publicFileUrl}
           target='_blank'
           rel='noopener noreferrer'
           className='file-link'
