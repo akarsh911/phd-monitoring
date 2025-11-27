@@ -321,6 +321,7 @@ class IrbSubController extends Controller
             else{
                 //send Email with accept reject link
                 $outsideExpert = $formInstance->student->outsideExpert();
+                if($outsideExpert){
                 $approval = Approval::create([
                     'key' => Approval::generateKey(),
                     'email' => $outsideExpert->email,
@@ -341,7 +342,7 @@ class IrbSubController extends Controller
                             ->subject('IRB Submission Approval Request')
                             ->attach($link); // This must be full path to the PDF
                 });            
-
+            }
             }
         }
         else{
