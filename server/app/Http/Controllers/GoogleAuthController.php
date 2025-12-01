@@ -37,7 +37,7 @@ class GoogleAuthController extends Controller
 
             if (!$user) {
                 // User does not exist, redirect with error
-                return redirect(env('FRONTEND_URL', 'http://localhost:3000') . '/google/callback?error=' . urlencode('No account found with this email. Please contact administrator.'));
+                return redirect(env('FRONTEND_URL', 'https://phdportal.thapar.edu') . '/google/callback?error=' . urlencode('No account found with this email. Please contact administrator.'));
             }
 
             // User exists, log them in
@@ -71,7 +71,7 @@ class GoogleAuthController extends Controller
             ];
 
             // Redirect to frontend callback with data
-            $callbackUrl = env('FRONTEND_URL', 'http://localhost:3000') . '/google/callback?' . http_build_query([
+            $callbackUrl = env('FRONTEND_URL', 'https://phdportal.thapar.edu') . '/google/callback?' . http_build_query([
                 'token' => $token,
                 'user' => json_encode($userData),
                 'available_roles' => json_encode($user->availableRoles())
@@ -81,7 +81,7 @@ class GoogleAuthController extends Controller
 
         } catch (\Exception $e) {
             // Redirect to frontend with error
-            return redirect(env('FRONTEND_URL', 'http://localhost:3000') . '/google/callback?error=' . urlencode('Failed to authenticate with Google: ' . $e->getMessage()));
+            return redirect(env('FRONTEND_URL', 'https://phdportal.thapar.edu') . '/google/callback?error=' . urlencode('Failed to authenticate with Google: ' . $e->getMessage()));
         }
     }
 
