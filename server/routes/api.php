@@ -293,6 +293,10 @@ Route::prefix('users')->group(function () {
     require base_path('routes/base/users.php');
 });
 
+Route::prefix('google')->group(function () {
+    require base_path('routes/base/google_auth.php');
+});
+
 Route::get('/send-welcome', [EmailNotificationController::class, 'sendWelcomeEmail']);
 
 

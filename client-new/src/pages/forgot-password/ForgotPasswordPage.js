@@ -12,18 +12,24 @@ const ForgotPasswordPage = () => {
     const [captchaToken, setCaptchaToken] = useState(null);
 
     useEffect(() => {
+        let widgetId = null;
+
         // Wait for Turnstile to be available and render widget
         const renderWidget = () => {
             if (window.turnstile) {
                 const container = document.getElementById('turnstile-container');
                 if (container && !container.hasChildNodes()) {
-                    window.turnstile.render('#turnstile-container', {
-                        sitekey: CLOUDFLARE_SITE_KEY,
-                        theme: 'light',
-                        callback: (token) => {
-                            setCaptchaToken(token);
-                        },
-                    });
+                    try {
+                        widgetId = window.turnstile.render('#turnstile-container', {
+                            sitekey: CLOUDFLARE_SITE_KEY,
+                            theme: 'light',
+                            callback: (token) => {
+                                setCaptchaToken(token);
+                            },
+                        });
+                    } catch (error) {
+                        console.error('Turnstile render error:', error);
+                    }
                 }
             } else {
                 // Retry if turnstile is not loaded yet
@@ -31,7 +37,19 @@ const ForgotPasswordPage = () => {
             }
         };
 
-        renderWidget();
+        const timer = setTimeout(renderWidget, 100);
+
+        // Cleanup function to remove widget when component unmounts
+        return () => {
+            clearTimeout(timer);
+            if (widgetId !== null && window.turnstile) {
+                try {
+                    window.turnstile.remove(widgetId);
+                } catch (error) {
+                    console.error('Turnstile cleanup error:', error);
+                }
+            }
+        };
     }, []);
 
     const onSubmit = async (data) => {
@@ -57,16 +75,10 @@ const ForgotPasswordPage = () => {
         // Reset captcha
         setCaptchaToken(null);
         if (window.turnstile) {
-            const container = document.getElementById('turnstile-container');
-            if (container) {
-                container.innerHTML = '';
-                window.turnstile.render('#turnstile-container', {
-                    sitekey: CLOUDFLARE_SITE_KEY,
-                    theme: 'light',
-                    callback: (token) => {
-                        setCaptchaToken(token);
-                    },
-                });
+            try {
+                window.turnstile.reset();
+            } catch (error) {
+                console.error('Turnstile reset error:', error);
             }
         }
     };

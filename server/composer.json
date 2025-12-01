@@ -10,6 +10,7 @@
         "guzzlehttp/guzzle": "*",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
+        "laravel/socialite": "*",
         "laravel/tinker": "^2.9",
         "league/csv": "^9.23",
         "maatwebsite/excel": "^1.1"

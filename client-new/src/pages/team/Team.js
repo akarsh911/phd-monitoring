@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Team.css';
 
 const mentors = [
@@ -99,6 +100,9 @@ const PersonCard = ({ name, title, image, github, linkedin, email }) => (
 const Team = () => {
   return (
     <div className='team-container'>
+      <Link to="/login" className="tw-text-[#932f2f] hover:tw-underline tw-mb-4 tw-inline-block" style={{marginLeft: '20px', marginTop: '10px'}}>
+        ← Back to Login
+      </Link>
       <img src='/images/tiet_logo.png' alt='Thapar Logo' className='logo' />
       <h1 className='heading'>Meet the PhD Monitoring Portal Team</h1>
 

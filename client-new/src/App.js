@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import LoginPage from './pages/login/Login';
+import GoogleCallback from './pages/login/GoogleCallback';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { LoadingProvider, useLoading } from './context/LoadingContext'; // Remove useLoading import
@@ -32,7 +33,8 @@ import AdminCourseManagement from './pages/AdminCourseManagement/AdminCourseMana
 import OutsideExperts from './pages/OutsideExperts/OutsideExperts';
 import SupervisorDoctoralApproval from './pages/SupervisorDoctoralApproval/SupervisorDoctoralApproval';
 import UsersPage from './pages/users/UsersPage';
-// import Team from './pages/team/Team';
+import PrivacyPolicy from './pages/privacy/PrivacyPolicy';
+import Support from './pages/support/Support';
 
 
 const App = () => {
@@ -62,8 +64,11 @@ const AppContent = () => {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/team" element={<Team />} />
-           <Route path="/login" element={<LoginPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage/>} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/google/callback" element={<GoogleCallback />} />
+          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage/>} />
           <Route path="/home" element={<Dashboard/>} />
           {/* <Route path="/team" element={<Team/>} /> */}
