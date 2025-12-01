@@ -12,24 +12,26 @@ const ForgotPasswordPage = () => {
     const [captchaToken, setCaptchaToken] = useState(null);
 
     useEffect(() => {
-        // Load Cloudflare Turnstile script
-        const script = document.createElement('script');
-        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
-        script.async = true;
-        script.defer = true;
-        document.body.appendChild(script);
-
-        // Setup callback for captcha
-        window.onTurnstileSuccess = function(token) {
-            setCaptchaToken(token);
-        };
-
-        return () => {
-            if (document.body.contains(script)) {
-                document.body.removeChild(script);
+        // Wait for Turnstile to be available and render widget
+        const renderWidget = () => {
+            if (window.turnstile) {
+                const container = document.getElementById('turnstile-container');
+                if (container && !container.hasChildNodes()) {
+                    window.turnstile.render('#turnstile-container', {
+                        sitekey: CLOUDFLARE_SITE_KEY,
+                        theme: 'light',
+                        callback: (token) => {
+                            setCaptchaToken(token);
+                        },
+                    });
+                }
+            } else {
+                // Retry if turnstile is not loaded yet
+                setTimeout(renderWidget, 100);
             }
-            delete window.onTurnstileSuccess;
         };
+
+        renderWidget();
     }, []);
 
     const onSubmit = async (data) => {
@@ -53,10 +55,20 @@ const ForgotPasswordPage = () => {
         }
 
         // Reset captcha
-        if (window.turnstile) {
-            window.turnstile.reset();
-        }
         setCaptchaToken(null);
+        if (window.turnstile) {
+            const container = document.getElementById('turnstile-container');
+            if (container) {
+                container.innerHTML = '';
+                window.turnstile.render('#turnstile-container', {
+                    sitekey: CLOUDFLARE_SITE_KEY,
+                    theme: 'light',
+                    callback: (token) => {
+                        setCaptchaToken(token);
+                    },
+                });
+            }
+        }
     };
 
     return (
@@ -86,12 +98,7 @@ const ForgotPasswordPage = () => {
                 </div>
                 
                 <div className="tw-flex tw-justify-center tw-my-4">
-                    <div 
-                        className="cf-turnstile" 
-                        data-sitekey={CLOUDFLARE_SITE_KEY}
-                        data-callback="onTurnstileSuccess"
-                        data-theme="light"
-                    ></div>
+                    <div id="turnstile-container"></div>
                 </div>
 
                 <button
