@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { loginAPI } from "../../api/login";
-import { CLOUDFLARE_SITE_KEY } from "../../api/urls";
+import { CLOUDFLARE_SITE_KEY, rootURL } from "../../api/urls";
 import Loader from "../../components/loader/loader";
 import { toast } from "react-toastify";
 
@@ -79,7 +79,7 @@ const LoginPage = () => {
     const top = window.screen.height / 2 - height / 2;
     
     // Open Google OAuth popup
-    const googleAuthUrl = `http://localhost:8000/api/google/redirect`;
+    const googleAuthUrl = rootURL+`/api/google/redirect`;
     const popup = window.open(
       googleAuthUrl,
       'Google Sign In',
