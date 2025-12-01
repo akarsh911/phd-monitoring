@@ -86,6 +86,13 @@ const LoginPage = () => {
       `width=${width},height=${height},left=${left},top=${top}`
     );
 
+    // Set a timeout to stop loading if no response after 60 seconds
+    const timeout = setTimeout(() => {
+      setLoading(false);
+      window.removeEventListener('message', messageListener);
+      toast.error('Google Sign-In timed out. Please try again.');
+    }, 60000);
+
     // Listen for messages from the popup
     const messageListener = (event) => {
       // Verify origin for security
@@ -94,6 +101,7 @@ const LoginPage = () => {
       }
 
       if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
+        clearTimeout(timeout);
         window.removeEventListener('message', messageListener);
         
         // Store the auth data
@@ -101,11 +109,6 @@ const LoginPage = () => {
         localStorage.setItem('userRole', event.data.user.role.role);
         localStorage.setItem('available_roles', JSON.stringify(event.data.available_roles));
         localStorage.setItem('user', JSON.stringify(event.data.user));
-        
-        // Close popup if still open
-        if (popup && !popup.closed) {
-          popup.close();
-        }
         
         // Redirect to appropriate page
         const onLogin = new URLSearchParams(window.location.search).get("onLogin");
@@ -115,13 +118,9 @@ const LoginPage = () => {
           window.location.href = "/home";
         }
       } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
+        clearTimeout(timeout);
         window.removeEventListener('message', messageListener);
         setLoading(false);
-        
-        // Close popup if still open
-        if (popup && !popup.closed) {
-          popup.close();
-        }
         
         toast.error(event.data.error || 'Google login failed');
       }
@@ -130,20 +129,12 @@ const LoginPage = () => {
     window.addEventListener('message', messageListener);
 
     // Check if popup was blocked
-    if (!popup || popup.closed || typeof popup.closed === 'undefined') {
+    if (!popup) {
+      clearTimeout(timeout);
       setLoading(false);
       window.removeEventListener('message', messageListener);
       toast.error('Popup was blocked. Please allow popups for this site.');
     }
-
-    // Handle popup close without completion
-    const checkPopupClosed = setInterval(() => {
-      if (popup && popup.closed) {
-        clearInterval(checkPopupClosed);
-        window.removeEventListener('message', messageListener);
-        setLoading(false);
-      }
-    }, 1000);
   };
 
   // Define the onSubmit function
