@@ -22,14 +22,15 @@ Route::post('/login', function (Request $request) {
     $request->validate([
         'email' => 'required|email',
         'password' => 'required',
-        'captcha_token' => 'required|string',
     ]);
 
-    // Verify captcha
-    if (!CloudflareHelper::verifyCaptcha($request->captcha_token)) {
-        return response()->json([
-            'error' => 'Captcha verification failed'
-        ], 422);
+    // Verify captcha if provided (optional)
+    if ($request->has('captcha_token') && $request->captcha_token) {
+        if (!CloudflareHelper::verifyCaptcha($request->captcha_token)) {
+            return response()->json([
+                'error' => 'Captcha verification failed'
+            ], 422);
+        }
     }
 
     if (Auth::attempt($request->only('email', 'password'))) {
@@ -67,7 +68,6 @@ Route::post('/login', function (Request $request) {
 Route::post('/forgot-password', function (Request $request) {
     $validator = Validator::make($request->all(), [
         'email' => 'required|email|exists:users,email',
-        'captcha_token' => 'required|string',
     ]);
 
     if ($validator->fails()) {
@@ -77,12 +77,14 @@ Route::post('/forgot-password', function (Request $request) {
         ], 422);
     }
 
-    // Verify captcha
-    if (!CloudflareHelper::verifyCaptcha($request->captcha_token)) {
-        return response()->json([
-            'success' => false,
-            'error' => 'Captcha verification failed'
-        ], 422);
+    // Verify captcha if provided (optional)
+    if ($request->has('captcha_token') && $request->captcha_token) {
+        if (!CloudflareHelper::verifyCaptcha($request->captcha_token)) {
+            return response()->json([
+                'success' => false,
+                'error' => 'Captcha verification failed'
+            ], 422);
+        }
     }
 
     $status = Password::sendResetLink(

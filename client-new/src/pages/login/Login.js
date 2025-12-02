@@ -139,11 +139,6 @@ const LoginPage = () => {
 
   // Define the onSubmit function
   const onSubmit = async (data) => {
-    if (!captchaToken) {
-      toast.error('Please complete the captcha verification');
-      return;
-    }
-
     setLoading(true);
 
     const result = await loginAPI(data.email, data.password, captchaToken);

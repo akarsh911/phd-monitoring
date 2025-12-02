@@ -53,11 +53,6 @@ const ForgotPasswordPage = () => {
     }, []);
 
     const onSubmit = async (data) => {
-        if (!captchaToken) {
-            toast.error('Please complete the captcha verification');
-            return;
-        }
-
         setLoading(true);
         const response = await customFetch(baseURL+"/forgot-password", "POST", {
             ...data,
