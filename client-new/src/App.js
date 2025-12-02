@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
+import LandingPage from './pages/landing/LandingPage';
 import LoginPage from './pages/login/Login';
 import GoogleCallback from './pages/login/GoogleCallback';
 import { ToastContainer } from "react-toastify";
@@ -62,7 +63,10 @@ const AppContent = () => {
       />
       <Router>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
+          {/* Landing Page */}
+          <Route path="/" element={<LandingPage />} />
+          
+          {/* Public Pages */}
           <Route path="/team" element={<Team />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/support" element={<Support />} />
@@ -70,6 +74,8 @@ const AppContent = () => {
           <Route path="/google/callback" element={<GoogleCallback />} />
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage/>} />
+          
+          {/* Dashboard */}
           <Route path="/home" element={<Dashboard/>} />
           {/* <Route path="/team" element={<Team/>} /> */}
           {role==='student' && (
