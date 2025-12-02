@@ -1,13 +1,20 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const PrivacyPolicy = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="tw-min-h-screen tw-bg-gray-50 tw-py-8 tw-px-4">
+      <nav className="tw-bg-white tw-shadow-sm tw-mb-6 tw-sticky tw-top-0 tw-z-50">
+        <div className="tw-max-w-4xl tw-mx-auto tw-px-4 tw-py-3 tw-flex tw-justify-between tw-items-center">
+          <button onClick={() => navigate(-1)} className="tw-text-[#932f2f] hover:tw-underline tw-font-medium">
+            ← Back
+          </button>
+          <Link to="/" className="tw-text-[#932f2f] hover:tw-underline tw-font-medium">Home</Link>
+        </div>
+      </nav>
       <div className="tw-max-w-4xl tw-mx-auto tw-bg-white tw-rounded-lg tw-shadow-md tw-p-8">
-        <Link to="/login" className="tw-text-[#932f2f] hover:tw-underline tw-mb-4 tw-inline-block">
-          ← Back to Login
-        </Link>
         
         <h1 className="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-4">
           Privacy Policy for PhD Portal

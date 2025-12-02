@@ -1,22 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Team.css';
 
 const mentors = [
-  {
-    name: 'Dr. N. Tejo Prakash',
-    title: 'Professor and Dean of Research and Development Cell (DoRDC)',
-    image: '/images/tejo.jpg',
-    linkedin: 'https://www.linkedin.com/in/tejoprakashnagaraja/',
-    email: 'ntejoprakash@thapar.edu',
-  },
-  {
-    name: 'Dr. Bhupendrakumar Chudasama',
-    title: 'Professor and Associate Dean of Research and Development Cell (ADoRDC)',
-    image: '/images/bhup.jpg',
-    linkedin: 'https://www.linkedin.com/in/bnchudasama/',
-    email: 'bnchudasama@thapar.edu',
-  },
   {
     name: 'Dr. Tarunpreet Bhatia',
     title: 'Associate Professor, CSED',
@@ -98,11 +84,18 @@ const PersonCard = ({ name, title, image, github, linkedin, email }) => (
 );
 
 const Team = () => {
+  const navigate = useNavigate();
+
   return (
     <div className='team-container'>
-      <Link to="/login" className="tw-text-[#932f2f] hover:tw-underline tw-mb-4 tw-inline-block" style={{marginLeft: '20px', marginTop: '10px'}}>
-        ← Back to Login
-      </Link>
+      <nav className="page-navbar">
+        <div className="nav-container">
+          <button onClick={() => navigate(-1)} className="back-button">
+            ← Back
+          </button>
+          <Link to="/" className="nav-home-link">Home</Link>
+        </div>
+      </nav>
       <img src='/images/tiet_logo.png' alt='Thapar Logo' className='logo' />
       <h1 className='heading'>Meet the PhD Monitoring Portal Team</h1>
 

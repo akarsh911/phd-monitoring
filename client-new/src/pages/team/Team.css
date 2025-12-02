@@ -10,6 +10,56 @@ body {
     padding: 40px 20px;
     text-align: center;
   }
+
+  .page-navbar {
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    padding: 1rem 0;
+    margin: -40px -20px 30px -20px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .page-navbar .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .back-button {
+    background: none;
+    border: none;
+    color: #932f2f;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: all 0.3s;
+  }
+  
+  .back-button:hover {
+    background: #f7fafc;
+    text-decoration: underline;
+  }
+  
+  .nav-home-link {
+    color: #932f2f;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    transition: all 0.3s;
+  }
+  
+  .nav-home-link:hover {
+    background: #f7fafc;
+    text-decoration: underline;
+  }
   
   .logo {
     width: 120px;

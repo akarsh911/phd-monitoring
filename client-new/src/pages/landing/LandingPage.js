@@ -31,12 +31,21 @@ const LandingPage = () => {
   ];
 
   const workflow = [
-    'Supervisor Allocation',
-    'IRB Submission',
-    'Revised IRB Submission',
-    'Coursework / 6 Month Progress',
-    'Synopsis Submission',
-    'Thesis Submission'
+    { name: 'Supervisor Allocation', type: 'main' },
+    { name: 'IRB Submission', type: 'main' },
+    { name: 'Revised IRB Submission', type: 'main' },
+    { name: 'Coursework / 6 Month Progress', type: 'main' },
+    { name: 'Synopsis Submission', type: 'main', note: 'Supervisor submits List of Examiners in parallel' },
+    { name: 'Thesis Submission', type: 'main' }
+  ];
+
+  const optionalForms = [
+    'Status Change',
+    'Semester Off',
+    'IRB Extension',
+    'Supervisor Change',
+    'Thesis Extension',
+    'Revised Title or Objectives'
   ];
 
   return (
@@ -129,16 +138,101 @@ const LandingPage = () => {
           <p className="section-subtitle">
             Track your progress through the complete PhD lifecycle
           </p>
-          <div className="workflow-timeline">
-            {workflow.map((stage, index) => (
-              <div key={index} className="workflow-stage">
-                <div className="workflow-number">{index + 1}</div>
-                <div className="workflow-content">
-                  <h3>{stage}</h3>
+          
+          <div className="workflow-layout">
+            {/* Circular Workflow */}
+            <div className="workflow-circle-wrapper">
+              <div className="workflow-circle-container">
+                <div className="workflow-circle">
+                  {workflow.map((stage, index) => {
+                    const angle = (index / workflow.length) * 360 - 90;
+                    const radius = 200;
+                    const x = Math.cos((angle * Math.PI) / 180) * radius;
+                    const y = Math.sin((angle * Math.PI) / 180) * radius;
+                    
+                    return (
+                      <div
+                        key={index}
+                        className="workflow-node"
+                        style={{
+                          transform: `translate(${x}px, ${y}px)`
+                        }}
+                      >
+                        <div className="workflow-node-circle">
+                          <span className="workflow-node-number">{index + 1}</span>
+                        </div>
+                        <div className="workflow-node-label">
+                          {stage.name}
+                          {stage.note && <span className="workflow-note">{stage.note}</span>}
+                        </div>
+                      </div>
+                    );
+                  })}
+                  
+                  {/* Center decoration */}
+                  <div className="workflow-center">
+                    <div className="workflow-center-icon">PhD</div>
+                    <div className="workflow-center-text">Journey</div>
+                  </div>
+                  
+                  {/* Connection lines (SVG overlay) */}
+                  <svg className="workflow-connections" viewBox="-250 -250 500 500">
+                    <defs>
+                      <marker
+                        id="arrowhead"
+                        markerWidth="10"
+                        markerHeight="10"
+                        refX="9"
+                        refY="3"
+                        orient="auto"
+                      >
+                        <polygon points="0 0, 10 3, 0 6" fill="#932f2f" />
+                      </marker>
+                    </defs>
+                    {workflow.map((_, index) => {
+                      if (index === workflow.length - 1) return null;
+                      const angle1 = (index / workflow.length) * 360 - 90;
+                      const angle2 = ((index + 1) / workflow.length) * 360 - 90;
+                      const radius = 200;
+                      const x1 = Math.cos((angle1 * Math.PI) / 180) * radius;
+                      const y1 = Math.sin((angle1 * Math.PI) / 180) * radius;
+                      const x2 = Math.cos((angle2 * Math.PI) / 180) * radius;
+                      const y2 = Math.sin((angle2 * Math.PI) / 180) * radius;
+                      
+                      return (
+                        <line
+                          key={index}
+                          x1={x1}
+                          y1={y1}
+                          x2={x2}
+                          y2={y2}
+                          stroke="#932f2f"
+                          strokeWidth="2"
+                          markerEnd="url(#arrowhead)"
+                          opacity="0.6"
+                        />
+                      );
+                    })}
+                  </svg>
                 </div>
-                {index < workflow.length - 1 && <div className="workflow-arrow">→</div>}
               </div>
-            ))}
+            </div>
+
+            {/* Optional Forms */}
+            <div className="optional-forms-section">
+              <h3 className="optional-forms-title">Optional Forms</h3>
+              <p className="optional-forms-subtitle">
+                Available Anytime
+              </p>
+              <div className="optional-forms-grid">
+                {optionalForms.map((form, index) => (
+                  <div key={index} className="optional-form-card">
+                    <div className="optional-form-dot">●</div>
+                    <span>{form}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
