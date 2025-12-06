@@ -233,12 +233,14 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
         </div>
       </div> */}
           <div className="profile-actions">
+            {userRole !== "student" &&(<>
             <CustomButton text="View Forms" onClick={navigateToForms} />
             <CustomButton
               text="View Presentations"
               onClick={navigateToProgress}
               disabled={true}
             />
+            </>)}
             {showEditButton && (
               <>
                 <CustomButton text="Tag Course" onClick={() => {
