@@ -34,7 +34,7 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
 
   const [profile, setProfile] = useState(locationState || dataIP);
   const [loading, setLoading] = useState(!profile);
-
+const [userRole, setUserRole] = useState('');
   useEffect(() => {
     if (!profile) {
       let url = roll_no
@@ -111,11 +111,13 @@ const ProfileCard = ({ dataIP = null, link = false }) => {
 
   useEffect(() => {
     // Set the user role from localStorage
-    const userRole = localStorage.getItem("userRole");
-    console.log("Role in ProfileCard:", userRole);
-    if (userRole === "hod" || userRole === "admin" || userRole === "dordc" || userRole === "doctoral") {
+    let userRole1 = localStorage.getItem("userRole");
+    console.log("Role in ProfileCard:", userRole1);
+    if (userRole1 === "hod" || userRole1 === "admin" || userRole1 === "dordc" || userRole1 === "doctoral") {
       setShowEditButton(true);
+
     }
+    setUserRole(userRole1);
   }, [loading]);
   const navigateToForms = () => {
     navigate(pathname + "/forms");
