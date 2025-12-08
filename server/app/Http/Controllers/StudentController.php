@@ -239,6 +239,7 @@ class StudentController extends Controller {
     $filters = $request->input('filters', []);
     $perPage = $request->input('rows', 15);
     $page = $request->input('page', 1);
+    $all = $request->input('all', false);
     $filtersJson = $request->query('filters');
 
     if ($filtersJson) {
@@ -277,6 +278,25 @@ class StudentController extends Controller {
 
     if ($filters) {
         $studentsQuery = $this->applyDynamicFilters($studentsQuery, $filters);
+    }
+    
+    // Check if all flag is set
+    if ($all) {
+        $students = $studentsQuery->get();
+        $result = $students->map(function ($student) {
+            return $this->ListStudentProfile($student);
+        });
+        
+        return response()->json([
+            'data' => $result,
+            'total' => $students->count(),
+            'per_page' => $students->count(),
+            'current_page' => 1,
+            'totalPages' => 1,
+            'role' => $role,
+            'fields'=>['name','roll_no','overall_progress','department','email','phone'],
+            'fieldsTitles'=>['Name','Roll No','Overall Progress','Department','Email','Phone'],
+        ]);
     }
     
     $students = $studentsQuery->paginate($perPage, ['*'], 'page', $page);

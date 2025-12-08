@@ -85,9 +85,11 @@ const AdminFormManagement = () => {
     setLoading(true);
     try {
       const response = await customFetch(
-        baseURL + "/students",
+        baseURL + "/students?all=true",
         "GET",
-        {},
+        {
+          all: true
+        },
         false
       );
       if (response.success) {
