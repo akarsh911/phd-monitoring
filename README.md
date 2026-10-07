@@ -25,3 +25,5 @@ Navigate to the server directory:
 
 ```bash
 cd server
+
+<!-- Security scan triggered at 2026-10-07 12:01:47 -->
